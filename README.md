@@ -8,7 +8,8 @@
 |----------|---------|
 | [PROJECT.md](./PROJECT.md) | Vision, cibles, scope, équipe |
 | [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) | Modèle de données, workflows, stack technique |
-| [docs/COMPETITIVE-ANALYSIS.md](./docs/COMPETITIVE-ANALYSIS.md) | **Analyse des compétiteurs** |
+| [docs/COMPETITIVE-ANALYSIS.md](./docs/COMPETITIVE-ANALYSIS.md) | Analyse des compétiteurs (VoiceMap, izi.TRAVEL, etc.) |
+| [docs/RISKS.md](./docs/RISKS.md) | **Analyse de risques et mitigation** |
 | [docs/ROADMAP.md](./docs/ROADMAP.md) | Phases et timeline |
 | [docs/USER-STORIES.md](./docs/USER-STORIES.md) | User stories par épic |
 
@@ -21,10 +22,6 @@
 - **Pierre Raymond** — Product Owner
 - **Camélia Raymond** — Lead technique & Développement
 
-## Compétiteurs analysés
-
-- VoiceMap, izi.TRAVEL, GuideAlong, Shaka Guide, SmartGuide, Detour (RIP)
-
 ## Stack
 
 - **Mobile:** Flutter
@@ -32,3 +29,9 @@
 - **Audio storage:** Cloudinary
 - **TTS:** ElevenLabs
 - **Maps:** Mapbox
+
+## Top 3 Risques identifiés
+
+1. 🚨 GPS imprécis / trigger raté
+2. ⚠️ Compétition gratuite (BaladoDécouverte)
+3. ⚠️ Sync groupe qui désync

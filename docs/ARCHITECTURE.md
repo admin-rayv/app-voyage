@@ -83,25 +83,9 @@
 | status | string | "generating", "ready", "error" |
 | created_at | timestamp | |
 
-### User (futur - V1)
-| Champ | Type | Description |
-|-------|------|-------------|
-| id | UUID | Identifiant unique |
-| email | string | Email |
-| name | string | Nom |
-| preferred_language | string | Langue préférée |
-| created_at | timestamp | |
-
-### Purchase (futur - V1)
-| Champ | Type | Description |
-|-------|------|-------------|
-| id | UUID | |
-| user_id | UUID | FK → User |
-| parcours_id | UUID | FK → Parcours |
-| amount_cad | float | Montant payé |
-| platform | string | "ios", "android" |
-| transaction_id | string | ID Apple/Google |
-| purchased_at | timestamp | |
+### User & Payments
+> ⏳ **Reporté** — On utilise Supabase Auth natif pour l'authentification.
+> Les tables User/Purchase seront ajoutées quand on implémente les paiements.
 
 ---
 
@@ -255,10 +239,13 @@ Contexte: [INFOS HISTORIQUES]
 | Composant | Technologie | Justification |
 |-----------|-------------|---------------|
 | Base de données | Supabase (PostgreSQL) | Gratuit, facile, realtime |
-| Auth | Supabase Auth | Google/Apple Sign-In |
-| Storage audio | Supabase Storage | Intégré, CDN |
+| Auth | Supabase Auth | Google/Apple Sign-In natif |
+| **Storage audio** | **Cloudinary** | 25GB gratuit, CDN, séparé de la DB |
 | API | Supabase auto-generated | REST + Realtime |
 | Sync multi-appareils | Supabase Realtime | WebSockets intégrés |
+
+> **Note:** Cloudinary pour les audios permet de ne pas surcharger Supabase Storage 
+> et offre un CDN performant pour le streaming/download.
 
 ### Génération contenu
 | Composant | Technologie | Justification |
@@ -350,15 +337,35 @@ HOME (carte)
 
 ---
 
-## Questions techniques ouvertes
+## Décisions techniques
 
-| Question | Options | Décision |
-|----------|---------|----------|
-| React Native vs Flutter? | RN: JS, plus de libs / Flutter: Dart, plus performant | **À décider** |
-| Mapbox vs Google Maps? | Mapbox: plus customisable, offline / GMaps: plus connu | **À décider** |
+| Question | Décision | Justification |
+|----------|----------|---------------|
+| **Framework mobile** | **Flutter** | Meilleure performance native, idéal pour GPS/audio background à long terme |
+| **Maps** | Mapbox | Plus customisable, supporte offline maps |
+| **Storage audio** | Cloudinary | 25GB gratuit, CDN, séparé de Supabase |
+| **Auth** | Supabase Auth natif | Pas de table User custom pour l'instant |
+| Format audio | MP3 128kbps | Compatibilité universelle |
+
+### Pourquoi Flutter > React Native pour ce projet
+
+| Critère | Flutter | React Native |
+|---------|---------|--------------|
+| Performance GPS background | ✅ Natif | ⚠️ Bridge JS |
+| Audio background + lock screen | ✅ Natif | ⚠️ Libs tierces |
+| Compilation | ARM natif | JavaScript bridge |
+| Long terme | Google maintient | Meta... moyennement |
+| Courbe d'apprentissage | Dart (nouveau) | JS (connu) |
+
+Flutter demande d'apprendre Dart, mais pour une app avec beaucoup de features natives (GPS, audio, notifications), c'est le meilleur choix à long terme.
+
+## Questions ouvertes restantes
+
+| Question | Options | Status |
+|----------|---------|--------|
 | Voix TTS française? | Tester plusieurs voix ElevenLabs | **À tester** |
 | Radius trigger par défaut? | 20m? 30m? 50m? | **À tester terrain** |
-| Format audio? | MP3 128kbps vs AAC vs OGG | **MP3 128k** (compatibilité) |
+| Nom de l'app? | Wandr, CityWhisper, Écho... | **À décider** |
 
 ---
 

@@ -1,6 +1,7 @@
 # 🔍 Analyse Compétitive — App Voyage
 
-> Recherche effectuée: Février 2026
+> Recherche effectuée: Février 2026  
+> Sources: Recherche web + Analyse Gemini Deep Research
 
 ---
 
@@ -10,6 +11,8 @@ Le marché des guides audio géolocalisés est **fragmenté** avec plusieurs act
 - Focalisées sur une région (Hawaii, Europe, parcs nationaux)
 - Orientées B2B (musées, offices de tourisme)
 - Génériques avec contenu UGC de qualité variable
+
+**Verdict marché:** Le marché est encombré de **mauvaises applications** (izi.TRAVEL) ou d'applications **très chères** (GuideAlong). Il y a une place à prendre pour une app **Mid-Market** (5$-10$), avec une UX moderne, un ton fun (IA bien utilisée) et la fonction de synchro de groupe.
 
 **Opportunité:** Il n'y a pas d'app qui combine vraiment:
 - ✅ Ton conversationnel/ami (pas robot)
@@ -223,21 +226,87 @@ Le marché des guides audio géolocalisés est **fragmenté** avec plusieurs act
 ---
 
 ### 7. TravelStorys 🗺️
-**275+ tours USA — GPS audio**
+**275+ tours USA — GPS audio sponsorisé**
 
 | Aspect | Détails |
 |--------|---------|
 | **URL** | travelstorys.com |
-| **Focus** | USA principalement |
-| **Prix** | Free + paid tours |
+| **Modèle** | B2B sponsorisé — Gratuit pour users |
+| **Focus** | USA (routes panoramiques, conservation) |
+| **Contenu** | Pro / Organismes |
 
 **Forces:**
 - Partenariats offices de tourisme
-- Bonne couverture USA
+- Focus conservation/nature
+- Gratuit pour utilisateurs
 
 **Faiblesses:**
 - Moins connu
 - Interface basique
+- Dépend des sponsors
+
+---
+
+## 🍁 Compétiteurs québécois/canadiens
+
+### 8. BaladoDécouverte 🇨🇦
+**Le "izi.TRAVEL" québécois — Leader local institutionnel**
+
+| Aspect | Détails |
+|--------|---------|
+| **URL** | baladodecouverte.com |
+| **Modèle** | **Gratuit** |
+| **Contenu** | Municipalités, sociétés d'histoire |
+| **Focus** | Québec |
+
+**Forces:**
+- Gratuit (obstacle concurrentiel majeur!)
+- Couverture québécoise
+- Partenariats municipaux
+
+**Faiblesses:**
+- ❌ Très institutionnel, souvent **ennuyeux**
+- ❌ "En 1842, le notaire X a signé..." 😴
+- ❌ Interface fonctionnelle mais pas "sexy"
+- ❌ Ton encyclopédique
+
+**💡 INSIGHT:** Les gens **paient pour le divertissement**, pas pour l'éducation sèche. BaladoDécouverte est gratuit mais boring.
+
+---
+
+### 9. Portrait Sonore 🎨
+**Guides artistiques/architecturaux — Niche "arty"**
+
+| Aspect | Détails |
+|--------|---------|
+| **Focus** | Montréal, Québec (architecture, art) |
+| **Qualité** | Très haute (production "arty") |
+| **Audience** | Niche |
+
+**Forces:**
+- Haute qualité de production
+- Angle unique (architecture/art)
+
+**Faiblesses:**
+- Très niche
+- Pas mainstream
+
+---
+
+### 10. Apps Parcs Canada / SÉPAQ 🏕️
+**Apps officielles des parcs**
+
+**Forces:**
+- Officielles
+
+**Faiblesses:**
+- ❌ Apps "compagnon" mal notées
+- ❌ Peu mises à jour
+- ❌ UX médiocre
+
+---
+
+**🎯 Opportunité Québec:** Le Québec n'a **pas d'équivalent à Shaka Guide** qui soit divertissant ET payant. Le marché est dominé par du contenu institutionnel gratuit mais ennuyeux.
 
 ---
 
@@ -252,6 +321,61 @@ Le marché des guides audio géolocalisés est **fragmenté** avec plusieurs act
 | **Detour** | $20/an | ✅✅ | ✅ | ❌ | ✅ | ⭐⭐⭐⭐⭐ |
 | **SmartGuide** | B2B | ❌ | ✅ | ✅ | ❌ | ⭐⭐⭐⭐ |
 | **App Voyage** | TBD | ✅✅ | ✅ | ✅ | ✅✅ Ami | 🎯 |
+
+---
+
+## Coût de production d'un parcours
+
+### Méthode traditionnelle (Detour/GuideAlong)
+**5 000$ à 15 000$ USD par heure d'audio fini**
+- Recherche historique approfondie
+- Scénariste professionnel
+- Acteurs en studio
+- Sound design
+- Intégration GPS
+
+### Méthode App Voyage (avec IA) — Estimation
+| Poste | Coût |
+|-------|------|
+| Recherche + Script (Humain + IA) | ~20h de travail |
+| Audio (ElevenLabs) | ~50$ de crédits |
+| Montage + Intégration | ~10h de travail |
+| **Total** | Coût monétaire très bas, temps élevé |
+
+**Avantage compétitif:** On peut itérer vite et produire plus de contenu pour moins cher.
+
+---
+
+## Tendances émergentes
+
+| Tendance | Description | Maturité |
+|----------|-------------|----------|
+| **Audio génératif dynamique** | IA génère le texte selon météo/heure ("Regardez cette statue sous la pluie...") | 🧪 Expérimental |
+| **Gamification** | Visite = chasse au trésor | ⚠️ Mitigé (bon pour familles) |
+| **Faux dialogues réalistes** | Conversations entre personnages historiques (pas juste un narrateur) | 🔥 Prometteur |
+| **AR Audio** | Son spatialisé selon position | 🧪 Tôt |
+
+---
+
+## Erreurs typiques des nouveaux entrants
+
+### 1. 📚 Le syndrome de l'encyclopédie
+**Erreur:** Vouloir tout dire sur chaque point.  
+**Réalité:** L'audio doit être **court (90 secondes max par point)**. Les gens marchent, il y a du bruit, ils perdent attention.
+
+### 2. 📍 Mauvais calibrage GPS
+**Erreur:** Le trigger se déclenche trop tard (après avoir passé le monument).  
+**Solution:** Calculer le "Time to Trigger" — tenir compte de la vitesse et direction, pas juste un rayon fixe.
+
+### 3. 🔋 Sous-estimer la batterie
+**Erreur:** GPS + Audio + Écran = batterie morte en 2h.  
+**Solution:** App ultra-optimisée. Flutter est bon, mais attention aux processus background.
+
+### 4. 🧭 Ignorer la logistique
+**Erreur:** "C'est l'église Notre-Dame" et c'est tout.  
+**Meilleur:** "Tournez à droite après l'église, attention à la traverse de piétons, le parking est à 50m."
+
+**💡 Le secret de Shaka Guide:** Ils incluent l'itinéraire logistique (où se garer, toilettes, où manger). C'est ça qui justifie le prix premium.
 
 ---
 
@@ -337,22 +461,113 @@ Contrôler la production = qualité garantie (vs marketplace variable).
 
 ## Recommandations stratégiques
 
-### Court terme (MVP)
-1. Focus **Montréal** — Marché local, facile à tester
-2. **1-3 parcours** haute qualité > 20 médiocres
-3. **Sync groupe dès MVP** — C'est le différenciateur
-4. **Personnalité forte** — Nommer le guide, lui donner du caractère
+### A. Différenciation par la Sync Groupe (Killer Feature)
 
-### Moyen terme (V1)
-1. Ajouter **Sainte-Julie** (test petit marché)
-2. **Freemium** — 1 parcours gratuit pour hook
-3. Approcher **Tourisme Montréal** pour B2B
+**Le problème:** Dans un couple, l'un a l'audio, l'autre non. Ou ils partagent des écouteurs filaires (gênant).
 
-### Long terme (V2+)
-1. Autres villes QC (Québec, Trois-Rivières)
-2. France (connexion familiale?)
-3. White-label pour offices de tourisme
+**La solution:** Mode "Host" — Pierre a le téléphone, Camélia écoute sur le sien.
+
+**Technique:**
+- Utiliser Supabase Realtime
+- Host envoie `play_track_id + timestamp` aux clients
+- **Ne pas viser sync à la milliseconde** (trop dur via mobile) — **sync à la seconde suffit** pour de la narration
 
 ---
 
-*Dernière mise à jour: 2026-02-12*
+### B. Le contenu "Ami Historien" — Créer des personas
+
+Puisqu'on utilise ElevenLabs, on peut créer des **personnages**:
+
+| Parcours | Persona suggéré |
+|----------|-----------------|
+| Vieux-Montréal historique | "Jacques" — fantôme d'un colon français |
+| Vieux-Montréal hanté | Narrateur mystérieux |
+| Plateau foodie | "Sarah" — étudiante en architecture gourmande |
+| Mile-End artistique | Artiste local passionné |
+
+**Astuce ElevenLabs:** Utiliser Speech-to-Speech ou les prompts d'émotion pour avoir des **rires, soupirs, hésitations**. C'est ce qui manque aux robots!
+
+---
+
+### C. Stratégie de lancement (Go-to-Market)
+
+#### Phase 1: Sainte-Julie = Bac à sable
+- Petit, contrôlable
+- Tester géofencing voiture/vélo sans stress
+- **Contacter la municipalité** pour partenariat "Pilote technologique"
+
+#### Phase 2: Montréal = Niches, pas "tout Montréal"
+❌ Ne pas faire "Montréal" (trop gros, trop vague)
+
+✅ Faire des **parcours niches**:
+- "Le Vieux-Montréal Hanté" 👻
+- "Le Plateau pour les Foodies" 🍕
+- "Mile-End Street Art" 🎨
+- "Montréal Souterrain" 🚇
+
+---
+
+### D. Pricing recommandé
+
+**Éviter l'abonnement** — Les touristes sont là 3 jours, ils ne veulent pas s'abonner.
+
+**Modèle Hybride "Unlock":**
+| Élément | Prix |
+|---------|------|
+| App | Gratuit |
+| 5 premiers points d'intérêt | Gratuit (teaser) |
+| Tour complet | **7.99$ CAD** (achat in-app) |
+| Pack "Tout Montréal" | **14.99$ CAD** |
+
+**Pourquoi?** Réduit la friction au téléchargement tout en monétisant ceux qui accrochent.
+
+---
+
+### E. Notes techniques (validation Gemini)
+
+| Composant | Recommandation |
+|-----------|----------------|
+| **Flutter** | ✅ Parfait |
+| **Supabase** | ✅ Bon pour backend/auth. Calcul de distance doit être **local** (Dart) pour offline |
+| **Cloudinary** | ✅ Bon, mais télécharger MP3 en cache local au premier lancement (pas de streaming temps réel) |
+| **Géofencing** | Tenir compte vitesse + direction, pas juste rayon fixe |
+
+---
+
+### F. Timeline suggérée
+
+| Phase | Focus | Objectif |
+|-------|-------|----------|
+| **Proto** | Sainte-Julie | Valider techno, partenariat municipal |
+| **MVP** | Vieux-Montréal (1-2 parcours niches) | Beta testers, sync groupe |
+| **V1** | 3-5 parcours Montréal | Launch public, monétisation |
+| **V2** | Autres villes QC, France | Expansion |
+
+---
+
+## Pourquoi Shaka justifie des prix premium
+
+**La promesse de la journée parfaite.**
+
+Quand un touriste loue une voiture à 100$/jour et est à Hawaii pour 5000$, il ne veut pas risquer de rater les meilleurs spots à cause d'une app gratuite mal faite.
+
+**Shaka vend de l'assurance:** "Suivez-moi, je vous garantis que vous verrez tout, que vous ne vous perdrez pas, et qu'on va rire."
+
+**Leur secret:** Ils incluent l'**itinéraire logistique** (où se garer, toilettes, où manger). Pas juste "voici le monument".
+
+---
+
+## Tableau comparatif final
+
+| App | Modèle | Prix | Sync | Offline | Ton | Québec |
+|-----|--------|------|------|---------|-----|--------|
+| VoiceMap | Marketplace | $5-15 | ❌ | ✅ | Variable | ⚠️ Peu |
+| izi.TRAVEL | Freemium | Gratuit | ❌ | ✅ | 😴 Robot | ⚠️ |
+| GuideAlong | Achat | $25-35 | ❌ | ✅ | ✅ Pro | 🇨🇦 Parcs |
+| Shaka | Achat/Bundle | $20-30 | ❌ | ✅ | 🔥 Radio DJ | ❌ |
+| BaladoDécouverte | Gratuit | $0 | ❌ | ✅ | 😴 Instit. | ✅ |
+| **App Voyage** | Freemium | $8-15 | ✅✅ | ✅ | 🔥 Ami | ✅✅ |
+
+---
+
+*Dernière mise à jour: 2026-02-12 — Intégration analyse Gemini*

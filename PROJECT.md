@@ -25,8 +25,8 @@ Une application mobile qui transforme chaque promenade en ville en une expérien
 
 ## Équipe
 
-- **Papa** — [Rôle à définir]
-- **Camelia** — Product Owner / Dev
+- **Pierre Raymond** — Product Owner
+- **Camélia Raymond** — Lead technique & Développement
 
 ## Cibles
 

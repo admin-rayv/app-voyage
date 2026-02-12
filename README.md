@@ -6,16 +6,17 @@
 
 | Document | Contenu |
 |----------|---------|
-| [PROJECT.md](./PROJECT.md) | Vision, cibles, scope, équipe |
+| [PROJECT.md](./PROJECT.md) | Vision, cibles, scope, équipe, business model |
 | [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) | Modèle de données, workflows, stack technique |
-| [docs/COMPETITIVE-ANALYSIS.md](./docs/COMPETITIVE-ANALYSIS.md) | Analyse des compétiteurs (VoiceMap, izi.TRAVEL, etc.) |
-| [docs/RISKS.md](./docs/RISKS.md) | **Analyse de risques et mitigation** |
-| [docs/ROADMAP.md](./docs/ROADMAP.md) | Phases et timeline |
-| [docs/USER-STORIES.md](./docs/USER-STORIES.md) | User stories par épic |
+| [docs/COMPETITIVE-ANALYSIS.md](./docs/COMPETITIVE-ANALYSIS.md) | Analyse des compétiteurs |
+| [docs/RISKS.md](./docs/RISKS.md) | Analyse de risques et mitigation |
+| [docs/SPRINTS.md](./docs/SPRINTS.md) | **Définition des sprints et livrables** |
+| [docs/USER-STORIES.md](./docs/USER-STORIES.md) | 45+ user stories détaillées |
 
 ## Status
 
-🚧 **Phase 0: Discovery** — Définition du projet en cours
+🚧 **Phase 0: Discovery** — ✅ Complété  
+➡️ **Prochaine étape:** Sprint 0 (Setup & Fondations)
 
 ## Équipe
 
@@ -30,8 +31,9 @@
 - **TTS:** ElevenLabs
 - **Maps:** Mapbox
 
-## Top 3 Risques identifiés
+## Planning
 
-1. 🚨 GPS imprécis / trigger raté
-2. ⚠️ Compétition gratuite (BaladoDécouverte)
-3. ⚠️ Sync groupe qui désync
+| Phase | Sprints | Durée estimée |
+|-------|---------|---------------|
+| **Phase 1: Prototype (Sainte-Julie)** | Sprint 0-5 | ~10-11 semaines |
+| **Phase 2: MVP (Montréal)** | Sprint 6-12 | ~14-18 semaines |

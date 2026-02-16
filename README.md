@@ -9,8 +9,9 @@
 | [PROJECT.md](./PROJECT.md) | Vision, cibles, scope, équipe, business model |
 | [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) | Modèle de données, workflows, stack technique |
 | [docs/COMPETITIVE-ANALYSIS.md](./docs/COMPETITIVE-ANALYSIS.md) | Analyse des compétiteurs |
+| [docs/NATIVE-VS-WEB.md](./docs/NATIVE-VS-WEB.md) | **App Native vs Web App (analyse)** |
 | [docs/RISKS.md](./docs/RISKS.md) | Analyse de risques et mitigation |
-| [docs/SPRINTS.md](./docs/SPRINTS.md) | **Définition des sprints et livrables** |
+| [docs/SPRINTS.md](./docs/SPRINTS.md) | Définition des sprints et livrables |
 | [docs/USER-STORIES.md](./docs/USER-STORIES.md) | 45+ user stories détaillées |
 
 ## Status
@@ -25,15 +26,8 @@
 
 ## Stack
 
-- **Mobile:** Flutter
+- **Mobile:** Flutter (app native iOS + Android)
 - **Backend:** Supabase (PostgreSQL + Auth + Realtime)
 - **Audio storage:** Cloudinary
 - **TTS:** ElevenLabs
 - **Maps:** Mapbox
-
-## Planning
-
-| Phase | Sprints | Durée estimée |
-|-------|---------|---------------|
-| **Phase 1: Prototype (Sainte-Julie)** | Sprint 0-5 | ~10-11 semaines |
-| **Phase 2: MVP (Montréal)** | Sprint 6-12 | ~14-18 semaines |

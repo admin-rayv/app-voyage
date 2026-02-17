@@ -356,62 +356,44 @@ Pour un MVP, c'est overkill. Supabase fait tout ce dont on a besoin.
 
 ## 5. Stockage audio
 
-### Cloudinary — ✅ CHOISI
+### ❌ Approche abandonnée: Stockage MP3 cloud
+
+Initialement prévu: stocker les MP3 pré-générés sur Cloudinary ou S3.
+
+**Problèmes identifiés:**
+- ❌ Chaque langue = re-générer et uploader tous les MP3
+- ❌ Modifier un script = re-générer manuellement
+- ❌ Coûts de stockage qui augmentent avec les langues
+- ❌ Gestion complexe des versions
+
+---
+
+### ✅ Nouvelle approche: Scripts + Génération à la demande
+
+**Principe:** Stocker le **texte des scripts** dans Supabase, générer l'audio **à la demande** via ElevenLabs.
 
 | Aspect | Détail |
 |--------|--------|
-| **Type** | CDN + Media management |
-| **Prix** | 25GB gratuit, puis ~20$/mois |
+| **Stockage** | PostgreSQL (texte) |
+| **Génération** | Edge Function → ElevenLabs |
+| **Cache** | Local sur l'appareil |
+| **Coût** | ~$0.24/script (une seule fois par user) |
 
 **Avantages:**
-- ✅ CDN mondial (téléchargement rapide)
-- ✅ Transformations audio possibles
-- ✅ Dashboard de gestion
-- ✅ API simple
-- ✅ Déjà utilisé pour DigiPattern
+- ✅ Ajouter une langue = traduire le texte (pas de MP3 à générer)
+- ✅ Modifier un script = automatiquement mis à jour
+- ✅ Pas de coûts de stockage cloud
+- ✅ Scalable à 100+ langues
+- ✅ Voix modifiable sans tout re-générer
 
-**Inconvénients:**
-- ❌ Coûts peuvent augmenter avec volume
-- ❌ Overkill si on a juste besoin de stockage
+**Workflow:**
+```
+User télécharge → Edge Function → ElevenLabs API → Stream MP3 → Cache local
+```
 
----
-
-### Supabase Storage
-
-**Avantages:**
-- ✅ Intégré avec Supabase (même dashboard)
-- ✅ 1GB gratuit
-- ✅ CDN via partnership Cloudflare
-
-**Inconvénients:**
-- ❌ Moins de features de transformation
-- ❌ Peut devenir cher pour gros volumes
-
----
-
-### AWS S3 + CloudFront
-
-**Avantages:**
-- ✅ Très scalable
-- ✅ Coût bas pour gros volumes
-- ✅ CloudFront = CDN performant
-
-**Inconvénients:**
-- ❌ Plus complexe à configurer
-- ❌ Pricing confus
-
----
-
-### Bunny CDN
-
-**Avantages:**
-- ✅ Très bon marché (~0.01$/GB)
-- ✅ CDN performant
-- ✅ Simple
-
-**Inconvénients:**
-- ❌ Moins connu
-- ❌ Moins de features
+**Invalidation cache:**
+- Hash SHA256 du contenu du script
+- Si script modifié → hash change → re-génération au prochain download
 
 ---
 
@@ -536,10 +518,10 @@ Les cartes offline sont essentielles pour les touristes sans data.
 | Composant | Choix | Justification principale |
 |-----------|-------|-------------------------|
 | **Framework mobile** | Flutter | Performance native + une codebase |
-| **Backend** | Supabase | PostgreSQL + Auth + Realtime intégrés |
-| **Stockage audio** | Cloudinary | CDN + déjà configuré |
+| **Backend** | Supabase | PostgreSQL + Auth + Realtime + Edge Functions |
+| **Stockage scripts** | Supabase (texte) | Multi-langue facile, pas de MP3 cloud |
+| **Génération audio** | ElevenLabs (à la demande) | Via Edge Function, cache local |
 | **Cartes** | Mapbox | Offline maps obligatoires |
-| **TTS** | ElevenLabs | Voix les plus naturelles |
 | **Langages** | Dart (mobile), SQL (backend) | Standards du framework |
 
 ---
@@ -559,15 +541,18 @@ Les cartes offline sont essentielles pour les touristes sans data.
 │                        │                             │
 │         ┌──────────────┼──────────────┐             │
 │         ▼              ▼              ▼             │
-│  ┌───────────┐  ┌───────────┐  ┌───────────┐       │
-│  │ Supabase  │  │ Cloudinary│  │  Mapbox   │       │
-│  │ (Backend) │  │  (Audio)  │  │  (Maps)   │       │
-│  └───────────┘  └───────────┘  └───────────┘       │
-│       │                                             │
-│       ▼                                             │
-│  ┌───────────┐                                      │
-│  │ElevenLabs │ (pré-génération audio)               │
-│  └───────────┘                                      │
+│  ┌────────────────┐  ┌───────────┐                  │
+│  │    Supabase    │  │  Mapbox   │                  │
+│  │ • PostgreSQL   │  │  (Maps)   │                  │
+│  │ • Edge Funcs   │  └───────────┘                  │
+│  │ • Scripts DB   │                                 │
+│  └────────────────┘                                 │
+│         │                                           │
+│         ▼ (Edge Function)                           │
+│  ┌───────────┐     ┌─────────────┐                  │
+│  │ElevenLabs │────>│ Cache local │                  │
+│  │   (TTS)   │     │  (device)   │                  │
+│  └───────────┘     └─────────────┘                  │
 └─────────────────────────────────────────────────────┘
 ```
 
@@ -578,8 +563,8 @@ Les cartes offline sont essentielles pour les touristes sans data.
 | Situation | Pivot possible |
 |-----------|---------------|
 | Performance insuffisante | Modules natifs Swift/Kotlin |
-| Coûts Cloudinary trop élevés | Bunny CDN ou S3 |
-| ElevenLabs trop cher | Google Cloud TTS |
+| ElevenLabs trop cher | Google Cloud TTS ou pré-génération MP3 |
+| Génération trop lente | Pré-générer les parcours populaires |
 | Besoin de features Apple avancées | Module Swift |
 
 ---

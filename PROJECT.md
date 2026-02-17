@@ -198,15 +198,27 @@ Les touristes sont là 3-5 jours. Ils ne veulent pas s'abonner à une app qu'ils
 | Composant | Choix | Justification |
 |-----------|-------|---------------|
 | **Mobile** | Flutter | Performance native, GPS/audio background |
-| **Backend** | Supabase | PostgreSQL + Auth + Realtime, gratuit au début |
-| **Storage audio** | Cloudinary | 25GB gratuit, CDN, séparé de la DB |
-| **TTS** | ElevenLabs | Voix naturelles, émotions |
+| **Backend** | Supabase | PostgreSQL + Auth + Realtime + Edge Functions |
+| **TTS** | ElevenLabs | Voix naturelles, génération à la demande |
 | **Maps** | Mapbox | Offline maps, customisable |
 | **Sync groupe** | Supabase Realtime | WebSockets intégrés |
 
+### Architecture audio — Scripts, pas MP3 🆕
+
+**Principe:** On stocke les **scripts texte** dans la DB, pas les fichiers audio.
+L'audio est **généré à la demande** via ElevenLabs lors du téléchargement.
+
+| Avantage | Explication |
+|----------|-------------|
+| Multi-langue facile | Ajouter une langue = traduire le texte |
+| Pas de stockage cloud | Plus besoin de Cloudinary/S3 |
+| Mises à jour instantanées | Modifier script → audio mis à jour |
+| Scalable | 100 langues = juste du texte dans la DB |
+
 ### Notes techniques importantes
 - Calcul de distance = **local** (Dart) pour fonctionner offline
-- MP3 téléchargés en **cache local** au premier lancement (pas de streaming)
+- Audio généré via **Edge Function** puis mis en **cache local** sur l'appareil
+- Cache invalidé via **hash du script** (si texte change → re-génération)
 - Sync groupe = à la **seconde** (pas milliseconde) — suffisant pour narration
 - Optimiser GPS polling pour économiser batterie
 

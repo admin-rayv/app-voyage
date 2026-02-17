@@ -1,244 +1,586 @@
-# 🛠️ Analyse: Choix du framework mobile
+# 🛠️ Analyse des technologies de développement mobile
 
-> Quel langage/framework pour développer App Voyage?
+> Comparaison exhaustive des options pour App Voyage
 
 ---
 
-## Les options possibles
+## Table des matières
 
-### 1. 🎯 Flutter (Dart) — Notre recommandation
+1. [Frameworks cross-platform](#1-frameworks-cross-platform)
+2. [Développement natif](#2-développement-natif)
+3. [Langages bas niveau](#3-langages-bas-niveau)
+4. [Backend & Base de données](#4-backend--base-de-données)
+5. [Stockage audio](#5-stockage-audio)
+6. [Cartographie](#6-cartographie)
+7. [Synthèse vocale (TTS)](#7-synthèse-vocale-tts)
+8. [Décisions finales](#8-décisions-finales)
 
-**C'est quoi?**
-Framework de Google. Tu écris du code en **Dart** (langage simple, similaire à JavaScript/Java), et ça compile en app native iOS ET Android.
+---
+
+## 1. Frameworks cross-platform
+
+### Flutter (Dart) — ✅ CHOISI
 
 | Aspect | Détail |
 |--------|--------|
 | **Langage** | Dart |
-| **Performance** | ⭐⭐⭐⭐ Très bonne (compile en code machine) |
-| **Batterie** | ⭐⭐⭐⭐ Bonne |
-| **Une seule codebase** | ✅ Oui (iOS + Android) |
-| **Accès GPS/Audio natif** | ✅ Complet |
-| **Courbe d'apprentissage** | Moyenne (Dart est facile) |
-| **Utilisé par** | Google, Alibaba, BMW, eBay |
+| **Créé par** | Google (2017) |
+| **Compilation** | AOT → Code machine ARM natif |
+| **Rendu UI** | Propre moteur (Skia) |
 
-**Pourquoi c'est bien:**
-- Un seul code pour iOS ET Android (économise 50% du temps)
-- Compile en **code machine natif** (pas interprété = rapide)
-- Excellentes libraries pour GPS, audio, maps
-- Hot reload = développement rapide
-- Grande communauté, beaucoup de docs
+**Avantages:**
+- ✅ Compile en code machine natif (pas interprété)
+- ✅ Une codebase → iOS + Android + Web + Desktop
+- ✅ Hot reload (développement rapide)
+- ✅ UI consistante entre plateformes
+- ✅ Excellente documentation
+- ✅ Grande communauté (180k+ stars GitHub)
+- ✅ Performances proches du natif (~90-95%)
+- ✅ Accès complet aux APIs natives via plugins
+
+**Inconvénients:**
+- ❌ Dart est un langage à apprendre
+- ❌ Taille des apps plus grande (~10-20MB de base)
+- ❌ Dépendance aux plugins pour features natives
+- ❌ Pas 100% des optimisations système disponibles
+
+**Apps connues:** Google Pay, BMW, Alibaba, Nubank, eBay Motors
 
 ---
 
-### 2. React Native (JavaScript)
-
-**C'est quoi?**
-Framework de Meta/Facebook. Tu écris en JavaScript, ça fait une app iOS et Android.
+### React Native (JavaScript)
 
 | Aspect | Détail |
 |--------|--------|
-| **Langage** | JavaScript |
-| **Performance** | ⭐⭐⭐ Bonne (mais "bridge" JS-Native) |
-| **Batterie** | ⭐⭐⭐ Correcte |
-| **Une seule codebase** | ✅ Oui |
-| **Accès GPS/Audio natif** | ✅ Via libraries |
-| **Courbe d'apprentissage** | Facile si tu connais JS |
-| **Utilisé par** | Facebook, Instagram, Airbnb (avant), Discord |
+| **Langage** | JavaScript / TypeScript |
+| **Créé par** | Meta/Facebook (2015) |
+| **Compilation** | JIT → Bridge → Composants natifs |
+| **Rendu UI** | Composants natifs de chaque plateforme |
 
-**Problème pour nous:**
-- Le "bridge" JavaScript ↔ Native peut causer des lags
-- Pour du GPS background intensif, c'est moins optimal
-- Airbnb a abandonné React Native pour du natif pur
+**Avantages:**
+- ✅ JavaScript = beaucoup de développeurs disponibles
+- ✅ Grande communauté et écosystème npm
+- ✅ UI utilise les vrais composants natifs
+- ✅ Code partageable avec web (React)
+- ✅ Expo simplifie le développement
+
+**Inconvénients:**
+- ❌ **Bridge JavaScript ↔ Native** = overhead performance
+- ❌ Problèmes de performance pour animations complexes
+- ❌ Debugging parfois difficile (2 mondes: JS + Native)
+- ❌ Dépendances natives peuvent casser entre versions
+- ❌ Airbnb a abandonné React Native pour du natif
+
+**Apps connues:** Facebook, Instagram, Discord, Shopify
+
+**Pourquoi pas pour App Voyage:**
+Le bridge JS-Native cause du lag pour le GPS background intensif. Les apps avec beaucoup d'interactions natives (GPS, audio, notifications) souffrent plus.
 
 ---
 
-### 3. Natif pur (Swift + Kotlin)
-
-**C'est quoi?**
-Développer séparément:
-- **Swift** pour iOS (langage d'Apple)
-- **Kotlin** pour Android (langage de Google)
+### Kotlin Multiplatform (KMP)
 
 | Aspect | Détail |
 |--------|--------|
-| **Langages** | Swift (iOS) + Kotlin (Android) |
-| **Performance** | ⭐⭐⭐⭐⭐ Maximum |
-| **Batterie** | ⭐⭐⭐⭐⭐ Optimale |
-| **Une seule codebase** | ❌ Non (2 apps à maintenir!) |
-| **Accès GPS/Audio natif** | ✅ Total |
-| **Courbe d'apprentissage** | Élevée (2 langages) |
-| **Utilisé par** | Apple, Google, banques |
+| **Langage** | Kotlin |
+| **Créé par** | JetBrains (2017) |
+| **Compilation** | Natif sur chaque plateforme |
+| **Rendu UI** | Natif (Swift UI / Jetpack Compose) ou Compose Multiplatform |
 
-**Problème pour nous:**
-- **Double le travail** — Chaque feature doit être codée 2 fois
-- **Double les bugs** — Chaque plateforme a ses propres problèmes
-- Pour une équipe de 2 personnes, c'est trop lourd
+**Avantages:**
+- ✅ Kotlin = langage moderne et agréable
+- ✅ Partage la logique métier, UI native par plateforme
+- ✅ Performance 100% native
+- ✅ Interopérabilité parfaite avec code natif existant
+- ✅ Soutenu par Google (Android) et JetBrains
+
+**Inconvénients:**
+- ❌ Plus récent, écosystème moins mature
+- ❌ UI doit souvent être faite séparément (sauf Compose Multiplatform)
+- ❌ Moins de ressources d'apprentissage
+- ❌ Compose Multiplatform encore en beta pour iOS
+
+**Apps connues:** Netflix, McDonald's, VMware, Philips
+
+**Pourquoi pas pour App Voyage:**
+Écosystème moins mature que Flutter. Compose Multiplatform pour iOS est encore jeune.
 
 ---
 
-### 4. C++ (Qt, Cocos2d, etc.)
-
-**C'est quoi?**
-Utiliser C++ avec un framework cross-platform comme Qt.
+### .NET MAUI (C#)
 
 | Aspect | Détail |
 |--------|--------|
-| **Langage** | C++ |
-| **Performance** | ⭐⭐⭐⭐⭐ Maximum théorique |
-| **Batterie** | ⭐⭐⭐⭐⭐ Optimale |
-| **Une seule codebase** | ⚠️ Partiellement |
-| **Accès GPS/Audio natif** | ⚠️ Complexe |
-| **Courbe d'apprentissage** | 🔴 Très élevée |
-| **Utilisé par** | Jeux vidéo, apps très spécialisées |
+| **Langage** | C# |
+| **Créé par** | Microsoft (2022, successeur de Xamarin) |
+| **Compilation** | AOT natif |
+| **Rendu UI** | Contrôles natifs abstraits |
 
-**Pourquoi c'est PAS recommandé pour nous:**
+**Avantages:**
+- ✅ C# = langage mature et puissant
+- ✅ Bon pour les équipes .NET existantes
+- ✅ Intégration Visual Studio excellente
+- ✅ Partage code avec backend .NET
 
-1. **C++ est BEAUCOUP plus complexe**
-   - Gestion manuelle de la mémoire (malloc/free)
-   - Bugs difficiles à trouver (segfaults, memory leaks)
-   - Développement 3-5x plus lent
+**Inconvénients:**
+- ❌ Communauté mobile plus petite
+- ❌ Moins de plugins/packages que Flutter ou RN
+- ❌ Historique de bugs avec Xamarin
+- ❌ Moins populaire pour les apps grand public
 
-2. **Les APIs mobiles ne sont pas en C++**
-   - iOS = Objective-C/Swift
-   - Android = Java/Kotlin
-   - Il faut faire des "bindings" compliqués
-
-3. **Surdimensionné pour notre besoin**
-   - C++ est pour les jeux 3D, les moteurs de rendu
-   - Une app de guide audio n'a pas besoin de ça
-
-4. **Communauté mobile quasi inexistante**
-   - Très peu de libs pour GPS, maps, audio
-   - Tu dois tout réinventer
+**Pourquoi pas pour App Voyage:**
+Écosystème mobile moins riche. Moins de libraries pour GPS, maps, audio.
 
 ---
 
-## Comparatif Performance & Batterie
+## 2. Développement natif
 
-| Framework | CPU Usage | Batterie | Pourquoi |
-|-----------|-----------|----------|----------|
-| **Natif (Swift/Kotlin)** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | Code machine direct |
-| **Flutter** | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | Compile en ARM, pas de bridge |
-| **C++ (Qt)** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | Mais complexité énorme |
-| **React Native** | ⭐⭐⭐ | ⭐⭐⭐ | Bridge JS-Native coûteux |
+### Swift (iOS)
 
-### Pourquoi Flutter est presque aussi bon que natif?
+| Aspect | Détail |
+|--------|--------|
+| **Langage** | Swift |
+| **Créé par** | Apple (2014) |
+| **IDE** | Xcode |
+| **UI** | SwiftUI ou UIKit |
 
-Flutter ne fonctionne PAS comme React Native:
+**Avantages:**
+- ✅ **Performance maximale** sur iOS
+- ✅ **Accès à 100% des APIs Apple**
+- ✅ Optimisations batterie complètes
+- ✅ Nouvelles features iOS dès le jour 1
+- ✅ SwiftUI = développement moderne et rapide
+- ✅ Meilleure intégration système (Widgets, Siri, etc.)
+
+**Inconvénients:**
+- ❌ iOS uniquement (besoin de Kotlin pour Android)
+- ❌ Xcode peut être lent et buggy
+- ❌ Double travail si on veut Android
+
+**Quand choisir:**
+- Budget illimité et équipe dédiée iOS
+- Besoin d'intégrations Apple profondes (CarPlay, Watch, etc.)
+- Performance critique au niveau milliseconde
+
+---
+
+### Kotlin (Android)
+
+| Aspect | Détail |
+|--------|--------|
+| **Langage** | Kotlin |
+| **Créé par** | JetBrains, adopté par Google (2017) |
+| **IDE** | Android Studio |
+| **UI** | Jetpack Compose ou XML Views |
+
+**Avantages:**
+- ✅ **Performance maximale** sur Android
+- ✅ **Accès à 100% des APIs Android**
+- ✅ Langage moderne (null safety, coroutines)
+- ✅ Jetpack Compose = UI déclarative moderne
+- ✅ Excellente documentation Google
+
+**Inconvénients:**
+- ❌ Android uniquement
+- ❌ Fragmentation Android (multiples versions OS)
+- ❌ Double travail si on veut iOS
+
+**Quand choisir:**
+- App Android-only
+- Besoin d'intégrations Android profondes
+- Performance critique
+
+---
+
+### Natif pur (Swift + Kotlin)
+
+**Avantages combinés:**
+- ✅ Performance 100% optimale sur les deux plateformes
+- ✅ Accès complet à toutes les APIs
+- ✅ Meilleures optimisations batterie possibles
+- ✅ Pas de dépendance à un framework tiers
+- ✅ Nouvelles features OS immédiatement
+
+**Inconvénients:**
+- ❌ **Double codebase à maintenir**
+- ❌ **Double les bugs potentiels**
+- ❌ **Double le temps de développement**
+- ❌ Besoin d'expertise dans les deux langages
+- ❌ Coût de maintenance élevé
+
+**Quand choisir:**
+- Équipe de 5+ développeurs
+- Budget important
+- Performance absolument critique
+- Intégrations système profondes nécessaires
+
+---
+
+## 3. Langages bas niveau
+
+### C++
+
+| Aspect | Détail |
+|--------|--------|
+| **Type** | Compilé, bas niveau |
+| **Utilisation mobile** | Via NDK (Android) ou frameworks comme Qt |
+| **Performance** | Maximale théorique |
+
+**Avantages:**
+- ✅ Performance brute maximale
+- ✅ Contrôle total sur la mémoire
+- ✅ Idéal pour calculs intensifs
+- ✅ Code réutilisable entre plateformes (théoriquement)
+
+**Inconvénients:**
+- ❌ **APIs mobiles n'existent pas en C++**
+  - GPS, notifications, audio = Swift/Kotlin
+  - Nécessite des bridges complexes
+- ❌ Gestion manuelle de la mémoire (bugs, crashes)
+- ❌ Développement 3-5x plus lent
+- ❌ Debugging difficile
+- ❌ Très peu de libraries mobiles
+- ❌ Aucune app grand public n'utilise C++ seul
+
+**Quand utiliser C++ sur mobile:**
+- Moteurs de jeux 3D (Unity, Unreal)
+- Traitement vidéo/image en temps réel
+- Algorithmes de ML embarqués
+- Codecs audio/vidéo custom
+
+**Pourquoi pas pour App Voyage:**
+Une app de guide audio n'a pas besoin de C++. Les gains de performance seraient négligeables, et le coût de développement serait énorme.
+
+---
+
+### Rust
+
+| Aspect | Détail |
+|--------|--------|
+| **Type** | Compilé, système, memory-safe |
+| **Utilisation mobile** | Émergente, via FFI |
+
+**Avantages:**
+- ✅ Performance comparable à C++
+- ✅ Memory safety sans garbage collector
+- ✅ Pas de data races
+- ✅ Moderne et agréable
+
+**Inconvénients:**
+- ❌ Écosystème mobile quasi inexistant
+- ❌ Courbe d'apprentissage très raide
+- ❌ Peu de développeurs disponibles
+- ❌ Pas de frameworks UI mobiles matures
+
+**Quand utiliser:**
+- Bibliothèques partagées performantes (crypto, parsing)
+- Backend systems
+
+**Pourquoi pas pour App Voyage:**
+Aucun écosystème mobile. Ce serait expérimental.
+
+---
+
+## 4. Backend & Base de données
+
+### Supabase (PostgreSQL) — ✅ CHOISI
+
+| Aspect | Détail |
+|--------|--------|
+| **Type** | BaaS (Backend as a Service) |
+| **Base de données** | PostgreSQL |
+| **Prix** | Gratuit jusqu'à 500MB, puis 25$/mois |
+
+**Avantages:**
+- ✅ PostgreSQL = robuste, mature, relationnel
+- ✅ Auth intégré (email, Google, Apple)
+- ✅ Realtime intégré (WebSockets)
+- ✅ Row Level Security (sécurité fine)
+- ✅ API auto-générée
+- ✅ Self-hostable (pas de lock-in)
+- ✅ Dashboard admin inclus
+
+**Inconvénients:**
+- ❌ Moins flexible qu'un backend custom
+- ❌ Coûts peuvent augmenter avec le scale
+- ❌ Realtime a des limites de connexions
+
+---
+
+### Firebase (Firestore)
+
+| Aspect | Détail |
+|--------|--------|
+| **Type** | BaaS (Google) |
+| **Base de données** | Firestore (NoSQL) |
+| **Prix** | Pay per read/write |
+
+**Avantages:**
+- ✅ Offline-first natif (sync automatique)
+- ✅ Realtime intégré
+- ✅ Auth, Cloud Functions, Analytics
+- ✅ Très bien documenté
+- ✅ Intégration Flutter excellente
+
+**Inconvénients:**
+- ❌ **Vendor lock-in Google**
+- ❌ **NoSQL peut compliquer certaines queries**
+- ❌ **Coûts imprévisibles** (par opération)
+- ❌ Pas de SQL pour queries complexes
+
+**Pourquoi Supabase plutôt que Firebase:**
+- SQL plus flexible pour nos besoins
+- Pas de lock-in
+- Coûts plus prévisibles
+- Open source
+
+---
+
+### Backend custom (Node.js, Python, Go)
+
+**Avantages:**
+- ✅ Flexibilité totale
+- ✅ Pas de dépendance externe
+- ✅ Optimisations sur mesure
+
+**Inconvénients:**
+- ❌ Beaucoup plus de travail
+- ❌ Maintenance serveurs
+- ❌ Sécurité à gérer soi-même
+- ❌ Auth à implémenter
+
+**Pourquoi pas:**
+Pour un MVP, c'est overkill. Supabase fait tout ce dont on a besoin.
+
+---
+
+## 5. Stockage audio
+
+### Cloudinary — ✅ CHOISI
+
+| Aspect | Détail |
+|--------|--------|
+| **Type** | CDN + Media management |
+| **Prix** | 25GB gratuit, puis ~20$/mois |
+
+**Avantages:**
+- ✅ CDN mondial (téléchargement rapide)
+- ✅ Transformations audio possibles
+- ✅ Dashboard de gestion
+- ✅ API simple
+- ✅ Déjà utilisé pour DigiPattern
+
+**Inconvénients:**
+- ❌ Coûts peuvent augmenter avec volume
+- ❌ Overkill si on a juste besoin de stockage
+
+---
+
+### Supabase Storage
+
+**Avantages:**
+- ✅ Intégré avec Supabase (même dashboard)
+- ✅ 1GB gratuit
+- ✅ CDN via partnership Cloudflare
+
+**Inconvénients:**
+- ❌ Moins de features de transformation
+- ❌ Peut devenir cher pour gros volumes
+
+---
+
+### AWS S3 + CloudFront
+
+**Avantages:**
+- ✅ Très scalable
+- ✅ Coût bas pour gros volumes
+- ✅ CloudFront = CDN performant
+
+**Inconvénients:**
+- ❌ Plus complexe à configurer
+- ❌ Pricing confus
+
+---
+
+### Bunny CDN
+
+**Avantages:**
+- ✅ Très bon marché (~0.01$/GB)
+- ✅ CDN performant
+- ✅ Simple
+
+**Inconvénients:**
+- ❌ Moins connu
+- ❌ Moins de features
+
+---
+
+## 6. Cartographie
+
+### Mapbox — ✅ CHOISI
+
+| Aspect | Détail |
+|--------|--------|
+| **Prix** | 50k chargements/mois gratuit |
+
+**Avantages:**
+- ✅ **Cartes offline** (critique pour nous)
+- ✅ Très customisable (styles custom)
+- ✅ Navigation turn-by-turn
+- ✅ Bon SDK Flutter
+- ✅ Belles cartes par défaut
+
+**Inconvénients:**
+- ❌ Peut devenir cher à grande échelle
+- ❌ SDK Flutter moins mature que Google Maps
+
+---
+
+### Google Maps
+
+**Avantages:**
+- ✅ Le plus connu et documenté
+- ✅ SDK Flutter très mature
+- ✅ Street View
+- ✅ Places API riche
+
+**Inconvénients:**
+- ❌ **Pas de cartes offline** (critique!)
+- ❌ Coûteux après le tier gratuit
+- ❌ Moins customisable
+
+**Pourquoi Mapbox:**
+Les cartes offline sont essentielles pour les touristes sans data.
+
+---
+
+### OpenStreetMap (via flutter_map)
+
+**Avantages:**
+- ✅ Gratuit
+- ✅ Open source
+- ✅ Données communautaires riches
+
+**Inconvénients:**
+- ❌ Moins beau par défaut
+- ❌ Offline plus complexe à gérer
+- ❌ Pas de support commercial
+
+---
+
+## 7. Synthèse vocale (TTS)
+
+### ElevenLabs — ✅ CHOISI
+
+| Aspect | Détail |
+|--------|--------|
+| **Prix** | ~0.30$/1000 caractères |
+
+**Avantages:**
+- ✅ **Voix très naturelles** (les meilleures du marché)
+- ✅ Émotions, styles, tons variés
+- ✅ Clonage de voix possible
+- ✅ Support français excellent
+- ✅ API simple
+
+**Inconvénients:**
+- ❌ Plus cher que les alternatives
+- ❌ Nécessite génération en amont
+
+---
+
+### Google Cloud TTS
+
+**Avantages:**
+- ✅ Moins cher (~0.04$/1000 caractères)
+- ✅ Voix WaveNet de bonne qualité
+- ✅ Beaucoup de langues
+
+**Inconvénients:**
+- ❌ Moins naturel qu'ElevenLabs
+- ❌ Moins d'options de personnalisation
+
+---
+
+### Amazon Polly
+
+**Avantages:**
+- ✅ Prix compétitif
+- ✅ Neural TTS disponible
+- ✅ Bonne intégration AWS
+
+**Inconvénients:**
+- ❌ Qualité inférieure à ElevenLabs
+- ❌ Moins de voix françaises naturelles
+
+---
+
+### TTS natif (device)
+
+**Avantages:**
+- ✅ Gratuit
+- ✅ Fonctionne offline
+- ✅ Pas d'API externe
+
+**Inconvénients:**
+- ❌ Qualité robotique
+- ❌ Varie selon les appareils
+- ❌ Pas de personnalité
+
+**Utilisation:** Fallback pour langues non prioritaires.
+
+---
+
+## 8. Décisions finales
+
+| Composant | Choix | Justification principale |
+|-----------|-------|-------------------------|
+| **Framework mobile** | Flutter | Performance native + une codebase |
+| **Backend** | Supabase | PostgreSQL + Auth + Realtime intégrés |
+| **Stockage audio** | Cloudinary | CDN + déjà configuré |
+| **Cartes** | Mapbox | Offline maps obligatoires |
+| **TTS** | ElevenLabs | Voix les plus naturelles |
+| **Langages** | Dart (mobile), SQL (backend) | Standards du framework |
+
+---
+
+### Pourquoi ces choix sont cohérents
 
 ```
-React Native:
-[JavaScript] ←→ [Bridge] ←→ [Code Natif]
-                  ↑
-            Lent, consomme CPU
-
-Flutter:
-[Dart] → [Compilation] → [Code Machine ARM]
-                              ↑
-                    Exécution directe, rapide
+┌─────────────────────────────────────────────────────┐
+│                    APP VOYAGE                        │
+├─────────────────────────────────────────────────────┤
+│  ┌─────────────────────────────────────────────┐    │
+│  │           FLUTTER (Dart)                     │    │
+│  │  • Performance 90-95% native                │    │
+│  │  • Une codebase → iOS + Android             │    │
+│  │  • Accès GPS, audio, maps via plugins       │    │
+│  └─────────────────────────────────────────────┘    │
+│                        │                             │
+│         ┌──────────────┼──────────────┐             │
+│         ▼              ▼              ▼             │
+│  ┌───────────┐  ┌───────────┐  ┌───────────┐       │
+│  │ Supabase  │  │ Cloudinary│  │  Mapbox   │       │
+│  │ (Backend) │  │  (Audio)  │  │  (Maps)   │       │
+│  └───────────┘  └───────────┘  └───────────┘       │
+│       │                                             │
+│       ▼                                             │
+│  ┌───────────┐                                      │
+│  │ElevenLabs │ (pré-génération audio)               │
+│  └───────────┘                                      │
+└─────────────────────────────────────────────────────┘
 ```
 
-Flutter compile ton code Dart directement en **code machine ARM** (le même qu'utilise Swift/Kotlin). Il n'y a pas d'interpréteur au runtime.
-
 ---
 
-## Impact batterie pour App Voyage
+### Alternatives considérées pour le futur
 
-Les plus gros consommateurs de batterie seront:
-
-| Composant | Impact | Solution |
-|-----------|--------|----------|
-| **GPS background** | 🔴 Élevé | Réduire fréquence polling |
-| **Écran allumé** | 🔴 Élevé | Mode économie, écran éteint OK |
-| **Audio** | 🟢 Faible | MP3 local, pas de streaming |
-| **Framework** | 🟡 Moyen | Flutter = OK |
-
-**Le framework n'est PAS le problème principal.**
-
-Le GPS background est le vrai consommateur. Qu'on soit en Flutter, Swift, ou C++, le GPS consomme pareil. La solution:
-- Polling GPS intelligent (pas chaque seconde)
-- Géofencing natif (laisse l'OS gérer)
-- Mode économie quand batterie < 20%
-
----
-
-## Comparatif temps de développement
-
-Pour une équipe de 2 personnes:
-
-| Framework | Temps estimé MVP | Pourquoi |
-|-----------|------------------|----------|
-| **Flutter** | 4-6 mois | Un code, deux plateformes |
-| **React Native** | 4-6 mois | Similaire, mais plus de bugs natifs |
-| **Natif (Swift+Kotlin)** | 8-12 mois | Double travail |
-| **C++** | 12-18 mois | Complexité énorme |
-
----
-
-## Notre recommandation: Flutter 🎯
-
-### Pourquoi Flutter pour App Voyage?
-
-1. **Performance quasi-native**
-   - Compile en ARM, pas interprété
-   - Suffisant pour GPS + audio (pas un jeu 3D)
-
-2. **Un seul code = 50% moins de travail**
-   - Critique pour une équipe de 2
-
-3. **Excellentes libraries**
-   - `geolocator` — GPS avec background
-   - `just_audio` — Lecteur audio complet
-   - `mapbox_maps_flutter` — Cartes offline
-   - `supabase_flutter` — Backend intégré
-
-4. **Batterie correcte**
-   - Pas de bridge JS = moins de CPU
-   - Le GPS est le vrai problème, pas Flutter
-
-5. **Google maintient activement**
-   - Updates réguliers
-   - Bonne documentation
-   - Grande communauté
-
-### Quand choisir autre chose?
-
-| Si tu veux... | Alors choisis... |
-|---------------|------------------|
-| Performance ABSOLUE (jeu 3D) | Natif ou C++ |
-| Équipe de 10+ devs avec budget | Natif (Swift + Kotlin) |
-| Déjà expert JavaScript | React Native (acceptable) |
-| App très simple | React Native ou même PWA |
-
----
-
-## Apps connues faites en Flutter
-
-Pour prouver que Flutter est sérieux:
-
-- **Google Pay** — Paiements (performance critique)
-- **Alibaba** — E-commerce (millions d'users)
-- **BMW** — App connectée véhicule
-- **eBay Motors** — Marketplace
-- **Philips Hue** — IoT / domotique
-- **Nubank** — Banque digitale (50M+ users)
-- **Reflectly** — App bien-être (App of the Day)
-
----
-
-## Conclusion
-
-| Critère | Flutter | Natif | C++ | React Native |
-|---------|---------|-------|-----|--------------|
-| Performance | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ |
-| Batterie | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ |
-| Temps dev | ⭐⭐⭐⭐⭐ | ⭐⭐ | ⭐ | ⭐⭐⭐⭐ |
-| Complexité | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐ | ⭐⭐⭐⭐ |
-| Pour équipe de 2 | ✅ Idéal | ❌ Trop lourd | ❌ Trop complexe | ⚠️ OK |
-
-**Flutter = Le meilleur compromis performance/productivité pour ce projet.**
-
-C++ serait overkill et prendrait 3x plus de temps. Le natif pur doublerait le travail. React Native aurait plus de problèmes de performance.
+| Situation | Pivot possible |
+|-----------|---------------|
+| Performance insuffisante | Modules natifs Swift/Kotlin |
+| Coûts Cloudinary trop élevés | Bunny CDN ou S3 |
+| ElevenLabs trop cher | Google Cloud TTS |
+| Besoin de features Apple avancées | Module Swift |
 
 ---
 

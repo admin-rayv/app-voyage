@@ -4,9 +4,9 @@ class AppConstants {
   static const String appName = 'App Voyage';
   static const String appVersion = '1.0.0';
   
-  // Supabase (à configurer)
-  static const String supabaseUrl = 'YOUR_SUPABASE_URL';
-  static const String supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY';
+  // Supabase
+  static const String supabaseUrl = 'https://lfwnpyttyoefqvhfqajb.supabase.co';
+  static const String supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmd25weXR0eW9lZnF2aGZxYWpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMDc2NTAsImV4cCI6MjA4Njg4MzY1MH0.J2kmSaIvxhkqGucy9C4ZwbokDS2hU7uBXlb4kE8Ryao';
   
   // Mapbox (à configurer)
   static const String mapboxAccessToken = 'YOUR_MAPBOX_TOKEN';

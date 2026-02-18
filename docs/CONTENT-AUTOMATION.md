@@ -30,12 +30,31 @@
 
 Nos utilisateurs sont **à pied**. Un tour doit être marchable.
 
+### Paramètres par mode
+
+| Mode | Rayon | Distance totale | Durée | POIs |
+|------|-------|-----------------|-------|------|
+| 🚶 **Piéton standard** | 4-5 km | 5-8 km | 2-3h | 10-15 |
+| 🚶 **Piéton zone dense** | 2-3 km | 3-5 km | 1.5-2h | 8-12 |
+| 🚴 **Vélo** | 8-12 km | 12-18 km | 2-3h | 12-18 |
+| 🚗 **Auto (road trip)** | 20+ km | Variable | 3-5h | 8-15 |
+
+### Quand utiliser quel rayon?
+
+| Zone | Rayon recommandé | Exemple |
+|------|------------------|---------|
+| **Ultra-dense** (tout proche) | 2-3 km | Vieux-Montréal, Vieux-Québec |
+| **Urbain standard** | 4-5 km | Plateau, Mile End, Centre-ville |
+| **Banlieue / ville moyenne** | 4-5 km | Sainte-Julie, Longueuil |
+| **Nature / parc** | 3-5 km | Mont-Royal, Parc Jean-Drapeau |
+
+### Autres paramètres
+
 | Paramètre | Valeur | Raison |
 |-----------|--------|--------|
-| **Rayon max** | 2-3 km | ~30-45 min de marche |
-| **POIs par tour** | 8-12 | ~60-90 min total |
-| **Espacement** | 200-400m entre POIs | Assez pour marcher, pas trop pour s'ennuyer |
+| **Espacement** | 200-500m entre POIs | Assez pour marcher, pas trop pour s'ennuyer |
 | **Boucle** | Retour au point de départ | Pratique pour stationnement |
+| **Temps par POI** | ~5-8 min | Audio (90s) + observation + photos |
 
 **Implication:** Un tour = un quartier/cluster marchable, PAS une ville entière.
 
@@ -157,7 +176,7 @@ Tu recherches des POIs pour un tour audio à {ville}.
 CONTEXTE DU TOUR:
 - Thème: {theme}
 - Quartier/Zone: {quartier}
-- Rayon maximum: 2km depuis {point_central}
+- Rayon maximum: {rayon_km}km depuis {point_central}
 - Nombre de POIs cible: 8-12
 
 CRITÈRES DE SÉLECTION:
@@ -190,7 +209,7 @@ Pour chaque POI candidat:
     "theme": "Patrimoine et Nature",
     "quartier": "Centre-ville",
     "point_central": {"lat": 45.5847, "lng": -73.3361},
-    "rayon_km": 2
+    "rayon_km": 4
   },
   "pois_candidats": [
     {
@@ -312,7 +331,7 @@ Génère le script audio en français québécois.
 ### Approche recommandée
 
 **Option A: Un seul tour "Découverte Sainte-Julie"**
-- 8-10 POIs dans un rayon de 2km du centre
+- 10-12 POIs dans un rayon de 4-5km du centre
 - Mix patrimoine + nature + anecdotes locales
 - ~75-90 minutes de marche
 

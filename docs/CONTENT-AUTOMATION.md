@@ -1,6 +1,6 @@
 # 🤖 AUTOMATISATION DU CONTENU — App Voyage
 
-> Explorer les options pour automatiser la création de contenu avec révision humaine
+> Pipeline de création de contenu: Thème → Quartier → Tour → POIs
 
 ---
 
@@ -13,81 +13,217 @@
 │                    PIPELINE DE CONTENU                          │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│   🤖 AI GÉNÈRE          →    👀 HUMAIN RÉVISE    →    ✅ PUBLIÉ │
+│   🏙️ ANALYSE      →   🎯 THÈMES     →   🚶 TOURS    →   📍 POIs │
+│   VILLE               UNIQUES           MARCHABLES      DÉTAILS │
 │                                                                 │
-│   • Recherche POIs           • Valide les infos      • En prod  │
-│   • Rédige scripts           • Corrige le ton        • Visible  │
-│   • Traduit                  • Approuve              • Jouable  │
+│   • C'est quoi le     • Quartiers       • Clusters      • GPS   │
+│     hook unique?        intéressants      walkables     • Script│
+│   • Petite/grande?    • Angles           • 2-3km max    • Audio │
+│   • Besoins?            originaux        • 8-12 stops          │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Étapes du processus
+## 🚶 Contrainte #1: Piéton d'abord
 
-### 1. Recherche de POIs
+Nos utilisateurs sont **à pied**. Un tour doit être marchable.
 
-| Approche | Description | Effort humain | Qualité |
-|----------|-------------|---------------|---------|
-| **100% Manuel** | Pierre recherche chaque POI | 🔴 Élevé | ⭐⭐⭐⭐⭐ |
-| **AI + Révision** | AI trouve les POIs, humain valide | 🟢 Faible | ⭐⭐⭐⭐ |
-| **100% AI** | AI trouve et insère automatiquement | 🟢 Très faible | ⭐⭐⭐ |
+| Paramètre | Valeur | Raison |
+|-----------|--------|--------|
+| **Rayon max** | 2-3 km | ~30-45 min de marche |
+| **POIs par tour** | 8-12 | ~60-90 min total |
+| **Espacement** | 200-400m entre POIs | Assez pour marcher, pas trop pour s'ennuyer |
+| **Boucle** | Retour au point de départ | Pratique pour stationnement |
 
-#### Option recommandée: AI + Révision
+**Implication:** Un tour = un quartier/cluster marchable, PAS une ville entière.
 
-**Comment ça marche:**
-1. L'AI recherche sur Google/Wikipedia/sites locaux
-2. L'AI génère une liste de POIs candidats avec:
-   - Nom du lieu
-   - Coordonnées GPS (via Google Maps API ou geocoding)
-   - Pourquoi c'est intéressant (2-3 lignes)
-   - Sources
-3. L'humain révise dans un tableau/Trello
-4. L'humain approuve → POI inséré dans la DB
+---
 
-**Sources de données pour l'AI:**
-- Google Places API
-- Wikipedia (articles locaux)
-- Sites des villes (ex: ville.sainte-julie.qc.ca)
-- TripAdvisor / Google Reviews
-- OpenStreetMap (POIs tagués)
-- Articles de journaux locaux
+## Étape 0: Analyse de la ville
 
-**Output format suggéré:**
+**AVANT de chercher des POIs**, analyser la ville.
+
+### Questions à répondre
+
+```markdown
+## Fiche d'analyse: {VILLE}
+
+### Taille et potentiel
+- Population: ?
+- Superficie: ?
+- Est-ce que ça vaut plusieurs tours ou un seul suffit?
+
+### Hook unique
+- C'est quoi le truc SPÉCIAL de cette ville?
+- Pourquoi un touriste irait LÀ plutôt qu'ailleurs?
+- Qu'est-ce que les locaux diraient: "Ah, {ville}? C'est connu pour..."
+
+### Quartiers/zones marchables
+- Y a-t-il des quartiers distincts?
+- Où sont les zones piétonnes?
+- Où peut-on stationner et marcher?
+
+### Thèmes potentiels
+- Histoire/patrimoine?
+- Gastronomie?
+- Nature/parcs?
+- Art/culture?
+- Insolite/hanté?
+- Architecture?
+
+### Verdict
+- [ ] MULTI-TOURS: Grande ville, plusieurs thèmes/quartiers possibles
+- [ ] TOUR UNIQUE: Petite ville, un tour complet suffit
+- [ ] SKIP: Pas assez de contenu pour justifier un tour
+```
+
+---
+
+## Étape 1: Structure des tours (AVANT les POIs)
+
+### Grandes villes (Montréal, Québec, etc.)
+
+**Approche: Thèmes × Quartiers**
+
+| Quartier | Thèmes possibles |
+|----------|------------------|
+| Vieux-Montréal | 👻 Hanté, 🏛️ Histoire, 🍷 Gastro |
+| Plateau | 🎨 Street Art, 🍴 Foodies, 🏠 Architecture |
+| Mile End | 🎵 Musique, ☕ Cafés, 🎨 Art |
+| Mont-Royal | 🌿 Nature, 🏃 Sport, 📸 Vues |
+
+**Résultat possible:**
+- Tour 1: Vieux-Montréal Hanté (8 POIs, ~90 min)
+- Tour 2: Plateau Foodies (10 POIs, ~2h)
+- Tour 3: Mile End Street Art (8 POIs, ~75 min)
+- Bundle: "Découverte Montréal" (3 tours, 14.99$)
+
+### Petites villes (Sainte-Julie, etc.)
+
+**Approche: Tour unique ou thématique simple**
+
+Questions:
+1. Y a-t-il assez pour PLUSIEURS tours? (Probablement non)
+2. Quel est le SEUL angle intéressant?
+3. Est-ce qu'un seul tour de 8-12 POIs couvre l'essentiel?
+
+**Résultat possible:**
+- Tour unique: "Découverte Sainte-Julie" (8 POIs, patrimoine + nature)
+- OU 2 micro-tours si quartiers distincts
+
+---
+
+## Étape 2: Identification des clusters marchables
+
+Une fois les thèmes identifiés, trouver les **clusters**.
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     CARTE DE LA VILLE                           │
+│                                                                 │
+│         ┌──────────┐                                            │
+│         │ Cluster A│ ← Zone marchable #1                        │
+│         │  ★ ★ ★   │   (centre-ville historique)                │
+│         │   ★ ★    │   8 POIs, rayon 1.5km                      │
+│         └──────────┘                                            │
+│                           ┌──────────┐                          │
+│                           │ Cluster B│ ← Zone marchable #2      │
+│                           │  ★ ★     │   (parc + nature)        │
+│                           │ ★        │   5 POIs, rayon 1km      │
+│                           └──────────┘                          │
+│                                                                 │
+│  ⚠️ Gap trop grand = voiture nécessaire = 2 tours séparés     │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Règles:**
+- Si >1km entre deux clusters → tours séparés
+- Si POIs trop éparpillés → sélectionner les meilleurs dans un rayon walkable
+- Chaque tour = 1 cluster = 1 zone de stationnement
+
+---
+
+## Étape 3: Recherche de POIs (par cluster/thème)
+
+**Seulement après avoir défini le thème et le cluster.**
+
+### Prompt AI pour recherche POIs
+
+```markdown
+Tu recherches des POIs pour un tour audio à {ville}.
+
+CONTEXTE DU TOUR:
+- Thème: {theme}
+- Quartier/Zone: {quartier}
+- Rayon maximum: 2km depuis {point_central}
+- Nombre de POIs cible: 8-12
+
+CRITÈRES DE SÉLECTION:
+1. **Pertinence au thème** — Le POI doit supporter le thème du tour
+2. **Marchabilité** — Accessible à pied depuis les autres POIs
+3. **Intérêt narratif** — Il y a une histoire à raconter (pas juste "c'est un building")
+4. **Visibilité** — L'auditeur peut VOIR quelque chose (pas un site démoli)
+
+EXCLURE:
+- POIs fermés au public sans intérêt extérieur
+- Lieux trop éloignés du cluster
+- Sites génériques sans histoire locale
+
+OUTPUT:
+Pour chaque POI candidat:
+- Nom
+- Coordonnées GPS
+- Distance du point central
+- Pourquoi c'est pertinent au thème
+- Hook narratif (1 phrase accrocheuse)
+- Sources
+```
+
+### Format de sortie
+
 ```json
 {
-  "poi_candidates": [
+  "tour": {
+    "ville": "Sainte-Julie",
+    "theme": "Patrimoine et Nature",
+    "quartier": "Centre-ville",
+    "point_central": {"lat": 45.5847, "lng": -73.3361},
+    "rayon_km": 2
+  },
+  "pois_candidats": [
     {
-      "name": "Église Sainte-Julie",
+      "nom": "Église Sainte-Julie",
       "lat": 45.5847,
       "lng": -73.3361,
-      "type": "building",
-      "why_interesting": "Construite en 1852, c'est le plus vieux bâtiment de la ville. Le clocher original a été frappé par la foudre en 1923.",
-      "sources": ["ville.sainte-julie.qc.ca/patrimoine", "wikipedia"],
-      "confidence": "high",
-      "status": "pending_review"
+      "distance_centre": "0m",
+      "pertinence_theme": "Bâtiment patrimonial central, construit 1852",
+      "hook": "Le clocher qu'on voit a été reconstruit après avoir été frappé par la foudre en 1923",
+      "sources": ["ville.sainte-julie.qc.ca", "patrimoine-culturel.gouv.qc.ca"],
+      "ordre_suggere": 1
     }
-  ]
+  ],
+  "parcours_suggere": "Église → Parc → Maison ancestrale → ...",
+  "stationnement_recommande": "Parking de l'église (gratuit)",
+  "duree_estimee": "75-90 minutes"
 }
 ```
 
 ---
 
-### 2. Génération des scripts audio
+## Étape 4: Génération des scripts
 
-| Approche | Description | Effort humain | Qualité |
-|----------|-------------|---------------|---------|
-| **100% Manuel** | Pierre écrit chaque script | 🔴 Élevé | ⭐⭐⭐⭐⭐ |
-| **AI + Révision** | AI rédige, humain peaufine | 🟡 Moyen | ⭐⭐⭐⭐ |
-| **AI + Guidelines stricts** | AI rédige avec prompts détaillés | 🟢 Faible | ⭐⭐⭐⭐ |
-
-#### Option recommandée: AI + Guidelines stricts + Révision légère
-
-**Prompt template pour génération de scripts:**
+### Prompt template
 
 ```markdown
 Tu es un guide touristique passionné qui raconte l'histoire de {ville}.
+
+CONTEXTE DU TOUR:
+- Thème: {theme}
+- Ce POI est le #{ordre} sur {total} du parcours
+- POI précédent: {poi_precedent}
+- POI suivant: {poi_suivant}
 
 TON STYLE:
 - Tu tutoies l'auditeur
@@ -110,259 +246,195 @@ INFORMATIONS SUR LE POI:
 - Histoire: {poi_history}
 - Anecdotes connues: {poi_anecdotes}
 - Ce qu'on peut voir: {poi_visual_elements}
+- Direction vers prochain POI: {direction_next}
 
 Génère le script audio en français québécois.
 ```
 
-**Workflow:**
-1. AI reçoit les infos du POI (de l'étape 1)
-2. AI génère le script avec le prompt template
-3. Script ajouté en status "draft" dans la DB
-4. Humain révise dans une interface (ou Trello)
-5. Humain approuve → status "approved"
-
 ---
 
-### 3. Traduction
-
-| Approche | Description | Effort humain | Qualité |
-|----------|-------------|---------------|---------|
-| **Traducteur pro** | Humain traduit tout | 🔴 Très élevé | ⭐⭐⭐⭐⭐ |
-| **AI + Révision** | Claude/GPT traduit, humain révise | 🟡 Moyen | ⭐⭐⭐⭐ |
-| **AI seul** | AI traduit automatiquement | 🟢 Très faible | ⭐⭐⭐ |
-
-#### Option recommandée: AI + Révision pour langues prioritaires
+## Étape 5: Traduction
 
 **Stratégie par langue:**
-- **Français → Anglais:** AI + révision légère (qualité AI excellente)
-- **Français → Espagnol:** AI + révision par hispanophone
-- **Autres langues:** AI seul (acceptable pour MVP)
+- **FR → EN:** AI + révision légère
+- **FR → ES:** AI + révision par hispanophone
+- **Autres:** AI seul (MVP)
 
-**Prompt template pour traduction:**
+---
 
-```markdown
-Traduis ce script de guide audio du français vers l'anglais.
+## Workflow complet
 
-RÈGLES:
-- Garde le même ton conversationnel et enthousiaste
-- Adapte les expressions idiomatiques (ne traduis pas littéralement)
-- Garde le tutoiement → "you" informel
-- Les noms propres restent en français
-- Adapte les références culturelles si nécessaire
+### Pour une nouvelle ville
 
-SCRIPT ORIGINAL:
-{script_fr}
+```
+1. ANALYSE
+   └── Remplir la fiche d'analyse de la ville
+   └── Décision: multi-tours, tour unique, ou skip?
 
-Traduis en anglais naturel, comme si un guide anglophone racontait la même histoire.
+2. STRUCTURE
+   └── Définir les thèmes intéressants
+   └── Identifier les clusters marchables (carte)
+   └── Créer 1 tour par cluster/thème
+
+3. POIs
+   └── Pour chaque tour, rechercher 10-15 POIs candidats
+   └── Filtrer à 8-12 POIs marchables
+   └── Définir l'ordre du parcours
+   └── Identifier stationnement + toilettes + cafés
+
+4. SCRIPTS
+   └── Générer scripts pour chaque POI
+   └── Révision humaine
+   └── Traduction
+
+5. AUDIO
+   └── TTS via ElevenLabs (on-demand)
+   └── Test du parcours complet
 ```
 
 ---
 
-### 4. Génération audio (TTS)
+## Application: Sainte-Julie
 
-| Approche | Description | Effort humain | Coût |
-|----------|-------------|---------------|------|
-| **Voix humaine** | Acteur enregistre | 🔴 Très élevé | $$$$ |
-| **ElevenLabs** | TTS haute qualité | 🟢 Faible | $$ |
-| **Google TTS** | TTS standard | 🟢 Très faible | $ |
+### Analyse rapide
 
-#### Option recommandée: ElevenLabs avec cache
+- **Population:** ~30,000
+- **Superficie:** ~49 km²
+- **Hook unique:** Ville de banlieue avec patrimoine agricole, proche nature
+- **Verdict:** Probablement **1-2 tours max**
 
-**Déjà planifié dans l'architecture:**
-- Scripts stockés en texte dans Supabase
-- Audio généré à la demande via Edge Function
-- Cache local sur l'appareil
+### Clusters potentiels
 
-**Automatisation possible:**
-- Pré-générer les audios populaires en batch
-- Régénérer automatiquement si script modifié
+1. **Centre-ville** — Église, mairie, parc central, bâtiments patrimoniaux
+2. **Mont Saint-Bruno** — Si on inclut (mais c'est une autre ville...)
+3. **Zone nature** — Parcs, sentiers?
+
+### Approche recommandée
+
+**Option A: Un seul tour "Découverte Sainte-Julie"**
+- 8-10 POIs dans un rayon de 2km du centre
+- Mix patrimoine + nature + anecdotes locales
+- ~75-90 minutes de marche
+
+**Option B: Skip pour le MVP**
+- Commencer directement par Montréal (plus de contenu)
+- Sainte-Julie = test technique seulement (3-5 POIs factices)
 
 ---
 
-## Options d'automatisation
+## Application: Montréal
 
-### Option A: Pipeline manuel assisté par AI
+### Thèmes × Quartiers (exemples)
+
+| # | Tour | Quartier | Thème | POIs estimés |
+|---|------|----------|-------|--------------|
+| 1 | Vieux-Montréal Hanté | Vieux-Mtl | 👻 Fantômes | 10 |
+| 2 | Plateau Foodies | Plateau | 🍴 Gastro | 12 |
+| 3 | Mile End Street Art | Mile End | 🎨 Art | 8 |
+| 4 | Mont-Royal Secrets | Mont-Royal | 🌿 Nature | 8 |
+| 5 | Architecture Art Déco | Centre-ville | 🏛️ Archi | 10 |
+
+### Bundles possibles
+
+- **Bundle "Découverte Montréal"** — Tours 1-3 (14.99$)
+- **Bundle "Montréal Complet"** — Tous les tours (29.99$)
+- **Tours individuels** — 7.99$ chacun
+
+---
+
+## Interface de révision: Trello
+
+### Structure du board
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│  1. Humain demande à l'AI: "Trouve 10 POIs à Sainte-Julie"      │
-│                           ↓                                      │
-│  2. AI retourne une liste dans le chat                          │
-│                           ↓                                      │
-│  3. Humain copie/colle dans Trello pour révision                │
-│                           ↓                                      │
-│  4. Humain approuve → copie dans Supabase manuellement          │
-└─────────────────────────────────────────────────────────────────┘
+BOARD: "Contenu App Voyage"
+
+LISTES:
+[Analyse]        [À générer]    [À réviser]    [Approuvé]    [En prod]
+
+CARTES:
+┌─────────────────────┐
+│ 📊 Fiche: Montréal  │  ← Analyse de ville
+│    Labels: analyse  │
+└─────────────────────┘
+
+┌─────────────────────┐
+│ 🗺️ Tour: Vieux-Mtl │  ← Structure du tour
+│    Hanté            │
+│    Labels: structure│
+└─────────────────────┘
+
+┌─────────────────────┐
+│ 📍 POI: Château     │  ← POI individuel
+│    Ramezay          │
+│    Labels: poi      │
+└─────────────────────┘
 ```
 
-**Avantages:** Simple, contrôle total
-**Inconvénients:** Beaucoup de copier/coller
-
----
-
-### Option B: Interface de révision dédiée
+### Format carte POI
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│  1. Script/cron lance la génération AI périodiquement           │
-│                           ↓                                      │
-│  2. Contenu généré → inséré en status "pending" dans DB         │
-│                           ↓                                      │
-│  3. Interface web affiche le contenu à réviser                  │
-│     [Approuver] [Modifier] [Rejeter]                            │
-│                           ↓                                      │
-│  4. Humain clique Approuver → status "approved"                 │
-└─────────────────────────────────────────────────────────────────┘
+Titre: [POI] {nom} — {tour}
+
+Description:
+📍 Coordonnées: {lat}, {lng}
+🚶 Ordre dans tour: #{n}
+📏 Distance du précédent: {x}m
+
+📝 Script FR:
+---
+{script_complet}
+---
+
+📝 Script EN:
+---
+{traduction}
+---
+
+📚 Sources:
+- {source1}
+- {source2}
+
+🗺️ Directions vers prochain:
+{directions}
+
+✏️ Notes de révision:
+[Commentaires ici]
 ```
 
-**Avantages:** Workflow clair, historique, plusieurs réviseurs
-**Inconvénients:** Nécessite de builder une interface
+---
+
+## Estimation des coûts
+
+| Tâche | Coût/unité | Pour 1 tour (10 POIs) |
+|-------|------------|----------------------|
+| Analyse ville | ~$0.10 | $0.10 |
+| Recherche POIs | ~$0.08/POI | $0.80 |
+| Script FR | ~$0.05/POI | $0.50 |
+| Traduction EN | ~$0.03/POI | $0.30 |
+| **Total** | | **~$1.70/tour** |
+
+**Coût négligeable** comparé au temps humain économisé.
 
 ---
 
-### Option C: Trello comme interface de révision
+## Checklist nouvelle ville
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  TRELLO BOARD: "Contenu App Voyage"                             │
-│                                                                  │
-│  [À réviser]     [En révision]    [Approuvé]    [En prod]       │
-│  ┌──────────┐    ┌──────────┐    ┌──────────┐   ┌──────────┐   │
-│  │ POI #12  │    │ POI #08  │    │ POI #05  │   │ POI #01  │   │
-│  │ Script   │    │ Script   │    │ Script   │   │ Script   │   │
-│  │ 🤖 Auto  │    │ 👀 Pierre│    │ ✅ OK    │   │ 🚀 Live  │   │
-│  └──────────┘    └──────────┘    └──────────┘   └──────────┘   │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
-
-AI génère → Carte créée dans "À réviser"
-Humain déplace vers "Approuvé"
-Script sync Trello → Supabase
-```
-
-**Avantages:** 
-- Pas de nouvelle interface à builder
-- Trello déjà utilisé pour le projet
-- Mobile-friendly
-- Notifications intégrées
-
-**Inconvénients:**
-- Nécessite un script de sync Trello ↔ Supabase
-- Limites de l'API Trello (rate limits)
+- [ ] Remplir fiche d'analyse
+- [ ] Décision: nombre de tours?
+- [ ] Identifier clusters marchables (carte)
+- [ ] Pour chaque tour:
+  - [ ] Définir thème + quartier
+  - [ ] Point central + rayon
+  - [ ] Recherche POIs (15 candidats)
+  - [ ] Sélection finale (8-12)
+  - [ ] Ordre du parcours
+  - [ ] Stationnement + logistique
+  - [ ] Scripts FR
+  - [ ] Révision
+  - [ ] Traduction EN
+  - [ ] Test terrain
 
 ---
 
-### Option D: GitHub Issues comme révision
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  GITHUB REPO: app-voyage/content                                 │
-│                                                                  │
-│  Issues:                                                         │
-│  #12 [POI] Église Sainte-Julie          [needs-review]          │
-│  #11 [Script] Parc municipal            [approved]              │
-│  #10 [POI] Maison ancestrale            [in-progress]           │
-│                                                                  │
-│  AI crée une Issue avec le contenu                              │
-│  Humain review et ajoute label "approved"                       │
-│  GitHub Action sync vers Supabase                               │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-**Avantages:**
-- Versioning du contenu
-- Discussions/commentaires
-- GitHub Actions pour automation
-- Gratuit
-
-**Inconvénients:**
-- Moins user-friendly que Trello
-- Pierre doit connaître GitHub
-
----
-
-## Recommandation
-
-### Pour le MVP (maintenant)
-
-**Option C: Trello comme interface de révision**
-
-1. **Créer un board Trello "Contenu Sainte-Julie"**
-   - Liste: À générer
-   - Liste: À réviser  
-   - Liste: Approuvé
-   - Liste: En production
-
-2. **Workflow:**
-   - Je (Molty) génère le contenu et crée les cartes
-   - Vous révisez et déplacez vers "Approuvé"
-   - Je sync vers Supabase
-
-3. **Format des cartes:**
-   ```
-   Titre: [POI] Église Sainte-Julie
-   
-   Description:
-   📍 Coordonnées: 45.5847, -73.3361
-   🏷️ Type: building
-   
-   📝 Script FR:
-   [Le script complet ici]
-   
-   📚 Sources:
-   - ville.sainte-julie.qc.ca
-   - Wikipedia
-   
-   ✏️ Notes de révision:
-   [Vous ajoutez vos commentaires ici]
-   ```
-
-### Pour V2 (plus tard)
-
-**Option B: Interface de révision dédiée**
-
-- Dashboard web simple
-- Liste des contenus à réviser
-- Preview audio (TTS)
-- Boutons Approuver/Modifier/Rejeter
-- Sync automatique vers Supabase
-
----
-
-## Prochaines étapes
-
-1. **Créer le board Trello "Contenu Sainte-Julie"**
-2. **Je génère les 8-10 POIs candidats**
-3. **Vous révisez**
-4. **Je génère les scripts pour les POIs approuvés**
-5. **Vous révisez les scripts**
-6. **Je sync vers Supabase**
-
----
-
-## Estimation des coûts AI
-
-| Tâche | Tokens/unité | Coût Claude | Pour 10 POIs |
-|-------|--------------|-------------|--------------|
-| Recherche POI | ~2000 | ~$0.06 | $0.60 |
-| Script FR | ~1500 | ~$0.05 | $0.50 |
-| Traduction EN | ~1000 | ~$0.03 | $0.30 |
-| **Total par POI** | | | **~$0.14** |
-
-**Pour Sainte-Julie (10 POIs):** ~$1.40 en tokens AI
-**Pour Montréal (50 POIs):** ~$7.00 en tokens AI
-
-*Coûts négligeables comparé au temps humain économisé.*
-
----
-
-## Questions ouvertes
-
-1. **Qui révise?** Pierre seul? Vous deux? 
-2. **Niveau de révision?** Juste valider ou réécrire si nécessaire?
-3. **Fréquence?** Batch (tout d'un coup) ou graduel (quelques POIs par jour)?
-4. **Interface préférée?** Trello? GitHub? Autre?
-
----
-
-*Document créé le 2026-02-18*
+*Document mis à jour le 2026-02-18 — Approche thème-first + piéton-first*

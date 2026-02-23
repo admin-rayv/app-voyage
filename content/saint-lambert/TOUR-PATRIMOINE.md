@@ -1,67 +1,19 @@
-# 🎧 TOUR: Découverte Saint-Lambert — Patrimoine & Origines
+# 🎧 POIs: Saint-Lambert — Patrimoine & Origines
 
-> **Un musée vivant de l'architecture québécoise**
+> **Fiches POI standalone — chaque point d'intérêt est autonome et auto-contenu**
 
 ---
 
-## Informations du tour
+## Informations de la ville
 
 | Champ | Valeur |
 |-------|--------|
 | **Ville** | Saint-Lambert |
-| **Thème** | Patrimoine architectural + Histoire des origines |
-| **Quartier** | Le Village (centre-ville) + Bord du fleuve |
-| **Durée** | ~75-90 minutes |
-| **Distance** | ~3.0 km (boucle) |
-| **POIs** | 8 (+ intro et conclusion) |
-| **Difficulté** | Facile (plat, trottoirs) |
-| **Départ/Arrivée** | Église Saint-Lambert, 41 avenue Lorne |
+| **Thème principal** | Patrimoine architectural + Histoire des origines |
+| **Quartiers couverts** | Le Village (centre-ville) + Bord du fleuve |
+| **Total POIs** | 8 |
+| **Audio total** | ~10 min |
 | **Stationnement** | Rues autour de l'église (gratuit 2h) |
-| **Prix suggéré** | 7.99$ CAD |
-
-### Parcours optimisé
-
-```
-1. Église Saint-Lambert          (45.5004, -73.5139)
-   ↓ 220m
-2. Église anglicane St-Barnabas  (45.5003, -73.5111)
-   ↓ 75m
-3. Parc du Village               (45.5009, -73.5107)
-   ↓ 650m (via Riverside)
-4. Maison Marsil                 (45.5044, -73.5174)
-   ↓ 990m (le long du fleuve, vers le sud)
-5. Vue sur le Pont Victoria      (45.4955, -73.5178)
-   ↓ 300m
-6. Écluse de Saint-Lambert       (45.4932, -73.5159)
-   ↓ 820m (retour vers le nord)
-7. Avenue Victoria               (45.4998, -73.5125)
-   ↓ 130m
-8. Retour Église (conclusion)    (45.5004, -73.5139)
-
-TOTAL: ~3.0 km | ~40 min de marche | ~75 min avec arrêts
-```
-
----
-
-## Introduction du tour (script audio)
-
-> **Durée:** 90 secondes | **Trigger:** Départ (45.5004, -73.5139) | Rayon: 50m
-
-```
-Bienvenue à Saint-Lambert!
-
-Tu te trouves dans ce qu'on appelle "Le Village" — le cœur historique d'une ville qui cache bien son jeu. Parce que derrière ses rues tranquilles de banlieue, Saint-Lambert est un véritable musée à ciel ouvert de l'architecture québécoise.
-
-Mais avant de parler de belles maisons, laisse-moi te raconter d'où vient cette ville.
-
-Son vrai nom, à l'origine? Mouillepied. Oui, "pieds mouillés". Imagine des terres marécageuses au bord du fleuve, où un chasseur du nom de Lambert Closse traquait le gibier les deux pieds dans l'eau. C'était au 17e siècle. La ville porte son nom.
-
-Ce qui a tout changé? Le pont Victoria. En 1854, on commence à construire le premier pont entre la Rive-Sud et Montréal. Soudainement, ce petit village agricole devient accessible. Les ouvriers arrivent, les familles suivent, les commerces s'installent. En 20 ans, la population triple.
-
-Aujourd'hui, tu vas marcher sur les traces de cette transformation. Des églises au style unique, des maisons du 18e siècle, et une écluse où des navires océaniques passent avec un système qu'on ne trouve nulle part ailleurs au monde.
-
-On commence?
-```
 
 ---
 
@@ -73,18 +25,17 @@ On commence?
 | **Coordonnées** | **45.5004, -73.5139** |
 | **Rayon trigger** | 40m |
 | **Type** | Église catholique |
+| **Catégories** | `patrimoine`, `religieux`, `architecture` |
 | **Année** | 1936-1938 |
-| **Ordre** | 1/8 |
-| **Distance vers suivant** | 220m → Église St-Barnabas |
 
 ### Script audio (FR)
 
 > **Durée:** 80 secondes | **Mots:** ~160
 
 ```
-Regarde cette église devant toi. Tu vois sa façade de pierre, ses formes géométriques, sa croix intégrée dans le mur? 
+Tu te trouves devant l'église Saint-Lambert, au cœur de ce qu'on appelle "Le Village" — le centre historique d'une ville qui cache bien son jeu.
 
-C'est pas une église ordinaire. C'est une des premières églises de style "Dom Bellot" au Québec.
+Regarde cette façade de pierre, ses formes géométriques, sa croix intégrée dans le mur. C'est pas une église ordinaire. C'est une des premières églises de style "Dom Bellot" au Québec.
 
 Dom Bellot, c'était un moine-architecte français qui a révolutionné l'architecture religieuse dans les années 1930. Son idée? Fini les décorations excessives. La beauté doit venir des formes et des matériaux eux-mêmes. L'architecte Gaston Gagnier s'en est inspiré pour construire celle-ci.
 
@@ -94,9 +45,7 @@ Les catholiques de Saint-Lambert ont attendu longtemps avant d'avoir leur propre
 
 Et cette église actuelle? Elle a remplacé la première, détruite par un incendie en 1936. Ils ont reconstruit au même endroit, en mieux.
 
-Lève les yeux vers la statue de saint Lambert au-dessus de la porte. C'est lui, le chasseur légendaire. Celui qui donnait son nom aux terres de Mouillepied.
-
-Continue vers l'est sur Lorne, tu vas voir une autre église à 200 mètres.
+Lève les yeux vers la statue de saint Lambert au-dessus de la porte. C'est lui, le chasseur légendaire. Celui qui donnait son nom aux terres de Mouillepied — les fameux "pieds mouillés" des premiers colons.
 ```
 
 ### Sources
@@ -113,27 +62,24 @@ Continue vers l'est sur Lorne, tu vas voir une autre église à 200 mètres.
 | **Coordonnées** | **45.5003, -73.5111** |
 | **Rayon trigger** | 40m |
 | **Type** | Église anglicane |
-| **Ordre** | 2/8 |
-| **Distance vers suivant** | 75m → Parc du Village |
+| **Catégories** | `patrimoine`, `religieux` |
 
 ### Script audio (FR)
 
 > **Durée:** 70 secondes | **Mots:** ~140
 
 ```
-À quelques pas de l'église catholique, tu trouves une église anglicane. Et ça, c'est pas un hasard.
+Tu es devant l'église anglicane Saint-Barnabas, sur l'avenue Lorne à Saint-Lambert. Et sa présence ici, c'est pas un hasard.
 
 Quand le pont Victoria a commencé à se construire en 1854, des centaines de travailleurs sont arrivés. Parmi eux, beaucoup d'anglophones — Irlandais, Écossais, Anglais. Ils avaient besoin de leur propre lieu de culte.
 
-Ce qui est fascinant, c'est comment ces deux communautés — catholique francophone et protestante anglophone — ont cohabité côte à côte. Littéralement à 200 mètres l'une de l'autre.
+Ce qui est fascinant, c'est comment ces deux communautés — catholique francophone et protestante anglophone — ont cohabité côte à côte. Littéralement à 200 mètres l'une de l'autre. L'église catholique Saint-Lambert est juste là, à deux pas.
 
 Derrière cette église moderne, il y a l'ancienne église anglicane, plus petite, qui date du 19e siècle. Elle témoigne de cette époque où Saint-Lambert était vraiment bilingue et biculturelle.
 
 Aujourd'hui, Saint-Lambert reste une des villes les plus bilingues du Québec. Un tiers de la population parle anglais à la maison.
 
 Cette diversité, elle est inscrite dans la pierre depuis le début. Tu la vois devant toi.
-
-Le parc est juste à côté, continue tout droit.
 ```
 
 ### Sources
@@ -149,25 +95,22 @@ Le parc est juste à côté, continue tout droit.
 | **Coordonnées** | **45.5009, -73.5107** |
 | **Rayon trigger** | 50m |
 | **Type** | Parc / espace public |
-| **Ordre** | 3/8 |
-| **Distance vers suivant** | 650m → Maison Marsil (via Riverside) |
+| **Catégories** | `nature`, `histoire` |
 
 ### Script audio (FR)
 
 > **Durée:** 70 secondes | **Mots:** ~140
 
 ```
-Tu es dans le Parc du Village. C'est ici que bat le cœur de Saint-Lambert.
+Tu es dans le Parc du Village, au cœur de Saint-Lambert.
 
-Ce parc se trouve dans ce qu'on appelle le "noyau villageois" — un espace de forme triangulaire qui appartenait autrefois à la Compagnie du Grand Tronc. Oui, la même compagnie de chemin de fer qui a construit le pont Victoria.
+Ce parc se trouve dans ce qu'on appelle le "noyau villageois" — un espace de forme triangulaire qui appartenait autrefois à la Compagnie du Grand Tronc. Oui, la même compagnie de chemin de fer qui a construit le pont Victoria, le premier pont entre la Rive-Sud et Montréal.
 
 En 1867, le Grand Tronc a commencé à vendre des terrains ici. C'est à partir de ce moment que Saint-Lambert est vraiment devenue une ville. Les institutions se sont installées tout autour: églises, écoles, commerces.
 
-Regarde autour de toi. Ce triangle entre l'avenue Lorne et les rues avoisinantes, c'est le plan original du village tel qu'il a été pensé il y a 160 ans.
+Ce triangle entre l'avenue Lorne et les rues avoisinantes, c'est le plan original du village tel qu'il a été pensé il y a 160 ans.
 
-Saint-Lambert, c'est une des bibliothèques les plus achalandées au Québec, 30 parcs, 500 commerces. Pas mal pour un ancien marais.
-
-Maintenant, dirige-toi vers la rue Riverside. C'est là que les choses deviennent vraiment intéressantes.
+Saint-Lambert, c'est une ville qui surprend. Une des bibliothèques les plus achalandées au Québec, 30 parcs, 500 commerces, 23,000 habitants. Pas mal pour un endroit qui s'appelait "Mouillepied" — parce que les premiers habitants avaient littéralement les pieds dans l'eau des marais au bord du fleuve.
 ```
 
 ### Sources
@@ -184,16 +127,15 @@ Maintenant, dirige-toi vers la rue Riverside. C'est là que les choses deviennen
 | **Coordonnées** | **45.5044, -73.5174** |
 | **Rayon trigger** | 40m |
 | **Type** | Maison patrimoniale classée |
+| **Catégories** | `patrimoine`, `architecture` |
 | **Année** | ~1750 |
-| **Ordre** | 4/8 |
-| **Distance vers suivant** | 990m → Vue Pont Victoria |
 
 ### Script audio (FR)
 
 > **Durée:** 85 secondes | **Mots:** ~170
 
 ```
-Arrête-toi devant le 349 Riverside. Cette maison de pierre devant toi date d'environ 1750. C'est la maison Marsil — une des plus vieilles de Saint-Lambert.
+Tu es au 349 Riverside, à Saint-Lambert. Cette maison de pierre devant toi date d'environ 1750. C'est la maison Marsil — une des plus vieilles de la ville.
 
 André Marsil, c'était un des premiers résidents permanents du territoire. Quand il a construit cette maison, le Canada était encore français. Louis XV était roi. Montréal avait moins de 5,000 habitants.
 
@@ -204,8 +146,6 @@ La maison Marsil elle-même a abrité le Musée du costume et du textile du Qué
 Regarde la structure. Les murs épais en pierre, le toit pentu pour la neige, les petites fenêtres pour conserver la chaleur. C'est de l'architecture de survie. Ces gens construisaient pour durer.
 
 Et ça a duré.
-
-Continue vers le sud le long du fleuve. On va aller voir le pont qui a changé l'histoire de cette ville.
 ```
 
 ### Sources
@@ -223,17 +163,14 @@ Continue vers le sud le long du fleuve. On va aller voir le pont qui a changé l
 | **Coordonnées** | **45.4955, -73.5178** |
 | **Rayon trigger** | 60m |
 | **Type** | Point de vue historique |
-| **Ordre** | 5/8 |
-| **Distance vers suivant** | 300m → Écluse |
+| **Catégories** | `histoire`, `infrastructure`, `point-de-vue` |
 
 ### Script audio (FR)
 
 > **Durée:** 90 secondes | **Mots:** ~180
 
 ```
-Arrête-toi ici. Regarde vers le fleuve.
-
-Tu vois le pont Victoria? Ce mastodonte de métal qui traverse le Saint-Laurent?
+Tu es au bord du fleuve Saint-Laurent, à Saint-Lambert. Et ce mastodonte de métal devant toi, c'est le pont Victoria.
 
 En 1854, quand la Compagnie du Grand Tronc a commencé sa construction, c'était le projet d'ingénierie le plus ambitieux au Canada. Le premier pont à traverser le fleuve. Près de 3 kilomètres de long.
 
@@ -248,8 +185,6 @@ Et après? Tout change. Le train arrive. Les gens peuvent vivre à Saint-Lambert
 Ce pont que tu regardes, c'est la raison pour laquelle tu te trouves dans une ville de 23,000 habitants plutôt qu'un village de fermiers.
 
 Tout ça parce que quelqu'un a décidé de construire un pont à cet endroit précis, il y a 170 ans.
-
-Continue vers le sud, 300 mètres. Tu vas entendre les navires avant de les voir.
 ```
 
 ### Sources
@@ -266,17 +201,14 @@ Continue vers le sud, 300 mètres. Tu vas entendre les navires avant de les voir
 | **Coordonnées** | **45.4932, -73.5159** |
 | **Rayon trigger** | 80m |
 | **Type** | Infrastructure maritime |
+| **Catégories** | `infrastructure`, `maritime`, `histoire` |
 | **Année** | 1959 (ouverture Voie maritime) |
-| **Ordre** | 6/8 |
-| **Distance vers suivant** | 820m → Avenue Victoria |
 
 ### Script audio (FR)
 
 > **Durée:** 90 secondes | **Mots:** ~180
 
 ```
-OK, c'est ici que ça devient impressionnant.
-
 Tu es devant l'écluse de Saint-Lambert — la porte d'entrée de la Voie maritime du Saint-Laurent. C'est la première écluse que les navires traversent quand ils quittent le port de Montréal vers les Grands Lacs.
 
 Ouverte en 1959, cette écluse fait partie d'un système de canaux de 370 kilomètres qui relie l'Atlantique aux Grands Lacs. Des cargos de partout dans le monde passent ici — grain des Prairies, minerai du Nord, conteneurs d'Europe.
@@ -286,8 +218,6 @@ Mais le truc vraiment cool? En 2015, Saint-Lambert est devenue la première écl
 Si t'as de la chance et qu'un navire passe, regarde comment il monte ou descend. L'eau change de niveau de plusieurs mètres. C'est silencieux, c'est lent, et c'est hypnotisant.
 
 Des touristes viennent ici juste pour regarder les bateaux passer. Et honnêtement, on comprend pourquoi.
-
-On reprend la marche vers le nord, direction avenue Victoria. Environ 800 mètres.
 ```
 
 ### Sources
@@ -305,19 +235,18 @@ On reprend la marche vers le nord, direction avenue Victoria. Environ 800 mètre
 | **Coordonnées** | **45.4998, -73.5125** |
 | **Rayon trigger** | 50m |
 | **Type** | Rue historique / commerce |
-| **Ordre** | 7/8 |
-| **Distance vers suivant** | 130m → Retour église |
+| **Catégories** | `histoire`, `commercial` |
 
 ### Script audio (FR)
 
 > **Durée:** 75 secondes | **Mots:** ~150
 
 ```
-Tu marches sur l'avenue Victoria. Regarde autour de toi.
+Tu marches sur l'avenue Victoria, à Saint-Lambert. Regarde autour de toi.
 
 Cette rue, c'est pas juste une artère commerciale. C'est une frontière invisible qui date de 1657.
 
-À ta gauche, t'es sur l'ancienne seigneurie de Longueuil, concédée à Charles Le Moyne. À ta droite, l'ancienne seigneurie de La Prairie, donnée aux Jésuites dix ans plus tôt.
+D'un côté, t'es sur l'ancienne seigneurie de Longueuil, concédée à Charles Le Moyne. De l'autre, l'ancienne seigneurie de La Prairie, donnée aux Jésuites dix ans plus tôt.
 
 Pendant plus de 200 ans, cette ligne divisait deux territoires, deux propriétaires, deux histoires. Les terres à l'ouest s'appelaient "Mouillepied" — les fameux pieds mouillés.
 
@@ -326,8 +255,6 @@ C'est drôle de penser que chaque fois que tu traverses Victoria pour aller au r
 Et pourquoi "Victoria"? En l'honneur du pont, bien sûr. Qui lui-même honore la reine Victoria d'Angleterre. Le pont qui a transformé ce village agricole en ce que tu vois maintenant — plus de 500 commerces, 25 restaurants, des galeries d'art.
 
 Ça va, pour un ancien marais?
-
-L'église est juste devant. On termine le tour là où on l'a commencé.
 ```
 
 ### Sources
@@ -335,40 +262,52 @@ L'église est juste devant. On termine le tour là où on l'a commencé.
 
 ---
 
-## Conclusion du tour (script audio)
+## POI #8: Maison Antoine-Sainte-Marie (Maison Sharpe)
 
-> **Durée:** 60 secondes | **Trigger:** Retour église (45.5004, -73.5139) | Rayon: 50m
+| Champ | Valeur |
+|-------|--------|
+| **Adresse** | Près du 349, rue Riverside, Saint-Lambert |
+| **Coordonnées** | **45.5046, -73.5172** |
+| **Rayon trigger** | 40m |
+| **Type** | Maison patrimoniale classée |
+| **Catégories** | `patrimoine`, `architecture` |
+| **Année** | ~1775 |
+
+### Script audio (FR)
+
+> **Durée:** 70 secondes | **Mots:** ~140
 
 ```
-Et voilà, tu as fait le tour du cœur historique de Saint-Lambert.
+Tu es sur la rue Riverside, à Saint-Lambert, devant la maison Antoine-Sainte-Marie — aussi connue comme la maison Sharpe.
 
-En une heure et demie, tu as traversé 350 ans d'histoire. Des terres marécageuses de Mouillepied aux ventouses de l'écluse la plus moderne au monde. Des premiers colons français aux King Cottages qu'on ne trouve nulle part ailleurs.
+Construite vers 1775, elle est classée immeuble patrimonial par le gouvernement du Québec. C'est une des plus anciennes structures de la Rive-Sud.
 
-Ce que j'espère que tu retiens, c'est que Saint-Lambert, c'est pas juste une banlieue tranquille. C'est un témoin vivant de l'évolution du Québec.
+Mais c'est l'histoire de sa propriétaire, Nettie Sharpe, qui la rend unique. En 1950, cette femme a acheté la maison après un incendie et l'a restaurée elle-même. Pas juste les murs — elle y a constitué une collection de 3,000 objets d'art populaire québécois. Meubles, outils, textiles, céramiques. Un véritable musée privé.
 
-La prochaine fois que tu te promènes dans les rues, regarde les maisons. Pense à la frontière invisible de l'avenue Victoria. Imagine les pieds mouillés des chasseurs du 17e siècle.
+Regarde la structure. Murs de pierre épais, fenêtres étroites, toiture pentue — c'est l'architecture typique du régime français. Construire pour survivre aux hivers du Québec, avec ce qu'on avait sous la main.
 
-L'histoire est partout autour de toi. Il suffit de savoir où regarder.
-
-Merci d'avoir marché avec moi. À bientôt pour un autre tour!
+Cette maison a traversé la Conquête anglaise, la Confédération, deux guerres mondiales, et elle est toujours debout. 250 ans de résistance tranquille.
 ```
+
+### Sources
+- patrimoine-culturel.gouv.qc.ca (fiche #92908)
+- culture.saint-lambert.ca
 
 ---
 
 ## Résumé des POIs avec coordonnées
 
-| # | POI | Coordonnées | Adresse | Durée audio | Distance vers suivant |
-|---|-----|-------------|---------|-------------|----------------------|
-| 0 | Introduction | 45.5004, -73.5139 | 41 av Lorne | 90s | — |
-| 1 | Église Saint-Lambert | **45.5004, -73.5139** | 41 av Lorne | 80s | 220m |
-| 2 | Église St-Barnabas | **45.5003, -73.5111** | 95 av Lorne | 70s | 75m |
-| 3 | Parc du Village | **45.5009, -73.5107** | Parc du Village | 70s | 650m |
-| 4 | Maison Marsil | **45.5044, -73.5174** | 349 Riverside | 85s | 990m |
-| 5 | Pont Victoria (vue) | **45.4955, -73.5178** | Bord du fleuve | 90s | 300m |
-| 6 | Écluse Saint-Lambert | **45.4932, -73.5159** | Voie maritime | 90s | 820m |
-| 7 | Avenue Victoria | **45.4998, -73.5125** | Av Victoria (centre) | 75s | 130m |
-| 8 | Conclusion | 45.5004, -73.5139 | Retour église | 60s | — |
-| | **TOTAL** | | | **~11 min audio** | **~3.0 km** |
+| # | POI | Coordonnées | Catégories | Durée audio |
+|---|-----|-------------|------------|-------------|
+| 1 | Église Saint-Lambert | **45.5004, -73.5139** | patrimoine, religieux, architecture | 80s |
+| 2 | Église St-Barnabas | **45.5003, -73.5111** | patrimoine, religieux | 70s |
+| 3 | Parc du Village | **45.5009, -73.5107** | nature, histoire | 70s |
+| 4 | Maison Marsil | **45.5044, -73.5174** | patrimoine, architecture | 85s |
+| 5 | Pont Victoria (vue) | **45.4955, -73.5178** | histoire, infrastructure, point-de-vue | 90s |
+| 6 | Écluse Saint-Lambert | **45.4932, -73.5159** | infrastructure, maritime, histoire | 90s |
+| 7 | Avenue Victoria | **45.4998, -73.5125** | histoire, commercial | 75s |
+| 8 | Maison Sharpe | **45.5046, -73.5172** | patrimoine, architecture | 70s |
+| | **TOTAL** | | | **~10 min audio** |
 
 ---
 
@@ -376,96 +315,110 @@ Merci d'avoir marché avec moi. À bientôt pour un autre tour!
 
 ```json
 {
-  "tour": {
-    "name": "Découverte Saint-Lambert — Patrimoine & Origines",
-    "city": "Saint-Lambert",
-    "theme": "patrimoine",
-    "language": "fr",
-    "duration_min": 75,
-    "distance_km": 3.0,
-    "poi_count": 8,
-    "difficulty": "easy",
-    "price_cad": 7.99,
-    "start_point": {"lat": 45.5004, "lng": -73.5139},
-    "parking": "Rues autour de l'église Saint-Lambert (41 av Lorne)"
+  "city": {
+    "name": "Saint-Lambert",
+    "slug": "saint-lambert",
+    "region": "Montérégie",
+    "country": "CA",
+    "center_lat": 45.5000,
+    "center_lng": -73.5140,
+    "timezone": "America/Toronto"
   },
   "pois": [
     {
-      "order": 1,
       "name": "Église Saint-Lambert",
+      "slug": "eglise-saint-lambert",
       "lat": 45.5004,
       "lng": -73.5139,
       "trigger_radius_m": 40,
       "address": "41, avenue Lorne",
       "type": "church",
+      "categories": ["patrimoine", "religieux", "architecture"],
       "year": "1936-1938",
       "audio_duration_s": 80
     },
     {
-      "order": 2,
       "name": "Église anglicane Saint-Barnabas",
+      "slug": "eglise-saint-barnabas",
       "lat": 45.5003,
       "lng": -73.5111,
       "trigger_radius_m": 40,
       "address": "95, avenue Lorne",
       "type": "church",
-      "year": "19e siècle",
+      "categories": ["patrimoine", "religieux"],
       "audio_duration_s": 70
     },
     {
-      "order": 3,
       "name": "Parc du Village",
+      "slug": "parc-du-village",
       "lat": 45.5009,
       "lng": -73.5107,
       "trigger_radius_m": 50,
       "address": "Parc du Village",
       "type": "park",
+      "categories": ["nature", "histoire"],
       "year": "~1867",
       "audio_duration_s": 70
     },
     {
-      "order": 4,
       "name": "Maison Marsil",
+      "slug": "maison-marsil",
       "lat": 45.5044,
       "lng": -73.5174,
       "trigger_radius_m": 40,
       "address": "349, rue Riverside",
       "type": "heritage_house",
+      "categories": ["patrimoine", "architecture"],
       "year": "~1750",
       "audio_duration_s": 85
     },
     {
-      "order": 5,
       "name": "Vue sur le Pont Victoria",
+      "slug": "pont-victoria-vue",
       "lat": 45.4955,
       "lng": -73.5178,
       "trigger_radius_m": 60,
       "address": "Bord du fleuve",
       "type": "viewpoint",
+      "categories": ["histoire", "infrastructure", "point-de-vue"],
       "year": "1854-1859",
       "audio_duration_s": 90
     },
     {
-      "order": 6,
       "name": "Écluse de Saint-Lambert",
+      "slug": "ecluse-saint-lambert",
       "lat": 45.4932,
       "lng": -73.5159,
       "trigger_radius_m": 80,
       "address": "Voie maritime du Saint-Laurent",
       "type": "infrastructure",
+      "categories": ["infrastructure", "maritime", "histoire"],
       "year": "1959",
       "audio_duration_s": 90
     },
     {
-      "order": 7,
-      "name": "Avenue Victoria",
+      "name": "Avenue Victoria — Ligne des seigneuries",
+      "slug": "avenue-victoria",
       "lat": 45.4998,
       "lng": -73.5125,
       "trigger_radius_m": 50,
       "address": "Avenue Victoria (secteur central)",
       "type": "street",
+      "categories": ["histoire", "commercial"],
       "year": "~1657 (seigneuries)",
       "audio_duration_s": 75
+    },
+    {
+      "name": "Maison Antoine-Sainte-Marie (Sharpe)",
+      "slug": "maison-sharpe",
+      "lat": 45.5046,
+      "lng": -73.5172,
+      "trigger_radius_m": 40,
+      "address": "Rue Riverside, près du 349",
+      "type": "heritage_house",
+      "categories": ["patrimoine", "architecture"],
+      "year": "~1775",
+      "audio_duration_s": 70
     }
   ]
 }
@@ -475,19 +428,19 @@ Merci d'avoir marché avec moi. À bientôt pour un autre tour!
 
 ## 📋 Checklist avant publication
 
-- [ ] Valider coordonnées GPS sur place (marcher le parcours)
+- [ ] Valider coordonnées GPS sur place (marcher près de chaque POI)
 - [ ] Confirmer que la vue du Pont Victoria est accessible à pied
 - [ ] Confirmer accès à l'écluse (horaires, barrières?)
 - [ ] Prendre photos de chaque POI
-- [ ] Identifier King Cottages spécifiques (adresses, caractéristiques)
+- [ ] Identifier King Cottages spécifiques (adresses, caractéristiques) → futur POI
 - [ ] Vérifier stationnement gratuit près de l'église
-- [ ] Tester timing réel du parcours
+- [ ] Tester le rayon de trigger de chaque POI individuellement
 - [ ] Révision des scripts par un local
 - [ ] Traduction anglaise
 - [ ] Génération audio TTS
 
 ---
 
-*Tour généré le 2026-02-18, mis à jour le 2026-02-23*
+*Dernière mise à jour: 2026-02-23*
 *Status: DRAFT — En attente de validation terrain*
-*Pipeline: Analyse → Thèmes → Clusters → POIs → Scripts ✅*
+*Pipeline: Analyse → POIs identifiés → Scripts auto-contenus ✅*

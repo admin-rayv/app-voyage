@@ -24,135 +24,140 @@ pour [bénéfice].
 
 > En tant que touriste,  
 > je veux voir une carte interactive de la ville,  
-> pour visualiser où je suis et ce qu'il y a autour.
+> pour visualiser où je suis et les POIs autour de moi.
 
 **Critères d'acceptation:**
 - [ ] Carte Mapbox centrée sur ma position GPS
-- [ ] Points d'intérêt visibles (icônes distinctes par type)
+- [ ] POIs visibles (icônes distinctes par catégorie)
 - [ ] Zoom in/out fluide (pinch + boutons)
 - [ ] Bouton "recentrer sur moi"
-- [ ] Fonctionne **offline** après téléchargement du parcours
+- [ ] Fonctionne **offline** après téléchargement des données
 - [ ] Rotation de la carte selon orientation (optionnel)
 
 **Notes techniques:**
 - Utiliser Mapbox GL pour le rendu
-- Tiles offline à télécharger avec le parcours
-- Markers custom selon le type de POI
+- Tiles offline à télécharger avec les données de la ville
+- Markers custom selon la catégorie de POI (patrimoine, nature, infrastructure, etc.)
 
 ---
 
-### 🔴 US-102: Voir les parcours disponibles
+### 🔴 US-102: Voir les POIs autour de moi
 **Estimation:** M
 
 > En tant que touriste,  
-> je veux voir la liste des parcours disponibles,  
-> pour choisir celui qui m'intéresse.
+> je veux voir la liste des points d'intérêt autour de moi,  
+> pour savoir ce qu'il y a à découvrir.
 
 **Critères d'acceptation:**
-- [ ] Liste avec: nom, durée, distance, thème, difficulté
-- [ ] Image de couverture attractive
-- [ ] Badge "Gratuit" ou prix affiché
-- [ ] Badge "Téléchargé" si déjà en cache
-- [ ] Preview du tracé sur mini-carte
-- [ ] Filtres: par thème, durée, mode transport
-- [ ] Note moyenne (quand on aura des reviews)
+- [ ] Liste des POIs triés par distance (du plus proche au plus loin)
+- [ ] Chaque POI affiche: nom, catégorie, distance, mini-description
+- [ ] Icône de catégorie (🏛️ patrimoine, 🌊 maritime, ⛪ religieux, etc.)
+- [ ] Badge "Écouté ✓" si déjà visité
+- [ ] Badge "Téléchargé" si audio en cache
+- [ ] Tap sur un POI → détail du POI
+- [ ] Indicateur de rayon: "X POIs à moins de 500m"
 
 **Données affichées:**
 ```
-🏛️ Vieux-Montréal Hanté
-⏱️ 45 min | 📍 2.3 km | 👻 Mystère
-⭐ 4.8 (124 avis)
-[Téléchargé ✓]          [7.99$ CAD]
+🏛️ Maison Marsil — Patrimoine
+📍 120m | ~1750 | ⏱️ 85s audio
+[Écouté ✓]
+
+⛪ Église Saint-Lambert — Religieux  
+📍 340m | 1936-1938 | ⏱️ 80s audio
+[Pas encore visité]
 ```
 
 ---
 
-### 🔴 US-103: Voir le détail d'un parcours
+### 🔴 US-103: Voir le détail d'un POI
 **Estimation:** S
 
 > En tant que touriste,  
-> je veux voir les détails d'un parcours avant de le commencer,  
-> pour savoir si ça m'intéresse.
+> je veux voir les détails d'un point d'intérêt,  
+> pour savoir ce que je vais découvrir.
 
 **Critères d'acceptation:**
-- [ ] Description complète du parcours
-- [ ] Liste des points d'intérêt (avec preview)
-- [ ] Carte du tracé complet
-- [ ] Infos pratiques: durée, distance, dénivelé
-- [ ] Mode(s) de transport recommandé(s)
-- [ ] **Preview audio** (30 sec du premier point) — GRATUIT
-- [ ] Bouton "Télécharger" ou "Acheter"
-- [ ] Reviews utilisateurs (V1)
+- [ ] Nom, catégorie, description complète
+- [ ] Position sur la carte (mini-carte)
+- [ ] Infos pratiques: adresse, année de construction, type
+- [ ] **Preview audio** (15-20 sec) — GRATUIT
+- [ ] Bouton "Écouter" (ou "Télécharger" si pas en cache)
+- [ ] Photos du lieu
+- [ ] Distance depuis ma position actuelle
+- [ ] Indicateur "Déjà visité" ou "Nouveau"
 
 ---
 
-### 🔴 US-104: Démarrer un parcours
+### 🔴 US-104: Activer le mode découverte
 **Estimation:** M
 
 > En tant que touriste,  
-> je veux démarrer un parcours,  
-> pour commencer ma visite guidée.
+> je veux activer le mode découverte,  
+> pour que les audios se déclenchent automatiquement quand je me promène.
 
 **Critères d'acceptation:**
-- [ ] Bouton "Démarrer" bien visible
-- [ ] Vérifier que le parcours est téléchargé (sinon proposer download)
+- [ ] Bouton "Explorer" bien visible sur l'écran principal
+- [ ] Vérifier que les données de la ville sont téléchargées (sinon proposer download)
 - [ ] Vérifier permissions GPS (sinon guider vers settings)
-- [ ] Afficher instruction pour rejoindre le point de départ
-- [ ] Transition vers mode "visite active"
-- [ ] Option "Démarrer au point le plus proche" (si pas au début)
+- [ ] Activer le geofencing sur tous les POIs non-écoutés à proximité
+- [ ] Transition vers mode "découverte active" (carte + mini-player)
+- [ ] L'utilisateur marche librement, pas de route imposée
 
 **Gestion d'erreurs:**
 - GPS désactivé → Message clair + lien vers settings
-- Parcours pas téléchargé → Proposer download
+- Données pas téléchargées → Proposer download
 - Batterie faible (<20%) → Warning + suggestion power bank
 
 ---
 
-### 🔴 US-105: Voir ma progression
-**Estimation:** S
-
-> En tant que touriste en visite,  
-> je veux voir ma progression dans le parcours,  
-> pour savoir combien il me reste.
-
-**Critères d'acceptation:**
-- [ ] Barre de progression visuelle (X/Y points)
-- [ ] Points visités en vert, à venir en gris sur la carte
-- [ ] Temps estimé restant
-- [ ] Distance restante
-- [ ] Prochain point d'intérêt avec distance
-- [ ] Option "Voir tous les points" (liste)
-
----
-
-### 🟡 US-106: Mettre en pause / Reprendre
+### 🔴 US-105: Voir mes POIs visités
 **Estimation:** S
 
 > En tant que touriste,  
-> je veux pouvoir mettre mon parcours en pause,  
-> pour faire une pause café sans perdre ma progression.
+> je veux voir la liste des POIs que j'ai déjà écoutés,  
+> pour savoir ce que j'ai découvert et ce qu'il reste.
+
+**Critères d'acceptation:**
+- [ ] Liste des POIs écoutés avec date de visite
+- [ ] POIs visités en vert sur la carte, non-visités en gris
+- [ ] Statistiques: "X/Y POIs découverts dans cette ville"
+- [ ] Barre de progression par catégorie
+- [ ] Option "Voir les POIs restants" (filtrer non-visités)
+
+---
+
+### 🔴 US-106: Filtrer les POIs par catégorie
+**Estimation:** S
+
+> En tant que touriste avec des intérêts spécifiques,  
+> je veux filtrer les POIs par catégorie,  
+> pour ne voir que ce qui m'intéresse.
+
+**Critères d'acceptation:**
+- [ ] Filtres par catégorie: patrimoine, religieux, nature, infrastructure, commercial, etc.
+- [ ] Toggle multi-catégories (sélection multiple)
+- [ ] La carte se met à jour en temps réel (masquer les POIs hors filtre)
+- [ ] La liste se met à jour aussi
+- [ ] Préférence sauvegardée entre sessions
+- [ ] Compteur par catégorie ("🏛️ Patrimoine (8)")
+- [ ] Bouton "Tout afficher" pour reset
+
+---
+
+### 🟡 US-107: Mettre en pause / Reprendre la découverte
+**Estimation:** S
+
+> En tant que touriste,  
+> je veux pouvoir mettre le mode découverte en pause,  
+> pour faire une pause café sans déclencher d'audios.
 
 **Critères d'acceptation:**
 - [ ] Bouton "Pause" accessible
-- [ ] Sauvegarder la progression (point actuel)
-- [ ] Notification "Parcours en pause"
-- [ ] Reprendre exactement où j'étais
+- [ ] Désactiver temporairement le geofencing
+- [ ] Notification "Découverte en pause"
+- [ ] Reprendre d'un tap
 - [ ] Proposition de reprendre au prochain lancement de l'app
-
----
-
-### 🟡 US-107: Quitter un parcours
-**Estimation:** XS
-
-> En tant que touriste,  
-> je veux pouvoir quitter un parcours en cours,  
-> pour arrêter ma visite.
-
-**Critères d'acceptation:**
-- [ ] Bouton "Quitter" (avec confirmation)
-- [ ] Sauvegarder progression pour reprendre plus tard
-- [ ] Retour à l'écran d'accueil
-- [ ] Option "Ne plus demander de confirmation"
 
 ---
 
@@ -161,18 +166,19 @@ pour [bénéfice].
 ### 🔴 US-201: Déclenchement audio automatique par GPS
 **Estimation:** L (critique, complexe)
 
-> En tant que touriste qui marche,  
-> je veux que l'audio se déclenche automatiquement quand j'arrive près d'un point,  
+> En tant que touriste qui se promène,  
+> je veux que l'audio se déclenche automatiquement quand j'arrive près d'un POI,  
 > pour ne pas avoir à toucher mon téléphone.
 
 **Critères d'acceptation:**
-- [ ] Déclenchement basé sur géofence (rayon configurable)
+- [ ] Déclenchement basé sur géofence (rayon configurable par POI)
 - [ ] Algorithme intelligent: vitesse + direction (pas juste rayon)
-- [ ] Notification/vibration **avant** lecture ("Prochain point dans 20m")
+- [ ] Notification/vibration **avant** lecture ("Tu approches: Maison Marsil")
 - [ ] Audio joue même si app en **background**
 - [ ] Contrôles sur lock screen (iOS/Android)
-- [ ] Ne pas re-déclencher si déjà écouté
-- [ ] Priorité: ne pas interrompre un audio en cours
+- [ ] Ne pas re-déclencher un POI déjà écouté (sauf si explicitement demandé)
+- [ ] Si plusieurs POIs proches: prioriser le plus proche
+- [ ] File d'attente: ne pas interrompre un audio en cours, jouer le suivant après
 
 **Rayon par défaut:**
 | Mode | Rayon trigger |
@@ -196,10 +202,10 @@ pour [bénéfice].
 > pour ne pas rater un point d'intérêt.
 
 **Critères d'acceptation:**
-- [ ] Bouton "Je suis arrivé" sur chaque point
-- [ ] Tap sur un point de la carte = jouer son audio
-- [ ] Liste des points avec bouton play individuel
-- [ ] Message si trop loin: "Tu sembles loin de ce point. Jouer quand même?"
+- [ ] Bouton "Écouter" sur chaque POI
+- [ ] Tap sur un POI de la carte = jouer son audio
+- [ ] Liste des POIs avec bouton play individuel
+- [ ] Message si trop loin: "Tu sembles loin de ce POI. Écouter quand même?"
 
 **Important:** Ce fallback est CRITIQUE car le GPS peut être imprécis en ville (bâtiments).
 
@@ -216,25 +222,24 @@ pour [bénéfice].
 - [ ] Play / Pause
 - [ ] Rewind 15 secondes (bouton ou swipe)
 - [ ] Forward 15 secondes
-- [ ] Skip au prochain point
 - [ ] Barre de progression avec seek
 - [ ] Contrôles accessibles sur lock screen
 - [ ] Contrôles dans notification (Android)
 - [ ] Intégration Control Center (iOS)
 
-**UX:** Mini-player sticky en bas de l'écran pendant la visite.
+**UX:** Mini-player sticky en bas de l'écran pendant la découverte.
 
 ---
 
-### 🔴 US-204: Télécharger un parcours offline
+### 🔴 US-204: Télécharger les POIs d'une ville (offline)
 **Estimation:** M
 
 > En tant que touriste sans data mobile,  
-> je veux télécharger un parcours avant ma visite,  
+> je veux télécharger tous les POIs d'une ville avant ma visite,  
 > pour ne pas dépendre du réseau.
 
 **Critères d'acceptation:**
-- [ ] Bouton "Télécharger" clair
+- [ ] Bouton "Télécharger [ville]" clair
 - [ ] Afficher taille du download (~20-50 MB)
 - [ ] Barre de progression pendant download
 - [ ] Download en background (peut quitter l'écran)
@@ -288,7 +293,7 @@ pour [bénéfice].
 > pour suivre le contenu.
 
 **Critères d'acceptation:**
-- [ ] Bouton "Voir texte" sur chaque point
+- [ ] Bouton "Voir texte" sur chaque POI
 - [ ] Texte synchronisé avec l'audio (karaoké style)
 - [ ] Accessible même sans jouer l'audio
 
@@ -355,7 +360,7 @@ pour [bénéfice].
 
 **Notes techniques:**
 - Utiliser Supabase Realtime (WebSockets)
-- Host envoie: `{action: "play", track_id: "xxx", timestamp: 45.2}`
+- Host envoie: `{action: "play", poi_id: "xxx", timestamp: 45.2}`
 - Membres ajustent leur position
 - Heartbeat toutes les 5 sec pour re-sync
 
@@ -385,8 +390,8 @@ pour [bénéfice].
 
 **Critères d'acceptation:**
 - [ ] Voir la position des autres membres sur la carte
-- [ ] Chacun déclenche ses propres audios
-- [ ] Indicateur "Marie écoute: Place Jacques-Cartier"
+- [ ] Chacun déclenche ses propres audios par proximité
+- [ ] Indicateur "Marie écoute: Maison Marsil"
 - [ ] Option de re-sync si on veut
 
 ---
@@ -398,14 +403,14 @@ pour [bénéfice].
 
 > En tant que touriste,  
 > je veux indiquer si je suis à pied, à vélo ou en auto,  
-> pour que l'expérience soit adaptée.
+> pour que le rayon de déclenchement soit adapté.
 
 **Critères d'acceptation:**
-- [ ] Sélecteur au démarrage du parcours
+- [ ] Sélecteur au lancement du mode découverte
 - [ ] Icônes claires: 🚶 🚴 🚗
 - [ ] Préférence sauvegardée
 - [ ] Possibilité de changer en cours de route
-- [ ] Certains parcours = mode unique (ex: "Road trip Sainte-Julie" = auto only)
+- [ ] Ajuste le rayon de trigger automatiquement
 
 ---
 
@@ -418,10 +423,9 @@ pour [bénéfice].
 
 **Critères d'acceptation:**
 - [ ] Trigger radius: 25-35m
-- [ ] Suggestions "Arrête-toi ici pour mieux voir"
-- [ ] Directions: "Tourne à droite après l'église"
-- [ ] Points rapprochés (50-200m entre chaque)
 - [ ] Audio peut être long (~90 sec)
+- [ ] Notifications discrètes mais claires
+- [ ] Priorité au POI le plus proche si plusieurs dans le rayon
 
 ---
 
@@ -434,10 +438,8 @@ pour [bénéfice].
 
 **Critères d'acceptation:**
 - [ ] Trigger radius: 50-75m
-- [ ] Narration plus courte (~60 sec max)
-- [ ] Pas de "arrête-toi ici"
-- [ ] Points plus espacés (200-500m)
-- [ ] Option: alertes sonores "Point à gauche dans 100m"
+- [ ] Notifications anticipées (déclencher plus tôt)
+- [ ] Option: alertes sonores "POI à gauche dans 100m"
 
 ---
 
@@ -445,14 +447,12 @@ pour [bénéfice].
 **Estimation:** L
 
 > En tant que passager en voiture,  
-> je veux une narration continue style road trip,  
-> pour découvrir les quartiers qu'on traverse.
+> je veux découvrir les POIs le long de ma route,  
+> pour enrichir mon trajet.
 
 **Critères d'acceptation:**
 - [ ] Trigger radius: 100-200m
-- [ ] Narration fluide (pas de pauses longues)
-- [ ] Transitions entre les zones
-- [ ] Contenu adapté: quartiers plutôt que bâtiments
+- [ ] Narration adaptée (pas de "arrête-toi ici")
 - [ ] Détection auto si vitesse >30km/h
 - [ ] Compatible CarPlay / Android Auto
 
@@ -481,11 +481,11 @@ pour [bénéfice].
 **Estimation:** S
 
 > En tant que touriste pressé,  
-> je veux pouvoir utiliser les parcours gratuits sans créer de compte,  
+> je veux pouvoir découvrir les POIs gratuits sans créer de compte,  
 > pour commencer immédiatement.
 
 **Critères d'acceptation:**
-- [ ] Parcours gratuits accessibles sans login
+- [ ] POIs gratuits accessibles sans login
 - [ ] Données stockées localement
 - [ ] Prompt "Créer un compte" pour sauvegarder progression
 - [ ] Compte requis seulement pour achats
@@ -495,9 +495,9 @@ pour [bénéfice].
 ### 🟡 US-502: Créer un compte
 **Estimation:** M
 
-> En tant que touriste qui veut acheter,  
+> En tant que touriste qui veut accéder à tout,  
 > je veux créer un compte facilement,  
-> pour accéder aux parcours premium.
+> pour accéder au contenu premium.
 
 **Critères d'acceptation:**
 - [ ] Sign up avec email/mot de passe
@@ -509,36 +509,36 @@ pour [bénéfice].
 
 ---
 
-### 🟡 US-503: Acheter un parcours
+### 🟡 US-503: Acheter un pack ville
 **Estimation:** L
 
 > En tant que touriste,  
-> je veux acheter un parcours premium,  
-> pour accéder au contenu complet.
+> je veux acheter l'accès complet à tous les POIs d'une ville,  
+> pour débloquer tout le contenu.
 
 **Critères d'acceptation:**
-- [ ] Prix affiché clairement (7.99$ CAD)
+- [ ] Prix affiché clairement (ex: 14.99$ CAD pour Montréal)
 - [ ] Paiement via Apple Pay / Google Pay
 - [ ] In-App Purchase (requis par les stores)
 - [ ] Confirmation d'achat
-- [ ] Parcours débloqué immédiatement
+- [ ] Tous les POIs de la ville débloqués immédiatement
 - [ ] Restauration des achats si réinstallation
 - [ ] Reçu par email
 
 ---
 
-### 🟡 US-504: Acheter un pack ville
+### 🟢 US-504: Acheter un tour curaté (V2)
 **Estimation:** M
 
-> En tant que touriste qui reste plusieurs jours,  
-> je veux acheter tous les parcours d'une ville,  
-> pour avoir un rabais.
+> En tant que touriste qui veut une expérience guidée,  
+> je veux acheter un tour thématique,  
+> pour avoir un parcours curé avec transitions narratives.
 
 **Critères d'acceptation:**
-- [ ] Bundle "Tout Montréal" visible
-- [ ] Économie affichée ("Économisez 40%!")
-- [ ] Prix: 14.99$ CAD
-- [ ] Unlock tous les parcours actuels ET futurs de la ville
+- [ ] Tour = collection ordonnée de POIs avec narration de liaison
+- [ ] Prix: 7.99$ CAD par tour
+- [ ] Preview du tour (POIs inclus, durée, thème)
+- [ ] Inclus si pack ville acheté
 - [ ] Même flow de paiement
 
 ---
@@ -551,43 +551,73 @@ pour [bénéfice].
 > pour savoir ce que j'ai déjà.
 
 **Critères d'acceptation:**
-- [ ] Liste des parcours achetés
+- [ ] Liste des villes / tours achetés
 - [ ] Date d'achat
 - [ ] Bouton "Restaurer achats"
 
 ---
 
-## Épic 6: Contenu — Parcours Spécifiques 🎭
+## Épic 6: Contenu — POIs par Ville 🎭
 
-### 🔴 US-601: Parcours "Vieux-Montréal Classique"
-**Estimation:** XL (contenu)
+> **Approche POI-first:** On collecte des POIs individuels par ville. Chaque POI est autonome avec son propre script audio. Les tours curatés viennent en V2.
 
-> Premier parcours pour le MVP — Le incontournable.
+### 🔴 US-601: POIs Saint-Lambert (bac à sable) 🧪
+**Estimation:** L (contenu)
+
+> Première ville pour valider la techno (bac à sable GPS/geofencing).
 
 **Specs:**
 | Aspect | Valeur |
 |--------|--------|
-| Points | 12-15 |
-| Durée | ~50 min |
-| Distance | ~2.5 km |
-| Mode | Piéton |
+| POIs | 15-20 (couvrir toute la ville) |
+| Catégories | Patrimoine, religieux, nature, infrastructure, commercial |
+| Langues | FR (EN en V1) |
+| Audio total | ~15-20 min |
+| Objectif | Valider le geofencing, pas monétiser |
+
+**POIs identifiés:**
+- Église Saint-Lambert (patrimoine, religieux)
+- Église anglicane Saint-Barnabas (patrimoine, religieux)
+- Parc du Village (nature, histoire)
+- Maison Marsil (patrimoine)
+- Vue sur le Pont Victoria (histoire, infrastructure)
+- Écluse de Saint-Lambert (infrastructure, maritime)
+- Avenue Victoria (histoire, commercial)
+- King Cottages (patrimoine, architecture)
+- Maison Sharpe (patrimoine)
+- Passerelle cyclable (infrastructure, nature)
+- + autres à identifier lors de la validation terrain
+
+---
+
+### 🟡 US-602: POIs Montréal — Vieux-Montréal
+**Estimation:** XL (contenu)
+
+> Premier secteur de Montréal — le plus touristique.
+
+**Specs:**
+| Aspect | Valeur |
+|--------|--------|
+| POIs | 20-30 |
+| Catégories | Patrimoine, religieux, gastronomie, art, histoire |
 | Langues | FR, EN |
 | Persona | "Jacques" (historien chaleureux) |
-| Prix | Teaser gratuit (5 pts), complet 7.99$ |
+| Prix | Teaser gratuit (5 POIs), reste payant |
 
-**Points d'intérêt suggérés:**
-1. Place Jacques-Cartier (départ)
-2. Hôtel de Ville
-3. Château Ramezay
-4. Place d'Armes
-5. Basilique Notre-Dame
-6. Vieux Séminaire
-7. Place Royale
-8. Pointe-à-Callière
-9. Place d'Youville
-10. Marché Bonsecours
-11. Chapelle Notre-Dame-de-Bon-Secours
-12. Rue Saint-Paul (fin)
+**POIs suggérés:**
+- Place Jacques-Cartier
+- Hôtel de Ville
+- Château Ramezay
+- Place d'Armes
+- Basilique Notre-Dame
+- Vieux Séminaire
+- Place Royale
+- Pointe-à-Callière
+- Place d'Youville
+- Marché Bonsecours
+- Chapelle Notre-Dame-de-Bon-Secours
+- Rue Saint-Paul
+- + cafés, spots photo, toilettes (POIs pratiques)
 
 **Contenu logistique à inclure:**
 - Toilettes: Centre de commerce, Marché Bonsecours
@@ -597,19 +627,46 @@ pour [bénéfice].
 
 ---
 
-### 🟡 US-602: Parcours "Vieux-Montréal Hanté" 👻
+### 🟡 US-603: POIs Montréal — Plateau Mont-Royal
 **Estimation:** XL (contenu)
 
-> Version mystère/légendes du Vieux-Montréal.
+> Découverte culinaire et culturelle du Plateau.
 
 **Specs:**
 | Aspect | Valeur |
 |--------|--------|
-| Points | 10 |
-| Durée | ~40 min |
-| Mode | Piéton (soir recommandé) |
-| Persona | Narrateur mystérieux |
-| Ton | Suspense, légendes, crimes historiques |
+| POIs | 15-20 |
+| Catégories | Gastronomie, art, culture, patrimoine |
+| Persona | "Sarah" (étudiante foodie) |
+| Ton | Énergique, recommendations perso |
+
+**Inclure:**
+- Bagels: Fairmount vs St-Viateur
+- Marchés: Jean-Talon
+- Murales / street art
+- Spots brunch emblématiques
+- Bars à vin, terrasses
+
+---
+
+### 🟢 US-604: POIs Montréal — Mile-End Street Art 🎨
+**Estimation:** XL (contenu)
+
+> Art urbain et culture alternative.
+
+---
+
+### 🟢 US-605: POIs Montréal — Souterrain / RÉSO 🚇
+**Estimation:** XL (contenu)
+
+> Le RÉSO, architecture, histoire.
+
+---
+
+### 🟢 US-606: POIs Montréal — Légendes & Mystères 👻 (V2 tour)
+**Estimation:** XL (contenu)
+
+> Version mystère/légendes — idéal comme tour curaté V2.
 
 **Thèmes:**
 - Fantômes du Château Ramezay
@@ -620,58 +677,6 @@ pour [bénéfice].
 
 ---
 
-### 🟡 US-603: Parcours "Plateau des Foodies" 🍕
-**Estimation:** XL (contenu)
-
-> Découverte culinaire du Plateau Mont-Royal.
-
-**Specs:**
-| Aspect | Valeur |
-|--------|--------|
-| Points | 10-12 |
-| Durée | ~45 min |
-| Mode | Piéton |
-| Persona | "Sarah" (étudiante foodie) |
-| Ton | Énergique, recommendations perso |
-
-**Inclure:**
-- Histoire des restos iconiques
-- Bagels: Fairmount vs St-Viateur
-- Marchés: Jean-Talon
-- Spots brunch
-- Bars à vin
-
----
-
-### 🔴 US-604: Parcours "Sainte-Julie Découverte" 🧪
-**Estimation:** L (contenu)
-
-> Parcours test pour valider la techno (bac à sable).
-
-**Specs:**
-| Aspect | Valeur |
-|--------|--------|
-| Points | 8-10 |
-| Durée | ~30 min |
-| Mode | Auto + Piéton |
-| Objectif | Valider géofencing, pas monétiser |
-
----
-
-### 🟢 US-605: Parcours "Mile-End Street Art" 🎨
-**Estimation:** XL (contenu)
-
-> Art urbain et culture alternative.
-
----
-
-### 🟢 US-606: Parcours "Montréal Souterrain" 🚇
-**Estimation:** XL (contenu)
-
-> Le RÉSO, architecture, histoire.
-
----
-
 ## Épic 7: Optimisation & Performance ⚡
 
 ### 🔴 US-701: Optimisation batterie
@@ -679,13 +684,13 @@ pour [bénéfice].
 
 > En tant que touriste,  
 > je veux que l'app ne vide pas ma batterie,  
-> pour pouvoir faire tout le parcours.
+> pour pouvoir explorer toute la journée.
 
 **Critères d'acceptation:**
-- [ ] GPS polling optimisé (pas chaque seconde)
+- [ ] GPS polling optimisé (geofencing natif, pas polling constant)
 - [ ] Mode économie si batterie <20%
-- [ ] Estimation "Batterie suffisante pour ce parcours"
-- [ ] Warning si batterie trop basse pour terminer
+- [ ] Estimation "Batterie suffisante pour X heures de découverte"
+- [ ] Warning si batterie trop basse
 - [ ] Max 15% de batterie par heure d'utilisation
 
 ---
@@ -694,12 +699,12 @@ pour [bénéfice].
 **Estimation:** S
 
 > En tant que touriste,  
-> je veux savoir si j'ai assez de batterie pour le parcours,  
-> pour éviter de tomber en panne.
+> je veux savoir combien de temps je peux explorer avec ma batterie restante,  
+> pour planifier ma promenade.
 
 **Critères d'acceptation:**
-- [ ] Indicateur au démarrage: "✓ Batterie suffisante" ou "⚠️ Batterie faible"
-- [ ] Estimation basée sur: durée parcours × consommation moyenne
+- [ ] Indicateur au lancement: "✓ Batterie suffisante (~3h de découverte)" ou "⚠️ Batterie faible"
+- [ ] Estimation basée sur: consommation moyenne × batterie restante
 
 ---
 
@@ -708,7 +713,7 @@ pour [bénéfice].
 
 > En tant que touriste avec batterie faible,  
 > je veux un mode économie,  
-> pour finir mon parcours quand même.
+> pour continuer ma découverte quand même.
 
 **Critères d'acceptation:**
 - [ ] Activation auto si batterie <20%
@@ -721,15 +726,15 @@ pour [bénéfice].
 
 ## Épic 8: Feedback & Amélioration 📝
 
-### 🟡 US-801: Noter un parcours
+### 🟡 US-801: Noter un POI
 **Estimation:** S
 
-> En tant que touriste qui a terminé,  
-> je veux noter le parcours,  
+> En tant que touriste qui a écouté un POI,  
+> je veux noter ce point d'intérêt,  
 > pour aider les futurs utilisateurs.
 
 **Critères d'acceptation:**
-- [ ] Prompt à la fin du parcours
+- [ ] Prompt après l'écoute d'un POI
 - [ ] Note 1-5 étoiles
 - [ ] Commentaire optionnel
 - [ ] "Pas maintenant" possible
@@ -740,27 +745,28 @@ pour [bénéfice].
 **Estimation:** S
 
 > En tant que touriste,  
-> je veux signaler un problème,  
+> je veux signaler un problème sur un POI,  
 > pour aider à améliorer l'app.
 
 **Critères d'acceptation:**
-- [ ] Bouton "Signaler" sur chaque point
+- [ ] Bouton "Signaler" sur chaque POI
 - [ ] Types: GPS imprécis, Info incorrecte, Audio problème, Autre
-- [ ] Envoi avec contexte (position, parcours, point)
+- [ ] Envoi avec contexte (position, POI concerné)
 - [ ] Confirmation "Merci pour votre feedback"
 
 ---
 
-### 🟢 US-803: Suggérer un nouveau parcours
+### 🟢 US-803: Suggérer un nouveau POI
 **Estimation:** XS
 
 > En tant que local,  
-> je veux suggérer une idée de parcours,  
-> pour enrichir le contenu.
+> je veux suggérer un point d'intérêt,  
+> pour enrichir le contenu de ma ville.
 
 **Critères d'acceptation:**
 - [ ] Formulaire simple
-- [ ] Ville, thème, description
+- [ ] Ville, catégorie, nom, description
+- [ ] Position GPS (auto depuis localisation)
 - [ ] Email de contact
 
 ---
@@ -776,7 +782,7 @@ pour [bénéfice].
 
 **Critères d'acceptation:**
 - [ ] 3-4 écrans max
-- [ ] Expliquer: GPS auto, offline, sync groupe
+- [ ] Expliquer: déclenchement auto par GPS, mode découverte, offline
 - [ ] Demander permission GPS
 - [ ] Demander permission notifications
 - [ ] Skip possible
@@ -793,7 +799,7 @@ pour [bénéfice].
 
 **Critères d'acceptation:**
 - [ ] Explication AVANT la popup système
-- [ ] "Pour déclencher l'audio automatiquement, on a besoin de ta position"
+- [ ] "Pour déclencher l'audio automatiquement quand tu t'approches d'un POI"
 - [ ] Bouton "Autoriser" → popup système
 - [ ] Gestion du refus avec explication
 
@@ -810,14 +816,67 @@ pour [bénéfice].
 - [ ] Langue (app)
 - [ ] Langue audio par défaut
 - [ ] Mode transport par défaut
+- [ ] Catégories de POIs favorites (pré-filtre)
 - [ ] Notifications on/off
 - [ ] Téléchargement Wi-Fi uniquement
 - [ ] Mode économie batterie
 - [ ] Compte (connexion/déconnexion)
-- [ ] Gérer stockage (supprimer parcours téléchargés)
+- [ ] Gérer stockage (supprimer données de villes)
 - [ ] À propos / Version
 - [ ] Politique de confidentialité
 - [ ] Support / Contact
+
+---
+
+## 🟢 Épic 10: Tours Curatés (V2) 🎭
+
+> **Reporté en V2.** Les tours deviennent des collections thématiques de POIs avec un ordre suggéré et des transitions narratives. Les POIs restent standalone — les tours ajoutent une couche d'expérience guidée par-dessus.
+
+### 🟢 US-1001: Voir les tours disponibles
+**Estimation:** M
+
+> En tant que touriste qui veut une expérience guidée,  
+> je veux voir les tours thématiques disponibles,  
+> pour choisir celui qui m'intéresse.
+
+**Critères d'acceptation:**
+- [ ] Liste avec: nom, thème, durée, distance, nombre de POIs
+- [ ] Image de couverture attractive
+- [ ] Badge "Gratuit" ou prix affiché
+- [ ] Preview du tracé sur mini-carte
+- [ ] Filtres: par thème, durée, mode transport
+
+---
+
+### 🟢 US-1002: Suivre un tour guidé
+**Estimation:** M
+
+> En tant que touriste,  
+> je veux suivre un tour guidé étape par étape,  
+> pour avoir une narration continue et un parcours optimisé.
+
+**Critères d'acceptation:**
+- [ ] Afficher le tracé du tour sur la carte
+- [ ] Navigation vers le prochain POI
+- [ ] Transitions narratives entre les POIs
+- [ ] Barre de progression (X/Y POIs du tour)
+- [ ] Option "Voir en mode libre" (désactiver le guidage)
+- [ ] Intro et conclusion du tour (narration dédiée)
+
+---
+
+### 🟢 US-1003: Voir la progression d'un tour
+**Estimation:** S
+
+> En tant que touriste en tour,  
+> je veux voir ma progression,  
+> pour savoir combien il me reste.
+
+**Critères d'acceptation:**
+- [ ] Barre de progression visuelle (X/Y POIs)
+- [ ] Temps estimé restant
+- [ ] Distance restante
+- [ ] Prochain POI avec distance
 
 ---
 
@@ -827,28 +886,28 @@ pour [bénéfice].
 | ID | Story | Estimation |
 |----|-------|------------|
 | US-101 | Carte de la ville | M |
-| US-102 | Liste des parcours | M |
-| US-103 | Détail d'un parcours | S |
-| US-104 | Démarrer un parcours | M |
-| US-105 | Voir ma progression | S |
+| US-102 | POIs autour de moi | M |
+| US-103 | Détail d'un POI | S |
+| US-104 | Mode découverte | M |
+| US-105 | POIs visités | S |
+| US-106 | Filtrer par catégorie | S |
 | US-201 | Trigger audio GPS auto | L |
 | US-202 | Trigger audio manuel | S |
 | US-203 | Contrôles audio | M |
 | US-204 | Téléchargement offline | M |
 | US-401 | Sélection mode transport | S |
 | US-402 | Mode piéton | M |
-| US-601 | Parcours Vieux-Mtl Classique | XL |
-| US-604 | Parcours Sainte-Julie (test) | L |
+| US-601 | POIs Saint-Lambert (test) | L |
 | US-701 | Optimisation batterie | M |
 | US-901 | Onboarding | M |
 | US-902 | Permissions | S |
 
-### 🟡 V1 (Should Have) — 20 stories
-Sync groupe, paiements, autres modes, etc.
+### 🟡 V1 (Should Have) — 18 stories
+Sync groupe, paiements pack ville, POIs Montréal, mode vélo, etc.
 
-### 🟢 V2+ (Could Have) — 8 stories
-Mode auto, détection auto, suggestions, etc.
+### 🟢 V2+ (Could Have) — 12 stories
+Mode auto, détection auto, tours curatés, suggestions POIs, etc.
 
 ---
 
-*Dernière mise à jour: 2026-02-12*
+*Dernière mise à jour: 2026-02-23*

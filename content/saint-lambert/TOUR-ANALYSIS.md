@@ -1,6 +1,6 @@
 # 🏙️ FICHE D'ANALYSE: Saint-Lambert
 
-> Générée automatiquement par le pipeline de contenu App Voyage
+> Analyse de ville pour la collecte de POIs — Approche POI-first
 
 ---
 
@@ -40,55 +40,89 @@ Saint-Lambert possède une collection de maisons **"King Cottage"**, construites
 
 ---
 
-## 🗺️ Zones marchables identifiées
+## 🎭 Thèmes & Catégories pour les POIs
 
-### Cluster principal: Le Village (centre-ville)
+> Ces thèmes servent à **catégoriser les POIs** et permettre le filtrage dans l'app.
 
-**Centre:** Intersection Victoria / Lorne
-**Rayon:** ~1.5 km (zone très dense, walkable)
-**Caractère:** Noyau historique, commerces, églises, patrimoine
-
-```
-            ┌─────────────────────────┐
-            │    FLEUVE ST-LAURENT    │
-            │    (Pont Victoria)      │
-            └───────────┬─────────────┘
-                        │
-        ┌───────────────┼───────────────┐
-        │               │               │
-        │   ★ Église    │   ★ Maisons   │
-        │   St-Lambert  │   Riverside   │
-        │               │               │
-        │       ★ Avenue Victoria       │
-        │       (ligne seigneuriale)    │
-        │               │               │
-        │   ★ King      │   ★ Maison    │
-        │   Cottages    │   Marsil      │
-        │               │               │
-        └───────────────┴───────────────┘
-              ~1.5 km de rayon
-```
-
-### Cluster secondaire: Riverside / Bord-de-l'eau
-
-**Centre:** Rue Riverside
-**Rayon:** ~1 km linéaire (le long du fleuve)
-**Caractère:** Maisons patrimoniales, vue sur le fleuve, piste cyclable
+| Catégorie | Exemples de POIs | Potentiel |
+|-----------|-----------------|-----------|
+| 🏛️ **Patrimoine** | Maison Marsil, Maison Sharpe, King Cottages | ⭐⭐⭐⭐⭐ |
+| ⛪ **Religieux** | Église Saint-Lambert, St-Barnabas, autres | ⭐⭐⭐ |
+| 📜 **Histoire** | Avenue Victoria (seigneuries), Parc du Village | ⭐⭐⭐⭐ |
+| 🌉 **Infrastructure** | Pont Victoria, Écluse, Voie maritime | ⭐⭐⭐⭐ |
+| 🌊 **Maritime** | Écluse, bord du fleuve | ⭐⭐⭐ |
+| 🏠 **Architecture** | Dom Bellot, King Cottages, maisons Riverside | ⭐⭐⭐⭐⭐ |
+| 🌳 **Nature** | Parc du Village, piste cyclable, bord du fleuve | ⭐⭐⭐ |
+| 🛍️ **Commercial** | Avenue Victoria (artère commerciale) | ⭐⭐ |
 
 ---
 
-## 🎭 Thèmes possibles
+## 📍 Tous les POIs à collecter
 
-| Thème | Potentiel | Justification |
-|-------|-----------|---------------|
-| 🏛️ **Patrimoine architectural** | ⭐⭐⭐⭐⭐ | 250+ bâtiments inventoriés, King Cottages uniques |
-| 📜 **Histoire des pionniers** | ⭐⭐⭐⭐ | Mouillepied, Lambert Closse, seigneuries |
-| 🌉 **L'impact du Pont Victoria** | ⭐⭐⭐⭐ | Transformation du village, chemin de fer |
-| ⛪ **Les églises** | ⭐⭐⭐ | 7 églises, styles variés (Dom Bellot, anglican) |
-| 🚴 **Nature / Fleuve** | ⭐⭐⭐ | Piste cyclable vers Parc Jean-Drapeau |
+### Approche: couvrir TOUTE la ville
 
-### Thème recommandé pour le premier tour:
-**"Patrimoine & Origines"** — Mix des hooks 1, 2, 3
+Avec l'approche POI-first, on ne se limite pas à un cluster marchable. On collecte **tous les POIs intéressants** de Saint-Lambert, qu'ils soient proches ou éloignés. L'utilisateur les découvrira naturellement en se promenant, en voiture, ou en vélo.
+
+### POIs confirmés (sources officielles)
+
+| # | Nom | Catégories | GPS | Source | Status |
+|---|-----|------------|-----|--------|--------|
+| 1 | **Église Saint-Lambert** | patrimoine, religieux, architecture | 45.5004, -73.5139 | patrimoine-culturel.gouv.qc.ca | ✅ Script fait |
+| 2 | **Église anglicane Saint-Barnabas** | patrimoine, religieux | 45.5003, -73.5111 | patrimoine-culturel.gouv.qc.ca | ✅ Script fait |
+| 3 | **Parc du Village** | nature, histoire | 45.5009, -73.5107 | saint-lambert.ca | ✅ Script fait |
+| 4 | **Maison Marsil** | patrimoine, architecture | 45.5044, -73.5174 | culture.saint-lambert.ca | ✅ Script fait |
+| 5 | **Vue sur le Pont Victoria** | histoire, infrastructure, point-de-vue | 45.4955, -73.5178 | patrimoine-culturel.gouv.qc.ca | ✅ Script fait |
+| 6 | **Écluse de Saint-Lambert** | infrastructure, maritime, histoire | 45.4932, -73.5159 | grandslacs-voiemaritime.com | ✅ Script fait |
+| 7 | **Avenue Victoria** | histoire, commercial | 45.4998, -73.5125 | saint-lambert.ca | ✅ Script fait |
+| 8 | **Maison Antoine-Ste-Marie (Sharpe)** | patrimoine, architecture | 45.5046, -73.5172 | patrimoine-culturel.gouv.qc.ca | ✅ Script fait |
+
+### POIs à ajouter (phase collecte terrain)
+
+| # | Nom | Catégories | GPS | À vérifier |
+|---|-----|------------|-----|------------|
+| 9 | **King Cottages** (à identifier) | patrimoine, architecture | À repérer | Identifier 2-3 adresses spécifiques, caractéristiques visuelles |
+| 10 | **Maison Whimbey** | patrimoine | À confirmer | 19e siècle, localisation exacte |
+| 11 | **Académie Saint-Michel** | patrimoine, histoire | ~45.5006, -73.5135 | Près de l'église, noyau institutionnel |
+| 12 | **Noyau villageois triangulaire** | histoire | ~45.5005, -73.5120 | Propriété Grand Tronc, lotissement 1867 |
+| 13 | **Passerelle cyclable** | infrastructure, nature | À confirmer | Accès vers Parc Jean-Drapeau |
+| 14 | **Gare de Saint-Lambert** (si existe encore) | histoire, infrastructure | À repérer | Liée au Grand Tronc et au pont Victoria |
+| 15 | **Ancien bureau de poste** | patrimoine | À repérer | Bâtiment institutionnel historique |
+| 16 | **Bord du fleuve / piste cyclable** | nature, point-de-vue | À repérer | Vue panoramique, spot photo |
+
+**Objectif: 15-20 POIs** pour couvrir Saint-Lambert de manière complète.
+
+---
+
+## 🔍 Approche de collecte par catégorie
+
+Pour chaque ville, on fait la "chasse aux POIs" par catégorie:
+
+### 1. 🏛️ Patrimoine & Architecture
+- Consulter le répertoire du patrimoine culturel du Québec
+- Inventaire municipal du patrimoine bâti
+- Repérer les bâtiments classés, cités, reconnus
+- **Saint-Lambert:** 250+ bâtiments inventoriés!
+
+### 2. ⛪ Religieux
+- Toutes les églises / temples / lieux de culte
+- Diversité religieuse = diversité culturelle (bon hook narratif)
+
+### 3. 🌉 Infrastructure & Maritime
+- Ponts, écluses, gares, canaux
+- Éléments qui ont transformé la ville
+
+### 4. 📜 Histoire & Mémoire
+- Rues/places avec une histoire
+- Sites de batailles, frontières anciennes
+- Monuments commémoratifs
+
+### 5. 🌳 Nature & Points de vue
+- Parcs, bord de l'eau, pistes cyclables
+- Spots photo, panoramas
+
+### 6. 🛍️ Commercial & Culture vivante
+- Artères commerciales historiques
+- Galeries d'art, cafés emblématiques
 
 ---
 
@@ -96,66 +130,19 @@ Saint-Lambert possède une collection de maisons **"King Cottage"**, construites
 
 | Question | Réponse |
 |----------|---------|
-| **Multi-tours ou tour unique?** | **Tour unique** — Ville de 7.5 km², un tour de ~10 POIs couvre l'essentiel |
+| **Combien de POIs?** | **15-20** — 8 déjà scriptés, 8-12 à ajouter lors de la validation terrain |
 | **Assez de contenu?** | **Oui** — 250 bâtiments patrimoniaux inventoriés, histoires riches |
-| **Walkable?** | **Excellent** — Le Village fait ~1.5 km, très dense |
+| **Couverture ville?** | **Bonne** — Les POIs couvrent Le Village, Riverside, bord du fleuve. À compléter avec la périphérie |
 | **Intérêt touristique?** | **Moyen-élevé** — Plus pour les locaux/Montréalais que touristes internationaux |
+| **Rôle dans le projet?** | **Bac à sable** — Saint-Lambert sert à valider le GPS/geofencing, pas à monétiser |
 
----
-
-## 📍 POIs candidats identifiés
-
-### POIs confirmés (sources officielles)
-
-| # | Nom | Type | Hook | Source |
-|---|-----|------|------|--------|
-| 1 | **Église Saint-Lambert** | Église | Architecture Dom Bellot (1936), une des premières au Québec | patrimoine-culturel.gouv.qc.ca |
-| 2 | **Église anglicane Saint-Barnabas** | Église | Plus ancienne, témoin de la diversité | patrimoine-culturel.gouv.qc.ca |
-| 3 | **Maison Marsil** | Maison patrimoniale | 18e siècle, ancien musée du textile | histoire-du-quebec.ca |
-| 4 | **Maison Sharpe** | Maison patrimoniale | 18e siècle | histoire-du-quebec.ca |
-| 5 | **Maison Whimbey** | Maison patrimoniale | 19e siècle | histoire-du-quebec.ca |
-| 6 | **Maisons King Cottage** | Architecture | Uniques à Saint-Lambert, Francis King | saint-lambert.ca |
-| 7 | **Rue Riverside** | Rue patrimoniale | Maisons des premiers colons (Marsil, Achim) | histoire-du-quebec.ca |
-| 8 | **Avenue Victoria** | Rue historique | Ligne de division des 2 seigneuries | saint-lambert.ca |
-| 9 | **Académie Saint-Michel** | Institution | Près de l'église, noyau institutionnel | patrimoine-culturel.gouv.qc.ca |
-| 10 | **Vue sur le Pont Victoria** | Point de vue | Premier pont Rive-Sud/Montréal (1854-1859) | patrimoine-culturel.gouv.qc.ca |
-
-### POIs à valider sur place
-
-| # | Nom | Type | À vérifier |
-|---|-----|------|------------|
-| 11 | Parc du Village | Parc | Existe-t-il? Localisation exacte? |
-| 12 | Noyau villageois triangulaire | Zone | Propriété Grand Tronc, lotissement 1867 |
-| 13 | Passerelle cyclable | Infrastructure | Accès vers Parc Jean-Drapeau |
-
----
-
-## 🚶 Parcours suggéré
-
-**Départ:** Stationnement près de l'église (gratuit?)
-**Durée:** ~90 minutes
-**Distance:** ~3-4 km
-**Boucle:** Oui (retour au point de départ)
-
-```
-1. Église Saint-Lambert (intro + Dom Bellot)
-   ↓ 200m
-2. Ancienne église anglicane (diversité religieuse)
-   ↓ 150m
-3. Académie Saint-Michel (noyau institutionnel)
-   ↓ 300m
-4. Avenue Victoria (ligne des seigneuries)
-   ↓ 400m
-5. Rue Riverside (maisons patrimoniales)
-   ↓ 200m
-6. Maison Marsil (18e siècle)
-   ↓ 150m
-7. King Cottages (architecture unique)
-   ↓ 300m
-8. Vue sur Pont Victoria (le pont qui a tout changé)
-   ↓ 400m
-9. Retour vers église (conclusion)
-```
+### Prochaines étapes
+1. ✅ Scripts auto-contenus pour les 8 premiers POIs — **FAIT**
+2. ⬜ Validation terrain: marcher la ville, tester les coordonnées GPS
+3. ⬜ Identifier et scripter les POIs manquants (King Cottages, gare, etc.)
+4. ⬜ Prendre photos de chaque POI
+5. ⬜ Générer les audios TTS
+6. ⬜ Insérer dans Supabase
 
 ---
 
@@ -169,15 +156,5 @@ Saint-Lambert possède une collection de maisons **"King Cottage"**, construites
 
 ---
 
-## ⚠️ À compléter
-
-- [ ] Coordonnées GPS exactes de chaque POI
-- [ ] Photos de repérage
-- [ ] Validation terrain du parcours
-- [ ] Localisation stationnement
-- [ ] Heures d'ouverture église (si intérieur)
-- [ ] Détails sur les King Cottages (caractéristiques visuelles)
-
----
-
-*Analyse générée le 2026-02-18 par le pipeline App Voyage*
+*Dernière mise à jour: 2026-02-23*
+*Analyse générée par le pipeline App Voyage — Approche POI-first*

@@ -2,87 +2,115 @@
 
 ## Philosophie
 
+**POI-first.** On collecte des points d'intérêt autonomes, on valide le GPS/geofencing, et l'utilisateur explore librement. Les tours curatés viennent après, quand on a assez de data et de contenu.
+
 **MVP = Minimum Viable Product** — La version la plus simple qui prouve que le concept fonctionne.  
 On ne build pas tout. On build juste assez pour valider avec de vrais utilisateurs.
 
 ---
 
-## 🥚 Phase 0: Prototype (2-3 semaines)
+## 🥚 Phase 0: Prototype — Collecte POIs + GPS (2-3 semaines)
 
-**Objectif:** Valider le concept avec un prototype testable
+**Objectif:** Collecter tous les POIs d'une ville test (Saint-Lambert) et valider le déclenchement GPS par proximité.
 
-- [ ] Générer contenu audio pour 1 parcours (Vieux-Montréal, ~10 points)
-- [ ] App barebones: carte + lecture audio basée sur position
-- [ ] Test en personne à Montréal
-- [ ] Feedback → itérer
+- [ ] Collecter 15-20 POIs standalone pour Saint-Lambert
+- [ ] Scripts audio auto-contenus pour chaque POI (pas de transitions, pas d'ordre)
+- [ ] App barebones: carte + POIs affichés + lecture audio par proximité GPS
+- [ ] Catégoriser chaque POI (patrimoine, religieux, infrastructure, nature, etc.)
+- [ ] Test en personne à Saint-Lambert — se promener librement
+- [ ] Valider: est-ce que le geofencing trigge au bon moment?
+- [ ] Feedback → itérer sur les rayons de trigger
 
 **Livrable:** APK/TestFlight pour test interne  
-**Pas inclus:** Offline, sync, multi-langue, joli UI
+**Pas inclus:** Offline, sync, multi-langue, joli UI, paiements
+
+**Métriques de succès:**
+- 5 tests terrain complétés
+- Taux de trigger GPS correct > 80%
+- Chaque POI fonctionne de façon indépendante
 
 ---
 
-## 🐣 Phase 1: MVP (4-6 semaines)
+## 🐣 Phase 1: MVP — Tous les POIs d'une ville + Auto-trigger + Offline (4-6 semaines)
 
-**Objectif:** Version utilisable par des beta testers
+**Objectif:** Version utilisable par des beta testers. Une ville complète avec tous ses POIs, téléchargeable offline, déclenchement automatique fiable.
 
 ### Features MVP
-- [ ] 1 ville (Montréal)
-- [ ] 3-5 parcours thématiques
-- [ ] Mode piéton uniquement
-- [ ] Français + Anglais
-- [ ] Téléchargement offline des parcours
+- [ ] 1 ville complète: Saint-Lambert (15-20 POIs)
+- [ ] 2e ville en cours: Montréal — Vieux-Montréal (20-30 POIs)
+- [ ] Mode découverte: se promener, l'audio se déclenche automatiquement
+- [ ] Filtrage POIs par catégorie
+- [ ] Mode piéton (défaut)
+- [ ] Français (EN en préparation)
+- [ ] Téléchargement offline de tous les POIs d'une ville
+- [ ] POIs visités / non-visités (suivi de progression)
 - [ ] UI propre mais simple
-- [ ] Onboarding basique
+- [ ] Onboarding basique ("l'app déclenche l'audio quand tu t'approches d'un POI")
 
 ### Pas inclus (reporté)
-- ❌ Sync multi-appareils
+- ❌ Sync multi-appareils (V2)
+- ❌ Tours curatés (V2)
 - ❌ Mode vélo/auto
 - ❌ Paiements
-- ❌ Autres villes
+- ❌ Autres villes que Saint-Lambert + Montréal
 
 **Livrable:** Beta publique (TestFlight + Google Play Beta)
 
+**Métriques de succès:**
+- 50 beta testers actifs
+- 70%+ des POIs écoutés par les testeurs
+- Taux de complétion d'une ville > 30%
+
 ---
 
-## 🐥 Phase 2: V1.0 — Launch (6-8 semaines après MVP)
+## 🐥 Phase 2: V1.0 — Tours curatés, Paiements, Sync (6-8 semaines après MVP)
 
-**Objectif:** Première version publique
+**Objectif:** Première version publique avec monétisation et features premium.
 
 ### Nouvelles features
-- [ ] Sync multi-appareils (mode Host)
+- [ ] **Tours curatés** (V2 du modèle): collections thématiques de POIs avec ordre + transitions
+- [ ] Sync multi-appareils (mode Host — notre killer feature)
 - [ ] Mode vélo
-- [ ] 2e ville (Sainte-Julie ou autre)
-- [ ] 10+ parcours Montréal
-- [ ] Système de favoris
-- [ ] Freemium: 2 parcours gratuits, reste payant
+- [ ] 50+ POIs Montréal (plusieurs quartiers)
+- [ ] Système de favoris (POIs sauvegardés)
+- [ ] Freemium: X POIs gratuits par ville, pack ville payant
+- [ ] Acheter un tour curaté (7.99$ CAD) ou un pack ville (14.99$ CAD)
 - [ ] Intégration paiement (in-app purchase)
-- [ ] Analytics (comprendre l'usage)
+- [ ] Anglais disponible
+- [ ] Analytics (comprendre l'usage: quels POIs populaires, quels ignorés)
 
 **Livrable:** App Store + Google Play (public)
+
+**Métriques de succès:**
+- 500 downloads
+- 4.0+ stars
+- Premiers revenus (achats in-app)
+- Taux de conversion free → paid > 5%
 
 ---
 
 ## 🐓 Phase 3: V2.0 — Growth (3-6 mois post-launch)
 
 ### Features envisagées
-- [ ] Mode auto (narration continue)
-- [ ] Plus de villes (Québec, Paris, etc.)
+- [ ] Mode auto (narration continue, type road trip)
+- [ ] Plus de villes (Québec, Ottawa, Paris, etc.)
 - [ ] Espagnol
-- [ ] Parcours personnalisés (AI qui génère selon tes intérêts)
-- [ ] Social: partager ses parcours favoris
-- [ ] Reviews/ratings des parcours
-- [ ] B2B: dashboard pour offices de tourisme
+- [ ] POIs personnalisés (AI qui suggère selon tes intérêts / catégories favorites)
+- [ ] Social: partager ses découvertes, POIs favoris
+- [ ] Reviews/ratings des POIs
+- [ ] B2B: dashboard pour offices de tourisme (uploader leurs propres POIs)
+- [ ] Contribution communautaire: locaux suggèrent des POIs
 
 ---
 
-## 📊 Métriques de succès
+## 📊 Métriques de succès par phase
 
 | Phase | Métrique cible |
 |-------|---------------|
-| Prototype | 5 tests terrain complétés |
-| MVP | 50 beta testers actifs |
-| V1.0 | 500 downloads, 4.0+ stars |
-| V2.0 | 5000 downloads, premiers revenus |
+| Phase 0 (Proto) | 5 tests terrain, trigger GPS > 80% fiable |
+| Phase 1 (MVP) | 50 beta testers actifs, POIs écoutés > 70% |
+| Phase 2 (V1.0) | 500 downloads, 4.0+ stars, premiers revenus |
+| Phase 3 (V2.0) | 5000 downloads, expansion géographique |
 
 ---
 
@@ -91,11 +119,14 @@ On ne build pas tout. On build juste assez pour valider avec de vrais utilisateu
 ```
 Fév 2026     Mar 2026     Avr 2026     Mai 2026     Juin 2026
     |------------|------------|------------|------------|
-    [Proto]      [---MVP---]  [----V1.0----]  [V2.0 planning]
+    [Phase 0    ][--Phase 1--][---Phase 2---]  [Phase 3 planning]
+    Collecte POIs  MVP: ville   V1: tours,
+    + GPS proto    complète     paiements,
+                   + offline    sync groupe
 ```
 
 *Les dates sont indicatives. On ajuste selon la vélocité réelle.*
 
 ---
 
-*Dernière mise à jour: 2026-02-12*
+*Dernière mise à jour: 2026-02-23*

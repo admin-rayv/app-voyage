@@ -16,20 +16,21 @@
 
 ## 🔴 Risques techniques
 
-### T1. GPS imprécis ou trigger raté
+### T1. GPS imprécis ou trigger raté sur un POI
 | Aspect | Détail |
 |--------|--------|
-| **Description** | L'audio ne se déclenche pas au bon moment (trop tôt, trop tard, pas du tout) |
+| **Description** | L'audio ne se déclenche pas au bon moment quand l'utilisateur s'approche d'un POI (trop tôt, trop tard, pas du tout) |
 | **Probabilité** | 🔴 Haute |
 | **Impact** | 🔴 Élevé — Expérience utilisateur ruinée, reviews négatifs |
-| **Cause** | GPS smartphone imprécis (~5-15m), bâtiments qui bloquent le signal, calibration du rayon |
+| **Cause** | GPS smartphone imprécis (~5-15m), bâtiments qui bloquent le signal, calibration du rayon par POI |
 
 **Mitigation:**
-- [ ] Tester sur le terrain AVANT de lancer
+- [ ] Tester chaque POI sur le terrain AVANT de lancer
 - [ ] Algorithme intelligent: tenir compte vitesse + direction (comme GuideAlong)
-- [ ] Rayon dynamique selon contexte (plus large en ville dense)
-- [ ] Fallback: bouton manuel "Je suis arrivé"
+- [ ] Rayon dynamique par POI (plus large pour les POIs en zone dense)
+- [ ] Fallback: bouton manuel "Écouter" sur chaque POI
 - [ ] Notification visuelle + vibration avant l'audio
+- [ ] Si plusieurs POIs proches: prioriser le plus proche, file d'attente pour les autres
 
 ---
 
@@ -38,12 +39,12 @@
 |--------|--------|
 | **Description** | GPS + audio + écran = téléphone mort en 2h |
 | **Probabilité** | 🟡 Moyenne |
-| **Impact** | 🟡 Moyen — Utilisateur frustré, parcours interrompu |
+| **Impact** | 🟡 Moyen — Utilisateur frustré, exploration interrompue |
 
 **Mitigation:**
-- [ ] Optimiser le polling GPS (pas besoin de refresh chaque seconde en mode piéton)
+- [ ] Utiliser geofencing natif (pas polling GPS constant)
 - [ ] Mode "économie" qui réduit la précision
-- [ ] Afficher estimation batterie restante
+- [ ] Afficher estimation batterie restante ("~3h de découverte")
 - [ ] Recommander de partir avec batterie pleine / power bank
 
 ---
@@ -93,6 +94,23 @@
 
 ---
 
+### T6. Trop de POIs submergent l'utilisateur
+| Aspect | Détail |
+|--------|--------|
+| **Description** | Avec l'approche POI-first, une ville dense peut avoir 50-100+ POIs. L'utilisateur se sent submergé, ne sait pas par où commencer, reçoit trop de notifications. |
+| **Probabilité** | 🟡 Moyenne |
+| **Impact** | 🟡 Moyen — UX dégradée, utilisateur désinstalle |
+
+**Mitigation:**
+- [ ] **Catégories & filtres** — L'utilisateur choisit ce qui l'intéresse (patrimoine, food, art, etc.)
+- [ ] **Notifications intelligentes** — Limiter le nombre de triggers par heure (pas spam)
+- [ ] **Priorité POI** — Afficher les "incontournables" en premier, le reste en secondaire
+- [ ] **Cool-down** après chaque audio (ne pas enchaîner 5 POIs en 2 minutes)
+- [ ] **Mode "Top 10"** — Suggérer les POIs les mieux notés pour les pressés
+- [ ] Ajuster la densité de POIs affichés selon le zoom de la carte
+
+---
+
 ## 🟠 Risques business / marché
 
 ### B1. BaladoDécouverte est gratuit
@@ -105,8 +123,9 @@
 **Mitigation:**
 - [ ] **Différenciation par la qualité et le ton** — BaladoDécouverte est ennuyeux
 - [ ] **Sync groupe** — ils ne l'ont pas
+- [ ] **Découverte libre** — pas de parcours rigides à suivre
 - [ ] **Marketing**: "Le guide que vous VOULEZ écouter"
-- [ ] Offrir parcours teaser gratuit pour prouver la valeur
+- [ ] Offrir POIs teaser gratuits pour prouver la valeur
 
 ---
 
@@ -120,8 +139,9 @@
 **Mitigation:**
 - [ ] Valider avec MVP minimal AVANT d'investir trop
 - [ ] Commencer Montréal (gros volume touristes: ~11M/an)
+- [ ] Cibler aussi les **locaux** qui redécouvrent leur ville via les POIs
 - [ ] Pivoter vers B2B si B2C ne marche pas (vendre à Tourisme Montréal)
-- [ ] Tracker métriques: téléchargements, conversion, complétion
+- [ ] Tracker métriques: téléchargements, POIs écoutés, conversion
 
 ---
 
@@ -133,7 +153,7 @@
 | **Impact** | 🟡 Moyen — Revenus irréguliers |
 
 **Mitigation:**
-- [ ] Créer parcours "4 saisons" (Montréal souterrain en hiver!)
+- [ ] Créer POIs "4 saisons" (Montréal souterrain en hiver!)
 - [ ] Cibler aussi les **locaux** qui redécouvrent leur ville
 - [ ] Diversifier géographiquement (villes avec tourisme année longue)
 
@@ -142,7 +162,7 @@
 ### B4. Copié par un gros joueur
 | Aspect | Détail |
 |--------|--------|
-| **Description** | VoiceMap ou Google ajoute sync groupe |
+| **Description** | VoiceMap ou Google ajoute sync groupe / POI discovery |
 | **Probabilité** | 🟢 Basse |
 | **Impact** | 🔴 Élevé |
 
@@ -163,7 +183,8 @@
 
 **Mitigation:**
 - [ ] A/B tester différents prix
-- [ ] Commencer à 7.99$ (milieu de marché)
+- [ ] Pack ville: ~14.99$ (accès à tous les POIs)
+- [ ] Tour curaté (V2): ~7.99$ chacun
 - [ ] Offrir bundle pour augmenter panier moyen
 - [ ] Regarder la conversion, pas juste les downloads
 
@@ -174,15 +195,15 @@
 ### C1. Contenu incorrect ou obsolète
 | Aspect | Détail |
 |--------|--------|
-| **Description** | Infos historiques fausses, restaurant fermé, horaires changés |
+| **Description** | Infos historiques fausses, bâtiment rénové, accès fermé |
 | **Probabilité** | 🟡 Moyenne |
 | **Impact** | 🟡 Moyen — Crédibilité atteinte |
 
 **Mitigation:**
-- [ ] Fact-check rigoureux avant publication
+- [ ] Fact-check rigoureux avant publication de chaque POI
 - [ ] Éviter les infos qui changent (horaires, prix) dans l'audio
 - [ ] Mettre les infos variables dans l'app (texte updatable)
-- [ ] Processus de mise à jour annuel
+- [ ] Processus de mise à jour annuel par ville
 
 ---
 
@@ -322,8 +343,9 @@
 
 | ID | Risque | Prob. | Impact | Priorité | Owner |
 |----|--------|-------|--------|----------|-------|
-| T1 | GPS imprécis | 🔴 | 🔴 | 🚨 CRITIQUE | Camélia |
+| T1 | GPS imprécis sur POI | 🔴 | 🔴 | 🚨 CRITIQUE | Camélia |
 | T3 | Sync groupe désync | 🟡 | 🔴 | ⚠️ HAUTE | Camélia |
+| T6 | Trop de POIs submergent l'utilisateur | 🟡 | 🟡 | 🟡 MOYENNE | Camélia |
 | B1 | BaladoDécouverte gratuit | 🔴 | 🟡 | ⚠️ HAUTE | Pierre |
 | B2 | Marché trop petit | 🟡 | 🔴 | ⚠️ HAUTE | Pierre |
 | B3 | Saisonnalité | 🔴 | 🟡 | ⚠️ HAUTE | Pierre |
@@ -341,10 +363,10 @@
 
 ### Top 3 risques à adresser en priorité:
 
-1. **T1 - GPS imprécis** → Prototyper et tester le géofencing TRÈS TÔT
-2. **B1 - Compétition gratuite** → Définir clairement notre différenciation
-3. **T3 - Sync groupe** → Valider la techno avec un POC simple
+1. **T1 - GPS imprécis sur POI** → Prototyper et tester le géofencing par POI à Saint-Lambert TRÈS TÔT
+2. **B1 - Compétition gratuite** → Différenciation: exploration libre + ton engageant + sync groupe
+3. **T6 - Surcharge de POIs** → Catégories, filtres, notifications intelligentes dès le MVP
 
 ---
 
-*Dernière mise à jour: 2026-02-12*
+*Dernière mise à jour: 2026-02-23*

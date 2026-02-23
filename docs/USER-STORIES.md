@@ -37,7 +37,7 @@ pour [bénéfice].
 **Notes techniques:**
 - Utiliser Mapbox GL pour le rendu
 - Tiles offline à télécharger avec les données de la ville
-- Markers custom selon la catégorie de POI (patrimoine, nature, infrastructure, etc.)
+- Markers custom selon la catégorie de POI (histoire, architecture, nature, food, art, insolite, vie-locale)
 
 ---
 
@@ -51,7 +51,7 @@ pour [bénéfice].
 **Critères d'acceptation:**
 - [ ] Liste des POIs triés par distance (du plus proche au plus loin)
 - [ ] Chaque POI affiche: nom, catégorie, distance, mini-description
-- [ ] Icône de catégorie (🏛️ patrimoine, 🌊 maritime, ⛪ religieux, etc.)
+- [ ] Icône de catégorie (🏛️ histoire, 🏗️ architecture, 🌿 nature, 🍴 food, 🎨 art, 👻 insolite, 🏘️ vie-locale)
 - [ ] Badge "Écouté ✓" si déjà visité
 - [ ] Badge "Téléchargé" si audio en cache
 - [ ] Tap sur un POI → détail du POI
@@ -135,7 +135,7 @@ pour [bénéfice].
 > pour ne voir que ce qui m'intéresse.
 
 **Critères d'acceptation:**
-- [ ] Filtres par catégorie: patrimoine, religieux, nature, infrastructure, commercial, etc.
+- [ ] Filtres par catégorie: 🏛️ histoire, 🏗️ architecture, 🌿 nature, 🍴 food, 🎨 art, 👻 insolite, 🏘️ vie-locale
 - [ ] Toggle multi-catégories (sélection multiple)
 - [ ] La carte se met à jour en temps réel (masquer les POIs hors filtre)
 - [ ] La liste se met à jour aussi

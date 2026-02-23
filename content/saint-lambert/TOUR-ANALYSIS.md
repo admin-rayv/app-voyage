@@ -46,14 +46,13 @@ Saint-Lambert possède une collection de maisons **"King Cottage"**, construites
 
 | Catégorie | Exemples de POIs | Potentiel |
 |-----------|-----------------|-----------|
-| 🏛️ **Patrimoine** | Maison Marsil, Maison Sharpe, King Cottages | ⭐⭐⭐⭐⭐ |
-| ⛪ **Religieux** | Église Saint-Lambert, St-Barnabas, autres | ⭐⭐⭐ |
-| 📜 **Histoire** | Avenue Victoria (seigneuries), Parc du Village | ⭐⭐⭐⭐ |
-| 🌉 **Infrastructure** | Pont Victoria, Écluse, Voie maritime | ⭐⭐⭐⭐ |
-| 🌊 **Maritime** | Écluse, bord du fleuve | ⭐⭐⭐ |
-| 🏠 **Architecture** | Dom Bellot, King Cottages, maisons Riverside | ⭐⭐⭐⭐⭐ |
-| 🌳 **Nature** | Parc du Village, piste cyclable, bord du fleuve | ⭐⭐⭐ |
-| 🛍️ **Commercial** | Avenue Victoria (artère commerciale) | ⭐⭐ |
+| 🏛️ **Histoire** | Maison Marsil, seigneuries, Lambert Closse, Parc du Village | ⭐⭐⭐⭐⭐ |
+| 🏗️ **Architecture** | King Cottages, Dom Bellot, Écluse, maisons Riverside | ⭐⭐⭐⭐⭐ |
+| 🌿 **Nature** | Parc du Village, piste cyclable, bord du fleuve | ⭐⭐⭐ |
+| 🍴 **Food & Drink** | Restos Victoria, cafés, marchés | ⭐⭐ |
+| 🎨 **Art & Culture** | Bibliothèque, galeries, art public | ⭐⭐ |
+| 👻 **Insolite** | Mouillepied, collection Sharpe 3000 objets, ventouses écluse | ⭐⭐⭐⭐ |
+| 🏘️ **Vie locale** | Marché du Village, events, traditions | ⭐⭐⭐ |
 
 ---
 
@@ -67,26 +66,26 @@ Avec l'approche POI-first, on ne se limite pas à un cluster marchable. On colle
 
 | # | Nom | Catégories | GPS | Source | Status |
 |---|-----|------------|-----|--------|--------|
-| 1 | **Église Saint-Lambert** | patrimoine, religieux, architecture | 45.5004, -73.5139 | patrimoine-culturel.gouv.qc.ca | ✅ Script fait |
-| 2 | **Église anglicane Saint-Barnabas** | patrimoine, religieux | 45.5003, -73.5111 | patrimoine-culturel.gouv.qc.ca | ✅ Script fait |
+| 1 | **Église Saint-Lambert** | histoire, architecture | 45.5004, -73.5139 | patrimoine-culturel.gouv.qc.ca | ✅ Script fait |
+| 2 | **Église anglicane Saint-Barnabas** | histoire, architecture | 45.5003, -73.5111 | patrimoine-culturel.gouv.qc.ca | ✅ Script fait |
 | 3 | **Parc du Village** | nature, histoire | 45.5009, -73.5107 | saint-lambert.ca | ✅ Script fait |
-| 4 | **Maison Marsil** | patrimoine, architecture | 45.5044, -73.5174 | culture.saint-lambert.ca | ✅ Script fait |
-| 5 | **Vue sur le Pont Victoria** | histoire, infrastructure, point-de-vue | 45.4955, -73.5178 | patrimoine-culturel.gouv.qc.ca | ✅ Script fait |
-| 6 | **Écluse de Saint-Lambert** | infrastructure, maritime, histoire | 45.4932, -73.5159 | grandslacs-voiemaritime.com | ✅ Script fait |
+| 4 | **Maison Marsil** | histoire, architecture | 45.5044, -73.5174 | culture.saint-lambert.ca | ✅ Script fait |
+| 5 | **Vue sur le Pont Victoria** | histoire, architecture | 45.4955, -73.5178 | patrimoine-culturel.gouv.qc.ca | ✅ Script fait |
+| 6 | **Écluse de Saint-Lambert** | architecture, insolite | 45.4932, -73.5159 | grandslacs-voiemaritime.com | ✅ Script fait |
 | 7 | **Avenue Victoria** | histoire, commercial | 45.4998, -73.5125 | saint-lambert.ca | ✅ Script fait |
-| 8 | **Maison Antoine-Ste-Marie (Sharpe)** | patrimoine, architecture | 45.5046, -73.5172 | patrimoine-culturel.gouv.qc.ca | ✅ Script fait |
+| 8 | **Maison Antoine-Ste-Marie (Sharpe)** | histoire, architecture | 45.5046, -73.5172 | patrimoine-culturel.gouv.qc.ca | ✅ Script fait |
 
 ### POIs à ajouter (phase collecte terrain)
 
 | # | Nom | Catégories | GPS | À vérifier |
 |---|-----|------------|-----|------------|
-| 9 | **King Cottages** (à identifier) | patrimoine, architecture | À repérer | Identifier 2-3 adresses spécifiques, caractéristiques visuelles |
-| 10 | **Maison Whimbey** | patrimoine | À confirmer | 19e siècle, localisation exacte |
-| 11 | **Académie Saint-Michel** | patrimoine, histoire | ~45.5006, -73.5135 | Près de l'église, noyau institutionnel |
+| 9 | **King Cottages** (à identifier) | histoire, architecture | À repérer | Identifier 2-3 adresses spécifiques, caractéristiques visuelles |
+| 10 | **Maison Whimbey** | histoire | À confirmer | 19e siècle, localisation exacte |
+| 11 | **Académie Saint-Michel** | histoire, architecture | ~45.5006, -73.5135 | Près de l'église, noyau institutionnel |
 | 12 | **Noyau villageois triangulaire** | histoire | ~45.5005, -73.5120 | Propriété Grand Tronc, lotissement 1867 |
 | 13 | **Passerelle cyclable** | infrastructure, nature | À confirmer | Accès vers Parc Jean-Drapeau |
 | 14 | **Gare de Saint-Lambert** (si existe encore) | histoire, infrastructure | À repérer | Liée au Grand Tronc et au pont Victoria |
-| 15 | **Ancien bureau de poste** | patrimoine | À repérer | Bâtiment institutionnel historique |
+| 15 | **Ancien bureau de poste** | histoire | À repérer | Bâtiment institutionnel historique |
 | 16 | **Bord du fleuve / piste cyclable** | nature, point-de-vue | À repérer | Vue panoramique, spot photo |
 
 **Objectif: 15-20 POIs** pour couvrir Saint-Lambert de manière complète.
@@ -95,34 +94,46 @@ Avec l'approche POI-first, on ne se limite pas à un cluster marchable. On colle
 
 ## 🔍 Approche de collecte par catégorie
 
-Pour chaque ville, on fait la "chasse aux POIs" par catégorie:
+Pour chaque ville, on fait la "chasse aux POIs" en passant par chacune des **7 catégories officielles**:
 
-### 1. 🏛️ Patrimoine & Architecture
-- Consulter le répertoire du patrimoine culturel du Québec
+### 1. 🏛️ Histoire
+- Répertoire du patrimoine culturel du Québec
+- Personnages historiques liés à la ville
+- Événements marquants, frontières anciennes, monuments
+- **Saint-Lambert:** Lambert Closse, seigneuries, pont Victoria
+
+### 2. 🏗️ Architecture
 - Inventaire municipal du patrimoine bâti
-- Repérer les bâtiments classés, cités, reconnus
-- **Saint-Lambert:** 250+ bâtiments inventoriés!
+- Bâtiments classés, styles distinctifs
+- Infrastructure notable (ponts, écluses, gares)
+- **Saint-Lambert:** King Cottages, Dom Bellot, écluse
 
-### 2. ⛪ Religieux
-- Toutes les églises / temples / lieux de culte
-- Diversité religieuse = diversité culturelle (bon hook narratif)
+### 3. 🌿 Nature
+- Parcs, sentiers, bord de l'eau
+- Arbres remarquables, points de vue
+- Pistes cyclables, accès fleuve
+- **Saint-Lambert:** 30 parcs, passerelle vers Parc Jean-Drapeau
 
-### 3. 🌉 Infrastructure & Maritime
-- Ponts, écluses, gares, canaux
-- Éléments qui ont transformé la ville
+### 4. 🍴 Food & Drink
+- Restos iconiques, cafés emblématiques
+- Marchés, histoire culinaire locale
+- **Saint-Lambert:** 25+ restaurants sur Victoria
 
-### 4. 📜 Histoire & Mémoire
-- Rues/places avec une histoire
-- Sites de batailles, frontières anciennes
-- Monuments commémoratifs
+### 5. 🎨 Art & Culture
+- Murales, art public, sculptures
+- Galeries, théâtres, bibliothèque
+- **Saint-Lambert:** Bibliothèque (une des plus achalandées au QC)
 
-### 5. 🌳 Nature & Points de vue
-- Parcs, bord de l'eau, pistes cyclables
-- Spots photo, panoramas
+### 6. 👻 Insolite
+- Légendes locales, histoires weird
+- Anecdotes surprenantes, fantômes, secrets
+- **Saint-Lambert:** "Mouillepied", collection Sharpe de 3000 objets
 
-### 6. 🛍️ Commercial & Culture vivante
-- Artères commerciales historiques
-- Galeries d'art, cafés emblématiques
+### 7. 🏘️ Vie locale
+- Marchés hebdomadaires, events récurrents
+- Traditions, festivals, spots communautaires
+- Vie de quartier, ce que les locaux savent
+- **Saint-Lambert:** Marché du Village, événements du centre-ville
 
 ---
 

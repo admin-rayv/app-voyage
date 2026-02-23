@@ -25,7 +25,7 @@
 | **Coordonnées** | **45.5004, -73.5139** |
 | **Rayon trigger** | 40m |
 | **Type** | Église catholique |
-| **Catégories** | `patrimoine`, `religieux`, `architecture` |
+| **Catégories** | `histoire`, `architecture` |
 | **Année** | 1936-1938 |
 
 ### Script audio (FR)
@@ -62,7 +62,7 @@ Lève les yeux vers la statue de saint Lambert au-dessus de la porte. C'est lui,
 | **Coordonnées** | **45.5003, -73.5111** |
 | **Rayon trigger** | 40m |
 | **Type** | Église anglicane |
-| **Catégories** | `patrimoine`, `religieux` |
+| **Catégories** | `histoire`, `architecture` |
 
 ### Script audio (FR)
 
@@ -127,7 +127,7 @@ Saint-Lambert, c'est une ville qui surprend. Une des bibliothèques les plus ach
 | **Coordonnées** | **45.5044, -73.5174** |
 | **Rayon trigger** | 40m |
 | **Type** | Maison patrimoniale classée |
-| **Catégories** | `patrimoine`, `architecture` |
+| **Catégories** | `histoire`, `architecture` |
 | **Année** | ~1750 |
 
 ### Script audio (FR)
@@ -163,7 +163,7 @@ Et ça a duré.
 | **Coordonnées** | **45.4955, -73.5178** |
 | **Rayon trigger** | 60m |
 | **Type** | Point de vue historique |
-| **Catégories** | `histoire`, `infrastructure`, `point-de-vue` |
+| **Catégories** | `histoire`, `architecture` |
 
 ### Script audio (FR)
 
@@ -201,7 +201,7 @@ Tout ça parce que quelqu'un a décidé de construire un pont à cet endroit pr�
 | **Coordonnées** | **45.4932, -73.5159** |
 | **Rayon trigger** | 80m |
 | **Type** | Infrastructure maritime |
-| **Catégories** | `infrastructure`, `maritime`, `histoire` |
+| **Catégories** | `architecture`, `insolite` |
 | **Année** | 1959 (ouverture Voie maritime) |
 
 ### Script audio (FR)
@@ -235,7 +235,7 @@ Des touristes viennent ici juste pour regarder les bateaux passer. Et honnêteme
 | **Coordonnées** | **45.4998, -73.5125** |
 | **Rayon trigger** | 50m |
 | **Type** | Rue historique / commerce |
-| **Catégories** | `histoire`, `commercial` |
+| **Catégories** | `histoire`, `vie-locale` |
 
 ### Script audio (FR)
 
@@ -270,7 +270,7 @@ Et pourquoi "Victoria"? En l'honneur du pont, bien sûr. Qui lui-même honore la
 | **Coordonnées** | **45.5046, -73.5172** |
 | **Rayon trigger** | 40m |
 | **Type** | Maison patrimoniale classée |
-| **Catégories** | `patrimoine`, `architecture` |
+| **Catégories** | `histoire`, `architecture` |
 | **Année** | ~1775 |
 
 ### Script audio (FR)
@@ -299,14 +299,14 @@ Cette maison a traversé la Conquête anglaise, la Confédération, deux guerres
 
 | # | POI | Coordonnées | Catégories | Durée audio |
 |---|-----|-------------|------------|-------------|
-| 1 | Église Saint-Lambert | **45.5004, -73.5139** | patrimoine, religieux, architecture | 80s |
-| 2 | Église St-Barnabas | **45.5003, -73.5111** | patrimoine, religieux | 70s |
+| 1 | Église Saint-Lambert | **45.5004, -73.5139** | histoire, architecture | 80s |
+| 2 | Église St-Barnabas | **45.5003, -73.5111** | histoire, architecture | 70s |
 | 3 | Parc du Village | **45.5009, -73.5107** | nature, histoire | 70s |
-| 4 | Maison Marsil | **45.5044, -73.5174** | patrimoine, architecture | 85s |
-| 5 | Pont Victoria (vue) | **45.4955, -73.5178** | histoire, infrastructure, point-de-vue | 90s |
-| 6 | Écluse Saint-Lambert | **45.4932, -73.5159** | infrastructure, maritime, histoire | 90s |
-| 7 | Avenue Victoria | **45.4998, -73.5125** | histoire, commercial | 75s |
-| 8 | Maison Sharpe | **45.5046, -73.5172** | patrimoine, architecture | 70s |
+| 4 | Maison Marsil | **45.5044, -73.5174** | histoire, architecture | 85s |
+| 5 | Pont Victoria (vue) | **45.4955, -73.5178** | histoire, architecture | 90s |
+| 6 | Écluse Saint-Lambert | **45.4932, -73.5159** | architecture, insolite | 90s |
+| 7 | Avenue Victoria | **45.4998, -73.5125** | histoire, vie-locale | 75s |
+| 8 | Maison Sharpe | **45.5046, -73.5172** | histoire, architecture | 70s |
 | | **TOTAL** | | | **~10 min audio** |
 
 ---
@@ -333,7 +333,7 @@ Cette maison a traversé la Conquête anglaise, la Confédération, deux guerres
       "trigger_radius_m": 40,
       "address": "41, avenue Lorne",
       "type": "church",
-      "categories": ["patrimoine", "religieux", "architecture"],
+      "categories": ["histoire", "architecture"],
       "year": "1936-1938",
       "audio_duration_s": 80
     },
@@ -345,7 +345,7 @@ Cette maison a traversé la Conquête anglaise, la Confédération, deux guerres
       "trigger_radius_m": 40,
       "address": "95, avenue Lorne",
       "type": "church",
-      "categories": ["patrimoine", "religieux"],
+      "categories": ["histoire", "architecture"],
       "audio_duration_s": 70
     },
     {
@@ -368,7 +368,7 @@ Cette maison a traversé la Conquête anglaise, la Confédération, deux guerres
       "trigger_radius_m": 40,
       "address": "349, rue Riverside",
       "type": "heritage_house",
-      "categories": ["patrimoine", "architecture"],
+      "categories": ["histoire", "architecture"],
       "year": "~1750",
       "audio_duration_s": 85
     },
@@ -380,7 +380,7 @@ Cette maison a traversé la Conquête anglaise, la Confédération, deux guerres
       "trigger_radius_m": 60,
       "address": "Bord du fleuve",
       "type": "viewpoint",
-      "categories": ["histoire", "infrastructure", "point-de-vue"],
+      "categories": ["histoire", "architecture"],
       "year": "1854-1859",
       "audio_duration_s": 90
     },
@@ -392,7 +392,7 @@ Cette maison a traversé la Conquête anglaise, la Confédération, deux guerres
       "trigger_radius_m": 80,
       "address": "Voie maritime du Saint-Laurent",
       "type": "infrastructure",
-      "categories": ["infrastructure", "maritime", "histoire"],
+      "categories": ["architecture", "insolite"],
       "year": "1959",
       "audio_duration_s": 90
     },
@@ -404,7 +404,7 @@ Cette maison a traversé la Conquête anglaise, la Confédération, deux guerres
       "trigger_radius_m": 50,
       "address": "Avenue Victoria (secteur central)",
       "type": "street",
-      "categories": ["histoire", "commercial"],
+      "categories": ["histoire", "vie-locale"],
       "year": "~1657 (seigneuries)",
       "audio_duration_s": 75
     },
@@ -416,7 +416,7 @@ Cette maison a traversé la Conquête anglaise, la Confédération, deux guerres
       "trigger_radius_m": 40,
       "address": "Rue Riverside, près du 349",
       "type": "heritage_house",
-      "categories": ["patrimoine", "architecture"],
+      "categories": ["histoire", "architecture"],
       "year": "~1775",
       "audio_duration_s": 70
     }

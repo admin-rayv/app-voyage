@@ -61,7 +61,7 @@
 | lng | float | Longitude |
 | trigger_radius_m | int | Rayon de déclenchement (défaut: 40m) |
 | type | string | "building", "monument", "park", "viewpoint" |
-| categories | string[] | `['patrimoine', 'nature', 'gastronomie', 'art', 'insolite']` |
+| categories | string[] | `['histoire', 'architecture', 'nature', 'food', 'art', 'insolite', 'vie-locale']` |
 | image_url | string | Photo du lieu (optionnel) |
 | logistics | JSONB | Voir détail ci-dessous |
 | is_published | boolean | Visible dans l'app (défaut: false) |
@@ -80,14 +80,14 @@
 
 **Champ `categories` (TEXT[]):**
 ```sql
--- Catégories disponibles:
--- 'patrimoine'    → Bâtiments historiques, monuments
--- 'nature'        → Parcs, vues, espaces verts
--- 'gastronomie'   → Restos, marchés, culture food
--- 'art'           → Street art, galeries, murales
--- 'insolite'      → Histoires bizarres, légendes, hantés
--- 'architecture'  → Style architectural notable
--- 'maritime'      → Fleuve, écluses, ports
+-- Catégories officielles (7):
+-- 'histoire'       → 🏛️ Patrimoine, personnages, événements passés
+-- 'architecture'   → 🏗️ Styles notables, bâtiments uniques, infrastructure
+-- 'nature'         → 🌿 Parcs, sentiers, fleuve, arbres
+-- 'food'           → 🍴 Restos, cafés, marchés, histoire culinaire
+-- 'art'            → 🎨 Murales, galeries, spectacles, art public
+-- 'insolite'       → 👻 Légendes, secrets, weird facts, hanté
+-- 'vie-locale'     → 🏘️ Marchés hebdo, events récurrents, traditions, spots communautaires
 ```
 
 ---
@@ -391,7 +391,7 @@ serve(async (req) => {
       "script_hash": "sha256:abc123...",
       "file": "poi_point-001.mp3",
       "duration_sec": 65,
-      "categories": ["patrimoine", "architecture"]
+      "categories": ["histoire", "architecture"]
     }
   ]
 }

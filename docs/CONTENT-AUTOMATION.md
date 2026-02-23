@@ -18,7 +18,7 @@
 │                                                                 │
 │   • C'est quoi le     • Patrimoine       • 60-90 sec     • patrimoine│
 │     hook unique?      • Nature            chacun         • nature    │
-│   • Petite/grande?    • Gastronomie     • Pas de         • gastro    │
+│   • Petite/grande?    • Gastronomie     • Pas de         • food    │
 │   • Thèmes?           • Art/culture       transitions   • art       │
 │                       • Insolite        • Stand-alone    • insolite  │
 │                                                                 │
@@ -98,10 +98,10 @@ Pour chaque ville, on collecte **tous** les POIs potentiels, pas juste ceux d'un
 
 | Quartier | POIs estimés | Catégories probables |
 |----------|-------------|---------------------|
-| Vieux-Montréal | 20-30 | patrimoine, architecture, insolite |
-| Plateau | 15-25 | art, gastronomie, architecture |
-| Mile End | 10-20 | art, gastronomie, nature |
-| Mont-Royal | 10-15 | nature, patrimoine |
+| Vieux-Montréal | 20-30 | histoire, architecture, insolite |
+| Plateau | 15-25 | art, food, architecture |
+| Mile End | 10-20 | art, food, nature |
+| Mont-Royal | 10-15 | nature, histoire |
 | Centre-ville | 15-25 | architecture, insolite |
 
 ### Petites villes (Saint-Lambert, Sainte-Julie, etc.)
@@ -134,7 +134,7 @@ CRITÈRES DE SÉLECTION:
 1. **Intérêt narratif** — Il y a une histoire à raconter (pas juste "c'est un building")
 2. **Visibilité** — L'auditeur peut VOIR quelque chose (pas un site démoli)
 3. **Géolocalisation précise** — On peut placer un point GPS dessus
-4. **Diversité** — Mix de catégories (patrimoine, nature, gastro, art, insolite)
+4. **Diversité** — Mix de catégories (histoire, nature, food, art, insolite)
 
 EXCLURE:
 - POIs fermés au public sans intérêt extérieur
@@ -142,13 +142,13 @@ EXCLURE:
 - Sites qui nécessitent un billet d'entrée pour être appréciés
 
 CATÉGORIES À UTILISER:
-- patrimoine (bâtiments historiques, monuments)
+- histoire (patrimoine, personnages, événements passés)
 - nature (parcs, vues, espaces verts)
-- gastronomie (restos iconiques, marchés, culture food)
+- food (restos iconiques, marchés, culture food)
 - art (street art, galeries, murales)
 - insolite (histoires bizarres, légendes, hantés)
 - architecture (style architectural notable)
-- maritime (fleuve, écluses, ports)
+- architecture (fleuve, écluses, ports)
 
 OUTPUT:
 Pour chaque POI candidat:
@@ -171,7 +171,7 @@ Pour chaque POI candidat:
       "nom": "Église Saint-Lambert",
       "lat": 45.5004,
       "lng": -73.5139,
-      "categories": ["patrimoine", "architecture"],
+      "categories": ["histoire", "architecture"],
       "hook": "Une des premières églises Dom Bellot au Québec, reconstruite après un incendie en 1936",
       "sources": ["patrimoine-culturel.gouv.qc.ca"],
       "type": "church",
@@ -231,18 +231,31 @@ Génère le script audio en français québécois.
 
 ## Étape 4: Tagging et catégorisation
 
-Chaque POI reçoit 1-3 catégories pour permettre le filtrage dans l'app:
+Chaque POI reçoit 1-3 catégories parmi les **7 catégories officielles**:
+
+| Slug | Emoji | Description |
+|------|-------|-------------|
+| `histoire` | 🏛️ | Patrimoine, personnages, événements passés |
+| `architecture` | 🏗️ | Styles notables, bâtiments uniques, infrastructure |
+| `nature` | 🌿 | Parcs, sentiers, fleuve, arbres |
+| `food` | 🍴 | Restos, cafés, marchés, histoire culinaire |
+| `art` | 🎨 | Murales, galeries, spectacles, art public |
+| `insolite` | 👻 | Légendes, secrets, weird facts, hanté |
+| `vie-locale` | 🏘️ | Marchés hebdo, events récurrents, traditions, spots communautaires |
 
 ```sql
 -- Exemples de tagging
-UPDATE points SET categories = ARRAY['patrimoine', 'architecture'] 
+UPDATE points SET categories = ARRAY['histoire', 'architecture'] 
   WHERE name->>'fr' = 'Église Saint-Lambert';
 
-UPDATE points SET categories = ARRAY['nature', 'maritime'] 
+UPDATE points SET categories = ARRAY['architecture', 'histoire'] 
   WHERE name->>'fr' = 'Vue sur le Pont Victoria';
 
-UPDATE points SET categories = ARRAY['patrimoine', 'insolite'] 
+UPDATE points SET categories = ARRAY['histoire', 'insolite'] 
   WHERE name->>'fr' = 'Maison Marsil';
+
+UPDATE points SET categories = ARRAY['vie-locale', 'food'] 
+  WHERE name->>'fr' = 'Marché du jeudi';
 ```
 
 ---
@@ -300,18 +313,18 @@ UPDATE points SET categories = ARRAY['patrimoine', 'insolite']
 
 | # | POI | Catégories | Status |
 |---|-----|-----------|--------|
-| 1 | Église Saint-Lambert | patrimoine, architecture | ✅ Script rédigé |
-| 2 | Église anglicane St-Barnabas | patrimoine | ✅ Script rédigé |
-| 3 | Parc du Village | patrimoine, nature | ✅ Script rédigé |
-| 4 | Maison Marsil | patrimoine, insolite | ✅ Script rédigé |
-| 5 | Vue sur le Pont Victoria | patrimoine, maritime | ✅ Script rédigé |
-| 6 | Écluse de Saint-Lambert | maritime, insolite | ✅ Script rédigé |
-| 7 | Avenue Victoria | patrimoine | ✅ Script rédigé |
+| 1 | Église Saint-Lambert | histoire, architecture | ✅ Script rédigé |
+| 2 | Église anglicane St-Barnabas | histoire | ✅ Script rédigé |
+| 3 | Parc du Village | histoire, nature | ✅ Script rédigé |
+| 4 | Maison Marsil | histoire, insolite | ✅ Script rédigé |
+| 5 | Vue sur le Pont Victoria | histoire, architecture | ✅ Script rédigé |
+| 6 | Écluse de Saint-Lambert | architecture, insolite | ✅ Script rédigé |
+| 7 | Avenue Victoria | histoire | ✅ Script rédigé |
 | 8 | King Cottages | architecture | 📝 À faire |
-| 9 | Maison Sharpe | patrimoine | 📝 À faire |
-| 10 | Maison Whimbey | patrimoine | 📝 À faire |
-| 11 | Académie Saint-Michel | patrimoine | 📝 À faire |
-| 12 | Piste cyclable / fleuve | nature, maritime | 📝 À faire |
+| 9 | Maison Sharpe | histoire | 📝 À faire |
+| 10 | Maison Whimbey | histoire | 📝 À faire |
+| 11 | Académie Saint-Michel | histoire | 📝 À faire |
+| 12 | Piste cyclable / fleuve | nature, architecture | 📝 À faire |
 | ... | (à compléter) | | |
 
 ---
@@ -322,10 +335,10 @@ UPDATE points SET categories = ARRAY['patrimoine', 'insolite']
 
 | Quartier | POIs estimés | Catégories principales |
 |----------|-------------|----------------------|
-| Vieux-Montréal | 25+ | patrimoine, architecture, insolite |
-| Plateau | 20+ | art, gastronomie, architecture |
-| Mile End | 15+ | art, gastronomie |
-| Mont-Royal | 10+ | nature, patrimoine |
+| Vieux-Montréal | 25+ | histoire, architecture, insolite |
+| Plateau | 20+ | art, food, architecture |
+| Mile End | 15+ | art, food |
+| Mont-Royal | 10+ | nature, histoire |
 | Centre-ville | 20+ | architecture, insolite |
 | **Total** | **90+** | |
 
@@ -333,8 +346,8 @@ UPDATE points SET categories = ARRAY['patrimoine', 'insolite']
 
 | Tour | POIs sélectionnés | Prix |
 |------|------------------|------|
-| "Vieux-Montréal Hanté" 👻 | 10 POIs insolite/patrimoine | 7.99$ |
-| "Plateau Foodies" 🍕 | 12 POIs gastronomie | 7.99$ |
+| "Vieux-Montréal Hanté" 👻 | 10 POIs insolite/histoire | 7.99$ |
+| "Plateau Foodies" 🍕 | 12 POIs food | 7.99$ |
 | "Mile-End Street Art" 🎨 | 8 POIs art | 7.99$ |
 | Bundle "Découverte Montréal" | 3 tours | 14.99$ |
 
@@ -359,7 +372,7 @@ CARTES:
 ┌─────────────────────┐
 │ 📍 POI: Château     │  ← POI individuel
 │    Ramezay          │
-│    Labels: patrimoine│
+│    Labels: histoire│
 │    Labels: insolite │
 └─────────────────────┘
 ```

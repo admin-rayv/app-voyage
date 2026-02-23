@@ -9,18 +9,24 @@
 ### Vue d'ensemble
 
 ```
-┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│    City     │────<│    Tour     │────<│    Point    │
-└─────────────┘     └─────────────┘     └─────────────┘
-                                              │
-                                              │
-                                        ┌─────▼─────┐
-                                        │  Script   │
-                                        │ (par lang)│
-                                        └───────────┘
+┌─────────────┐     ┌─────────────┐
+│    City     │────<│    Point    │  ← POIs standalone, liés à une ville
+└─────────────┘     └─────────────┘
+                          │
+                          │
+                    ┌─────▼─────┐
+                    │  Script   │
+                    │ (par lang)│
+                    └───────────┘
+
+                    ┌─────────────┐     ┌──────────────┐
+                    │  Tour (V2)  │────<│ TourPoint(V2)│──── Point
+                    └─────────────┘     └──────────────┘
 ```
 
-**Principe clé:** On stocke les **scripts texte**, pas les fichiers audio. L'audio est **généré à la demande** via ElevenLabs et mis en cache localement sur l'appareil.
+**Principe clé:** Les **POIs sont autonomes** — ils appartiennent à une ville, pas à un tour. On stocke les **scripts texte**, pas les fichiers audio. L'audio est **généré à la demande** via ElevenLabs et mis en cache localement sur l'appareil.
+
+**Tours = V2:** Les tours deviennent des collections optionnelles de POIs (curated playlists). Un même POI peut apparaître dans plusieurs tours via la table de jointure `tour_points`.
 
 ---
 
@@ -42,7 +48,53 @@
 
 ---
 
-### Tour (Parcours)
+### Point (Point d'intérêt) — Standalone ⭐
+
+> **Changement majeur:** Les POIs sont maintenant **indépendants**. Ils appartiennent à une ville (`city_id`), pas à un tour. Plus de `tour_id` ni de `order_index`.
+
+| Champ | Type | Description |
+|-------|------|-------------|
+| id | UUID | Identifiant unique |
+| city_id | UUID | FK → City |
+| name | JSONB | `{"fr": "...", "en": "..."}` |
+| lat | float | Latitude |
+| lng | float | Longitude |
+| trigger_radius_m | int | Rayon de déclenchement (défaut: 40m) |
+| type | string | "building", "monument", "park", "viewpoint" |
+| categories | string[] | `['patrimoine', 'nature', 'gastronomie', 'art', 'insolite']` |
+| image_url | string | Photo du lieu (optionnel) |
+| logistics | JSONB | Voir détail ci-dessous |
+| is_published | boolean | Visible dans l'app (défaut: false) |
+| created_at | timestamp | |
+| updated_at | timestamp | |
+
+**Champ `logistics` (JSONB):**
+```json
+{
+  "parking": "Stationnement Champ-de-Mars à 200m",
+  "toilets": "Toilettes publiques au Marché Bonsecours",
+  "photo_spot": "Meilleur angle depuis le coin sud-est",
+  "tips": "Éviter entre 12h-14h (très achalandé)"
+}
+```
+
+**Champ `categories` (TEXT[]):**
+```sql
+-- Catégories disponibles:
+-- 'patrimoine'    → Bâtiments historiques, monuments
+-- 'nature'        → Parcs, vues, espaces verts
+-- 'gastronomie'   → Restos, marchés, culture food
+-- 'art'           → Street art, galeries, murales
+-- 'insolite'      → Histoires bizarres, légendes, hantés
+-- 'architecture'  → Style architectural notable
+-- 'maritime'      → Fleuve, écluses, ports
+```
+
+---
+
+### Tour (Parcours curaté) — V2 🔮
+
+> **Note:** Les tours deviennent une feature V2. Un tour est une **collection curatée** de POIs existants, avec un thème, un narrateur, et un ordre suggéré. Pensez "playlist" de POIs.
 
 | Champ | Type | Description |
 |-------|------|-------------|
@@ -66,32 +118,17 @@
 
 ---
 
-### Point (Point d'intérêt)
+### TourPoint (Table de jointure Tour ↔ Point) — V2 🔮
+
+> Table de jointure many-to-many. Un POI peut appartenir à **plusieurs tours**. L'ordre est spécifique à chaque tour.
 
 | Champ | Type | Description |
 |-------|------|-------------|
-| id | UUID | Identifiant unique |
 | tour_id | UUID | FK → Tour |
-| order_index | int | Position dans le parcours (1, 2, 3...) |
-| name | JSONB | `{"fr": "...", "en": "..."}` |
-| lat | float | Latitude |
-| lng | float | Longitude |
-| trigger_radius_m | int | Rayon de déclenchement (défaut: 30m) |
-| type | string | "building", "monument", "park", "viewpoint" |
-| image_url | string | Photo du lieu (optionnel) |
-| logistics | JSONB | Voir détail ci-dessous |
-| created_at | timestamp | |
-| updated_at | timestamp | |
+| point_id | UUID | FK → Point |
+| order_index | int | Position dans ce tour (1, 2, 3...) |
 
-**Champ `logistics` (JSONB):**
-```json
-{
-  "parking": "Stationnement Champ-de-Mars à 200m",
-  "toilets": "Toilettes publiques au Marché Bonsecours",
-  "photo_spot": "Meilleur angle depuis le coin sud-est",
-  "tips": "Éviter entre 12h-14h (très achalandé)"
-}
-```
+**PK:** (tour_id, point_id)
 
 ---
 
@@ -116,6 +153,8 @@
 **Index:**
 - `(point_id, language)` — UNIQUE
 - `point_id` — Pour récupérer tous les scripts d'un point
+
+**Important:** Chaque script est **auto-contenu**. Pas de référence au POI précédent/suivant, pas de transitions "continue vers...". Le script doit fonctionner indépendamment.
 
 **Exemple de contenu:**
 ```
@@ -169,10 +208,10 @@ L'entrée est gratuite et le hall d'honneur vaut vraiment le détour.
 │                    WORKFLOW AUDIO                                    │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                     │
-│  CRÉATION (une seule fois)                                          │
+│  CRÉATION (une seule fois par POI)                                  │
 │  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐          │
 │  │  Recherche   │───>│   Rédiger    │───>│   Traduire   │          │
-│  │    POIs      │    │  Script FR   │    │   EN, ES...  │          │
+│  │    POI       │    │  Script FR   │    │   EN, ES...  │          │
 │  └──────────────┘    └──────────────┘    └──────────────┘          │
 │                             │                    │                  │
 │                             ▼                    ▼                  │
@@ -186,8 +225,8 @@ L'entrée est gratuite et le hall d'honneur vaut vraiment le détour.
 │  UTILISATION (à chaque téléchargement)                              │
 │                                                                     │
 │  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐          │
-│  │ User clique  │───>│ Edge Function│───>│  ElevenLabs  │          │
-│  │ "Télécharger"│    │ (Supabase)   │    │     API      │          │
+│  │ User active  │───>│ Edge Function│───>│  ElevenLabs  │          │
+│  │ "Découvrir"  │    │ (Supabase)   │    │     API      │          │
 │  └──────────────┘    └──────────────┘    └──────────────┘          │
 │                                                 │                   │
 │                                                 ▼                   │
@@ -225,20 +264,19 @@ L'entrée est gratuite et le hall d'honneur vaut vraiment le détour.
 
 ---
 
-## Flux de téléchargement d'un parcours
+## Flux de téléchargement des POIs d'une ville
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                  TÉLÉCHARGEMENT PARCOURS                         │
+│              TÉLÉCHARGEMENT POIs D'UNE VILLE                    │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│  1. User sélectionne langue (FR)                                │
-│  2. User clique "Télécharger"                                   │
+│  1. User sélectionne ville + langue (FR)                        │
+│  2. User clique "Télécharger pour explorer"                     │
 │                     │                                           │
 │                     ▼                                           │
-│  3. App récupère métadonnées du parcours (Supabase)             │
-│     - Tour info                                                 │
-│     - Points (coords, noms)                                     │
+│  3. App récupère les POIs publiés de la ville (Supabase)        │
+│     - Points (coords, noms, catégories)                         │
 │     - Scripts FR pour chaque point                              │
 │                     │                                           │
 │                     ▼                                           │
@@ -257,14 +295,15 @@ L'entrée est gratuite et le hall d'honneur vaut vraiment le détour.
 │     │     → Retourne stream audio             │                 │
 │     │                                         │                 │
 │     │  d. App sauvegarde MP3 localement       │                 │
-│     │     → /app/cache/tour-{id}/point-{n}.mp3│                 │
+│     │     → /app/cache/city-{id}/poi-{id}.mp3 │                 │
 │     └─────────────────────────────────────────┘                 │
 │                     │                                           │
 │                     ▼                                           │
 │  5. Télécharger tiles carte Mapbox (offline)                    │
+│     → Région = bounding box de tous les POIs de la ville        │
 │                     │                                           │
 │                     ▼                                           │
-│  6. Marquer parcours comme "téléchargé"                         │
+│  6. Marquer ville comme "téléchargée"                           │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -325,16 +364,16 @@ serve(async (req) => {
 
 ## Gestion du cache local (device)
 
-### Structure de cache
+### Structure de cache — Par ville
 
 ```
 /app_data/
 └── cache/
-    └── tours/
-        └── {tour_id}/
-            ├── manifest.json      # Hash des scripts pour invalidation
-            ├── point_001_fr.mp3
-            ├── point_002_fr.mp3
+    └── cities/
+        └── {city_id}/
+            ├── manifest.json       # Hash des scripts pour invalidation
+            ├── poi_{point_id}.mp3  # Audio de chaque POI
+            ├── poi_{point_id}.mp3
             └── ...
 ```
 
@@ -342,15 +381,17 @@ serve(async (req) => {
 
 ```json
 {
-  "tour_id": "abc-123",
+  "city_id": "abc-123",
+  "city_slug": "saint-lambert",
   "language": "fr",
-  "downloaded_at": "2026-02-17T10:00:00Z",
+  "downloaded_at": "2026-02-23T10:00:00Z",
   "points": [
     {
       "point_id": "point-001",
       "script_hash": "sha256:abc123...",
-      "file": "point_001_fr.mp3",
-      "duration_sec": 65
+      "file": "poi_point-001.mp3",
+      "duration_sec": 65,
+      "categories": ["patrimoine", "architecture"]
     }
   ]
 }
@@ -361,30 +402,37 @@ serve(async (req) => {
 ```dart
 // Pseudo-code Flutter
 
-Future<void> downloadTour(String tourId, String language) async {
-  // 1. Récupérer les scripts actuels
+Future<void> downloadCity(String cityId, String language) async {
+  // 1. Récupérer les POIs publiés de la ville
+  final points = await supabase
+    .from('points')
+    .select('id, name, lat, lng, categories')
+    .eq('city_id', cityId)
+    .eq('is_published', true);
+
+  // 2. Récupérer les scripts pour ces POIs
   final scripts = await supabase
     .from('scripts')
     .select('id, point_id, content')
-    .eq('tour.id', tourId)
+    .in_('point_id', points.map((p) => p['id']))
     .eq('language', language);
   
-  // 2. Charger le manifest local (si existe)
-  final manifest = await loadManifest(tourId);
+  // 3. Charger le manifest local (si existe)
+  final manifest = await loadManifest(cityId);
   
   for (final script in scripts) {
     final currentHash = sha256(script.content);
     final cachedHash = manifest?.getHash(script.point_id);
     
-    // 3. Générer seulement si nouveau ou modifié
+    // 4. Générer seulement si nouveau ou modifié
     if (cachedHash != currentHash) {
       final audio = await generateAudio(script.id);
-      await saveToCache(tourId, script.point_id, audio);
+      await saveToCache(cityId, script.point_id, audio);
       manifest.updateHash(script.point_id, currentHash);
     }
   }
   
-  await saveManifest(tourId, manifest);
+  await saveManifest(cityId, manifest);
 }
 ```
 
@@ -428,6 +476,8 @@ Future<void> downloadTour(String tourId, String language) async {
 | Cloudinary | Plus de stockage MP3 cloud |
 | Table audio_files | Remplacée par scripts |
 | Upload manuel MP3 | Génération automatique |
+| tour_id dans points | POIs sont standalone |
+| order_index dans points | Pas d'ordre fixe |
 
 ---
 
@@ -440,10 +490,10 @@ Future<void> downloadTour(String tourId, String language) async {
 | Prix | ~$0.30 / 1000 caractères |
 | Script moyen | ~800 caractères (150 mots) |
 | Coût par script | ~$0.24 |
-| Parcours (10 points) | ~$2.40 |
-| Parcours 3 langues | ~$7.20 |
+| Ville (30 POIs) | ~$7.20 |
+| Ville 3 langues | ~$21.60 |
 
-**Avec cache:** Chaque script n'est généré qu'une fois par utilisateur. Si 1000 users téléchargent le même parcours FR, le coût est de $2.40 total (pas $2400).
+**Avec cache:** Chaque script n'est généré qu'une fois par utilisateur. Si 1000 users téléchargent les mêmes POIs FR, le coût est de $7.20 total (pas $7200).
 
 **Stratégie:** Pré-générer les audios les plus populaires côté serveur pour réduire les coûts.
 
@@ -503,7 +553,24 @@ CREATE TABLE cities (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Tours
+-- Points (POIs standalone, liés à une ville)
+CREATE TABLE points (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  city_id UUID REFERENCES cities(id) ON DELETE CASCADE,
+  name JSONB NOT NULL,
+  lat FLOAT NOT NULL,
+  lng FLOAT NOT NULL,
+  trigger_radius_m INT DEFAULT 40,
+  type TEXT DEFAULT 'building',
+  categories TEXT[] DEFAULT '{}',
+  image_url TEXT,
+  logistics JSONB DEFAULT '{}',
+  is_published BOOLEAN DEFAULT false,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Tours (V2 — collections curatées de POIs)
 CREATE TABLE tours (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   city_id UUID REFERENCES cities(id) ON DELETE CASCADE,
@@ -525,24 +592,15 @@ CREATE TABLE tours (
   UNIQUE(city_id, slug)
 );
 
--- Points
-CREATE TABLE points (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+-- Tour-Points (V2 — table de jointure many-to-many)
+CREATE TABLE tour_points (
   tour_id UUID REFERENCES tours(id) ON DELETE CASCADE,
+  point_id UUID REFERENCES points(id) ON DELETE CASCADE,
   order_index INT NOT NULL,
-  name JSONB NOT NULL,
-  lat FLOAT NOT NULL,
-  lng FLOAT NOT NULL,
-  trigger_radius_m INT DEFAULT 30,
-  type TEXT DEFAULT 'building',
-  image_url TEXT,
-  logistics JSONB DEFAULT '{}',
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE(tour_id, order_index)
+  PRIMARY KEY (tour_id, point_id)
 );
 
--- Scripts (NOUVELLE TABLE CLÉ)
+-- Scripts (TABLE CLÉ — contenu audio texte)
 CREATE TABLE scripts (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   point_id UUID REFERENCES points(id) ON DELETE CASCADE,
@@ -576,11 +634,15 @@ CREATE TABLE voice_config (
 
 -- Index pour performance
 CREATE INDEX idx_scripts_point_lang ON scripts(point_id, language);
-CREATE INDEX idx_points_tour ON points(tour_id);
+CREATE INDEX idx_points_city ON points(city_id);
+CREATE INDEX idx_points_published ON points(city_id, is_published);
+CREATE INDEX idx_points_categories ON points USING GIN(categories);
 CREATE INDEX idx_tours_city ON tours(city_id);
 CREATE INDEX idx_tours_status ON tours(status);
+CREATE INDEX idx_tour_points_tour ON tour_points(tour_id);
+CREATE INDEX idx_tour_points_point ON tour_points(point_id);
 ```
 
 ---
 
-*Dernière mise à jour: 2026-02-17*
+*Dernière mise à jour: 2026-02-23*

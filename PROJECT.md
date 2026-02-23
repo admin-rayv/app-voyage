@@ -6,13 +6,32 @@
 
 ## Vision
 
-Une application mobile qui transforme chaque promenade en ville en une expérience immersive. Un guide audio intelligent qui réagit à ta position GPS et te raconte l'histoire, la culture et les secrets des lieux que tu traverses — comme si un ami local passionné t'accompagnait.
+Une application mobile qui transforme chaque promenade en ville en une expérience immersive. Tu te balades librement et **découvres des points d'intérêt (POIs) autour de toi** — l'audio se déclenche automatiquement quand tu t'approches d'un lieu. Comme si un ami local passionné t'accompagnait et te racontait l'histoire, la culture et les secrets de chaque endroit.
 
 **Ce qui nous différencie:**
 - 🎯 **Sync groupe** — Seule app avec écoute synchronisée (familles, couples, amis)
 - 🎭 **Personnalité forte** — Pas une voix robot, un vrai personnage attachant
 - 🇨🇦 **Focus Québec** — Contenu local de qualité en français
-- 🚶🚴🚗 **Multi-transport** — Adapté à pied, vélo ET auto
+- 🗺️ **Découverte libre** — Pas de parcours imposé, tu explores à ton rythme
+- 🚶🚴🚗 **Multi-transport** — Fonctionne à pied, vélo ET auto (rayon de déclenchement adaptatif)
+
+---
+
+## Approche: POI-First 🎯
+
+**Les POIs sont l'unité de base.** Chaque point d'intérêt est indépendant, autonome, avec son propre script audio. L'utilisateur n'a pas besoin de "suivre un parcours" — il se promène librement et les POIs se déclenchent automatiquement par proximité GPS.
+
+| Approche | Description |
+|----------|-------------|
+| **Phase 1 (maintenant)** | Collecter TOUS les POIs d'une ville → tester le GPS/geofencing → l'utilisateur explore librement |
+| **Phase 2 (V2)** | Regrouper les POIs en **tours curatés** (collections thématiques) → parcours optionnels payants |
+
+**Pourquoi POI-first?**
+- ✅ Meilleur pour tester le GPS/geofencing naturellement
+- ✅ Expérience plus organique (découverte vs suivre des ordres)
+- ✅ Meilleur data collection (voir quels POIs sont populaires)
+- ✅ Couvre toute une ville, pas juste des clusters marchables
+- ✅ Fonctionne pour tous les modes de transport sans redesign
 
 ---
 
@@ -26,6 +45,7 @@ Une application mobile qui transforme chaque promenade en ville en une expérien
 | Groupe = chacun son téléphone, désync | **Mode Host**: tout le monde écoute ensemble |
 | Roaming = coûteux à l'étranger | 100% offline après téléchargement |
 | BaladoDécouverte = gratuit mais boring | On vend du **divertissement**, pas de l'éducation sèche |
+| Parcours fixes = rigides, pas adaptés | **Exploration libre** — tu vas où tu veux |
 
 ---
 
@@ -61,24 +81,24 @@ Une application mobile qui transforme chaque promenade en ville en une expérien
 
 ## Stratégie de lancement (Go-to-Market)
 
-### Phase 1: Sainte-Julie = Bac à sable 🧪
-- Petit, contrôlable, proche de chez nous
-- Tester géofencing voiture/vélo sans pression
-- **Action:** Contacter la municipalité pour partenariat "Pilote technologique"
-- Objectif: Valider la techno, pas monétiser
+### Phase 1: Saint-Lambert = Bac à sable 🧪
+- Collecter TOUS les POIs de Saint-Lambert
+- Tester le GPS/geofencing avec de vrais points d'intérêt
+- L'utilisateur se promène librement, les POIs se déclenchent
+- **Objectif:** Valider la techno de déclenchement automatique
 
-### Phase 2: Montréal = Parcours niches 🎯
-**❌ NE PAS faire "Montréal" (trop vague, trop gros)**
+### Phase 2: Montréal = POIs par quartier 🎯
+**Collecter les POIs de Montréal par quartier/thème:**
 
-**✅ Faire des parcours niches:**
+| Quartier | POIs estimés | Thèmes |
+|----------|-------------|--------|
+| **Vieux-Montréal** | 20-30 | Histoire, fantômes, architecture |
+| **Plateau** | 15-25 | Street art, restos, culture |
+| **Mile-End** | 10-20 | Musique, cafés, art |
+| **Mont-Royal** | 10-15 | Nature, vues, histoire |
+| **Centre-ville** | 15-25 | Architecture Art Déco, souterrain |
 
-| Parcours | Thème | Persona |
-|----------|-------|---------|
-| **Vieux-Montréal Hanté** 👻 | Légendes, mystères, crimes historiques | "Jacques" — fantôme d'un colon |
-| **Plateau des Foodies** 🍕 | Restos, histoire culinaire, spots locaux | "Sarah" — étudiante foodie |
-| **Mile-End Street Art** 🎨 | Murales, artistes, culture alternative | Artiste local passionné |
-| **Montréal Souterrain** 🚇 | Architecture, histoire du RÉSO | Architecte curieux |
-| **Vieux-Montréal Classique** 🏛️ | Histoire, architecture, incontournables | "Jacques" version historique |
+**V2:** Regrouper en tours curatés thématiques (ex: "Vieux-Montréal Hanté" = sélection de 10 POIs avec un narrateur mystérieux)
 
 ### Phase 3: Expansion
 - Autres quartiers Montréal
@@ -95,7 +115,7 @@ Utiliser ElevenLabs pour créer des **personnages distincts**:
 |---------|--------------|------|-------------|
 | **Jacques** | Fantôme d'un colon, mystérieux mais chaleureux | Homme, 50s, accent québécois léger | Vieux-Montréal, historique |
 | **Sarah** | Étudiante passionnée, énergique, gourmande | Femme, 25-30, dynamique | Plateau, Mile-End, foodie |
-| **Le Narrateur** | Voix off cinématique, suspense | Neutre, profond | Parcours hantés, mystères |
+| **Le Narrateur** | Voix off cinématique, suspense | Neutre, profond | POIs mystères, insolites |
 
 **Astuce production:** Utiliser les prompts d'émotion ElevenLabs pour ajouter rires, soupirs, hésitations — c'est ce qui manque aux robots!
 
@@ -106,10 +126,9 @@ Utiliser ElevenLabs pour créer des **personnages distincts**:
 ### Format audio
 | Règle | Valeur | Pourquoi |
 |-------|--------|----------|
-| Durée max par point | **90 secondes** | Les gens marchent, bruit ambiant, attention limitée |
-| Durée min par point | 30 secondes | Assez pour dire quelque chose d'intéressant |
+| Durée max par POI | **90 secondes** | Les gens marchent, bruit ambiant, attention limitée |
+| Durée min par POI | 30 secondes | Assez pour dire quelque chose d'intéressant |
 | Mots par minute | ~150 | Rythme naturel de conversation |
-| Points par parcours | 10-15 | ~45-60 min total |
 
 ### Ton et style
 - ✅ Tutoiement
@@ -117,12 +136,14 @@ Utiliser ElevenLabs pour créer des **personnages distincts**:
 - ✅ Anecdotes et secrets
 - ✅ Humour quand approprié
 - ✅ Expressions locales
+- ✅ **Scripts auto-contenus** (chaque POI se suffit à lui-même, pas de "continue vers...")
 - ❌ Dates précises à répétition
 - ❌ Style encyclopédique
 - ❌ "Ce monument a été érigé en..."
+- ❌ Références au POI précédent/suivant
 
 ### Contenu logistique (secret de Shaka Guide!)
-Chaque point doit inclure si pertinent:
+Chaque POI doit inclure si pertinent:
 - 🅿️ Où se garer à proximité
 - 🚻 Toilettes les plus proches
 - ☕ Bon café/resto nearby
@@ -131,31 +152,33 @@ Chaque point doit inclure si pertinent:
 - ⚠️ Attention particulière (traverse dangereuse, etc.)
 
 **Exemple:**
-> "Avant de continuer, petit tip: les meilleures toilettes publiques sont dans le Centre de commerce, juste là à droite. Et si t'as soif, le café Olimpico au coin fait le meilleur espresso du quartier. Je dis ça, je dis rien..."
+> "Petit tip: les meilleures toilettes publiques sont dans le Centre de commerce, juste là à droite. Et si t'as soif, le café Olimpico au coin fait le meilleur espresso du quartier. Je dis ça, je dis rien..."
 
 ---
 
 ## Business Model — Décidé ✅
 
-### Modèle: Freemium "Unlock"
+### Modèle: Freemium POI-first
 
 | Élément | Prix | Justification |
 |---------|------|---------------|
 | App | **Gratuit** | Réduire friction téléchargement |
-| 5 premiers points | **Gratuit** | Teaser, prouver la qualité |
-| Tour complet | **7.99$ CAD** | Milieu de marché, accessible |
-| Pack "Tout Montréal" | **14.99$ CAD** | Inciter à acheter plus |
-| Pack "Tout Québec" | **24.99$ CAD** | Pour les gros voyageurs |
+| Tous les POIs | **Gratuit** (Phase 1) | Tester la techno, collecter des données d'usage |
+| Tour curaté (V2) | **7.99$ CAD** | Collections thématiques avec narrateur dédié |
+| Pack "Tout Montréal" (V2) | **14.99$ CAD** | Tous les tours d'une ville |
+| Pack "Tout Québec" (V2) | **24.99$ CAD** | Pour les gros voyageurs |
 
-### Pourquoi pas d'abonnement?
-Les touristes sont là 3-5 jours. Ils ne veulent pas s'abonner à une app qu'ils utiliseront une fois.
+### Pourquoi gratuit au début?
+- On a besoin de DATA sur le GPS/geofencing avant de monétiser
+- Les POIs gratuits attirent les utilisateurs → on voit quels POIs sont populaires
+- Les tours curatés payants arrivent en V2 (collections de POIs avec un fil narratif)
 
-### Revenue share (in-app purchases)
+### Revenue share (in-app purchases — V2)
 - Apple/Google prennent 30%
 - Sur 7.99$ → on garde ~5.60$
 - Objectif: 1000 ventes/mois = 5600$/mois (après 1 an)
 
-### B2B (Phase 2)
+### B2B (Phase 3)
 - Approcher Tourisme Montréal, Tourisme Québec
 - White-label pour offices de tourisme
 - Prix: à négocier (forfait ou revenue share)
@@ -164,11 +187,13 @@ Les touristes sont là 3-5 jours. Ils ne veulent pas s'abonner à une app qu'ils
 
 ## Modes de transport
 
-| Mode | Trigger radius | Style narration | Points/km |
+Tous les modes fonctionnent de la même façon — seul le **rayon de déclenchement** change:
+
+| Mode | Trigger radius | Style narration | Détection |
 |------|---------------|-----------------|-----------|
-| **🚶 Pied** | 25-35m | Détaillé, "arrête-toi ici" | 5-8 |
-| **🚴 Vélo** | 50-75m | Plus court, pas d'arrêts forcés | 2-4 |
-| **🚗 Auto** | 100-200m | Continu, style podcast | 1-2 |
+| **🚶 Pied** | 25-40m | Détaillé, "regarde autour de toi" | Vitesse <7 km/h |
+| **🚴 Vélo** | 50-75m | Plus concis, pas d'arrêts forcés | Vitesse 7-25 km/h |
+| **🚗 Auto** | 100-200m | Style podcast, continu | Vitesse >25 km/h |
 
 ### Algorithme intelligent (comme GuideAlong)
 - Ne pas juste utiliser un rayon fixe
@@ -221,24 +246,26 @@ L'audio est **généré à la demande** via ElevenLabs lors du téléchargement.
 - Cache invalidé via **hash du script** (si texte change → re-génération)
 - Sync groupe = à la **seconde** (pas milliseconde) — suffisant pour narration
 - Optimiser GPS polling pour économiser batterie
+- **Cache par ville** (pas par tour) — on télécharge tous les POIs d'une région
 
 ---
 
 ## Métriques de succès
 
-### Proto (Sainte-Julie)
-- [ ] 5 tests terrain complétés
+### Proto (Saint-Lambert)
 - [ ] GPS trigger fonctionne >90% du temps
-- [ ] Retours positifs sur le ton
+- [ ] 5 tests terrain complétés (marche libre)
+- [ ] Retours positifs sur le ton des scripts
 
-### MVP (Vieux-Montréal)
+### MVP (Montréal)
+- [ ] 50+ POIs publiés
 - [ ] 50 beta testers
-- [ ] 80% complètent le parcours
+- [ ] Données d'usage: quels POIs sont écoutés
 - [ ] Note moyenne >4.0
-- [ ] Sync groupe fonctionne
 
 ### V1 (Launch)
 - [ ] 500 téléchargements premier mois
+- [ ] Premiers tours curatés (V2)
 - [ ] 10% conversion gratuit → payant
 - [ ] Note App Store >4.2
 
@@ -276,4 +303,4 @@ L'audio est **généré à la demande** via ElevenLabs lors du téléchargement.
 
 ---
 
-*Dernière mise à jour: 2026-02-12*
+*Dernière mise à jour: 2026-02-23*

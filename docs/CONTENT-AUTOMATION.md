@@ -1,6 +1,6 @@
 # 🤖 AUTOMATISATION DU CONTENU — App Voyage
 
-> Pipeline de création de contenu: Thème → Quartier → Tour → POIs
+> Pipeline de création de contenu: Ville → Analyse → Collecter TOUS les POIs → Scripts
 
 ---
 
@@ -13,50 +13,35 @@
 │                    PIPELINE DE CONTENU                          │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│   🏙️ ANALYSE      →   🎯 THÈMES     →   🚶 TOURS    →   📍 POIs │
-│   VILLE               UNIQUES           MARCHABLES      DÉTAILS │
+│   🏙️ ANALYSE      →   📍 COLLECTER    →   📝 SCRIPTS   →  🏷️ TAGS │
+│   VILLE               TOUS LES POIs       AUTO-CONTENUS   CATÉGORIES│
 │                                                                 │
-│   • C'est quoi le     • Quartiers       • Clusters      • GPS   │
-│     hook unique?        intéressants      walkables     • Script│
-│   • Petite/grande?    • Angles           • 2-3km max    • Audio │
-│   • Besoins?            originaux        • 8-12 stops          │
+│   • C'est quoi le     • Patrimoine       • 60-90 sec     • patrimoine│
+│     hook unique?      • Nature            chacun         • nature    │
+│   • Petite/grande?    • Gastronomie     • Pas de         • gastro    │
+│   • Thèmes?           • Art/culture       transitions   • art       │
+│                       • Insolite        • Stand-alone    • insolite  │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🚶 Contrainte #1: Piéton d'abord
+## Approche POI-First
 
-Nos utilisateurs sont **à pied**. Un tour doit être marchable.
+**Chaque POI est une unité indépendante.** On ne planifie pas de routes ni de parcours — on collecte TOUS les POIs intéressants d'une ville, on écrit un script autonome pour chacun, et on les tague par catégorie.
 
-### Paramètres par mode
+Les tours curatés (collections ordonnées) viendront en V2, une fois qu'on a la data d'usage.
 
-| Mode | Rayon | Distance totale | Durée | POIs |
-|------|-------|-----------------|-------|------|
-| 🚶 **Piéton standard** | 4-5 km | 5-8 km | 2-3h | 10-15 |
-| 🚶 **Piéton zone dense** | 2-3 km | 3-5 km | 1.5-2h | 8-12 |
-| 🚴 **Vélo** | 8-12 km | 12-18 km | 2-3h | 12-18 |
-| 🚗 **Auto (road trip)** | 20+ km | Variable | 3-5h | 8-15 |
+### Paramètres par mode de transport
 
-### Quand utiliser quel rayon?
+| Mode | Rayon trigger | Style narration |
+|------|--------------|-----------------|
+| 🚶 **Piéton** | 25-40m | Détaillé, "regarde autour de toi" |
+| 🚴 **Vélo** | 50-75m | Plus concis, pas d'arrêts forcés |
+| 🚗 **Auto** | 100-200m | Continu, style podcast |
 
-| Zone | Rayon recommandé | Exemple |
-|------|------------------|---------|
-| **Ultra-dense** (tout proche) | 2-3 km | Vieux-Montréal, Vieux-Québec |
-| **Urbain standard** | 4-5 km | Plateau, Mile End, Centre-ville |
-| **Banlieue / ville moyenne** | 4-5 km | Sainte-Julie, Longueuil |
-| **Nature / parc** | 3-5 km | Mont-Royal, Parc Jean-Drapeau |
-
-### Autres paramètres
-
-| Paramètre | Valeur | Raison |
-|-----------|--------|--------|
-| **Espacement** | 200-500m entre POIs | Assez pour marcher, pas trop pour s'ennuyer |
-| **Boucle** | Retour au point de départ | Pratique pour stationnement |
-| **Temps par POI** | ~5-8 min | Audio (90s) + observation + photos |
-
-**Implication:** Un tour = un quartier/cluster marchable, PAS une ville entière.
+**Note:** Le même POI fonctionne pour tous les modes — seul le rayon de déclenchement change.
 
 ---
 
@@ -72,19 +57,19 @@ Nos utilisateurs sont **à pied**. Un tour doit être marchable.
 ### Taille et potentiel
 - Population: ?
 - Superficie: ?
-- Est-ce que ça vaut plusieurs tours ou un seul suffit?
+- Combien de POIs peut-on raisonnablement couvrir?
 
 ### Hook unique
 - C'est quoi le truc SPÉCIAL de cette ville?
 - Pourquoi un touriste irait LÀ plutôt qu'ailleurs?
 - Qu'est-ce que les locaux diraient: "Ah, {ville}? C'est connu pour..."
 
-### Quartiers/zones marchables
+### Zones d'intérêt
 - Y a-t-il des quartiers distincts?
-- Où sont les zones piétonnes?
-- Où peut-on stationner et marcher?
+- Où sont concentrés les POIs potentiels?
+- Quelles zones ont le plus de densité de points?
 
-### Thèmes potentiels
+### Thèmes / Catégories
 - Histoire/patrimoine?
 - Gastronomie?
 - Nature/parcs?
@@ -93,109 +78,84 @@ Nos utilisateurs sont **à pied**. Un tour doit être marchable.
 - Architecture?
 
 ### Verdict
-- [ ] MULTI-TOURS: Grande ville, plusieurs thèmes/quartiers possibles
-- [ ] TOUR UNIQUE: Petite ville, un tour complet suffit
-- [ ] SKIP: Pas assez de contenu pour justifier un tour
+- [ ] GRANDE VILLE: 50+ POIs possibles, plusieurs quartiers
+- [ ] VILLE MOYENNE: 15-30 POIs, quelques zones d'intérêt
+- [ ] PETITE VILLE: 8-15 POIs, une zone principale
+- [ ] SKIP: Pas assez de contenu intéressant
 ```
 
 ---
 
-## Étape 1: Structure des tours (AVANT les POIs)
+## Étape 1: Collecte de TOUS les POIs
+
+### Approche systématique
+
+Pour chaque ville, on collecte **tous** les POIs potentiels, pas juste ceux d'un thème ou d'un quartier. On ratisse large et on trie ensuite.
 
 ### Grandes villes (Montréal, Québec, etc.)
 
-**Approche: Thèmes × Quartiers**
+**Collecter par quartier, tagger par catégorie:**
 
-| Quartier | Thèmes possibles |
-|----------|------------------|
-| Vieux-Montréal | 👻 Hanté, 🏛️ Histoire, 🍷 Gastro |
-| Plateau | 🎨 Street Art, 🍴 Foodies, 🏠 Architecture |
-| Mile End | 🎵 Musique, ☕ Cafés, 🎨 Art |
-| Mont-Royal | 🌿 Nature, 🏃 Sport, 📸 Vues |
+| Quartier | POIs estimés | Catégories probables |
+|----------|-------------|---------------------|
+| Vieux-Montréal | 20-30 | patrimoine, architecture, insolite |
+| Plateau | 15-25 | art, gastronomie, architecture |
+| Mile End | 10-20 | art, gastronomie, nature |
+| Mont-Royal | 10-15 | nature, patrimoine |
+| Centre-ville | 15-25 | architecture, insolite |
 
-**Résultat possible:**
-- Tour 1: Vieux-Montréal Hanté (8 POIs, ~90 min)
-- Tour 2: Plateau Foodies (10 POIs, ~2h)
-- Tour 3: Mile End Street Art (8 POIs, ~75 min)
-- Bundle: "Découverte Montréal" (3 tours, 14.99$)
+### Petites villes (Saint-Lambert, Sainte-Julie, etc.)
 
-### Petites villes (Sainte-Julie, etc.)
+**Collecter tout ce qui est intéressant:**
 
-**Approche: Tour unique ou thématique simple**
-
-Questions:
-1. Y a-t-il assez pour PLUSIEURS tours? (Probablement non)
-2. Quel est le SEUL angle intéressant?
-3. Est-ce qu'un seul tour de 8-12 POIs couvre l'essentiel?
-
-**Résultat possible:**
-- Tour unique: "Découverte Sainte-Julie" (8 POIs, patrimoine + nature)
-- OU 2 micro-tours si quartiers distincts
+| Catégorie | POIs estimés |
+|-----------|-------------|
+| Patrimoine | 5-10 |
+| Nature / vues | 3-5 |
+| Gastronomie | 2-5 |
+| Insolite | 1-3 |
+| **Total** | **15-25** |
 
 ---
 
-## Étape 2: Identification des clusters marchables
-
-Une fois les thèmes identifiés, trouver les **clusters**.
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                     CARTE DE LA VILLE                           │
-│                                                                 │
-│         ┌──────────┐                                            │
-│         │ Cluster A│ ← Zone marchable #1                        │
-│         │  ★ ★ ★   │   (centre-ville historique)                │
-│         │   ★ ★    │   8 POIs, rayon 1.5km                      │
-│         └──────────┘                                            │
-│                           ┌──────────┐                          │
-│                           │ Cluster B│ ← Zone marchable #2      │
-│                           │  ★ ★     │   (parc + nature)        │
-│                           │ ★        │   5 POIs, rayon 1km      │
-│                           └──────────┘                          │
-│                                                                 │
-│  ⚠️ Gap trop grand = voiture nécessaire = 2 tours séparés     │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-**Règles:**
-- Si >1km entre deux clusters → tours séparés
-- Si POIs trop éparpillés → sélectionner les meilleurs dans un rayon walkable
-- Chaque tour = 1 cluster = 1 zone de stationnement
-
----
-
-## Étape 3: Recherche de POIs (par cluster/thème)
-
-**Seulement après avoir défini le thème et le cluster.**
+## Étape 2: Recherche de POIs
 
 ### Prompt AI pour recherche POIs
 
 ```markdown
-Tu recherches des POIs pour un tour audio à {ville}.
+Tu recherches des POIs pour l'app de guide audio à {ville}.
 
-CONTEXTE DU TOUR:
-- Thème: {theme}
-- Quartier/Zone: {quartier}
-- Rayon maximum: {rayon_km}km depuis {point_central}
-- Nombre de POIs cible: 8-12
+CONTEXTE:
+- On veut collecter TOUS les POIs intéressants de la ville
+- Chaque POI est indépendant (pas de parcours)
+- L'audio se déclenche quand l'utilisateur passe à proximité
 
 CRITÈRES DE SÉLECTION:
-1. **Pertinence au thème** — Le POI doit supporter le thème du tour
-2. **Marchabilité** — Accessible à pied depuis les autres POIs
-3. **Intérêt narratif** — Il y a une histoire à raconter (pas juste "c'est un building")
-4. **Visibilité** — L'auditeur peut VOIR quelque chose (pas un site démoli)
+1. **Intérêt narratif** — Il y a une histoire à raconter (pas juste "c'est un building")
+2. **Visibilité** — L'auditeur peut VOIR quelque chose (pas un site démoli)
+3. **Géolocalisation précise** — On peut placer un point GPS dessus
+4. **Diversité** — Mix de catégories (patrimoine, nature, gastro, art, insolite)
 
 EXCLURE:
 - POIs fermés au public sans intérêt extérieur
-- Lieux trop éloignés du cluster
-- Sites génériques sans histoire locale
+- Lieux trop génériques sans histoire locale
+- Sites qui nécessitent un billet d'entrée pour être appréciés
+
+CATÉGORIES À UTILISER:
+- patrimoine (bâtiments historiques, monuments)
+- nature (parcs, vues, espaces verts)
+- gastronomie (restos iconiques, marchés, culture food)
+- art (street art, galeries, murales)
+- insolite (histoires bizarres, légendes, hantés)
+- architecture (style architectural notable)
+- maritime (fleuve, écluses, ports)
 
 OUTPUT:
 Pour chaque POI candidat:
 - Nom
 - Coordonnées GPS
-- Distance du point central
-- Pourquoi c'est pertinent au thème
+- Catégories (1-3)
+- Pourquoi c'est intéressant
 - Hook narratif (1 phrase accrocheuse)
 - Sources
 ```
@@ -204,45 +164,41 @@ Pour chaque POI candidat:
 
 ```json
 {
-  "tour": {
-    "ville": "Sainte-Julie",
-    "theme": "Patrimoine et Nature",
-    "quartier": "Centre-ville",
-    "point_central": {"lat": 45.5847, "lng": -73.3361},
-    "rayon_km": 4
-  },
-  "pois_candidats": [
+  "city": "Saint-Lambert",
+  "total_pois": 15,
+  "pois": [
     {
-      "nom": "Église Sainte-Julie",
-      "lat": 45.5847,
-      "lng": -73.3361,
-      "distance_centre": "0m",
-      "pertinence_theme": "Bâtiment patrimonial central, construit 1852",
-      "hook": "Le clocher qu'on voit a été reconstruit après avoir été frappé par la foudre en 1923",
-      "sources": ["ville.sainte-julie.qc.ca", "patrimoine-culturel.gouv.qc.ca"],
-      "ordre_suggere": 1
+      "nom": "Église Saint-Lambert",
+      "lat": 45.5004,
+      "lng": -73.5139,
+      "categories": ["patrimoine", "architecture"],
+      "hook": "Une des premières églises Dom Bellot au Québec, reconstruite après un incendie en 1936",
+      "sources": ["patrimoine-culturel.gouv.qc.ca"],
+      "type": "church",
+      "trigger_radius_m": 40
     }
-  ],
-  "parcours_suggere": "Église → Parc → Maison ancestrale → ...",
-  "stationnement_recommande": "Parking de l'église (gratuit)",
-  "duree_estimee": "75-90 minutes"
+  ]
 }
 ```
 
 ---
 
-## Étape 4: Génération des scripts
+## Étape 3: Génération des scripts
+
+### Règle #1: Scripts auto-contenus
+
+Chaque script doit fonctionner **indépendamment**. L'utilisateur peut arriver de n'importe quelle direction, à n'importe quel moment. Pas de:
+- ❌ "Continue vers le prochain point..."
+- ❌ "Comme on a vu au point précédent..."
+- ❌ "Tu te souviens de l'église tout à l'heure?"
+- ✅ "Tu vois ce bâtiment devant toi?"
+- ✅ "Regarde autour de toi..."
+- ✅ Script complet qui se suffit à lui-même
 
 ### Prompt template
 
 ```markdown
 Tu es un guide touristique passionné qui raconte l'histoire de {ville}.
-
-CONTEXTE DU TOUR:
-- Thème: {theme}
-- Ce POI est le #{ordre} sur {total} du parcours
-- POI précédent: {poi_precedent}
-- POI suivant: {poi_suivant}
 
 TON STYLE:
 - Tu tutoies l'auditeur
@@ -255,19 +211,38 @@ TON STYLE:
 CONTRAINTES:
 - Maximum 150-180 mots (60-90 secondes parlé)
 - Commence par capter l'attention (hook)
-- Termine par une transition vers le prochain point
+- Le script est AUTO-CONTENU (pas de référence à d'autres POIs)
 - Inclus au moins une anecdote surprenante
 - Mentionne un détail visuel à observer
+- Termine par un petit conseil pratique ou un fait mémorable
 
 INFORMATIONS SUR LE POI:
 - Nom: {poi_name}
 - Type: {poi_type}
+- Catégories: {poi_categories}
 - Histoire: {poi_history}
 - Anecdotes connues: {poi_anecdotes}
 - Ce qu'on peut voir: {poi_visual_elements}
-- Direction vers prochain POI: {direction_next}
 
 Génère le script audio en français québécois.
+```
+
+---
+
+## Étape 4: Tagging et catégorisation
+
+Chaque POI reçoit 1-3 catégories pour permettre le filtrage dans l'app:
+
+```sql
+-- Exemples de tagging
+UPDATE points SET categories = ARRAY['patrimoine', 'architecture'] 
+  WHERE name->>'fr' = 'Église Saint-Lambert';
+
+UPDATE points SET categories = ARRAY['nature', 'maritime'] 
+  WHERE name->>'fr' = 'Vue sur le Pont Victoria';
+
+UPDATE points SET categories = ARRAY['patrimoine', 'insolite'] 
+  WHERE name->>'fr' = 'Maison Marsil';
 ```
 
 ---
@@ -288,76 +263,80 @@ Génère le script audio en français québécois.
 ```
 1. ANALYSE
    └── Remplir la fiche d'analyse de la ville
-   └── Décision: multi-tours, tour unique, ou skip?
+   └── Identifier les zones d'intérêt et thèmes
 
-2. STRUCTURE
-   └── Définir les thèmes intéressants
-   └── Identifier les clusters marchables (carte)
-   └── Créer 1 tour par cluster/thème
+2. COLLECTE
+   └── Rechercher TOUS les POIs intéressants
+   └── Coordonnées GPS précises
+   └── Catégoriser chaque POI
 
-3. POIs
-   └── Pour chaque tour, rechercher 10-15 POIs candidats
-   └── Filtrer à 8-12 POIs marchables
-   └── Définir l'ordre du parcours
-   └── Identifier stationnement + toilettes + cafés
-
-4. SCRIPTS
-   └── Générer scripts pour chaque POI
+3. SCRIPTS
+   └── Générer script auto-contenu pour chaque POI
    └── Révision humaine
    └── Traduction
 
-5. AUDIO
-   └── TTS via ElevenLabs (on-demand)
-   └── Test du parcours complet
+4. PUBLICATION
+   └── Set is_published = true pour les POIs validés
+   └── Test terrain (marcher dans la ville, vérifier les triggers)
+
+5. V2: CURATION
+   └── Identifier les POIs populaires (analytics)
+   └── Créer des tours curatés (collections thématiques)
+   └── Ajouter transitions narratives pour les tours
 ```
 
 ---
 
-## Application: Sainte-Julie
+## Application: Saint-Lambert
 
 ### Analyse rapide
 
-- **Population:** ~30,000
-- **Superficie:** ~49 km²
-- **Hook unique:** Ville de banlieue avec patrimoine agricole, proche nature
-- **Verdict:** Probablement **1-2 tours max**
+- **Population:** ~23,500
+- **Superficie:** ~7.5 km²
+- **Hook unique:** Musée vivant d'architecture québécoise, née de "Mouillepied"
+- **Verdict:** **PETITE VILLE** — 15-20 POIs possibles
 
-### Clusters potentiels
+### POIs collectés
 
-1. **Centre-ville** — Église, mairie, parc central, bâtiments patrimoniaux
-2. **Mont Saint-Bruno** — Si on inclut (mais c'est une autre ville...)
-3. **Zone nature** — Parcs, sentiers?
-
-### Approche recommandée
-
-**Option A: Un seul tour "Découverte Sainte-Julie"**
-- 10-12 POIs dans un rayon de 4-5km du centre
-- Mix patrimoine + nature + anecdotes locales
-- ~75-90 minutes de marche
-
-**Option B: Skip pour le MVP**
-- Commencer directement par Montréal (plus de contenu)
-- Sainte-Julie = test technique seulement (3-5 POIs factices)
+| # | POI | Catégories | Status |
+|---|-----|-----------|--------|
+| 1 | Église Saint-Lambert | patrimoine, architecture | ✅ Script rédigé |
+| 2 | Église anglicane St-Barnabas | patrimoine | ✅ Script rédigé |
+| 3 | Parc du Village | patrimoine, nature | ✅ Script rédigé |
+| 4 | Maison Marsil | patrimoine, insolite | ✅ Script rédigé |
+| 5 | Vue sur le Pont Victoria | patrimoine, maritime | ✅ Script rédigé |
+| 6 | Écluse de Saint-Lambert | maritime, insolite | ✅ Script rédigé |
+| 7 | Avenue Victoria | patrimoine | ✅ Script rédigé |
+| 8 | King Cottages | architecture | 📝 À faire |
+| 9 | Maison Sharpe | patrimoine | 📝 À faire |
+| 10 | Maison Whimbey | patrimoine | 📝 À faire |
+| 11 | Académie Saint-Michel | patrimoine | 📝 À faire |
+| 12 | Piste cyclable / fleuve | nature, maritime | 📝 À faire |
+| ... | (à compléter) | | |
 
 ---
 
 ## Application: Montréal
 
-### Thèmes × Quartiers (exemples)
+### POIs par quartier (estimations)
 
-| # | Tour | Quartier | Thème | POIs estimés |
-|---|------|----------|-------|--------------|
-| 1 | Vieux-Montréal Hanté | Vieux-Mtl | 👻 Fantômes | 10 |
-| 2 | Plateau Foodies | Plateau | 🍴 Gastro | 12 |
-| 3 | Mile End Street Art | Mile End | 🎨 Art | 8 |
-| 4 | Mont-Royal Secrets | Mont-Royal | 🌿 Nature | 8 |
-| 5 | Architecture Art Déco | Centre-ville | 🏛️ Archi | 10 |
+| Quartier | POIs estimés | Catégories principales |
+|----------|-------------|----------------------|
+| Vieux-Montréal | 25+ | patrimoine, architecture, insolite |
+| Plateau | 20+ | art, gastronomie, architecture |
+| Mile End | 15+ | art, gastronomie |
+| Mont-Royal | 10+ | nature, patrimoine |
+| Centre-ville | 20+ | architecture, insolite |
+| **Total** | **90+** | |
 
-### Bundles possibles
+### V2: Tours curatés (futurs)
 
-- **Bundle "Découverte Montréal"** — Tours 1-3 (14.99$)
-- **Bundle "Montréal Complet"** — Tous les tours (29.99$)
-- **Tours individuels** — 7.99$ chacun
+| Tour | POIs sélectionnés | Prix |
+|------|------------------|------|
+| "Vieux-Montréal Hanté" 👻 | 10 POIs insolite/patrimoine | 7.99$ |
+| "Plateau Foodies" 🍕 | 12 POIs gastronomie | 7.99$ |
+| "Mile-End Street Art" 🎨 | 8 POIs art | 7.99$ |
+| Bundle "Découverte Montréal" | 3 tours | 14.99$ |
 
 ---
 
@@ -369,7 +348,7 @@ Génère le script audio en français québécois.
 BOARD: "Contenu App Voyage"
 
 LISTES:
-[Analyse]        [À générer]    [À réviser]    [Approuvé]    [En prod]
+[Analyse]        [À rédiger]    [À réviser]    [Approuvé]    [Publié]
 
 CARTES:
 ┌─────────────────────┐
@@ -378,31 +357,26 @@ CARTES:
 └─────────────────────┘
 
 ┌─────────────────────┐
-│ 🗺️ Tour: Vieux-Mtl │  ← Structure du tour
-│    Hanté            │
-│    Labels: structure│
-└─────────────────────┘
-
-┌─────────────────────┐
 │ 📍 POI: Château     │  ← POI individuel
 │    Ramezay          │
-│    Labels: poi      │
+│    Labels: patrimoine│
+│    Labels: insolite │
 └─────────────────────┘
 ```
 
 ### Format carte POI
 
 ```
-Titre: [POI] {nom} — {tour}
+Titre: [POI] {nom} — {ville}
 
 Description:
 📍 Coordonnées: {lat}, {lng}
-🚶 Ordre dans tour: #{n}
-📏 Distance du précédent: {x}m
+🏷️ Catégories: {categories}
+📏 Rayon trigger: {radius}m
 
 📝 Script FR:
 ---
-{script_complet}
+{script_complet_auto_contenu}
 ---
 
 📝 Script EN:
@@ -414,8 +388,10 @@ Description:
 - {source1}
 - {source2}
 
-🗺️ Directions vers prochain:
-{directions}
+🗺️ Infos logistiques:
+- Parking: {parking}
+- Toilettes: {toilets}
+- Photo spot: {photo}
 
 ✏️ Notes de révision:
 [Commentaires ici]
@@ -425,13 +401,13 @@ Description:
 
 ## Estimation des coûts
 
-| Tâche | Coût/unité | Pour 1 tour (10 POIs) |
+| Tâche | Coût/unité | Pour 1 ville (20 POIs) |
 |-------|------------|----------------------|
 | Analyse ville | ~$0.10 | $0.10 |
-| Recherche POIs | ~$0.08/POI | $0.80 |
-| Script FR | ~$0.05/POI | $0.50 |
-| Traduction EN | ~$0.03/POI | $0.30 |
-| **Total** | | **~$1.70/tour** |
+| Recherche POIs | ~$0.08/POI | $1.60 |
+| Script FR | ~$0.05/POI | $1.00 |
+| Traduction EN | ~$0.03/POI | $0.60 |
+| **Total** | | **~$3.30/ville** |
 
 **Coût négligeable** comparé au temps humain économisé.
 
@@ -440,20 +416,18 @@ Description:
 ## Checklist nouvelle ville
 
 - [ ] Remplir fiche d'analyse
-- [ ] Décision: nombre de tours?
-- [ ] Identifier clusters marchables (carte)
-- [ ] Pour chaque tour:
-  - [ ] Définir thème + quartier
-  - [ ] Point central + rayon
-  - [ ] Recherche POIs (15 candidats)
-  - [ ] Sélection finale (8-12)
-  - [ ] Ordre du parcours
-  - [ ] Stationnement + logistique
-  - [ ] Scripts FR
+- [ ] Identifier zones d'intérêt et thèmes
+- [ ] Collecter TOUS les POIs candidats
+- [ ] Pour chaque POI:
+  - [ ] Coordonnées GPS précises
+  - [ ] Catégories (1-3)
+  - [ ] Script FR auto-contenu
   - [ ] Révision
   - [ ] Traduction EN
-  - [ ] Test terrain
+  - [ ] Infos logistiques
+- [ ] Set is_published = true pour les validés
+- [ ] Test terrain (marcher dans la ville)
 
 ---
 
-*Document mis à jour le 2026-02-18 — Approche thème-first + piéton-first*
+*Document mis à jour le 2026-02-23 — Approche POI-first (tours curatés = V2)*

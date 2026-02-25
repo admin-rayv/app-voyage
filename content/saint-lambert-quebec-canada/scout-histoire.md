@@ -1,3 +1,5 @@
+> ✅ **PUSHED TO DB:** 2026-02-25 — 13 POIs, 39 scripts
+
 # 🔍 POIs trouvés: Saint-Lambert, histoire
 > Date: 2026-02-25
 > City ID: 19b90c91-43bd-48d3-8874-26d8949eee28

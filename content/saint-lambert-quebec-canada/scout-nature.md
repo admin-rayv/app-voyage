@@ -14,7 +14,7 @@
 - 🏷️ **Catégories:** nature
 - 🏛️ **Type:** park
 - 📏 **Rayon déclenchement:** 100m
-- 💡 **Hook:** Le plus grand parc de Saint-Lambert avec 17km de sentiers en bordure du fleuve Saint-Laurent. Vue imprenable sur le centre-ville de Montréal et le pont Victoria.
+- 💡 **Hook:** Le plus grand parc de Saint-Lambert, traversé par une piste cyclable qui relie toute la Rive-Sud. Vue imprenable sur le centre-ville de Montréal et le pont Victoria.
 - 📖 **Anecdote:** C'est l'un des meilleurs endroits de la Rive-Sud pour observer les feux d'artifice Loto-Québec durant l'été. Le parc a été aménagé sur les terrains adjacents à l'écluse historique de la Voie maritime du Saint-Laurent.
 - 📚 **Source:** https://www.saint-lambert.ca/fr/bottin-coordonnees/parc-de-la-voie-maritime, https://baliseqc.ca/3S/explorer/monteregie/parc-de-la-voie-maritime-saint-lambert-LR0394
 - ✅ **Verdict:** ⚠️ À RÉVISER
@@ -36,17 +36,17 @@
     "parking": "Stationnement gratuit sur place, entrée par la promenade Riverside",
     "toilets": "Toilettes disponibles en saison estivale",
     "photo_spot": "Près du belvédère avec vue sur le pont Victoria et Montréal",
-    "tips": "Idéal pour les feux d'artifice en été. Parc à chiens sur place. Piste de 17km partagée avec cyclistes."
+    "tips": "Idéal pour les feux d'artifice en été. Parc à chiens sur place. Piste cyclable régionale vers Longueuil et Brossard."
   }
 }
 ```
 
 ### 🎙️ Script audio (fr)
 > Persona: Marco
-> Mots: 189
-> Durée estimée: 76s
+> Mots: 192
+> Durée estimée: 77s
 
-Respire un grand coup. Sérieusement, fais-le. Tu es au Parc de la Voie maritime, le plus grand espace vert de Saint-Lambert, et ce que tu as devant toi, c'est 17 kilomètres de sentiers en bordure du fleuve.
+Respire un grand coup. Sérieusement, fais-le. Tu es au Parc de la Voie maritime, le plus grand espace vert de Saint-Lambert. Une piste cyclable traverse tout le parc et relie la Rive-Sud, de Longueuil jusqu'à Brossard.
 
 Regarde vers Montréal. Tu vois le pont Victoria? Ce mastodonte de fer a été inauguré en 1860 par le Prince de Galles. De cet angle, tu as une des plus belles perspectives sur le centre-ville, avec les gratte-ciels qui se découpent sur l'horizon.
 
@@ -58,10 +58,10 @@ Pour une belle photo, marche vers le belvédère près de l'eau. Au coucher du s
 
 ### 🎙️ Script audio (en)
 > Persona: Marco
-> Mots: 185
+> Mots: 186
 > Durée estimée: 74s
 
-Take a deep breath. Seriously, do it. You're at Seaway Park, the largest green space in Saint-Lambert, and what you have in front of you is 17 kilometers of trails along the river.
+Take a deep breath. Seriously, do it. You're at Seaway Park, the largest green space in Saint-Lambert. A bike path runs through the entire park and connects the South Shore, from Longueuil all the way to Brossard.
 
 Look towards Montreal. See the Victoria Bridge? That iron giant was inaugurated in 1860 by the Prince of Wales. From this angle, you've got one of the best perspectives on downtown, with the skyscrapers cutting against the horizon.
 

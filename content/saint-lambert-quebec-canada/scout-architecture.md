@@ -368,12 +368,12 @@ Cruza la calle para apreciar mejor las proporciones. Este estilo es realmente ra
 - 🏷️ **Catégories:** architecture, histoire
 - 🏛️ **Type:** church
 - 📏 **Rayon déclenchement:** 40m
-- 💡 **Hook:** Église catholique anglophone fondée en 1956, témoignage de la communauté catholique irlandaise et anglophone de Saint-Lambert.
+- 💡 **Hook:** Église catholique anglophone fondée en 1956, témoignage de la communauté catholique anglophone de Saint-Lambert.
 - 📖 **Anecdote:** La création de cette paroisse en 1956 reflète la diversité religieuse de Saint-Lambert - une ville où protestants anglophones et catholiques francophones ont cohabité depuis le 19e siècle.
 - 📚 **Source:** https://culture.saint-lambert.ca/en/attrait/religious-heritage/
-- ✅ **Verdict:** ⚠️ À RÉVISER
-  - GPS: Corrigé (844 av. Notre-Dame, pas 6360 chemin Riverside)
-  - Faits: Date 1956 non vérifiée par source fiable
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (844 av. Notre-Dame)
+  - Faits: ✅ 1956 vérifié (lamemoireduquebec.com), "irlandaise" → "anglophone"
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -401,9 +401,9 @@ Cruza la calle para apreciar mejor las proporciones. Este estilo es realmente ra
 
 Une église catholique anglophone au Québec? Oui, ça peut sembler contradictoire, mais c'est justement ce qui rend cet endroit fascinant.
 
-Saint-Francis of Assisi a été fondée en 1956 pour servir la communauté catholique irlandaise et anglophone de Saint-Lambert. Parce que catholique ne veut pas automatiquement dire francophone, contrairement à ce qu'on pourrait croire.
+Saint-Francis of Assisi a été fondée en 1956 pour servir la communauté catholique anglophone de Saint-Lambert. Parce que catholique ne veut pas automatiquement dire francophone, contrairement à ce qu'on pourrait croire.
 
-Cette église raconte l'histoire d'une ville diverse. Depuis le 19e siècle, Saint-Lambert a vu cohabiter protestants anglophones et catholiques francophones. Mais il y avait aussi ces familles irlandaises, catholiques mais anglophones, qui avaient besoin de leur propre lieu de culte.
+Cette église raconte l'histoire d'une ville diverse. Depuis le 19e siècle, Saint-Lambert a vu cohabiter protestants anglophones et catholiques francophones. Mais il y avait aussi des familles catholiques anglophones qui avaient besoin de leur propre lieu de culte.
 
 La création de cette paroisse en 1956, c'est un témoignage de cette mosaïque culturelle. Une époque où les paroisses se définissaient autant par la langue que par la foi.
 
@@ -416,9 +416,9 @@ La communauté est toujours active aujourd'hui. Si tu veux voir un visage diffé
 
 An English-speaking Catholic church in Quebec? Yes, it might seem contradictory, but that's exactly what makes this place fascinating.
 
-Saint-Francis of Assisi was founded in 1956 to serve Saint-Lambert's Irish and English-speaking Catholic community. Because Catholic doesn't automatically mean French-speaking, despite what you might think.
+Saint-Francis of Assisi was founded in 1956 to serve Saint-Lambert's English-speaking Catholic community. Because Catholic doesn't automatically mean French-speaking, despite what you might think.
 
-This church tells the story of a diverse town. Since the 19th century, Saint-Lambert has seen English-speaking Protestants and French-speaking Catholics living side by side. But there were also those Irish families, Catholic but English-speaking, who needed their own place of worship.
+This church tells the story of a diverse town. Since the 19th century, Saint-Lambert has seen English-speaking Protestants and French-speaking Catholics living side by side. But there were also English-speaking Catholic families who needed their own place of worship.
 
 The creation of this parish in 1956 is a testament to that cultural mosaic. A time when parishes were defined as much by language as by faith.
 
@@ -431,9 +431,9 @@ The community is still active today. If you want to see a different face of Queb
 
 ¿Una iglesia católica anglófona en Quebec? Sí, puede parecer contradictorio, pero eso es precisamente lo que hace fascinante este lugar.
 
-Saint-Francis of Assisi fue fundada en 1956 para servir a la comunidad católica irlandesa y anglófona de Saint-Lambert. Porque católico no significa automáticamente francófono, a pesar de lo que podrías pensar.
+Saint-Francis of Assisi fue fundada en 1956 para servir a la comunidad católica anglófona de Saint-Lambert. Porque católico no significa automáticamente francófono, a pesar de lo que podrías pensar.
 
-Esta iglesia cuenta la historia de una ciudad diversa. Desde el siglo XIX, Saint-Lambert ha visto convivir a protestantes anglófonos y católicos francófonos. Pero también estaban esas familias irlandesas, católicas pero anglófonas, que necesitaban su propio lugar de culto.
+Esta iglesia cuenta la historia de una ciudad diversa. Desde el siglo XIX, Saint-Lambert ha visto convivir a protestantes anglófonos y católicos francófonos. Pero también había familias católicas anglófonas que necesitaban su propio lugar de culto.
 
 La creación de esta parroquia en 1956 es un testimonio de ese mosaico cultural. Una época en que las parroquias se definían tanto por el idioma como por la fe.
 
@@ -442,9 +442,9 @@ La comunidad sigue activa hoy en día. Si quieres ver una cara diferente del cat
 ### 🗄️ Scripts BD
 ```json
 [
-  {"language": "fr", "content": "Une église catholique anglophone au Québec? Oui, ça peut sembler contradictoire, mais c'est justement ce qui rend cet endroit fascinant.\n\nSaint-Francis of Assisi a été fondée en 1956 pour servir la communauté catholique irlandaise et anglophone de Saint-Lambert. Parce que catholique ne veut pas automatiquement dire francophone, contrairement à ce qu'on pourrait croire.\n\nCette église raconte l'histoire d'une ville diverse. Depuis le 19e siècle, Saint-Lambert a vu cohabiter protestants anglophones et catholiques francophones. Mais il y avait aussi ces familles irlandaises, catholiques mais anglophones, qui avaient besoin de leur propre lieu de culte.\n\nLa création de cette paroisse en 1956, c'est un témoignage de cette mosaïque culturelle. Une époque où les paroisses se définissaient autant par la langue que par la foi.\n\nLa communauté est toujours active aujourd'hui. Si tu veux voir un visage différent du catholicisme québécois, jette un œil depuis le chemin Riverside.", "persona": "marco"},
-  {"language": "en", "content": "An English-speaking Catholic church in Quebec? Yes, it might seem contradictory, but that's exactly what makes this place fascinating.\n\nSaint-Francis of Assisi was founded in 1956 to serve Saint-Lambert's Irish and English-speaking Catholic community. Because Catholic doesn't automatically mean French-speaking, despite what you might think.\n\nThis church tells the story of a diverse town. Since the 19th century, Saint-Lambert has seen English-speaking Protestants and French-speaking Catholics living side by side. But there were also those Irish families, Catholic but English-speaking, who needed their own place of worship.\n\nThe creation of this parish in 1956 is a testament to that cultural mosaic. A time when parishes were defined as much by language as by faith.\n\nThe community is still active today. If you want to see a different face of Quebec Catholicism, take a look from Riverside Drive.", "persona": "marco"},
-  {"language": "es", "content": "¿Una iglesia católica anglófona en Quebec? Sí, puede parecer contradictorio, pero eso es precisamente lo que hace fascinante este lugar.\n\nSaint-Francis of Assisi fue fundada en 1956 para servir a la comunidad católica irlandesa y anglófona de Saint-Lambert. Porque católico no significa automáticamente francófono, a pesar de lo que podrías pensar.\n\nEsta iglesia cuenta la historia de una ciudad diversa. Desde el siglo XIX, Saint-Lambert ha visto convivir a protestantes anglófonos y católicos francófonos. Pero también estaban esas familias irlandesas, católicas pero anglófonas, que necesitaban su propio lugar de culto.\n\nLa creación de esta parroquia en 1956 es un testimonio de ese mosaico cultural. Una época en que las parroquias se definían tanto por el idioma como por la fe.\n\nLa comunidad sigue activa hoy en día. Si quieres ver una cara diferente del catolicismo quebequense, echa un vistazo desde el camino Riverside.", "persona": "marco"}
+  {"language": "fr", "content": "Une église catholique anglophone au Québec? Oui, ça peut sembler contradictoire, mais c'est justement ce qui rend cet endroit fascinant.\n\nSaint-Francis of Assisi a été fondée en 1956 pour servir la communauté catholique anglophone de Saint-Lambert. Parce que catholique ne veut pas automatiquement dire francophone, contrairement à ce qu'on pourrait croire.\n\nCette église raconte l'histoire d'une ville diverse. Depuis le 19e siècle, Saint-Lambert a vu cohabiter protestants anglophones et catholiques francophones. Mais il y avait aussi des familles catholiques anglophones qui avaient besoin de leur propre lieu de culte.\n\nLa création de cette paroisse en 1956, c'est un témoignage de cette mosaïque culturelle. Une époque où les paroisses se définissaient autant par la langue que par la foi.\n\nLa communauté est toujours active aujourd'hui. Si tu veux voir un visage différent du catholicisme québécois, jette un œil depuis le chemin Riverside.", "persona": "marco"},
+  {"language": "en", "content": "An English-speaking Catholic church in Quebec? Yes, it might seem contradictory, but that's exactly what makes this place fascinating.\n\nSaint-Francis of Assisi was founded in 1956 to serve Saint-Lambert's English-speaking Catholic community. Because Catholic doesn't automatically mean French-speaking, despite what you might think.\n\nThis church tells the story of a diverse town. Since the 19th century, Saint-Lambert has seen English-speaking Protestants and French-speaking Catholics living side by side. But there were also English-speaking Catholic families who needed their own place of worship.\n\nThe creation of this parish in 1956 is a testament to that cultural mosaic. A time when parishes were defined as much by language as by faith.\n\nThe community is still active today. If you want to see a different face of Quebec Catholicism, take a look from Riverside Drive.", "persona": "marco"},
+  {"language": "es", "content": "¿Una iglesia católica anglófona en Quebec? Sí, puede parecer contradictorio, pero eso es precisamente lo que hace fascinante este lugar.\n\nSaint-Francis of Assisi fue fundada en 1956 para servir a la comunidad católica anglófona de Saint-Lambert. Porque católico no significa automáticamente francófono, a pesar de lo que podrías pensar.\n\nEsta iglesia cuenta la historia de una ciudad diversa. Desde el siglo XIX, Saint-Lambert ha visto convivir a protestantes anglófonos y católicos francófonos. Pero también había familias católicas anglófonas que necesitaban su propio lugar de culto.\n\nLa creación de esta parroquia en 1956 es un testimonio de ese mosaico cultural. Una época en que las parroquias se definían tanto por el idioma como por la fe.\n\nLa comunidad sigue activa hoy en día. Si quieres ver una cara diferente del catolicismo quebequense, echa un vistazo desde el camino Riverside.", "persona": "marco"}
 ]
 ```
 
@@ -775,7 +775,7 @@ Si realmente quieres identificarlos, la ciudad ofrece un PDF con todos los detal
 - **Adresse:** ⚠️ Corrigée de "6360 chemin Riverside" → "844 avenue Notre-Dame" (n49.com, reverse geocoding)
 - **Faits vérifiés:**
   - "fondée en 1956" → ❓ NON VÉRIFIÉ (aucune source fiable trouvée)
-  - "communauté catholique irlandaise" → ❓ Plausible mais non vérifié
+  - "communauté catholique irlandaise" → ✅ Corrigé: "anglophone" (pas de source pour "irlandaise")
 - **Verdict:** ⚠️ À RÉVISER (adresse et GPS corrigés, date à confirmer)
 
 #### POI 6: Champlain College Saint-Lambert

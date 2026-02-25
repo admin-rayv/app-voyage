@@ -681,14 +681,10 @@ C'est encore une école active aujourd'hui, alors reste à l'extérieur. Mais pr
 - 🏷️ **Catégories:** histoire
 - 🏛️ **Type:** building
 - 📏 **Rayon déclenchement:** 50m
-- 💡 **Hook:** Fondé en 1898 par les Sœurs des Saints Noms de Jésus et de Marie, ce collège privé est une institution phare de Saint-Lambert depuis plus de 125 ans. Il incarne la dualité linguistique et religieuse qui a marqué l'histoire de la ville.
+- 💡 **Hook:** Fondé en 1910 par les Sœurs des Saints Noms de Jésus et de Marie, ce collège privé est une institution phare de Saint-Lambert depuis plus de 115 ans. Il incarne la dualité linguistique et religieuse qui a marqué l'histoire de la ville.
 - 📖 **Anecdote:** Le collège porte le nom de l'abbé Flavien Durocher, figure importante de l'Église catholique au 19e siècle. Initialement réservé aux filles, il est devenu mixte au fil du temps. Situé sur Riverside Drive, l'institution est entourée de maisons patrimoniales, créant un paysage où l'éducation et le patrimoine se côtoient depuis plus d'un siècle.
 - 📚 **Source:** http://lamemoireduquebec.com/wiki/index.php?title=Saint-Lambert_(municipalit%C3%A9_de_ville)
-- ✅ **Verdict:** ❌ REJETÉ
-  - GPS: ✅ Vérifié (Rue Riverside, Saint-Lambert)
-  - Faits: ❌ ERREUR MAJEURE - Le script dit "fondé en 1898" mais Wikipedia et le site officiel (cdsl.qc.ca) indiquent 1910!
-  - Le script mentionne "125 ans d'éducation" ce qui est faux si fondé en 1910 (116 ans en 2026)
-  - Sœurs des Saints Noms de Jésus et de Marie ✅ Confirmé
+- ✅ **Verdict:** ✅ APPROUVÉ (date corrigée: 1910, "plus de 115 ans")
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -714,13 +710,13 @@ C'est encore une école active aujourd'hui, alors reste à l'extérieur. Mais pr
 > Mots: 172
 > Durée estimée: 69s
 
-Regarde ce campus qui s'étend le long de Riverside. Depuis 1898, des générations de jeunes Lambertois ont étudié ici.
+Regarde ce campus qui s'étend le long de Riverside. Depuis 1910, des générations de jeunes Lambertois ont étudié ici.
 
 Le Collège Durocher a été fondé par les Sœurs des Saints Noms de Jésus et de Marie. À l'époque, c'était une école pour filles, l'éducation était séparée par genre. Le nom vient de l'abbé Flavien Durocher, une figure marquante de l'Église catholique au 19e siècle.
 
 Ce qui est fascinant, c'est le contexte. Saint-Lambert était une ville à deux visages, les anglophones protestants d'un côté, les francophones catholiques de l'autre. Les anglos avaient leur St. Lambert Academy, les francophones avaient le Collège Durocher. Deux solitudes qui se côtoyaient sur quelques kilomètres carrés.
 
-Aujourd'hui, l'école est mixte et reste une des institutions les plus réputées de la Rive-Sud. 125 ans d'éducation au même endroit. Et regarde autour, le collège est entouré de maisons patrimoniales du 18e siècle. L'éducation et le patrimoine, côte à côte, depuis plus d'un siècle.
+Aujourd'hui, l'école est mixte et reste une des institutions les plus réputées de la Rive-Sud. Plus de 115 ans d'éducation au même endroit. Et regarde autour, le collège est entouré de maisons patrimoniales du 18e siècle. L'éducation et le patrimoine, côte à côte, depuis plus d'un siècle.
 
 C'est une école active, alors admire le campus depuis Riverside.
 
@@ -728,7 +724,7 @@ C'est une école active, alors admire le campus depuis Riverside.
 ```json
 {
   "language": "fr",
-  "content": "Regarde ce campus qui s'étend le long de Riverside. Depuis 1898, des générations de jeunes Lambertois ont étudié ici.\n\nLe Collège Durocher a été fondé par les Sœurs des Saints Noms de Jésus et de Marie. À l'époque, c'était une école pour filles, l'éducation était séparée par genre. Le nom vient de l'abbé Flavien Durocher, une figure marquante de l'Église catholique au 19e siècle.\n\nCe qui est fascinant, c'est le contexte. Saint-Lambert était une ville à deux visages, les anglophones protestants d'un côté, les francophones catholiques de l'autre. Les anglos avaient leur St. Lambert Academy, les francophones avaient le Collège Durocher. Deux solitudes qui se côtoyaient sur quelques kilomètres carrés.\n\nAujourd'hui, l'école est mixte et reste une des institutions les plus réputées de la Rive-Sud. 125 ans d'éducation au même endroit. Et regarde autour, le collège est entouré de maisons patrimoniales du 18e siècle. L'éducation et le patrimoine, côte à côte, depuis plus d'un siècle.\n\nC'est une école active, alors admire le campus depuis Riverside.",
+  "content": "Regarde ce campus qui s'étend le long de Riverside. Depuis 1910, des générations de jeunes Lambertois ont étudié ici.\n\nLe Collège Durocher a été fondé par les Sœurs des Saints Noms de Jésus et de Marie. À l'époque, c'était une école pour filles, l'éducation était séparée par genre. Le nom vient de l'abbé Flavien Durocher, une figure marquante de l'Église catholique au 19e siècle.\n\nCe qui est fascinant, c'est le contexte. Saint-Lambert était une ville à deux visages, les anglophones protestants d'un côté, les francophones catholiques de l'autre. Les anglos avaient leur St. Lambert Academy, les francophones avaient le Collège Durocher. Deux solitudes qui se côtoyaient sur quelques kilomètres carrés.\n\nAujourd'hui, l'école est mixte et reste une des institutions les plus réputées de la Rive-Sud. Plus de 115 ans d'éducation au même endroit. Et regarde autour, le collège est entouré de maisons patrimoniales du 18e siècle. L'éducation et le patrimoine, côte à côte, depuis plus d'un siècle.\n\nC'est une école active, alors admire le campus depuis Riverside.",
   "voice_id": null,
   "voice_settings": {"stability": 0.5, "clarity": 0.75},
   "persona": "marco"

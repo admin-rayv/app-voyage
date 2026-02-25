@@ -32,13 +32,16 @@ Faire **minimum 5 recherches** pour couvrir le sujet.
 
 ### 2. Pour chaque POI candidat, trouver:
 
-- **Nom** (FR + EN)
+- **Nom** (FR + EN) — Les deux langues sont requises pour le champ `name` JSONB
 - **Adresse** exacte
 - **Coordonnées GPS** — Utiliser le script [scripts/geocode.py](scripts/geocode.py) avec l'adresse
+- **Type** — Un des types valides (voir section "Types de POI valides" plus bas)
+- **Rayon** — Rayon de déclenchement approprié (voir section "Rayon de déclenchement")
 - **Hook** — En 1-2 phrases, POURQUOI c'est intéressant (pas juste "c'est un bâtiment")
 - **Anecdote** — Un fait surprenant ou méconnu
 - **Source(s)** — URL vérifiable
 - **Catégories** — 1-3 parmi les 7 officielles
+- **Logistics** — Parking, toilettes, spot photo, conseils pratiques (voir section "Logistics")
 
 ### 3. Filtrage
 
@@ -72,24 +75,75 @@ Format du fichier:
 ```markdown
 # 🔍 POIs trouvés: {ville} — {catégorie}
 > Date: {YYYY-MM-DD}
+> City ID: {city_uuid}
 > Status: EN ATTENTE DE VALIDATION
 
-## POI 1: {nom}
+## POI 1: {nom_fr}
 - 📍 **GPS:** {lat}, {lng} (exacte | point suggéré)
-- 🏠 **Adresse:** {adresse}
+- 🏠 **Adresse:** {adresse complète}
 - 🏷️ **Catégories:** {cat1}, {cat2}
+- 🏛️ **Type:** {type} (voir types ci-dessous)
+- 📏 **Rayon déclenchement:** {radius_m}m
 - 💡 **Hook:** {pourquoi c'est intéressant en 1-2 phrases}
 - 📖 **Anecdote:** {fait surprenant}
 - 📚 **Source:** {url}
 - ✅ **Verdict:** EN ATTENTE
 
-## POI 2: {nom}
+### 🗄️ Données BD (prêtes pour insertion)
+```json
+{
+  "name": {"fr": "{nom_fr}", "en": "{nom_en}"},
+  "lat": {lat},
+  "lng": {lng},
+  "trigger_radius_m": {radius_m},
+  "type": "{type}",
+  "categories": ["{cat1}", "{cat2}"],
+  "image_url": null,
+  "logistics": {
+    "parking": "{stationnement le plus proche, ou null}",
+    "toilets": "{toilettes publiques proches, ou null}",
+    "photo_spot": "{meilleur angle/endroit pour photo, ou null}",
+    "tips": "{conseil pratique: meilleur moment, foule, accès, ou null}"
+  }
+}
+```
+
+## POI 2: {nom_fr}
 ...
 
 ---
 **Total:** {n} POIs trouvés
 **Fichier:** content/{ville}/scout-{catégorie}.md
 ```
+
+### Types de POI valides
+Valeurs possibles pour le champ `type`:
+- `building` — Bâtiment, maison, édifice (défaut)
+- `monument` — Monument, statue, plaque commémorative
+- `park` — Parc, jardin, espace vert
+- `water` — Cours d'eau, écluse, fontaine, canal
+- `street` — Rue, quartier, zone piétonne
+- `viewpoint` — Point de vue, belvédère
+- `restaurant` — Restaurant, café, bar
+- `shop` — Boutique, marché, commerce
+- `church` — Église, lieu de culte
+- `museum` — Musée, galerie, centre d'exposition
+- `bridge` — Pont, passerelle
+- `other` — Autre
+
+### Rayon de déclenchement
+Le `trigger_radius_m` détermine à quelle distance l'audio se déclenche:
+- **30m** — POI très précis (statue, plaque, petit bâtiment)
+- **40m** — Standard (bâtiment, monument) — **défaut**
+- **60m** — POI large (parc, place publique)
+- **100m** — Zone étendue (quartier, point de vue panoramique)
+
+### Logistics
+Remplir au mieux. Mettre `null` pour les champs sans info pertinente — ne PAS inventer.
+- **parking** — Stationnement le plus proche (nom + distance approximative)
+- **toilets** — Toilettes publiques les plus proches
+- **photo_spot** — Meilleur angle ou endroit pour prendre une photo
+- **tips** — Conseils pratiques (meilleur moment pour visiter, affluence, accès PMR, etc.)
 
 ### 6. Push Git
 

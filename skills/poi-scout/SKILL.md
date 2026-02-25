@@ -19,6 +19,32 @@ Optionnel:
 
 ## Processus
 
+### 0. Identifier la ville (disambiguation)
+
+Avant toute recherche, identifier la ville exacte avec le script [scripts/geocode.py](scripts/geocode.py):
+
+```bash
+python3 scripts/geocode.py "{ville}"
+```
+
+Le script retourne une liste de résultats géocodés. **Si plusieurs résultats** (ex: Saint-Lambert QC vs Saint-Lambert France):
+- Présenter les options à l'utilisateur avec les coordonnées et la région/pays
+- Attendre la confirmation avant de continuer
+- **Ne jamais assumer** — toujours demander si ambigu
+
+**Si un seul résultat** ou si la ville est évidente (ex: "Montréal, Québec"):
+- Confirmer dans le résumé et continuer
+
+Noter les coordonnées du centre-ville pour les recherches. Elles serviront aussi comme `city_id` si la ville doit être créée en BD plus tard.
+
+Ensuite, vérifier si la ville existe déjà dans Supabase:
+```bash
+curl -s "https://lfwnpyttyoefqvhfqajb.supabase.co/rest/v1/cities?slug=eq.{slug_ville}&select=id,name,center_lat,center_lng" \
+  -H "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmd25weXR0eW9lZnF2aGZxYWpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMDc2NTAsImV4cCI6MjA4Njg4MzY1MH0.J2kmSaIvxhkqGucy9C4ZwbokDS2hU7uXlb4kE8Ryao"
+```
+- Si trouvée → utiliser son `city_id` dans le header du fichier de sortie
+- Si pas trouvée → noter `City ID: À CRÉER` et inclure les infos nécessaires pour le seed (nom FR/EN, coordonnées centre, pays, région, timezone)
+
 ### 1. Recherche web
 
 Chercher des POIs via web_search en combinant:
@@ -75,7 +101,10 @@ Format du fichier:
 ```markdown
 # 🔍 POIs trouvés: {ville} — {catégorie}
 > Date: {YYYY-MM-DD}
-> City ID: {city_uuid}
+> City ID: {city_uuid | À CRÉER}
+> City: {nom_fr} / {nom_en}
+> Coordonnées centre: {center_lat}, {center_lng}
+> Pays: {country_code} | Région: {region}
 > Status: EN ATTENTE DE VALIDATION
 
 ## POI 1: {nom_fr}

@@ -546,11 +546,11 @@ El campus está abierto al público, puedes pasear libremente. Busca los detalle
 - 📏 **Rayon déclenchement:** 100m
 - 💡 **Hook:** Un quartier résidentiel historique où se concentrent de nombreuses maisons patrimoniales inventoriées par la Ville. Une promenade architecturale à travers les styles du 19e et 20e siècle.
 - 📖 **Anecdote:** Les noms des rues (Oak/Chêne, Pine/Pin, Maple/Érable) reflètent le caractère arboré de ce quartier développé au tournant du 20e siècle pour les familles anglophones aisées qui travaillaient à Montréal mais préféraient la vie de banlieue.
-- 📚 **Source:** https://www.patrimoine-culturel.gouv.qc.ca (inventaire Saint-Lambert)
-- ✅ **Verdict:** ⚠️ À RÉVISER
-  - GPS: OK (secteur Oak/Pine)
-  - Faits: Nom "Brooklyn Park" non vérifié comme appellation officielle
-  - 330 Oak et 190 Pine: confirmés comme patrimoniales (patrimoine-culturel.gouv.qc.ca)
+- 📚 **Source:** https://www.patrimoine-culturel.gouv.qc.ca/detail.do?methode=consulter&id=216618&type=bien (190 Pine, Brooklyn Park)
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ OK (secteur Oak/Pine)
+  - Faits: ✅ "Brooklyn Park" confirmé comme appellation officielle (patrimoine-culturel.gouv.qc.ca)
+  - 330 Oak, 190 Pine, 343-345 Pine: toutes listées sous "Brooklyn Park"
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json

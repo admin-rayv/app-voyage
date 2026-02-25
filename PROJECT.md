@@ -107,17 +107,21 @@ Une application mobile qui transforme chaque promenade en ville en une expérien
 
 ---
 
-## Personas narrateurs (voix du guide)
+## Persona narrateur: Marco
 
-Utiliser ElevenLabs pour créer des **personnages distincts**:
+**Un seul narrateur pour toute l'app.** Marco, c'est ton ami qui voyage avec toi.
 
-| Persona | Personnalité | Voix | Utilisation |
-|---------|--------------|------|-------------|
-| **Jacques** | Fantôme d'un colon, mystérieux mais chaleureux | Homme, 50s, accent québécois léger | Vieux-Montréal, historique |
-| **Sarah** | Étudiante passionnée, énergique, gourmande | Femme, 25-30, dynamique | Plateau, Mile-End, foodie |
-| **Le Narrateur** | Voix off cinématique, suspense | Neutre, profond | POIs mystères, insolites |
+| Aspect | Description |
+|--------|-------------|
+| **Qui** | Un ami explorateur passionné par tout ce qui l'entoure |
+| **Ton** | Conversationnel, curieux, cultivé sans être prétentieux, humour naturel |
+| **Voix** | Homme ~30-35, chaleureux, accent québécois léger, rythme naturel |
+| **Style** | Tutoiement, observations visuelles, anecdotes, tips pratiques |
+| **Adapte son énergie** | Posé (monument solennel), excité (spot food), mystérieux (légende), émerveillé (nature) |
 
-**Astuce production:** Utiliser les prompts d'émotion ElevenLabs pour ajouter rires, soupirs, hésitations — c'est ce qui manque aux robots!
+Marco est toujours là — chaque POI, chaque ville, chaque catégorie. L'utilisateur développe une relation avec lui.
+
+**Astuce production:** Utiliser les prompts d'émotion ElevenLabs pour ajouter rires, soupirs, hésitations — c'est ce qui fait que Marco se sent réel, pas robot.
 
 ---
 

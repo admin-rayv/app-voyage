@@ -313,7 +313,7 @@ Cette rue, Riverside Drive, c'est un vrai corridor du patrimoine. Si tu continue
 
 ## POI 6: Église catholique Saint-Lambert
 - 📍 **GPS:** 45.5003717, -73.5138892 (exacte)
-- 🏠 **Adresse:** Avenue Lorne, Saint-Lambert, QC
+- 🏠 **Adresse:** 41 Avenue Lorne, Saint-Lambert, QC J4P 2G7
 - 🏷️ **Catégories:** histoire, architecture
 - 🏛️ **Type:** church
 - 📏 **Rayon déclenchement:** 50m
@@ -408,26 +408,22 @@ Petit conseil : si tu passes pendant les heures de messe ou lors des Journées d
 
 ### 🎙️ Script audio (fr)
 > Persona: Marco
-> Mots: 182
-> Durée estimée: 73s
+> Mots: 156
+> Durée estimée: 62s
 
 Prends une seconde devant ce monument. Ce n'est pas juste une statue, ce sont des noms. Des vies.
 
-Ce cénotaphe a été inauguré en 1922 par le général Arthur Currie lui-même, le commandant du Corps expéditionnaire canadien pendant la Première Guerre mondiale. Il l'a personnellement financé pour honorer les 60 citoyens de Saint-Lambert tombés dans les tranchées. C'est un des plus anciens monuments aux morts de toute la Rive-Sud.
+Ce cénotaphe a été inauguré en 1922 par le général Arthur Currie lui-même, le commandant du Corps expéditionnaire canadien pendant la Première Guerre mondiale. Il l'a offert à la ville de Saint-Lambert pour honorer les 60 citoyens tombés dans les tranchées. C'est un des plus anciens monuments aux morts de toute la Rive-Sud.
 
-Et il y a une histoire troublante. En 2007, quelqu'un a volé la plaque de bronze originale. Elle listait les 132 soldats morts des deux guerres mondiales. Probablement revendue pour le métal. Imagine voler les noms des morts.
-
-Huit mois plus tard, la ville a installé une nouvelle plaque, en granit cette fois. Les noms sont gravés dans la pierre. Impossible à voler.
+Regarde les plaques autour de la base. Tu y trouveras les noms des soldats des deux guerres mondiales. Des voisins, des fils, des pères. Saint-Lambert était une petite ville à l'époque. Tout le monde connaissait quelqu'un sur cette liste.
 
 Si tu passes ici autour du 11 novembre, reviens. La cérémonie du Jour du Souvenir rassemble encore des familles dont les arrière-grands-pères sont gravés sur cette pierre. Un siècle plus tard, on se souvient.
-
-Regarde les noms. Des voisins, des fils, des pères. Saint-Lambert était une petite ville. Tout le monde connaissait quelqu'un.
 
 ### 🗄️ Script BD
 ```json
 {
   "language": "fr",
-  "content": "Prends une seconde devant ce monument. Ce n'est pas juste une statue, ce sont des noms. Des vies.\n\nCe cénotaphe a été inauguré en 1922 par le général Arthur Currie lui-même, le commandant du Corps expéditionnaire canadien pendant la Première Guerre mondiale. Il l'a personnellement financé pour honorer les 60 citoyens de Saint-Lambert tombés dans les tranchées. C'est un des plus anciens monuments aux morts de toute la Rive-Sud.\n\nEt il y a une histoire troublante. En 2007, quelqu'un a volé la plaque de bronze originale. Elle listait les 132 soldats morts des deux guerres mondiales. Probablement revendue pour le métal. Imagine voler les noms des morts.\n\nHuit mois plus tard, la ville a installé une nouvelle plaque, en granit cette fois. Les noms sont gravés dans la pierre. Impossible à voler.\n\nSi tu passes ici autour du 11 novembre, reviens. La cérémonie du Jour du Souvenir rassemble encore des familles dont les arrière-grands-pères sont gravés sur cette pierre. Un siècle plus tard, on se souvient.\n\nRegarde les noms. Des voisins, des fils, des pères. Saint-Lambert était une petite ville. Tout le monde connaissait quelqu'un.",
+  "content": "Prends une seconde devant ce monument. Ce n'est pas juste une statue, ce sont des noms. Des vies.\n\nCe cénotaphe a été inauguré en 1922 par le général Arthur Currie lui-même, le commandant du Corps expéditionnaire canadien pendant la Première Guerre mondiale. Il l'a offert à la ville de Saint-Lambert pour honorer les 60 citoyens tombés dans les tranchées. C'est un des plus anciens monuments aux morts de toute la Rive-Sud.\n\nRegarde les plaques autour de la base. Tu y trouveras les noms des soldats des deux guerres mondiales. Des voisins, des fils, des pères. Saint-Lambert était une petite ville à l'époque. Tout le monde connaissait quelqu'un sur cette liste.\n\nSi tu passes ici autour du 11 novembre, reviens. La cérémonie du Jour du Souvenir rassemble encore des familles dont les arrière-grands-pères sont gravés sur cette pierre. Un siècle plus tard, on se souvient.",
   "voice_id": null,
   "voice_settings": {"stability": 0.5, "clarity": 0.75},
   "persona": "marco"

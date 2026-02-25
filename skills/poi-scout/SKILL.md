@@ -88,9 +88,14 @@ curl -s "https://lfwnpyttyoefqvhfqajb.supabase.co/rest/v1/points?city_id=eq.CITY
 
 Sauvegarder les résultats dans:
 ```
-~/.openclaw/workspace/app-voyage/content/{ville}/scout-{catégorie}.md
+~/.openclaw/workspace/app-voyage/content/{ville}-{province}-{pays}/scout-{catégorie}.md
 ```
-Exemple: `content/saint-lambert/scout-food.md`
+Exemple: `content/saint-lambert-quebec-canada/scout-food.md`
+
+Le nom du dossier est toujours en minuscules, sans accents, avec des tirets. Exemples:
+- Saint-Lambert, Québec, Canada → `saint-lambert-quebec-canada`
+- Montréal, Québec, Canada → `montreal-quebec-canada`
+- Paris, Île-de-France, France → `paris-ile-de-france-france`
 
 Créer le dossier de la ville s'il n'existe pas.
 
@@ -140,7 +145,7 @@ Format du fichier:
 
 ---
 **Total:** {n} POIs trouvés
-**Fichier:** content/{ville}/scout-{catégorie}.md
+**Fichier:** content/{ville}-{province}-{pays}/scout-{catégorie}.md
 ```
 
 ### Types de POI valides

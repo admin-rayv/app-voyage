@@ -555,16 +555,15 @@ Regarde l'architecture néo-gothique victorienne, les fenêtres en ogive, la pie
 ---
 
 ## POI 10: Usine Waterman (Lofts industriels)
-- 📍 **GPS:** 45.4988136, -73.5117463 (exacte)
-- 🏠 **Adresse:** 2625 rue Waterman, Saint-Lambert, QC
+- 📍 **GPS:** 45.4987098, -73.5116362 (exacte)
+- 🏠 **Adresse:** 24 Rue Waterman, Saint-Lambert, QC J4P 1R8
 - 🏷️ **Catégories:** histoire, architecture
 - 🏛️ **Type:** building
 - 📏 **Rayon déclenchement:** 50m
 - 💡 **Hook:** Ancienne usine de stylos-plumes Waterman, installée à Saint-Lambert en 1908. Ce bâtiment industriel emblématique a été converti en lofts résidentiels et témoigne du passé manufacturier de la ville, lié à sa position stratégique au carrefour du pont Victoria et du chemin de fer.
 - 📖 **Anecdote:** La compagnie Waterman, fondée à New York en 1884, a choisi Saint-Lambert pour ses terrains abordables et sa connexion ferroviaire directe avec New York via le pont Victoria. L'usine produisait les fameux stylos-plumes Waterman, alors un objet de luxe, pour tout le marché canadien. La conversion en lofts illustre la transformation de Saint-Lambert de ville industrielle en banlieue résidentielle cossue.
 - 📚 **Source:** https://en.wikipedia.org/wiki/Saint-Lambert,_Mont%C3%A9r%C3%A9gie
-- ✅ **Verdict:** ⚠️ À RÉVISER
-  - GPS: ⚠️ Pointe vers 20 rue Waterman mais script dit 2625 rue Waterman - VÉRIFIER ADRESSE
+- ✅ **Verdict:** ✅ APPROUVÉ (GPS corrigé: 24 Rue Waterman)
   - Faits: Installation 1908 ✅ Confirmé (Flickr historical note)
   - Waterman fondée à New York en 1884 ✅ Confirmé (Wikipedia, invent.org)
 
@@ -572,8 +571,8 @@ Regarde l'architecture néo-gothique victorienne, les fenêtres en ogive, la pie
 ```json
 {
   "name": {"fr": "Ancienne usine Waterman", "en": "Former Waterman Factory"},
-  "lat": 45.4988136,
-  "lng": -73.5117463,
+  "lat": 45.4987098,
+  "lng": -73.5116362,
   "trigger_radius_m": 50,
   "type": "building",
   "categories": ["histoire", "architecture"],

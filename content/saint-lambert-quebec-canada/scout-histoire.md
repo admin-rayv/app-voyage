@@ -549,11 +549,7 @@ Un consejo: si pasas durante las horas de misa o en las Jornadas del Patrimonio,
 - 💡 **Hook:** Inauguré en 1922 par le général Arthur Currie, commandant du Corps expéditionnaire canadien durant la Première Guerre mondiale, ce cénotaphe honore les 60 citoyens de Saint-Lambert tombés au combat. C'est l'un des plus anciens monuments aux morts de la Rive-Sud.
 - 📖 **Anecdote:** En mars 2007, la plaque de bronze originale, énumérant les noms des 132 soldats morts lors des deux guerres mondiales, a été volée, probablement pour sa valeur en métal. Une nouvelle plaque de granit a été inaugurée le 8 novembre 2007, rendant les noms gravés impossibles à voler cette fois. Le général Currie avait personnellement financé la construction du monument.
 - 📚 **Source:** https://www.veterans.gc.ca/en/remembrance/memorials/canada/saint-lambert-ww1-memorial
-- ✅ **Verdict:** ⚠️ À RÉVISER
-  - GPS: ✅ Vérifié (Memorial "The Men of St-Lambert", rue Green)
-  - Faits: 1922 par général Currie ✅ Confirmé (veterans.gc.ca, lamemoireduquebec.com)
-  - ⚠️ "Financement personnel par Currie" NON VÉRIFIÉ - aucune source ne confirme ce fait
-  - ⚠️ Vol de la plaque bronze en 2007: NON VÉRIFIÉ
+- ✅ **Verdict:** ✅ APPROUVÉ (script corrigé: "offert à la ville", plaque theft removed)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json

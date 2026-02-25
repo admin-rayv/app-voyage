@@ -109,9 +109,13 @@ En utilisant les informations du POI (hook, anecdote, logistics, type), rédiger
 3. **Détail visuel** (10s) — Quelque chose que l'auditeur peut observer ICI et MAINTENANT.
 4. **Outro** (10-15s) — Conseil pratique, fait mémorable, ou tip logistique. Laisser une impression.
 
-### 3. Ajouter les scripts au fichier
+### 3. Écrire les scripts en 3 langues
 
-Pour chaque POI dans le fichier scout, ajouter une section `### 🎙️ Script audio ({langue})` **juste après** le bloc JSON `🗄️ Données BD`, avec le format suivant:
+Pour chaque POI, écrire le script en **français** d'abord, puis le **traduire** en anglais et espagnol. Marco garde la même personnalité dans toutes les langues — conversationnel, passionné, jamais robotique.
+
+**Ordre:** Français → Anglais → Espagnol
+
+Ajouter les 3 scripts **juste après** le bloc JSON `🗄️ Données BD`:
 
 ```markdown
 ### 🎙️ Script audio (fr)
@@ -119,21 +123,51 @@ Pour chaque POI dans le fichier scout, ajouter une section `### 🎙️ Script a
 > Mots: {word_count}
 > Durée estimée: {word_count / 150 * 60}s
 
-{script_complet}
+{script_français}
+
+### 🎙️ Script audio (en)
+> Persona: Marco
+> Mots: {word_count}
+> Durée estimée: {word_count / 150 * 60}s
+
+{script_anglais}
+
+### 🎙️ Script audio (es)
+> Persona: Marco
+> Mots: {word_count}
+> Durée estimée: {word_count / 150 * 60}s
+
+{script_espagnol}
 ```
+
+**Règles de traduction:**
+- Adapter les expressions idiomatiques (pas de traduction littérale)
+- Garder le tutoiement en français, "you" en anglais, "tú" en espagnol
+- Conserver le ton conversationnel et la personnalité de Marco
+- Les faits restent les mêmes, seule la langue change
 
 **Ne pas modifier** le reste du fichier (les données du scout restent intactes).
 
-### 4. Ajouter les données script BD
+### 4. Ajouter les données script BD (3 langues)
 
-Après le script, ajouter un bloc JSON prêt pour insertion dans la table `scripts`:
+Après les scripts, ajouter un bloc JSON avec les **3 langues** prêtes pour insertion:
 
 ```markdown
 ### 🗄️ Script BD
 ```json
 {
-  "language": "fr",
-  "content": "{le script complet, sur une seule ligne, avec \\n pour les sauts}",
+  "fr": {
+    "content": "{script français, sur une seule ligne, avec \\n pour les sauts}",
+    "word_count": {nombre_mots_fr}
+  },
+  "en": {
+    "content": "{script anglais, sur une seule ligne, avec \\n pour les sauts}",
+    "word_count": {nombre_mots_en}
+  },
+  "es": {
+    "content": "{script espagnol, sur une seule ligne, avec \\n pour les sauts}",
+    "word_count": {nombre_mots_es}
+  },
   "voice_id": null,
   "voice_settings": {"stability": 0.5, "clarity": 0.75},
   "persona": "marco"
@@ -159,32 +193,72 @@ Confirme dans ton résumé final que le push a été fait avec succès.
 
 ## Exemple complet
 
-Voici à quoi ressemble un POI après le passage du Writer (ajouté après le bloc JSON existant):
+Voici à quoi ressemble un POI après le passage du Writer (3 langues + JSON):
 
 ```markdown
 ### 🎙️ Script audio (fr)
 > Persona: Marco
-> Mots: 165
-> Durée estimée: 66s
+> Mots: 156
+> Durée estimée: 62s
 
 Cette maison en pierre devant toi? Elle a l'air tranquille, mais elle cache 275 ans d'histoires.
 
-C'est la Maison Marsil — la plus ancienne de Saint-Lambert. Quand ces murs ont été construits vers 1750, Montréal était encore une bourgade française. Les pierres que tu vois viennent directement des champs. Les colons les ramassaient en labourant et bâtissaient avec.
+C'est la Maison Marsil, la plus ancienne de Saint-Lambert. Quand ces murs ont été construits vers 1750, Montréal était encore une bourgade française. Les pierres que tu vois viennent directement des champs. Les colons les ramassaient en labourant et bâtissaient avec.
 
 Ce qui est fascinant? De 1887 à 1891, cette maison servait de chapelle. Les catholiques du coin n'avaient pas encore leur église, alors ils se rassemblaient ici pour la messe. Dans le salon, imagine!
 
-Regarde bien la façade — chaque pierre est d'une taille différente. C'est tout le charme des maisons en pierres des champs. Chaque roche raconte un bout de terre.
+Regarde bien la façade, chaque pierre est d'une taille différente. C'est tout le charme des maisons en pierres des champs.
 
-Pour une belle photo, recule un peu sur le trottoir de Riverside. Tu auras la vue parfaite avec le jardin en avant.
+Pour une belle photo, recule un peu sur le trottoir de Riverside.
+
+### 🎙️ Script audio (en)
+> Persona: Marco
+> Mots: 152
+> Durée estimée: 61s
+
+See this stone house in front of you? It looks peaceful, but it's hiding 275 years of stories.
+
+This is Maison Marsil, the oldest house in Saint-Lambert. When these walls were built around 1750, Montreal was still a small French settlement. The stones you see came straight from the fields. The settlers picked them up while plowing and built with whatever the land gave them.
+
+Here's the fascinating part. From 1887 to 1891, this house served as a chapel. The local Catholics didn't have their own church yet, so they gathered here for mass. In the living room, can you imagine?
+
+Look closely at the facade, each stone is a different size. That's the rustic charm of fieldstone houses.
+
+For a great photo, step back onto the Riverside sidewalk.
+
+### 🎙️ Script audio (es)
+> Persona: Marco
+> Mots: 158
+> Durée estimée: 63s
+
+¿Ves esta casa de piedra frente a ti? Parece tranquila, pero esconde 275 años de historias.
+
+Esta es la Maison Marsil, la casa más antigua de Saint-Lambert. Cuando estos muros se construyeron alrededor de 1750, Montreal todavía era un pequeño asentamiento francés. Las piedras que ves vienen directamente de los campos. Los colonos las recogían mientras araban y construían con lo que la tierra les daba.
+
+Aquí está lo fascinante. De 1887 a 1891, esta casa sirvió como capilla. Los católicos locales aún no tenían su propia iglesia, así que se reunían aquí para la misa. ¡En la sala de estar, imagínate!
+
+Mira bien la fachada, cada piedra tiene un tamaño diferente. Ese es el encanto rústico de las casas de piedra de campo.
+
+Para una buena foto, retrocede un poco hacia la acera de Riverside.
 
 ### 🗄️ Script BD
 ```json
 {
-  "language": "fr",
-  "content": "Hé, regarde cette maison en pierre devant toi. Elle a l'air tranquille comme ça, mais laisse-moi te dire... elle en a vu des affaires depuis 1750.\n\nC'est la Maison Marsil — la plus vieille de Saint-Lambert...",
+  "fr": {
+    "content": "Cette maison en pierre devant toi? Elle a l'air tranquille, mais elle cache 275 ans d'histoires.\n\nC'est la Maison Marsil, la plus ancienne de Saint-Lambert...",
+    "word_count": 156
+  },
+  "en": {
+    "content": "See this stone house in front of you? It looks peaceful, but it's hiding 275 years of stories.\n\nThis is Maison Marsil, the oldest house in Saint-Lambert...",
+    "word_count": 152
+  },
+  "es": {
+    "content": "¿Ves esta casa de piedra frente a ti? Parece tranquila, pero esconde 275 años de historias.\n\nEsta es la Maison Marsil, la casa más antigua de Saint-Lambert...",
+    "word_count": 158
+  },
   "voice_id": null,
   "voice_settings": {"stability": 0.5, "clarity": 0.75},
-  "persona": "jacques"
+  "persona": "marco"
 }
 ```
 ```
@@ -192,8 +266,9 @@ Pour une belle photo, recule un peu sur le trottoir de Riverside. Tu auras la vu
 ## Règles
 
 - **Écrire TOUS les scripts** du fichier en une seule passe (pas un par un)
+- **3 langues obligatoires** — Chaque POI doit avoir FR + EN + ES
 - **Ne jamais inventer de faits** — utiliser uniquement les infos du scout (hook, anecdote, source)
-- **Rester fidèle à Marco** — Même personnalité, même ton, mais il adapte son énergie au sujet
+- **Rester fidèle à Marco** — Même personnalité dans les 3 langues
 - **Varier les hooks** — pas 13 scripts qui commencent par "Tu vois ce bâtiment?"
 - **Compter les mots** — chaque script DOIT être entre 75 et 300 mots
 - **Les logistics sont un bonus** — les intégrer naturellement, pas en fin de script comme une pub

@@ -1,4 +1,6 @@
 # 🔍 POIs trouvés: Saint-Lambert — architecture
+> ✅ **PUSHED TO DB:** 2026-02-25 — 8 POIs, 24 scripts
+
 > Date: 2026-02-25
 > City ID: f1fba711-...
 > City: Saint-Lambert / Saint-Lambert

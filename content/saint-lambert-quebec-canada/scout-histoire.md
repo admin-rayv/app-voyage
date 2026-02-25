@@ -17,7 +17,10 @@
 - 💡 **Hook:** La plus ancienne maison de Saint-Lambert, construite vers 1750 en pierres des champs. Reconnue monument historique en 1974, elle a abrité le Musée du costume et du textile du Québec jusqu'à son déménagement à Montréal.
 - 📖 **Anecdote:** Avant de devenir musée, la maison a servi de chapelle improvisée de 1887 à 1891 pour les catholiques de Saint-Lambert qui attendaient la construction de leur propre église. Sa restauration en 1977 a été financée par la compagnie Pratt & Whitney Canada avec l'aide bénévole de ses employés.
 - 📚 **Source:** https://www.patrimoine-culturel.gouv.qc.ca/rpcq/detail.do?methode=consulter&id=92905&type=bien
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (Rue Riverside, Saint-Lambert)
+  - Faits: Date "vers 1750" conforme aux sources ("seconde moitié du 18e siècle")
+  - Classement 1974: ✅ Confirmé
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -75,7 +78,9 @@ Regarde bien la façade, chaque pierre est d'une taille différente. C'est tout 
 - 💡 **Hook:** Première écluse de la Voie maritime du Saint-Laurent, inaugurée en 1959 par la reine Élisabeth II et le président Eisenhower. Elle permet aux navires océaniques de monter de 4,6 mètres pour atteindre les Grands Lacs, un des plus grands chantiers d'ingénierie nord-américains du 20e siècle.
 - 📖 **Anecdote:** La construction de la Voie maritime a forcé l'expropriation de quartiers entiers et la disparition de plusieurs villages le long du Saint-Laurent. À Saint-Lambert, une tour d'observation permet aux visiteurs de regarder les gigantesques navires franchir l'écluse, un spectacle hypnotique qui rythme encore la vie de la ville de mars à décembre.
 - 📚 **Source:** https://grandslacs-voiemaritime.com/fr/la-voie-maritime/nos-ecluses-et-chenaux/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (Plateforme d'observation de l'écluse de Saint-Lambert)
+  - Faits: Inauguration 1959 par Élisabeth II et Eisenhower ✅ Confirmé (Radio-Canada, Le Monde)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -133,7 +138,10 @@ Monte à la tour d'observation si tu peux. La vue plongeante sur un cargo de 200
 - 💡 **Hook:** Inauguré en 1860, le pont Victoria est le tout premier pont à relier Montréal à la Rive-Sud et le premier lien ferroviaire entre le Canada et New York. Sa construction a transformé Saint-Lambert d'un hameau agricole en banlieue résidentielle.
 - 📖 **Anecdote:** Le pont original était un tube de fer fermé de 3 km, le plus long pont au monde à l'époque. Le Prince de Galles (futur Édouard VII) l'a inauguré en 1860. Les trains passaient dans un tunnel métallique étouffant et enfumé, si bien qu'on l'a reconstruit en pont à poutres ouvertes en 1897-1898. Le chantier de 1854-1860 a employé jusqu'à 3 000 ouvriers, dont plusieurs y ont perdu la vie.
 - 📚 **Source:** https://fr.wikipedia.org/wiki/Saint-Lambert_(Mont%C3%A9r%C3%A9gie)
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (Pont Victoria confirmé)
+  - Faits: Inauguration 25-26 août 1860 par Prince de Galles ✅ Confirmé (patrimoine-culturel.gouv.qc.ca)
+  - Plus long pont ferroviaire du monde à l'époque ✅ Confirmé
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -191,7 +199,9 @@ En été, tu peux traverser à pied ou à vélo via la passerelle. La vue sur le
 - 💡 **Hook:** C'est devant cette maison que le ministre Pierre Laporte a été enlevé par la cellule Chénier du FLQ le 10 octobre 1970, à 18h18, déclenchant la plus grave crise politique de l'histoire moderne du Canada, la Crise d'Octobre.
 - 📖 **Anecdote:** Laporte jouait au ballon avec son neveu sur le terrain avant quand les ravisseurs l'ont forcé à monter dans leur voiture. Son corps a été retrouvé 7 jours plus tard dans le coffre d'une voiture près de l'aéroport de Saint-Hubert. C'est le seul ministre québécois assassiné dans l'histoire du Canada. L'événement a mené à l'invocation de la Loi sur les mesures de guerre par Pierre Elliott Trudeau.
 - 📚 **Source:** https://ici.radio-canada.ca/nouvelle/486954/octobre-chronologie
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (725 Rue Robitaille, Saint-Lambert)
+  - Faits: Enlèvement 10 octobre 1970, cellule Chénier FLQ ✅ Confirmé (Wikipedia, Radio-Canada, histoire-du-quebec.ca)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -249,7 +259,10 @@ Il n'y a aucune plaque ici. Aucun monument. Juste une maison dans une rue tranqu
 - 💡 **Hook:** Construite vers 1775, cette maison en pierre est l'un des plus anciens bâtiments encore debout de Saint-Lambert. Reconnue monument historique en 1974 par le gouvernement du Québec, elle témoigne de l'architecture rurale du Régime français sur les rives du Saint-Laurent.
 - 📖 **Anecdote:** Aussi connue sous le nom de Maison Antoine-Sainte-Marie, elle tire son nom courant de la famille Sharpe qui l'a habitée. Au 18e siècle, les premières familles de Saint-Lambert, les Marsil, Achim et Sainte-Marie, vivaient le long du chemin du Bord-de-l'eau (aujourd'hui Riverside), cultivant des terres concédées par les Jésuites.
 - 📚 **Source:** http://lamemoireduquebec.com/wiki/index.php?title=Saint-Lambert_(municipalit%C3%A9_de_ville)
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (789 Rue Riverside, Saint-Lambert)
+  - Faits: Construite vers 1775 ✅ Confirmé (patrimoine-culturel.gouv.qc.ca, Montreal Gazette)
+  - Monument historique 1974 ✅ Confirmé
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -307,7 +320,10 @@ Cette rue, Riverside Drive, c'est un vrai corridor du patrimoine. Si tu continue
 - 💡 **Hook:** Construite en 1936-1938 selon les plans de Gaston Gagnier, cette église est l'une des premières au Québec à s'inspirer du style de Dom Paul Bellot, un moine-architecte français qui a révolutionné l'architecture religieuse québécoise. Sa façade en pierre taillée multicolore et sa rosace sont remarquables.
 - 📖 **Anecdote:** L'église précédente, en brique, a été détruite par un incendie en 1936. La communauté catholique a décidé de reconstruire immédiatement au même endroit. Avant cela, les catholiques de Saint-Lambert avaient dû se battre pendant des décennies pour obtenir leur propre paroisse, utilisant même une maison privée comme chapelle en 1886. La paroisse n'a été officiellement érigée qu'en 1894.
 - 📚 **Source:** https://www.patrimoine-culturel.gouv.qc.ca/detail.do?methode=consulter&id=125915&type=bien
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ⚠️ Pointe vers 41 Avenue Lorne (proche de l'église, acceptable)
+  - Faits: 1936-1938 par Gaston Gagnier ✅ Confirmé (patrimoine-culturel.gouv.qc.ca)
+  - Influence Dom Paul Bellot ✅ Confirmé
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -365,7 +381,11 @@ Petit conseil : si tu passes pendant les heures de messe ou lors des Journées d
 - 💡 **Hook:** Inauguré en 1922 par le général Arthur Currie, commandant du Corps expéditionnaire canadien durant la Première Guerre mondiale, ce cénotaphe honore les 60 citoyens de Saint-Lambert tombés au combat. C'est l'un des plus anciens monuments aux morts de la Rive-Sud.
 - 📖 **Anecdote:** En mars 2007, la plaque de bronze originale, énumérant les noms des 132 soldats morts lors des deux guerres mondiales, a été volée, probablement pour sa valeur en métal. Une nouvelle plaque de granit a été inaugurée le 8 novembre 2007, rendant les noms gravés impossibles à voler cette fois. Le général Currie avait personnellement financé la construction du monument.
 - 📚 **Source:** https://www.veterans.gc.ca/en/remembrance/memorials/canada/saint-lambert-ww1-memorial
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ⚠️ À RÉVISER
+  - GPS: ✅ Vérifié (Memorial "The Men of St-Lambert", rue Green)
+  - Faits: 1922 par général Currie ✅ Confirmé (veterans.gc.ca, lamemoireduquebec.com)
+  - ⚠️ "Financement personnel par Currie" NON VÉRIFIÉ - aucune source ne confirme ce fait
+  - ⚠️ Vol de la plaque bronze en 2007: NON VÉRIFIÉ
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -425,7 +445,10 @@ Regarde les noms. Des voisins, des fils, des pères. Saint-Lambert était une pe
 - 💡 **Hook:** Construite vers 1750 pour la famille Melville, cette maison en pierre est l'une des trois résidences de Saint-Lambert classées monument historique en 1974. Elle témoigne de l'architecture domestique de la Nouvelle-France sur la rive sud du Saint-Laurent.
 - 📖 **Anecdote:** Acquise par Alexis Marsil en 1842, cette maison est restée dans la famille Marsil/Auclair pendant des générations. Elle fait partie du trio de maisons patrimoniales classées de Riverside Drive (avec la Maison Marsil et la Maison Sharpe), faisant de cette rue un véritable corridor du patrimoine lambertois.
 - 📚 **Source:** http://lamemoireduquebec.com/wiki/index.php?title=Saint-Lambert_(municipalit%C3%A9_de_ville)
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (405 Rue Riverside, Saint-Lambert)
+  - Faits: Vers 1750, famille Melville, Marsil 1842 ✅ Confirmé (lamemoireduquebec.com)
+  - Monument historique 1974 ✅ Confirmé
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -483,7 +506,10 @@ C'est une résidence privée aujourd'hui, alors admire-la depuis le trottoir. Et
 - 💡 **Hook:** Le plus vieil édifice non résidentiel de Saint-Lambert, construit en 1884-1886 comme première église anglicane. Devenu loge maçonnique en 1920, puis acheté par la ville en 1998, il est un témoin rare de la communauté anglo-protestante fondatrice de Saint-Lambert.
 - 📖 **Anecdote:** Quand la communauté anglicane a construit une nouvelle église plus grande en 1928, l'ancien bâtiment est devenu un temple maçonnique pendant près de 70 ans. En 2009, le maire a voulu le démolir, mais la Société d'histoire Mouillepied s'y est farouchement opposée. Le bâtiment a été cité monument historique en 2000, mais son statut a été abrogé en 2021, laissant son avenir incertain.
 - 📚 **Source:** https://www.patrimoine-culturel.gouv.qc.ca/rpcq/detail.do?methode=consulter&id=93517&type=bien
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (9,11 Avenue Lorne, Saint-Lambert)
+  - Faits: 1884-1886 ✅ Confirmé (patrimoine-culturel.gouv.qc.ca, La Presse)
+  - Projet démolition 2009, citation 2000: ✅ Confirmé
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -541,7 +567,10 @@ Regarde l'architecture néo-gothique victorienne, les fenêtres en ogive, la pie
 - 💡 **Hook:** Ancienne usine de stylos-plumes Waterman, installée à Saint-Lambert en 1908. Ce bâtiment industriel emblématique a été converti en lofts résidentiels et témoigne du passé manufacturier de la ville, lié à sa position stratégique au carrefour du pont Victoria et du chemin de fer.
 - 📖 **Anecdote:** La compagnie Waterman, fondée à New York en 1884, a choisi Saint-Lambert pour ses terrains abordables et sa connexion ferroviaire directe avec New York via le pont Victoria. L'usine produisait les fameux stylos-plumes Waterman, alors un objet de luxe, pour tout le marché canadien. La conversion en lofts illustre la transformation de Saint-Lambert de ville industrielle en banlieue résidentielle cossue.
 - 📚 **Source:** https://en.wikipedia.org/wiki/Saint-Lambert,_Mont%C3%A9r%C3%A9gie
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ⚠️ À RÉVISER
+  - GPS: ⚠️ Pointe vers 20 rue Waterman mais script dit 2625 rue Waterman - VÉRIFIER ADRESSE
+  - Faits: Installation 1908 ✅ Confirmé (Flickr historical note)
+  - Waterman fondée à New York en 1884 ✅ Confirmé (Wikipedia, invent.org)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -599,7 +628,10 @@ La rue porte encore le nom Waterman. Parfois, les noms de rues sont les derniers
 - 💡 **Hook:** Fondée en 1896, la St. Lambert Academy est le symbole de la communauté anglo-protestante qui a façonné Saint-Lambert. Conçue par le grand architecte montréalais Robert Findlay, puis agrandie par la firme Ross & Macdonald en 1924 dans un style néo-Tudor, elle est un joyau architectural méconnu.
 - 📖 **Anecdote:** La firme Ross & Macdonald, qui a conçu l'agrandissement de 1924, est la même qui a dessiné la Gare Windsor, le château Frontenac (aile) et l'hôtel Mont-Royal à Montréal. Que cette firme prestigieuse ait travaillé sur une école de banlieue témoigne de l'ambition et de la richesse de la communauté anglophone de Saint-Lambert au début du 20e siècle.
 - 📚 **Source:** https://www.patrimoine-culturel.gouv.qc.ca/rpcq/detail.do?methode=consulter&id=216346&type=bien
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (81 Rue Green, proche de l'école)
+  - Faits: 1896 par Robert Findlay ✅ Confirmé (patrimoine-culturel.gouv.qc.ca, dictionaryofarchitectsincanada.org)
+  - Agrandissement 1924 par Ross & Macdonald ✅ Confirmé
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -657,7 +689,11 @@ C'est encore une école active aujourd'hui, alors reste à l'extérieur. Mais pr
 - 💡 **Hook:** Fondé en 1898 par les Sœurs des Saints Noms de Jésus et de Marie, ce collège privé est une institution phare de Saint-Lambert depuis plus de 125 ans. Il incarne la dualité linguistique et religieuse qui a marqué l'histoire de la ville.
 - 📖 **Anecdote:** Le collège porte le nom de l'abbé Flavien Durocher, figure importante de l'Église catholique au 19e siècle. Initialement réservé aux filles, il est devenu mixte au fil du temps. Situé sur Riverside Drive, l'institution est entourée de maisons patrimoniales, créant un paysage où l'éducation et le patrimoine se côtoient depuis plus d'un siècle.
 - 📚 **Source:** http://lamemoireduquebec.com/wiki/index.php?title=Saint-Lambert_(municipalit%C3%A9_de_ville)
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ❌ REJETÉ
+  - GPS: ✅ Vérifié (Rue Riverside, Saint-Lambert)
+  - Faits: ❌ ERREUR MAJEURE - Le script dit "fondé en 1898" mais Wikipedia et le site officiel (cdsl.qc.ca) indiquent 1910!
+  - Le script mentionne "125 ans d'éducation" ce qui est faux si fondé en 1910 (116 ans en 2026)
+  - Sœurs des Saints Noms de Jésus et de Marie ✅ Confirmé
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -715,7 +751,10 @@ C'est une école active, alors admire le campus depuis Riverside.
 - 💡 **Hook:** Cœur administratif de la ville depuis sa création, l'hôtel de ville se trouve dans le noyau villageois historique de Saint-Lambert, à l'intersection des rues Argyle et Victoria, le « Village » lambertois fondé au 19e siècle.
 - 📖 **Anecdote:** Saint-Lambert est devenue municipalité le 1er juillet 1857, sous le premier maire Louis Bétournay. La ville a vécu une fusion forcée avec Longueuil en 2002, puis un référendum de défusion réussi en 2004, avec 41,4 % des électeurs inscrits votant pour la séparation. Elle est redevenue indépendante le 1er janvier 2006, un acte de résistance civique rare au Québec. Sa devise est « Maximus in minimis », se montrer grand jusque dans les détails infimes.
 - 📚 **Source:** https://www.saint-lambert.ca/fr/profil-de-la-municipalite-2
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (55 Avenue Argyle, Saint-Lambert)
+  - Faits: 1857 premier maire Louis Bétournay ✅ Confirmé (Wikipedia fr/en)
+  - Défusion 2006 après fusion 2002 ✅ Confirmé
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -768,3 +807,142 @@ Après ta visite, fais quelques pas sur la rue Victoria. Les boutiques, les caf�
 
 **Total:** 13 POIs trouvés
 **Fichier:** content/saint-lambert/scout-histoire.md
+
+---
+
+## 📋 Rapport de vérification
+
+**Date:** 2026-02-25
+**Vérificateur:** POI Checker (cron job)
+
+### Résumé
+| Verdict | Nombre |
+|---------|--------|
+| ✅ APPROUVÉ | 10 |
+| ⚠️ À RÉVISER | 2 |
+| ❌ REJETÉ | 1 |
+| ❓ NON VÉRIFIÉ | 0 |
+
+### Détails par POI
+
+#### POI 1: Maison Marsil
+- **GPS:** ✅ Vérifié (Rue Riverside, Saint-Lambert)
+- **Faits vérifiés:**
+  - "Construite vers 1750" → ✅ Compatible avec "seconde moitié du 18e siècle" (source: patrimoine-culturel.gouv.qc.ca)
+  - "Reconnue monument historique en 1974" → ✅ Confirmé
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 2: Écluse de Saint-Lambert
+- **GPS:** ✅ Vérifié (Plateforme d'observation de l'écluse de Saint-Lambert)
+- **Faits vérifiés:**
+  - "Inaugurée en 1959 par Élisabeth II et Eisenhower" → ✅ Confirmé (source: Radio-Canada, Le Monde, grandquebec.com)
+  - "Première des sept écluses" → ✅ Confirmé
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 3: Pont Victoria
+- **GPS:** ✅ Vérifié (Pont Victoria)
+- **Faits vérifiés:**
+  - "Inauguré en 1860 par le Prince de Galles" → ✅ Confirmé le 25-26 août 1860 (source: patrimoine-culturel.gouv.qc.ca, ville.montreal.qc.ca)
+  - "Plus long pont au monde à l'époque" → ✅ Confirmé (plus long pont ferroviaire)
+  - "3 000 ouvriers" → ✅ Confirmé
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 4: Résidence de Pierre Laporte
+- **GPS:** ✅ Vérifié (725 Rue Robitaille, Saint-Lambert)
+- **Faits vérifiés:**
+  - "Enlevé le 10 octobre 1970" → ✅ Confirmé (source: Wikipedia, Radio-Canada, histoire-du-quebec.ca)
+  - "Cellule Chénier du FLQ" → ✅ Confirmé
+  - "725 rue Robitaille" → ✅ Confirmé
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 5: Maison Sharpe
+- **GPS:** ✅ Vérifié (789 Rue Riverside, Saint-Lambert)
+- **Faits vérifiés:**
+  - "Construite vers 1775" → ✅ Confirmé (source: patrimoine-culturel.gouv.qc.ca, Montreal Gazette)
+  - "Monument historique 1974" → ✅ Confirmé
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 6: Église catholique Saint-Lambert
+- **GPS:** ⚠️ Pointe vers 41 Avenue Lorne (proche, acceptable)
+- **Faits vérifiés:**
+  - "1936-1938 par Gaston Gagnier" → ✅ Confirmé (source: patrimoine-culturel.gouv.qc.ca)
+  - "Influence Dom Paul Bellot" → ✅ Confirmé (source: ville.montreal.qc.ca)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 7: Cénotaphe de Saint-Lambert
+- **GPS:** ✅ Vérifié (Memorial "The Men of St-Lambert", rue Green)
+- **Faits vérifiés:**
+  - "Inauguré en 1922 par le général Arthur Currie" → ✅ Confirmé (source: veterans.gc.ca, lamemoireduquebec.com)
+  - "60 citoyens de Saint-Lambert tombés" → ✅ Confirmé
+- **Faits NON VÉRIFIÉS:**
+  - ⚠️ "Il l'a personnellement financé" → Aucune source ne confirme ce fait
+  - ⚠️ "Plaque de bronze volée en mars 2007" → NON VÉRIFIÉ
+- **Verdict:** ⚠️ À RÉVISER (retirer l'affirmation sur le financement personnel par Currie)
+
+#### POI 8: Maison Auclair
+- **GPS:** ✅ Vérifié (405 Rue Riverside, Saint-Lambert)
+- **Faits vérifiés:**
+  - "Construite vers 1750 pour la famille Melville" → ✅ Confirmé (source: lamemoireduquebec.com)
+  - "Acquise par Alexis Marsil en 1842" → ✅ Confirmé
+  - "Monument historique 1974" → ✅ Confirmé
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 9: Ancienne église anglicane St. Barnabas
+- **GPS:** ✅ Vérifié (9,11 Avenue Lorne, Saint-Lambert)
+- **Faits vérifiés:**
+  - "1884-1886" → ✅ Confirmé (source: patrimoine-culturel.gouv.qc.ca)
+  - "Projet de démolition en 2009" → ✅ Confirmé (source: La Presse)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 10: Usine Waterman
+- **GPS:** ⚠️ Décalage - Pointe vers 20 rue Waterman, script indique 2625 rue Waterman
+- **Faits vérifiés:**
+  - "Installée à Saint-Lambert en 1908" → ✅ Confirmé (source: Flickr historical note)
+  - "Fondée à New York en 1884" → ✅ Confirmé (source: Wikipedia, invent.org)
+- **Verdict:** ⚠️ À RÉVISER (vérifier et corriger l'adresse GPS)
+
+#### POI 11: St. Lambert Academy
+- **GPS:** ✅ Vérifié (81 Rue Green, proche de l'école)
+- **Faits vérifiés:**
+  - "Fondée en 1896" → ✅ Confirmé (source: chamblycounty.com)
+  - "Robert Findlay architecte" → ✅ Confirmé (source: dictionaryofarchitectsincanada.org)
+  - "Agrandissement 1924 par Ross & Macdonald" → ✅ Confirmé (source: patrimoine-culturel.gouv.qc.ca)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 12: Collège Durocher Saint-Lambert
+- **GPS:** ✅ Vérifié (Rue Riverside, Saint-Lambert)
+- **Faits vérifiés:**
+  - ❌ "Fondé en 1898" → FAUX! Le site officiel (cdsl.qc.ca) et Wikipedia indiquent 1910
+  - ❌ "125 ans d'éducation" → FAUX si fondé en 1910 (116 ans en 2026)
+  - "Sœurs des Saints Noms de Jésus et de Marie" → ✅ Confirmé
+- **Verdict:** ❌ REJETÉ (erreur factuelle majeure sur la date de fondation)
+
+#### POI 13: Hôtel de Ville de Saint-Lambert
+- **GPS:** ✅ Vérifié (55 Avenue Argyle, Saint-Lambert)
+- **Faits vérifiés:**
+  - "Créée le 1er juillet 1857" → ✅ Confirmé (source: Wikipedia fr/en)
+  - "Premier maire Louis Bétournay" → ✅ Confirmé
+  - "Défusion en 2006" → ✅ Confirmé
+- **Verdict:** ✅ APPROUVÉ
+
+### Sources consultées
+- patrimoine-culturel.gouv.qc.ca (Répertoire du patrimoine culturel du Québec)
+- veterans.gc.ca (Anciens Combattants Canada)
+- Wikipedia (fr/en)
+- Radio-Canada / ici.radio-canada.ca
+- Le Monde (archives 1959)
+- lamemoireduquebec.com
+- Montreal Gazette
+- La Presse
+- cdsl.qc.ca (site officiel du Collège Durocher)
+- dictionaryofarchitectsincanada.org
+- ville.montreal.qc.ca
+- chamblycounty.com
+
+### Corrections requises
+
+**POI 7 (Cénotaphe):** Retirer l'affirmation "Il l'a personnellement financé" du script audio. Vérifier l'anecdote sur le vol de la plaque en 2007.
+
+**POI 10 (Usine Waterman):** Vérifier et corriger les coordonnées GPS. L'adresse "2625 rue Waterman" ne correspond pas au point GPS fourni (qui pointe vers le 20 rue Waterman).
+
+**POI 12 (Collège Durocher):** Corriger la date de fondation de 1898 à 1910. Mettre à jour "125 ans" à "plus de 115 ans" ou retirer cette mention.

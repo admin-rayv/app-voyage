@@ -35,13 +35,26 @@ python3 scripts/geocode.py "{ville}, {province}, {pays}"
 
 Le script retourne les coordonnées exactes. Avec ville + province + pays, le résultat est non-ambigu.
 
-Ensuite, vérifier si la ville existe déjà dans Supabase:
+### 0.5 Vérifier les POIs existants (ÉVITER LES DOUBLONS!)
+
+⚠️ **ÉTAPE OBLIGATOIRE** — Avant de proposer des POIs, vérifie ce qui existe déjà dans Supabase:
+
 ```bash
-curl -s "https://lfwnpyttyoefqvhfqajb.supabase.co/rest/v1/cities?slug=eq.{slug_ville}&select=id,name,center_lat,center_lng" \
-  -H "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmd25weXR0eW9lZnF2aGZxYWpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMDc2NTAsImV4cCI6MjA4Njg4MzY1MH0.J2kmSaIvxhkqGucy9C4ZwbokDS2hU7uXlb4kE8Ryao"
+python3 scripts/existing_pois.py "{ville-slug}" --category {catégorie}
 ```
-- Si trouvée → utiliser son `city_id` dans le header du fichier de sortie
-- Si pas trouvée → noter `City ID: À CRÉER` et inclure les infos nécessaires pour le seed (nom FR/EN, coordonnées centre, pays, région, timezone)
+
+Exemple:
+```bash
+python3 scripts/existing_pois.py "saint-lambert" --category histoire
+```
+
+Le script affiche:
+- La liste des POIs déjà en BD pour cette ville/catégorie
+- Un avertissement de ne PAS reproposer ces POIs
+
+**Règle absolue:** Si un POI existe déjà (même nom ou même lieu), **NE PAS le proposer** dans ta recherche. Trouve des POIs DIFFÉRENTS.
+
+Si la ville n'existe pas encore → le script l'indiquera, et tu peux proposer n'importe quel POI.
 
 ### 1. Recherche web
 

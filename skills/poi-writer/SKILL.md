@@ -148,32 +148,25 @@ Ajouter les 3 scripts **juste après** le bloc JSON `🗄️ Données BD`:
 
 **Ne pas modifier** le reste du fichier (les données du scout restent intactes).
 
-### 4. Ajouter les données script BD (3 langues)
+### 4. Ajouter les données script BD (3 rows, 1 par langue)
 
-Après les scripts, ajouter un bloc JSON avec les **3 langues** prêtes pour insertion:
+La table `scripts` a **1 row par langue** (contrainte UNIQUE sur point_id + language).
+Le `word_count` est **auto-calculé** par Postgres, ne pas l'inclure.
+
+Après les scripts, ajouter un bloc JSON **array de 3 objets** prêts pour INSERT:
 
 ```markdown
-### 🗄️ Script BD
+### 🗄️ Scripts BD
 ```json
-{
-  "fr": {
-    "content": "{script français, sur une seule ligne, avec \\n pour les sauts}",
-    "word_count": {nombre_mots_fr}
-  },
-  "en": {
-    "content": "{script anglais, sur une seule ligne, avec \\n pour les sauts}",
-    "word_count": {nombre_mots_en}
-  },
-  "es": {
-    "content": "{script espagnol, sur une seule ligne, avec \\n pour les sauts}",
-    "word_count": {nombre_mots_es}
-  },
-  "voice_id": null,
-  "voice_settings": {"stability": 0.5, "clarity": 0.75},
-  "persona": "marco"
-}
+[
+  {"language": "fr", "content": "{script français, \\n pour sauts}", "persona": "marco"},
+  {"language": "en", "content": "{script anglais, \\n pour sauts}", "persona": "marco"},
+  {"language": "es", "content": "{script espagnol, \\n pour sauts}", "persona": "marco"}
+]
 ```
 ```
+
+**Note:** `voice_id` et `voice_settings` seront ajoutés par le poi-pusher selon la config `voice_config`.
 
 ### 5. Push Git — OBLIGATOIRE
 
@@ -241,25 +234,13 @@ Mira bien la fachada, cada piedra tiene un tamaño diferente. Ese es el encanto 
 
 Para una buena foto, retrocede un poco hacia la acera de Riverside.
 
-### 🗄️ Script BD
+### 🗄️ Scripts BD
 ```json
-{
-  "fr": {
-    "content": "Cette maison en pierre devant toi? Elle a l'air tranquille, mais elle cache 275 ans d'histoires.\n\nC'est la Maison Marsil, la plus ancienne de Saint-Lambert...",
-    "word_count": 156
-  },
-  "en": {
-    "content": "See this stone house in front of you? It looks peaceful, but it's hiding 275 years of stories.\n\nThis is Maison Marsil, the oldest house in Saint-Lambert...",
-    "word_count": 152
-  },
-  "es": {
-    "content": "¿Ves esta casa de piedra frente a ti? Parece tranquila, pero esconde 275 años de historias.\n\nEsta es la Maison Marsil, la casa más antigua de Saint-Lambert...",
-    "word_count": 158
-  },
-  "voice_id": null,
-  "voice_settings": {"stability": 0.5, "clarity": 0.75},
-  "persona": "marco"
-}
+[
+  {"language": "fr", "content": "Cette maison en pierre devant toi? Elle a l'air tranquille, mais elle cache 275 ans d'histoires.\n\nC'est la Maison Marsil, la plus ancienne de Saint-Lambert...", "persona": "marco"},
+  {"language": "en", "content": "See this stone house in front of you? It looks peaceful, but it's hiding 275 years of stories.\n\nThis is Maison Marsil, the oldest house in Saint-Lambert...", "persona": "marco"},
+  {"language": "es", "content": "¿Ves esta casa de piedra frente a ti? Parece tranquila, pero esconde 275 años de historias.\n\nEsta es la Maison Marsil, la casa más antigua de Saint-Lambert...", "persona": "marco"}
+]
 ```
 ```
 

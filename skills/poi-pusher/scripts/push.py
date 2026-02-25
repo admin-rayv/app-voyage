@@ -76,6 +76,76 @@ def lookup_city(slug):
     return None, None
 
 
+def create_city(folder_slug, pois):
+    """Create a new city from folder slug and POI data"""
+    # Parse folder slug: city-province-country (e.g., saint-lambert-quebec-canada)
+    parts = folder_slug.split('-')
+    
+    # Try to identify country (last part)
+    country = 'CA'  # Default
+    if parts[-1] == 'canada':
+        country = 'CA'
+        parts = parts[:-1]
+    elif parts[-1] == 'france':
+        country = 'FR'
+        parts = parts[:-1]
+    elif parts[-1] == 'usa' or parts[-1] == 'us':
+        country = 'US'
+        parts = parts[:-1]
+    
+    # Try to identify province/region
+    region = None
+    province_map = {
+        'quebec': 'QC', 'qc': 'QC',
+        'ontario': 'ON', 'on': 'ON',
+        'british-columbia': 'BC', 'bc': 'BC',
+        'alberta': 'AB', 'ab': 'AB',
+    }
+    for i, part in enumerate(parts):
+        if part in province_map:
+            region = province_map[part]
+            parts = parts[:i]
+            break
+    
+    # Remaining parts are the city name
+    city_slug = '-'.join(parts)
+    city_name_raw = ' '.join(parts).title().replace('-', ' ')
+    
+    # Calculate center from POIs
+    lats = []
+    lngs = []
+    for poi in pois:
+        if poi.get('db_data'):
+            lat = poi['db_data'].get('lat')
+            lng = poi['db_data'].get('lng')
+            if lat and lng:
+                lats.append(lat)
+                lngs.append(lng)
+    
+    center_lat = sum(lats) / len(lats) if lats else 0
+    center_lng = sum(lngs) / len(lngs) if lngs else 0
+    
+    city_data = {
+        "slug": city_slug,
+        "name": {"fr": city_name_raw, "en": city_name_raw},
+        "country": country,
+        "region": region,
+        "center_lat": round(center_lat, 6),
+        "center_lng": round(center_lng, 6),
+        "timezone": "America/Toronto" if country == 'CA' else "UTC",
+        "available_languages": ["fr", "en", "es"]
+    }
+    
+    print(f"🏙️ Creating city: {city_name_raw} ({city_slug})")
+    print(f"   Country: {country}, Region: {region}")
+    print(f"   Center: {center_lat:.4f}, {center_lng:.4f}")
+    
+    result = supabase_request("POST", "cities", city_data)
+    if result and len(result) > 0:
+        return result[0]['id'], city_name_raw
+    return None, None
+
+
 def parse_scout_file(filepath):
     """Parse a scout file and extract POIs and scripts"""
     with open(filepath, 'r', encoding='utf-8') as f:
@@ -210,17 +280,29 @@ def main():
         print("❌ Could not extract city slug from path")
         return
     
-    city_id, city_name = lookup_city(city_slug)
-    if not city_id:
-        print(f"❌ City not found: {city_slug}")
-        print("Create the city first in Supabase.")
-        return
-    
-    print(f"📍 City: {city_name} ({city_id})")
-    
-    # Parse the file
+    # Parse the file first (need POIs to calculate city center)
     pois = parse_scout_file(filepath)
     print(f"📄 Found {len(pois)} POIs")
+    
+    city_id, city_name = lookup_city(city_slug)
+    city_created = False
+    if not city_id:
+        print(f"⚠️ City not found: {city_slug}")
+        if args.dry_run:
+            print("   (would create city automatically)")
+            # Fake city for dry run
+            city_id = "dry-run-city-id"
+            city_name = city_slug.split('-')[0].title()
+        else:
+            print("Creating city automatically...")
+            city_id, city_name = create_city(city_slug, pois)
+            if not city_id:
+                print("❌ Failed to create city")
+                return
+            print(f"✅ City created: {city_name} ({city_id})")
+            city_created = True
+    else:
+        print(f"📍 City: {city_name} ({city_id})")
     
     # Check all approved
     not_approved = [p for p in pois if not p.get('approved')]

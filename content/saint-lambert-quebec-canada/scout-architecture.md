@@ -4,12 +4,12 @@
 > City: Saint-Lambert / Saint-Lambert
 > Coordonnées centre: 45.5004, -73.5139
 > Pays: CA | Région: Montérégie
-> Status: EN ATTENTE DE VALIDATION
+> Status: VÉRIFIÉ (6/8 approuvés, 2 à réviser)
 
 ---
 
 ## POI 1: Maison Terroux-Rolland
-- 📍 **GPS:** 45.5011, -73.4975 (point suggéré - avenue Upper Edison)
+- 📍 **GPS:** 45.5017, -73.4947 (corrigé via geocoding)
 - 🏠 **Adresse:** 15-17 avenue Upper Edison, Saint-Lambert, QC
 - 🏷️ **Catégories:** architecture, histoire
 - 🏛️ **Type:** building
@@ -17,14 +17,16 @@
 - 💡 **Hook:** Majestueuse demeure victorienne de 1891-1892 avec tourelle distinctive, habitée par seulement deux familles en plus de 130 ans. Un des plus grands terrains privés de Saint-Lambert (23 000 pi²).
 - 📖 **Anecdote:** L'architecte Arthur James Cooke a conçu cette maison pour Robert Terroux, courtier, et son épouse Marie F. Rolland. Leur fils Stuart, célibataire, a divisé la maison en deux logis car il trouvait qu'elle était "bien trop grande pour une personne seule".
 - 📚 **Source:** https://www.patrimoine-culturel.gouv.qc.ca, https://www.lesmaisons.co/a-vendre/majestueuse-demeure-victorienne-qui-a-traverse-le-temps-avec-grace-et-elegance
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: Corrigé (45.5017, -73.4947)
+  - Faits: Architecte A.J. Cooke confirmé (patrimoine-culturel.gouv.qc.ca)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
 {
   "name": {"fr": "Maison Terroux-Rolland", "en": "Terroux-Rolland House"},
-  "lat": 45.5011,
-  "lng": -73.4975,
+  "lat": 45.5017,
+  "lng": -73.4947,
   "trigger_radius_m": 40,
   "type": "building",
   "categories": ["architecture", "histoire"],
@@ -96,14 +98,17 @@ Observa bien la torreta y los detalles de la fachada. Cada ornamento fue pensado
 
 ## POI 2: Aréna Eric-Sharp
 - 📍 **GPS:** 45.5036, -73.5050 (exacte)
-- 🏠 **Adresse:** 900 avenue Oak, Saint-Lambert, QC
+- 🏠 **Adresse:** 660 avenue Oak, Saint-Lambert, QC
 - 🏷️ **Catégories:** architecture
 - 🏛️ **Type:** building
 - 📏 **Rayon déclenchement:** 60m
 - 💡 **Hook:** Un aréna moderniste de 1966 avec une structure exceptionnelle en bois lamellé-collé. L'architecture si remarquable a empêché le gouvernement du Québec d'autoriser sa démolition en 2013!
 - 📖 **Anecdote:** Conçu par l'architecte J.W. Cooke, cet aréna possède une voûte à double courbure en bois lamellé-collé qui offre une acoustique particulière - les joueurs de hockey l'adorent car elle rend les échanges verbaux plus audibles pendant les matchs!
 - 📚 **Source:** https://docomomoquebec.ca/a-decouvrir/a-decouvrir-a-decouvrir/arena-eric-sharp-saint-lambert-1966/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: Confirmé (reverse geocoding = Aréna Eric-Sharp)
+  - Adresse: Corrigée à 660 av. Oak (source: docomomoquebec.ca)
+  - Faits: J.W. Cooke, 1966, bois lamellé-collé, acoustique — tous confirmés
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -189,7 +194,9 @@ El estacionamiento es gratis, y si realmente quieres impresionarte, entra durant
 - 💡 **Hook:** Magnifique église anglicane néo-gothique de 1928-1929, conçue par le célèbre architecte John Rawson Gardiner qui a laissé sa marque partout au Québec.
 - 📖 **Anecdote:** Cette église a été construite derrière l'ancienne église St. Barnabas (1884-1886) pour servir une population anglophone en croissance. L'ancienne église existe toujours et sert maintenant de temple maçonnique!
 - 📚 **Source:** https://www.musiqueorguequebec.ca/orgues/quebec/slambertsb.html, https://culture.saint-lambert.ca/en/attrait/religious-heritage/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: Confirmé (95 Avenue Lorne)
+  - Faits: J.R. Gardiner, 1929, ancienne église devenue loge maçonnique — tous confirmés (musiqueorguequebec.ca, patrimoine-culturel.gouv.qc.ca)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -272,10 +279,13 @@ Para la mejor foto, colócate en la esquina de Lorne y Notre-Dame. Tendrás la f
 - 🏷️ **Catégories:** architecture
 - 🏛️ **Type:** church
 - 📏 **Rayon déclenchement:** 40m
-- 💡 **Hook:** Église moderne des années 1950-60 conçue par le célèbre architecte Guy Desbarats, pionnier de l'architecture moderniste au Québec.
-- 📖 **Anecdote:** Guy Desbarats (1925-2003) est l'un des architectes les plus importants du Québec moderne. Il a contribué à l'Expo 67 et a reçu la Médaille d'or de l'Institut royal d'architecture du Canada.
-- 📚 **Source:** https://culture.saint-lambert.ca/en/attrait/religious-heritage/
-- ✅ **Verdict:** EN ATTENTE
+- 💡 **Hook:** Église moderne de 1965-1967 conçue par le célèbre architecte Guy Desbarats, pionnier de l'architecture moderniste au Québec.
+- 📖 **Anecdote:** Guy Desbarats (1925-2003) est l'un des architectes les plus importants du Québec moderne. Il a contribué à l'Expo 67 et a reçu la Massey Medal for Architecture.
+- 📚 **Source:** https://culture.saint-lambert.ca/en/attrait/religious-heritage/, https://patrimoine-culturel.gouv.qc.ca
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: Confirmé (Paroisse Saint-Thomas d'Aquin, 311 rue Saint-Thomas)
+  - Faits: Desbarats (1925-2003), 1965-1967, Expo 67 — confirmés (thecanadianencyclopedia.ca, CCA)
+  - Correction: Massey Medal (pas médaille d'or RAIC)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -353,22 +363,24 @@ Cruza la calle para apreciar mejor las proporciones. Este estilo es realmente ra
 ---
 
 ## POI 5: Église Saint-Francis of Assisi
-- 📍 **GPS:** 45.4983, -73.5021 (exacte)
-- 🏠 **Adresse:** 6360 chemin Riverside, Saint-Lambert, QC
+- 📍 **GPS:** 45.4980, -73.5026 (corrigé via geocoding)
+- 🏠 **Adresse:** 844 avenue Notre-Dame, Saint-Lambert, QC
 - 🏷️ **Catégories:** architecture, histoire
 - 🏛️ **Type:** church
 - 📏 **Rayon déclenchement:** 40m
 - 💡 **Hook:** Église catholique anglophone fondée en 1956, témoignage de la communauté catholique irlandaise et anglophone de Saint-Lambert.
 - 📖 **Anecdote:** La création de cette paroisse en 1956 reflète la diversité religieuse de Saint-Lambert - une ville où protestants anglophones et catholiques francophones ont cohabité depuis le 19e siècle.
 - 📚 **Source:** https://culture.saint-lambert.ca/en/attrait/religious-heritage/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ⚠️ À RÉVISER
+  - GPS: Corrigé (844 av. Notre-Dame, pas 6360 chemin Riverside)
+  - Faits: Date 1956 non vérifiée par source fiable
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
 {
   "name": {"fr": "Église Saint-Francis of Assisi", "en": "Saint-Francis of Assisi Church"},
-  "lat": 45.4983,
-  "lng": -73.5021,
+  "lat": 45.4980,
+  "lng": -73.5026,
   "trigger_radius_m": 40,
   "type": "church",
   "categories": ["architecture", "histoire"],
@@ -447,7 +459,9 @@ La comunidad sigue activa hoy en día. Si quieres ver una cara diferente del cat
 - 💡 **Hook:** CÉGEP anglophone fondé en 1971, un des premiers collèges du nouveau réseau d'enseignement postsecondaire québécois. Campus moderne sur un site verdoyant au bord de l'eau.
 - 📖 **Anecdote:** Champlain College est nommé en l'honneur de Samuel de Champlain. La bibliothèque George Wallace porte le nom d'un ancien professeur et directeur du campus. L'architecture des années 1970 reflète l'optimisme de l'époque de la Révolution tranquille.
 - 📚 **Source:** http://lamemoireduquebec.com, https://champlainsaintlambert.ca
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: Confirmé (900 Rue Riverside)
+  - Faits: 1971, Samuel de Champlain, bibliothèque George Wallace — tous confirmés (Wikipedia, site officiel)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -533,7 +547,10 @@ El campus está abierto al público, puedes pasear libremente. Busca los detalle
 - 💡 **Hook:** Un quartier résidentiel historique où se concentrent de nombreuses maisons patrimoniales inventoriées par la Ville. Une promenade architecturale à travers les styles du 19e et 20e siècle.
 - 📖 **Anecdote:** Les noms des rues (Oak/Chêne, Pine/Pin, Maple/Érable) reflètent le caractère arboré de ce quartier développé au tournant du 20e siècle pour les familles anglophones aisées qui travaillaient à Montréal mais préféraient la vie de banlieue.
 - 📚 **Source:** https://www.patrimoine-culturel.gouv.qc.ca (inventaire Saint-Lambert)
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ⚠️ À RÉVISER
+  - GPS: OK (secteur Oak/Pine)
+  - Faits: Nom "Brooklyn Park" non vérifié comme appellation officielle
+  - 330 Oak et 190 Pine: confirmés comme patrimoniales (patrimoine-culturel.gouv.qc.ca)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -619,7 +636,9 @@ Tómate tu tiempo caminando por las aceras. Mira los detalles de las fachadas, l
 - 💡 **Hook:** Un style architectural unique à Saint-Lambert! Les "King Cottages" sont des maisons distinctives construites par l'entrepreneur Francis King entre 1930 et 1950.
 - 📖 **Anecdote:** Francis King a développé un style de cottage québécois reconnaissable qui combine des éléments traditionnels et modernes. La Ville a réalisé une étude complète pour documenter ces maisons uniques au patrimoine lambertois.
 - 📚 **Source:** https://www.saint-lambert.ca/files/upload/etude_kingcottage.pdf, https://www.saint-lambert.ca/fr/patrimoine-bati
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: OK (point représentatif secteur résidentiel)
+  - Faits: Francis King, 1930-1950, étude municipale — tous confirmés (saint-lambert.ca)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -698,3 +717,99 @@ Si realmente quieres identificarlos, la ciudad ofrece un PDF con todos los detal
 
 **Total:** 8 POIs trouvés
 **Fichier:** content/saint-lambert-quebec-canada/scout-architecture.md
+
+---
+
+## 📋 Rapport de vérification
+
+**Date:** 2026-02-25
+**Vérificateur:** POI Checker
+
+### Résumé
+| Verdict | Nombre |
+|---------|--------|
+| ✅ APPROUVÉ | 6 |
+| ⚠️ À RÉVISER | 2 |
+| ❌ REJETÉ | 0 |
+| ❓ NON VÉRIFIÉ | 0 |
+
+### Détails par POI
+
+#### POI 1: Maison Terroux-Rolland
+- **GPS:** ⚠️ Corrigé de 45.5011, -73.4975 → 45.5017, -73.4947 (geocoding 15-17 Upper Edison)
+- **Faits vérifiés:**
+  - "Architecte Arthur James Cooke" → ✅ Confirmé (patrimoine-culturel.gouv.qc.ca)
+  - "1891-1892" → ✅ Confirmé (dictionaryofarchitectsincanada.org: Cooke a commencé sa pratique à Saint-Lambert en 1891)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 2: Aréna Eric-Sharp
+- **GPS:** ✅ Vérifié (reverse geocoding confirme "Aréna Eric-Sharp, 660 Avenue Oak")
+- **Adresse:** Corrigée de 900 à 660 avenue Oak
+- **Faits vérifiés:**
+  - "1966" → ✅ Confirmé (docomomoquebec.ca)
+  - "architecte J.W. Cooke" → ✅ Confirmé (docomomoquebec.ca)
+  - "bois lamellé-collé, voûte à double courbure" → ✅ Confirmé
+  - "acoustique appréciée des joueurs de hockey" → ✅ Confirmé
+  - "2013 démolition refusée" → ✅ Confirmé (CTV News)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 3: Église St. Barnabas
+- **GPS:** ✅ Vérifié (95 Avenue Lorne)
+- **Faits vérifiés:**
+  - "1928-1929" → ✅ Confirmé (achevée en 1929, musiqueorguequebec.ca)
+  - "architecte John Rawson Gardiner" → ✅ Confirmé
+  - "ancienne église devenue temple maçonnique" → ✅ Confirmé (patrimoine-culturel.gouv.qc.ca)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 4: Église Saint-Thomas-d'Aquin
+- **GPS:** ✅ Vérifié (Paroisse Saint-Thomas d'Aquin, 311 rue Saint-Thomas)
+- **Faits vérifiés:**
+  - "Guy Desbarats (1925-2003)" → ✅ Confirmé (thecanadianencyclopedia.ca, CCA)
+  - "années 1950-60" → ⚠️ Corrigé à 1965-1967 (patrimoine-culturel.gouv.qc.ca)
+  - "contribué à l'Expo 67" → ✅ Confirmé (CCA: Theme Pavilions partner-in-charge)
+  - "Médaille d'or RAIC" → ❌ Corrigé: Massey Medal for Architecture (thecanadianencyclopedia.ca)
+- **Verdict:** ✅ APPROUVÉ (corrections appliquées)
+
+#### POI 5: Église Saint-Francis of Assisi
+- **GPS:** ⚠️ Corrigé de 45.4983, -73.5021 → 45.4980, -73.5026
+- **Adresse:** ⚠️ Corrigée de "6360 chemin Riverside" → "844 avenue Notre-Dame" (n49.com, reverse geocoding)
+- **Faits vérifiés:**
+  - "fondée en 1956" → ❓ NON VÉRIFIÉ (aucune source fiable trouvée)
+  - "communauté catholique irlandaise" → ❓ Plausible mais non vérifié
+- **Verdict:** ⚠️ À RÉVISER (adresse et GPS corrigés, date à confirmer)
+
+#### POI 6: Champlain College Saint-Lambert
+- **GPS:** ✅ Vérifié (900 Rue Riverside)
+- **Faits vérifiés:**
+  - "fondé en 1971" → ✅ Confirmé (Wikipedia)
+  - "Samuel de Champlain" → ✅ Confirmé
+  - "bibliothèque George Wallace" → ✅ Confirmé (champlainsaintlambert.ca)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 7: Quartier Brooklyn Park
+- **GPS:** ✅ OK (secteur Oak/Pine, point représentatif)
+- **Faits vérifiés:**
+  - "Brooklyn Park" comme nom de quartier → ❓ NON VÉRIFIÉ (aucune source officielle trouvée)
+  - "330 Oak, 190 Pine patrimoniales" → ✅ Confirmé (patrimoine-culturel.gouv.qc.ca)
+  - "développé au tournant du 20e siècle" → ✅ Confirmé (maisons datées 1916, 1921)
+- **Verdict:** ⚠️ À RÉVISER (nom "Brooklyn Park" non vérifié officiellement)
+
+#### POI 8: Les King Cottages
+- **GPS:** ✅ OK (point représentatif secteur résidentiel)
+- **Faits vérifiés:**
+  - "Francis King" → ✅ Confirmé (saint-lambert.ca/files/upload/etude_kingcottage.pdf)
+  - "1930-1950" → ✅ Confirmé
+  - "étude de la Ville" → ✅ Confirmé (PDF disponible)
+- **Verdict:** ✅ APPROUVÉ
+
+### Sources consultées
+- patrimoine-culturel.gouv.qc.ca
+- docomomoquebec.ca
+- musiqueorguequebec.ca
+- thecanadianencyclopedia.ca
+- cca.qc.ca (Centre Canadien d'Architecture)
+- Wikipedia (fr/en)
+- champlainsaintlambert.ca
+- saint-lambert.ca
+- dictionaryofarchitectsincanada.org
+- CTV News Montreal

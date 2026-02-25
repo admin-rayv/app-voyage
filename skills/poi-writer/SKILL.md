@@ -51,6 +51,7 @@ Marco, c'est cet ami que tout le monde rêve d'avoir en voyage. Le gars qui conn
 - "y'a" → utiliser "il y a"
 - "t'sais" ou "tu sais" comme tic verbal
 - Joual ou expressions trop familières
+- **Tirets longs (—)** → utiliser des virgules ou des points. Les tirets ne fonctionnent pas bien avec le TTS.
 
 ### Exemples de voix Marco
 

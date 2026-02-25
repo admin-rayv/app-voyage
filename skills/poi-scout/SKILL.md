@@ -91,7 +91,17 @@ Format du fichier:
 **Fichier:** content/{ville}/scout-{catégorie}.md
 ```
 
-Après la sauvegarde, présenter un résumé dans le chat avec la liste des POIs et demander à l'utilisateur lesquels garder. Quand l'utilisateur approuve, mettre à jour le champ **Verdict** de chaque POI (APPROUVÉ ou REJETÉ) dans le fichier.
+### 6. Push Git
+
+Après la sauvegarde du fichier, commit et push automatiquement:
+```bash
+cd ~/.openclaw/workspace/app-voyage
+git add content/
+git commit -m "scout: {ville} — {catégorie} ({n} POIs)" --author="Admin Rayv <admin@rayv.ca>"
+git push origin main
+```
+
+Après le push, présenter un résumé dans le chat avec la liste des POIs et demander à l'utilisateur lesquels garder. Quand l'utilisateur approuve, mettre à jour le champ **Verdict** de chaque POI (APPROUVÉ ou REJETÉ) dans le fichier, puis commit+push à nouveau.
 
 ## Règles
 

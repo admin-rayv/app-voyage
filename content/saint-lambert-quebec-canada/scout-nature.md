@@ -633,14 +633,12 @@ En la avenida Victoria, encontrarás estacionamiento fácilmente. Y probablement
 - 🏛️ **Type:** park
 - 📏 **Rayon déclenchement:** 40m
 - 💡 **Hook:** Petit parc triangulaire historique à l'intersection de la rue Logan, de la rue Riverside et de l'avenue Victoria.
-- 📖 **Anecdote:** Un monument érigé dans ce parc souligne le centenaire de 1936, célébrant le premier chemin de fer canadien reliant Saint-Jean à La Prairie, dont Saint-Lambert était une étape clé.
+- 📖 **Anecdote:** Un monument érigé en 1936 célèbre le centenaire du premier chemin de fer canadien (La Prairie–Saint-Jean, 1836). Bien que la ligne ne passait pas par Saint-Lambert, la ville a voulu honorer ce moment fondateur.
 - 📚 **Source:** https://toponymie.gouv.qc.ca/ct/ToposWeb/fiche.aspx?no_seq=426693, https://www.saint-lambert.ca/fr/bottin-coordonnees/parc-du-centenaire
-- ✅ **Verdict:** ⚠️ À RÉVISER
+- ✅ **Verdict:** ✅ APPROUVÉ
   - GPS: ✅ Vérifié (reverse geocoding: 925 Rue Riverside, Saint-Lambert - proche de l'intersection)
-  - Faits: Monument centenaire 1936 ✅; Premier chemin de fer 1836 ✅
-  - ❌ ERREUR MAJEURE: Script dit "Saint-Lambert était une gare sur cette ligne pionnière" - FAUX!
-  - Le premier chemin de fer (1836) allait de La Prairie à Saint-Jean-sur-Richelieu, PAS via Saint-Lambert
-  - Action: Supprimer/reformuler "Saint-Lambert était une gare sur cette ligne" - c'est factuellement incorrect
+  - Faits: Monument centenaire 1936 ✅; Premier chemin de fer 1836 (La Prairie→Saint-Jean) ✅
+  - Note: Corrigé — la ligne ne passait PAS par Saint-Lambert (reformulé pour refléter que la ville commémore l'événement national)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -663,12 +661,12 @@ En la avenida Victoria, encontrarás estacionamiento fácilmente. Y probablement
 
 ### 🎙️ Script audio (fr)
 > Persona: Marco
-> Mots: 168
-> Durée estimée: 67s
+> Mots: 165
+> Durée estimée: 66s
 
-Ce petit triangle de verdure que tu vois? Il célèbre un moment qui a changé le Canada. En 1836, le premier chemin de fer du pays a été inauguré, reliant La Prairie à Saint-Jean. Et devine où passait ce train historique? Ici même, à Saint-Lambert.
+Ce petit triangle de verdure que tu vois? Il célèbre un moment qui a changé le Canada. En 1836, le premier chemin de fer du pays a été inauguré, reliant La Prairie à Saint-Jean-sur-Richelieu. Seize miles de rails qui ont lancé l'ère ferroviaire canadienne.
 
-Le monument devant toi a été érigé en 1936 pour le centenaire de cet événement. Cent ans de rail canadien. Avant l'automobile, avant les autoroutes, c'est le train qui a connecté ce pays immense. Et Saint-Lambert était une gare sur cette ligne pionnière.
+Le monument devant toi a été érigé en 1936 pour le centenaire de cet événement. Même si cette ligne pionnière ne passait pas par Saint-Lambert, la ville a voulu honorer ce moment fondateur. Avant l'automobile, avant les autoroutes, c'est le train qui a connecté ce pays immense.
 
 Ce qui me fascine, c'est l'intersection où tu te trouves. Trois rues convergent ici: Logan, Riverside, Victoria. C'est comme si le parc était né du carrefour même de l'histoire.
 
@@ -678,12 +676,12 @@ L'histoire, parfois, se cache dans les petits coins triangulaires.
 
 ### 🎙️ Script audio (en)
 > Persona: Marco
-> Mots: 166
-> Durée estimée: 66s
+> Mots: 163
+> Durée estimée: 65s
 
-This little triangle of greenery you see? It celebrates a moment that changed Canada. In 1836, the country's first railway was inaugurated, connecting La Prairie to Saint-Jean. And guess where this historic train passed? Right here, through Saint-Lambert.
+This little triangle of greenery you see? It celebrates a moment that changed Canada. In 1836, the country's first railway was inaugurated, connecting La Prairie to Saint-Jean-sur-Richelieu. Sixteen miles of track that launched the Canadian railway era.
 
-The monument in front of you was erected in 1936 for the centennial of that event. One hundred years of Canadian rail. Before automobiles, before highways, it was the train that connected this vast country. And Saint-Lambert was a station on that pioneering line.
+The monument in front of you was erected in 1936 for the centennial of that event. Even though that pioneering line didn't pass through Saint-Lambert, the town wanted to honor this founding moment. Before automobiles, before highways, it was the train that connected this vast country.
 
 What fascinates me is the intersection where you're standing. Three streets converge here: Logan, Riverside, Victoria. It's as if the park was born from the very crossroads of history.
 
@@ -693,12 +691,12 @@ History sometimes hides in small triangular corners.
 
 ### 🎙️ Script audio (es)
 > Persona: Marco
-> Mots: 174
-> Durée estimée: 70s
+> Mots: 170
+> Durée estimée: 68s
 
-¿Este pequeño triángulo de vegetación que ves? Celebra un momento que cambió Canadá. En 1836, se inauguró el primer ferrocarril del país, conectando La Prairie con Saint-Jean. ¿Y adivina por dónde pasaba este tren histórico? Justo aquí, por Saint-Lambert.
+¿Este pequeño triángulo de vegetación que ves? Celebra un momento que cambió Canadá. En 1836, se inauguró el primer ferrocarril del país, conectando La Prairie con Saint-Jean-sur-Richelieu. Veintiséis kilómetros de vías que lanzaron la era ferroviaria canadiense.
 
-El monumento frente a ti fue erigido en 1936 para el centenario de ese evento. Cien años de ferrocarril canadiense. Antes de los automóviles, antes de las autopistas, fue el tren el que conectó este vasto país. Y Saint-Lambert era una estación en esa línea pionera.
+El monumento frente a ti fue erigido en 1936 para el centenario de ese evento. Aunque esa línea pionera no pasaba por Saint-Lambert, la ciudad quiso honrar este momento fundacional. Antes de los automóviles, antes de las autopistas, fue el tren el que conectó este vasto país.
 
 Lo que me fascina es la intersección donde estás parado. Tres calles convergen aquí: Logan, Riverside, Victoria. Es como si el parque hubiera nacido del mismo cruce de la historia.
 
@@ -709,9 +707,9 @@ La historia a veces se esconde en pequeñas esquinas triangulares.
 ### 🗄️ Scripts BD
 ```json
 [
-  {"language": "fr", "content": "Ce petit triangle de verdure que tu vois? Il célèbre un moment qui a changé le Canada. En 1836, le premier chemin de fer du pays a été inauguré, reliant La Prairie à Saint-Jean. Et devine où passait ce train historique? Ici même, à Saint-Lambert.\n\nLe monument devant toi a été érigé en 1936 pour le centenaire de cet événement. Cent ans de rail canadien. Avant l'automobile, avant les autoroutes, c'est le train qui a connecté ce pays immense. Et Saint-Lambert était une gare sur cette ligne pionnière.\n\nCe qui me fascine, c'est l'intersection où tu te trouves. Trois rues convergent ici: Logan, Riverside, Victoria. C'est comme si le parc était né du carrefour même de l'histoire.\n\nC'est un petit parc, parfait pour une pause pendant ta promenade sur Riverside. Assieds-toi sur un banc, regarde le monument, et pense à ce premier train crachotant de la fumée en 1836.\n\nL'histoire, parfois, se cache dans les petits coins triangulaires.", "persona": "marco"},
-  {"language": "en", "content": "This little triangle of greenery you see? It celebrates a moment that changed Canada. In 1836, the country's first railway was inaugurated, connecting La Prairie to Saint-Jean. And guess where this historic train passed? Right here, through Saint-Lambert.\n\nThe monument in front of you was erected in 1936 for the centennial of that event. One hundred years of Canadian rail. Before automobiles, before highways, it was the train that connected this vast country. And Saint-Lambert was a station on that pioneering line.\n\nWhat fascinates me is the intersection where you're standing. Three streets converge here: Logan, Riverside, Victoria. It's as if the park was born from the very crossroads of history.\n\nIt's a small park, perfect for a break during your walk along Riverside. Sit on a bench, look at the monument, and think about that first train puffing smoke in 1836.\n\nHistory sometimes hides in small triangular corners.", "persona": "marco"},
-  {"language": "es", "content": "¿Este pequeño triángulo de vegetación que ves? Celebra un momento que cambió Canadá. En 1836, se inauguró el primer ferrocarril del país, conectando La Prairie con Saint-Jean. ¿Y adivina por dónde pasaba este tren histórico? Justo aquí, por Saint-Lambert.\n\nEl monumento frente a ti fue erigido en 1936 para el centenario de ese evento. Cien años de ferrocarril canadiense. Antes de los automóviles, antes de las autopistas, fue el tren el que conectó este vasto país. Y Saint-Lambert era una estación en esa línea pionera.\n\nLo que me fascina es la intersección donde estás parado. Tres calles convergen aquí: Logan, Riverside, Victoria. Es como si el parque hubiera nacido del mismo cruce de la historia.\n\nEs un parque pequeño, perfecto para un descanso durante tu paseo por Riverside. Siéntate en un banco, mira el monumento, y piensa en ese primer tren echando humo en 1836.\n\nLa historia a veces se esconde en pequeñas esquinas triangulares.", "persona": "marco"}
+  {"language": "fr", "content": "Ce petit triangle de verdure que tu vois? Il célèbre un moment qui a changé le Canada. En 1836, le premier chemin de fer du pays a été inauguré, reliant La Prairie à Saint-Jean-sur-Richelieu. Seize miles de rails qui ont lancé l'ère ferroviaire canadienne.\n\nLe monument devant toi a été érigé en 1936 pour le centenaire de cet événement. Même si cette ligne pionnière ne passait pas par Saint-Lambert, la ville a voulu honorer ce moment fondateur. Avant l'automobile, avant les autoroutes, c'est le train qui a connecté ce pays immense.\n\nCe qui me fascine, c'est l'intersection où tu te trouves. Trois rues convergent ici: Logan, Riverside, Victoria. C'est comme si le parc était né du carrefour même de l'histoire.\n\nC'est un petit parc, parfait pour une pause pendant ta promenade sur Riverside. Assieds-toi sur un banc, regarde le monument, et pense à ce premier train crachotant de la fumée en 1836.\n\nL'histoire, parfois, se cache dans les petits coins triangulaires.", "persona": "marco"},
+  {"language": "en", "content": "This little triangle of greenery you see? It celebrates a moment that changed Canada. In 1836, the country's first railway was inaugurated, connecting La Prairie to Saint-Jean-sur-Richelieu. Sixteen miles of track that launched the Canadian railway era.\n\nThe monument in front of you was erected in 1936 for the centennial of that event. Even though that pioneering line didn't pass through Saint-Lambert, the town wanted to honor this founding moment. Before automobiles, before highways, it was the train that connected this vast country.\n\nWhat fascinates me is the intersection where you're standing. Three streets converge here: Logan, Riverside, Victoria. It's as if the park was born from the very crossroads of history.\n\nIt's a small park, perfect for a break during your walk along Riverside. Sit on a bench, look at the monument, and think about that first train puffing smoke in 1836.\n\nHistory sometimes hides in small triangular corners.", "persona": "marco"},
+  {"language": "es", "content": "¿Este pequeño triángulo de vegetación que ves? Celebra un momento que cambió Canadá. En 1836, se inauguró el primer ferrocarril del país, conectando La Prairie con Saint-Jean-sur-Richelieu. Veintiséis kilómetros de vías que lanzaron la era ferroviaria canadiense.\n\nEl monumento frente a ti fue erigido en 1936 para el centenario de ese evento. Aunque esa línea pionera no pasaba por Saint-Lambert, la ciudad quiso honrar este momento fundacional. Antes de los automóviles, antes de las autopistas, fue el tren el que conectó este vasto país.\n\nLo que me fascina es la intersección donde estás parado. Tres calles convergen aquí: Logan, Riverside, Victoria. Es como si el parque hubiera nacido del mismo cruce de la historia.\n\nEs un parque pequeño, perfecto para un descanso durante tu paseo por Riverside. Siéntate en un banco, mira el monumento, y piensa en ese primer tren echando humo en 1836.\n\nLa historia a veces se esconde en pequeñas esquinas triangulares.", "persona": "marco"}
 ]
 ```
 

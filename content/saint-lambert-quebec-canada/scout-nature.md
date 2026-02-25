@@ -17,7 +17,10 @@
 - 💡 **Hook:** Le plus grand parc de Saint-Lambert avec 17km de sentiers en bordure du fleuve Saint-Laurent. Vue imprenable sur le centre-ville de Montréal et le pont Victoria.
 - 📖 **Anecdote:** C'est l'un des meilleurs endroits de la Rive-Sud pour observer les feux d'artifice Loto-Québec durant l'été. Le parc a été aménagé sur les terrains adjacents à l'écluse historique de la Voie maritime du Saint-Laurent.
 - 📚 **Source:** https://www.saint-lambert.ca/fr/bottin-coordonnees/parc-de-la-voie-maritime, https://baliseqc.ca/3S/explorer/monteregie/parc-de-la-voie-maritime-saint-lambert-LR0394
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ⚠️ À RÉVISER
+  - GPS: ✅ Vérifié (reverse geocoding: Parc à chiens de Saint-Lambert, secteur Voie maritime)
+  - Faits: "17 kilomètres de sentiers" non vérifié par sources officielles; Pont Victoria 1860 ✅; Voie maritime 1959 ✅
+  - Action: Vérifier/reformuler le chiffre de 17km (piste cyclable régionale vs sentiers du parc)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -103,7 +106,9 @@ Para una buena foto, camina hacia el mirador cerca del agua. Al atardecer, es m�
 - 💡 **Hook:** Parc linéaire aménagé sur l'emprise d'une ancienne voie ferrée, c'est un corridor vert idéal pour la promenade au cœur de la ville.
 - 📖 **Anecdote:** Son nom a été choisi comme l'un des 12 "Toponymes coups de cœur" de la Commission de toponymie du Québec en 2018, car il désigne parfaitement un espace aménagé de verdure traversant la ville.
 - 📚 **Source:** https://toponymie.gouv.qc.ca/ct/ToposWeb/Fiche.aspx?no_seq=431967, https://www.lecourrierdusud.ca/parc-de-coulee-verte-coup-de-coeur-de-commission-de-toponymie-quebec/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (reverse geocoding: Club de Golf St-Lambert, secteur adjacent)
+  - Faits: Toponyme coup de cœur 2018 ✅ (Commission toponymie Québec); Ancienne voie ferrée ✅
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -189,7 +194,9 @@ El parque conecta Lespérance con el camino Tiffin. Perfecto para una caminata l
 - 💡 **Hook:** Plus de 100 parcelles de jardins communautaires où les Lambertois cultivent légumes et fleurs depuis 2019.
 - 📖 **Anecdote:** Rénové en 2019, ce jardin a vu son nombre de parcelles augmenter de 68 à plus de 100 pour répondre à la demande croissante. C'est un lieu de rencontre intergénérationnel où se transmettent les savoirs horticoles.
 - 📚 **Source:** https://www.saint-lambert.ca/fr/agriculture-urbaine, https://desassurances.com/arrondissements/jardins-interieurs-de-st-lambert-les/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (reverse geocoding: 211 Rue Lespérance, Saint-Lambert)
+  - Faits: Plus de 100 parcelles ✅; Rénové en 2019 ✅; De 68 à 100+ parcelles ✅ (saint-lambert.ca)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -275,7 +282,9 @@ El estacionamiento es gratuito justo al lado. Y desde ahí, puedes conectar dire
 - 💡 **Hook:** Parc de 8.8 acres aux espaces verts luxuriants, situé sur le territoire de l'ancienne municipalité de Préville fusionnée en 1969.
 - 📖 **Anecdote:** Ce parc porte le nom de l'ancienne municipalité de Préville, qui a existé de 1948 à 1969 avant sa fusion avec Saint-Lambert. Il témoigne de l'histoire des banlieues de la Rive-Sud.
 - 📚 **Source:** https://toponymie.gouv.qc.ca/ct/ToposWeb/Fiche.aspx?no_seq=307522, https://www.mypacer.com/parks/107467/parc-preville-saint-lambert
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (reverse geocoding: 120 Rue du Poitou, Saint-Lambert)
+  - Faits: 8.8 acres ✅ (mypacer.com); Préville 1948-1969 ✅; Fusion 1969 ✅ (Wikipedia, toponymie.gouv.qc.ca)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -361,7 +370,11 @@ Estaciona en la calle. Y tómate el tiempo de caminar bajo los árboles, algunos
 - 💡 **Hook:** Parc historique de 4.2 acres avec de magnifiques arbres matures, au cœur d'un des plus anciens quartiers de Saint-Lambert.
 - 📖 **Anecdote:** Ce parc tire son nom de l'avenue Alexandra, elle-même nommée en l'honneur de la reine Alexandra, épouse du roi Édouard VII. Le quartier environnant date de l'époque victorienne de Saint-Lambert.
 - 📚 **Source:** https://toponymie.gouv.qc.ca/ct/ToposWeb/fiche.aspx?no_seq=307516, https://www.mypacer.com/parks/114853/parc-alexandra-saint-lambert
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ⚠️ À RÉVISER
+  - GPS: ✅ Vérifié (reverse geocoding: 265 Avenue du Régent, Saint-Lambert)
+  - Faits: 4.2 acres ✅; Reine Alexandra épouse Édouard VII ✅
+  - ⚠️ ERREUR: Script dit "En 2024, ils ont rénové" mais travaux seulement COMMENCÉS en juillet 2024 (pas terminés)
+  - Action: Reformuler en "entreprennent la rénovation" ou supprimer la mention
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -447,7 +460,9 @@ Las 4.2 acres ofrecen suficiente espacio para perderte un poco. Encuentra un ban
 - 💡 **Hook:** Parc familial paisible avec espaces verts et multiples installations récréatives, nommé d'après un quartier de Londres.
 - 📖 **Anecdote:** Comme plusieurs rues de Saint-Lambert (Brixton, Dulwich, Lorne), ce parc porte un nom britannique, témoignant de l'héritage anglo-saxon de cette ville fondée au XIXe siècle comme banlieue résidentielle pour les anglophones de Montréal.
 - 📚 **Source:** https://www.saint-lambert.ca/fr/parc-de-dulwich, https://www.hazelviewproperties.com/fr/news/check-out-saint-lambert's-parks
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (reverse geocoding: 224 Avenue de Brixton, Saint-Lambert)
+  - Faits: Dulwich quartier de Londres ✅ (Wikipedia); Héritage britannique 19e siècle ✅
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -533,7 +548,9 @@ Toma la entrada por Brixton para la mejor vista general.
 - 💡 **Hook:** Cœur battant de Saint-Lambert, ce parc central est le lieu de rassemblement favori des Lambertois depuis des générations.
 - 📖 **Anecdote:** Son nom fait référence au lieu de naissance du village au milieu du XIXe siècle. En hiver, on y érige des igloos pour le bonheur des enfants, une tradition locale appréciée.
 - 📚 **Source:** https://toponymie.gouv.qc.ca/ct/ToposWeb/fiche.aspx?no_seq=431939, https://www.saint-lambert.ca/fr/bottin-coordonnees/parc-du-village
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (reverse geocoding: Avenue Victoria, Saint-Lambert - centre-ville)
+  - Faits: Nom réfère au village 19e siècle ✅ (toponymie.gouv.qc.ca); Igloos en hiver ✅ (saint-lambert.ca)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -619,7 +636,12 @@ En la avenida Victoria, encontrarás estacionamiento fácilmente. Y probablement
 - 💡 **Hook:** Petit parc triangulaire historique à l'intersection de la rue Logan, de la rue Riverside et de l'avenue Victoria.
 - 📖 **Anecdote:** Un monument érigé dans ce parc souligne le centenaire de 1936, célébrant le premier chemin de fer canadien reliant Saint-Jean à La Prairie, dont Saint-Lambert était une étape clé.
 - 📚 **Source:** https://toponymie.gouv.qc.ca/ct/ToposWeb/fiche.aspx?no_seq=426693, https://www.saint-lambert.ca/fr/bottin-coordonnees/parc-du-centenaire
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ⚠️ À RÉVISER
+  - GPS: ✅ Vérifié (reverse geocoding: 925 Rue Riverside, Saint-Lambert - proche de l'intersection)
+  - Faits: Monument centenaire 1936 ✅; Premier chemin de fer 1836 ✅
+  - ❌ ERREUR MAJEURE: Script dit "Saint-Lambert était une gare sur cette ligne pionnière" - FAUX!
+  - Le premier chemin de fer (1836) allait de La Prairie à Saint-Jean-sur-Richelieu, PAS via Saint-Lambert
+  - Action: Supprimer/reformuler "Saint-Lambert était une gare sur cette ligne" - c'est factuellement incorrect
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -705,7 +727,9 @@ La historia a veces se esconde en pequeñas esquinas triangulares.
 - 💡 **Hook:** Parc de quartier aux espaces verts paisibles, adjacent au corridor de la Coulée-Verte.
 - 📖 **Anecdote:** Comme le parc Dulwich, son nom évoque un quartier londonien, rappelant les origines britanniques de plusieurs premiers résidents de Saint-Lambert qui travaillaient pour les compagnies ferroviaires.
 - 📚 **Source:** https://www.tostlambert.org/circuitgeneractifs
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (reverse geocoding: Coulée verte, Saint-Lambert - secteur Brixton)
+  - Faits: Brixton quartier de Londres ✅ (Wikipedia); Connexion Coulée-Verte ✅
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -785,7 +809,9 @@ Es un parque de barrio, tranquilo y sin pretensiones. Los árboles ofrecen sombr
 - 💡 **Hook:** Parc de quartier dans le secteur Préville, offrant un espace vert de proximité aux familles du sud de Saint-Lambert.
 - 📖 **Anecdote:** Ce parc se trouve dans le secteur de l'ancienne municipalité de Préville, une zone résidentielle développée après la Seconde Guerre mondiale pour accueillir les familles de la classe moyenne.
 - 📚 **Source:** https://www.tostlambert.org/circuitgeneractifs
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (reverse geocoding: Avenue Hall, Saint-Lambert - secteur Préville)
+  - Faits: Secteur Préville après-guerre ✅; Pas de faits spécifiques contestables
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -865,7 +891,9 @@ Si vives en el barrio en lugar de visitarlo, este parque es tu jardín trasero. 
 - 💡 **Hook:** Parc symbolisant l'union des communautés dans le secteur Préville de Saint-Lambert.
 - 📖 **Anecdote:** Son nom évoque possiblement la fusion de 1969 entre Préville et Saint-Lambert, un "mariage" municipal qui a uni deux communautés distinctes en une seule ville.
 - 📚 **Source:** https://www.tostlambert.org/circuitgeneractifs
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (reverse geocoding: Boulevard de l'Union, Saint-Lambert)
+  - Faits: Fusion 1969 ✅; Le script utilise "peut-être" pour l'origine du nom (prudent et acceptable)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -951,7 +979,9 @@ A veces los parques más modestos llevan los nombres más significativos.
 - 💡 **Hook:** Espace clôturé où les chiens peuvent courir librement en toute sécurité, avec système d'accès contrôlé pour les résidents.
 - 📖 **Anecdote:** Depuis 2010, l'accès au parc canin est réservé aux résidents de Saint-Lambert moyennant un abonnement annuel. Cette mesure controversée a fait les manchettes quand des non-résidents se voyaient refuser l'accès à leurs voisins canins!
 - 📚 **Source:** https://tvrs.ca/actualites/les-pitbulls-et-cie-y-sont-interdits--un-systeme-dacces-controle-maintenant-dans-les-deux-parcs-a-chiens-de-saint-lambert, https://ici.radio-canada.ca/nouvelle/484150/stlambert-parc-chiens
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (reverse geocoding: Rue Riverside, Saint-Lambert - stationnement Voie maritime)
+  - Faits: Système d'accès depuis 2010 ✅ (Radio-Canada août 2010); Réservé résidents ✅; Pitbulls interdits ✅
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -1030,3 +1060,126 @@ Si tienes un perro y solo estás de visita, disfruta la vista de todos modos. El
 
 **Total:** 12 POIs trouvés
 **Fichier:** content/saint-lambert-quebec-canada/scout-nature.md
+
+---
+
+## 📋 Rapport de vérification
+
+**Date:** 2026-02-25
+**Vérificateur:** POI Checker (cron)
+
+### Résumé
+| Verdict | Nombre |
+|---------|--------|
+| ✅ APPROUVÉ | 9 |
+| ⚠️ À RÉVISER | 3 |
+| ❌ REJETÉ | 0 |
+| ❓ NON VÉRIFIÉ | 0 |
+
+### Méthodologie
+- Reverse geocoding via OpenStreetMap (Nominatim) pour toutes les coordonnées GPS
+- Recherches web multiples (Brave Search) pour validation des faits
+- Sources privilégiées: .gouv.qc.ca, Wikipedia, Radio-Canada, sites municipaux officiels
+
+### Détails par POI
+
+#### POI 1: Parc de la Voie maritime
+- **GPS:** ✅ Vérifié — Reverse geocoding: "Parc à chiens de Saint-Lambert, Autoroute René-Lévesque"
+- **Faits vérifiés:**
+  - "Pont Victoria inauguré en 1860 par le Prince de Galles" → ✅ Confirmé (patrimoine-culturel.gouv.qc.ca)
+  - "Voie maritime depuis 1959" → ✅ Confirmé (Wikipedia, Radio-Canada)
+  - "17 kilomètres de sentiers" → ⚠️ Non vérifié (site officiel ne mentionne pas ce chiffre)
+- **Verdict:** ⚠️ À RÉVISER — Vérifier/reformuler les "17km de sentiers"
+
+#### POI 2: Parc de la Coulée-Verte
+- **GPS:** ✅ Vérifié — Reverse geocoding: "Club de Golf St-Lambert, Rue du Golf"
+- **Faits vérifiés:**
+  - "Toponyme coup de cœur 2018" → ✅ Confirmé (toponymie.gouv.qc.ca, Le Courrier du Sud)
+  - "Ancienne voie ferrée" → ✅ Plausible et cohérent
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 3: Jardins communautaires du parc Lespérance
+- **GPS:** ✅ Vérifié — Reverse geocoding: "211 Rue Lespérance, Saint-Lambert"
+- **Faits vérifiés:**
+  - "Rénové en 2019" → ✅ Confirmé (saint-lambert.ca)
+  - "De 68 à plus de 100 parcelles" → ✅ Confirmé (TVRS, saint-lambert.ca)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 4: Parc Préville
+- **GPS:** ✅ Vérifié — Reverse geocoding: "120 Rue du Poitou, Saint-Lambert"
+- **Faits vérifiés:**
+  - "8.8 acres" → ✅ Confirmé (mypacer.com)
+  - "Préville 1948-1969, fusionné avec Saint-Lambert" → ✅ Confirmé (Wikipedia, toponymie.gouv.qc.ca)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 5: Parc Alexandra
+- **GPS:** ✅ Vérifié — Reverse geocoding: "265 Avenue du Régent, Saint-Lambert"
+- **Faits vérifiés:**
+  - "4.2 acres" → ✅ Confirmé (mypacer.com)
+  - "Reine Alexandra épouse d'Édouard VII" → ✅ Confirmé (Wikipedia)
+  - "En 2024, ils ont rénové la piscine" → ⚠️ INEXACT (travaux commencés en juillet 2024, pas terminés)
+- **Verdict:** ⚠️ À RÉVISER — Reformuler "ont rénové" en "entreprennent la rénovation"
+
+#### POI 6: Parc Dulwich
+- **GPS:** ✅ Vérifié — Reverse geocoding: "224 Avenue de Brixton, Saint-Lambert"
+- **Faits vérifiés:**
+  - "Dulwich quartier de Londres" → ✅ Confirmé (Wikipedia)
+  - "Héritage britannique 19e siècle" → ✅ Confirmé
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 7: Parc du Village
+- **GPS:** ✅ Vérifié — Reverse geocoding: "Avenue Victoria, Saint-Lambert" (centre-ville)
+- **Faits vérifiés:**
+  - "Nom réfère au village du 19e siècle" → ✅ Confirmé (toponymie.gouv.qc.ca)
+  - "Igloos érigés chaque hiver" → ✅ Confirmé (saint-lambert.ca: "les jeunes aiment s'amuser dans les petits igloos")
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 8: Parc du Centenaire
+- **GPS:** ✅ Vérifié — Reverse geocoding: "925 Rue Riverside, Saint-Lambert"
+- **Faits vérifiés:**
+  - "Monument centenaire 1936" → ✅ Confirmé (toponymie.gouv.qc.ca)
+  - "Premier chemin de fer Canada 1836" → ✅ Confirmé (Radio-Canada, Histoire du Québec)
+  - "Saint-Lambert était une gare sur cette ligne" → ❌ FAUX (la ligne allait de La Prairie à Saint-Jean, pas via Saint-Lambert)
+- **Verdict:** ⚠️ À RÉVISER — ERREUR FACTUELLE MAJEURE à corriger
+
+#### POI 9: Parc de Brixton
+- **GPS:** ✅ Vérifié — Reverse geocoding: "Coulée verte, Saint-Lambert"
+- **Faits vérifiés:**
+  - "Brixton quartier de Londres" → ✅ Confirmé (Wikipedia)
+  - "Connexion à la Coulée-Verte" → ✅ Confirmé par GPS
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 10: Parc Houde
+- **GPS:** ✅ Vérifié — Reverse geocoding: "Avenue Hall, Saint-Lambert" (secteur Préville)
+- **Faits vérifiés:**
+  - "Secteur Préville développé après-guerre" → ✅ Cohérent avec l'histoire de Préville
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 11: Parc de l'Union
+- **GPS:** ✅ Vérifié — Reverse geocoding: "Boulevard de l'Union, Saint-Lambert"
+- **Faits vérifiés:**
+  - "Fusion 1969" → ✅ Confirmé
+  - "Nom évoque possiblement la fusion" → ✅ Formulation prudente acceptable
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 12: Parc canin de la Voie maritime
+- **GPS:** ✅ Vérifié — Reverse geocoding: "Rue Riverside, Saint-Lambert" (stationnement)
+- **Faits vérifiés:**
+  - "Depuis 2010, carte d'accès réservée aux résidents" → ✅ Confirmé (Radio-Canada, août 2010)
+  - "Pitbulls interdits" → ✅ Confirmé (TVRS)
+- **Verdict:** ✅ APPROUVÉ
+
+### Sources utilisées
+- patrimoine-culturel.gouv.qc.ca (Pont Victoria)
+- toponymie.gouv.qc.ca (Coulée-Verte, Village, Centenaire, Préville)
+- saint-lambert.ca (site officiel de la ville)
+- Wikipedia FR/EN (Préville, Voie maritime, Alexandra, Dulwich, Brixton)
+- Radio-Canada (premier chemin de fer, parc canin)
+- Le Courrier du Sud (Coulée-Verte)
+- mypacer.com (superficies des parcs)
+- TVRS (jardins communautaires, parc canin)
+
+### Actions requises
+1. **POI 1** — Vérifier le chiffre de "17 kilomètres de sentiers" ou reformuler en "piste cyclable régionale"
+2. **POI 5** — Changer "En 2024, ils ont rénové" → "En 2024, la ville a entrepris la rénovation de"
+3. **POI 8** — SUPPRIMER "Saint-Lambert était une gare sur cette ligne pionnière" — c'est FAUX

@@ -9,7 +9,7 @@
 ---
 
 ## POI 1: Maison Terroux-Rolland
-- 📍 **GPS:** 45.5017, -73.4947 (corrigé via geocoding)
+- 📍 **GPS:** 45.4966323, -73.5020884 (vérifié: 15 Rue Upper-Edison)
 - 🏠 **Adresse:** 15-17 avenue Upper Edison, Saint-Lambert, QC
 - 🏷️ **Catégories:** architecture, histoire
 - 🏛️ **Type:** building
@@ -18,15 +18,15 @@
 - 📖 **Anecdote:** L'architecte Arthur James Cooke a conçu cette maison pour Robert Terroux, courtier, et son épouse Marie F. Rolland. Leur fils Stuart, célibataire, a divisé la maison en deux logis car il trouvait qu'elle était "bien trop grande pour une personne seule".
 - 📚 **Source:** https://www.patrimoine-culturel.gouv.qc.ca, https://www.lesmaisons.co/a-vendre/majestueuse-demeure-victorienne-qui-a-traverse-le-temps-avec-grace-et-elegance
 - ✅ **Verdict:** ✅ APPROUVÉ
-  - GPS: Corrigé (45.5017, -73.4947)
+  - GPS: Corrigé (45.4966323, -73.5020884)
   - Faits: Architecte A.J. Cooke confirmé (patrimoine-culturel.gouv.qc.ca)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
 {
   "name": {"fr": "Maison Terroux-Rolland", "en": "Terroux-Rolland House"},
-  "lat": 45.5017,
-  "lng": -73.4947,
+  "lat": 45.4966323,
+  "lng": -73.5020884,
   "trigger_radius_m": 40,
   "type": "building",
   "categories": ["architecture", "histoire"],
@@ -736,7 +736,7 @@ Si realmente quieres identificarlos, la ciudad ofrece un PDF con todos los detal
 ### Détails par POI
 
 #### POI 1: Maison Terroux-Rolland
-- **GPS:** ⚠️ Corrigé de 45.5011, -73.4975 → 45.5017, -73.4947 (geocoding 15-17 Upper Edison)
+- **GPS:** ✅ Corrigé → 45.4966323, -73.5020884 (vérifié: 15 Rue Upper-Edison)
 - **Faits vérifiés:**
   - "Architecte Arthur James Cooke" → ✅ Confirmé (patrimoine-culturel.gouv.qc.ca)
   - "1891-1892" → ✅ Confirmé (dictionaryofarchitectsincanada.org: Cooke a commencé sa pratique à Saint-Lambert en 1891)

@@ -19,7 +19,7 @@ Optionnel:
 
 ## Processus
 
-### 0. Identifier la ville (disambiguation)
+### 0. Identifier la ville (disambiguation automatique)
 
 Avant toute recherche, identifier la ville exacte avec le script [scripts/geocode.py](scripts/geocode.py):
 
@@ -27,15 +27,14 @@ Avant toute recherche, identifier la ville exacte avec le script [scripts/geocod
 python3 scripts/geocode.py "{ville}"
 ```
 
-Le script retourne une liste de résultats géocodés. **Si plusieurs résultats** (ex: Saint-Lambert QC vs Saint-Lambert France):
-- Présenter les options à l'utilisateur avec les coordonnées et la région/pays
-- Attendre la confirmation avant de continuer
-- **Ne jamais assumer** — toujours demander si ambigu
+Le script retourne une liste de résultats géocodés. **Règles de sélection automatique:**
 
-**Si un seul résultat** ou si la ville est évidente (ex: "Montréal, Québec"):
-- Confirmer dans le résumé et continuer
+1. **Si l'utilisateur a précisé un pays/région** (ex: "Saint-Lambert, Québec") → prendre ce résultat
+2. **Si plusieurs résultats sans précision** → **priorité Canada/Québec** (c'est notre marché principal), puis Canada autre province, puis international
+3. **Si aucun résultat au Canada** → prendre le premier résultat pertinent
+4. **Toujours documenter le choix** dans le fichier de sortie — noter la ville choisie ET les alternatives trouvées pour traçabilité
 
-Noter les coordonnées du centre-ville pour les recherches. Elles serviront aussi comme `city_id` si la ville doit être créée en BD plus tard.
+**Astuce:** Pour éviter l'ambiguïté, l'utilisateur peut préciser "Saint-Lambert, QC" ou "Paris, France" dans sa demande.
 
 Ensuite, vérifier si la ville existe déjà dans Supabase:
 ```bash

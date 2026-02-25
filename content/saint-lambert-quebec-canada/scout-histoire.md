@@ -38,31 +38,6 @@
 }
 ```
 
-### 🎙️ Script audio (fr)
-> Persona: Marco
-> Mots: 205
-> Durée estimée: 82s
-
-Ok, cette maison en pierre devant toi? Elle a l'air de rien comme ça. Mais fais-moi confiance — elle cache 275 ans d'histoires.
-
-On parle de la Maison Marsil. Construite vers 1750, c'est la doyenne de Saint-Lambert. Quand ces murs-là ont été montés, on était encore en Nouvelle-France. Les pierres que tu vois? Des pierres des champs. Les colons les ramassaient en labourant leur terre pis ils bâtissaient avec. Du recyclage avant l'heure.
-
-Mais mon bout préféré? De 1887 à 1891, les catholiques du coin avaient pas encore d'église, fait que la messe se disait ici. Dans le salon! Imagine le curé entre la cheminée pis la table de cuisine.
-
-En 1974, le gouvernement l'a classée monument historique. Pis la restauration trois ans plus tard? C'est Pratt & Whitney Canada qui a payé la facture, avec ses employés bénévoles qui ont retroussé leurs manches. Une compagnie de moteurs d'avion qui restaure une maison du Régime français — faut le faire.
-
-Regarde bien la façade — chaque pierre est d'une grosseur différente. C'est ça, le charme brut des maisons en pierres des champs. Pour une belle photo, recule un peu sur le trottoir de Riverside. Tu vas avoir la vue parfaite avec le jardin en avant.
-
-### 🗄️ Script BD
-```json
-{
-  "language": "fr",
-  "content": "Ok, cette maison en pierre devant toi? Elle a l'air de rien comme ça. Mais fais-moi confiance — elle cache 275 ans d'histoires.\n\nOn parle de la Maison Marsil. Construite vers 1750, c'est la doyenne de Saint-Lambert. Quand ces murs-là ont été montés, on était encore en Nouvelle-France. Les pierres que tu vois? Des pierres des champs. Les colons les ramassaient en labourant leur terre pis ils bâtissaient avec. Du recyclage avant l'heure.\n\nMais mon bout préféré? De 1887 à 1891, les catholiques du coin avaient pas encore d'église, fait que la messe se disait ici. Dans le salon! Imagine le curé entre la cheminée pis la table de cuisine.\n\nEn 1974, le gouvernement l'a classée monument historique. Pis la restauration trois ans plus tard? C'est Pratt & Whitney Canada qui a payé la facture, avec ses employés bénévoles qui ont retroussé leurs manches. Une compagnie de moteurs d'avion qui restaure une maison du Régime français — faut le faire.\n\nRegarde bien la façade — chaque pierre est d'une grosseur différente. C'est ça, le charme brut des maisons en pierres des champs. Pour une belle photo, recule un peu sur le trottoir de Riverside. Tu vas avoir la vue parfaite avec le jardin en avant.",
-  "voice_id": null,
-  "voice_settings": {"stability": 0.5, "clarity": 0.75},
-  "persona": "marco"
-}
-```
 
 ---
 
@@ -96,31 +71,6 @@ Regarde bien la façade — chaque pierre est d'une grosseur différente. C'est 
 }
 ```
 
-### 🎙️ Script audio (fr)
-> Persona: Marco
-> Mots: 197
-> Durée estimée: 79s
-
-Tu vois ce mur d'eau là-bas? C'est pas juste une écluse — c'est la porte d'entrée du continent.
-
-L'écluse de Saint-Lambert, c'est la première de la Voie maritime du Saint-Laurent. Inaugurée en 1959, et pas par n'importe qui — la reine Élisabeth II en personne, avec le président Eisenhower à ses côtés. Quand même.
-
-Le concept est simple mais complètement fou : on prend des navires océaniques de 200 mètres de long, pis on les monte de 4,6 mètres pour les envoyer jusqu'aux Grands Lacs. La construction de la Voie maritime, c'était un des plus gros chantiers d'ingénierie en Amérique du Nord au 20e siècle. Mais ça a coûté cher en vies humaines aussi — des quartiers entiers expropriés, des villages disparus sous les eaux le long du Saint-Laurent.
-
-Le show est encore gratuit aujourd'hui. De mars à décembre, monte dans la tour d'observation — tu vas voir ces géants d'acier passer à quelques mètres de toi. Y'a quelque chose d'hypnotique là-dedans. Les Lambertois vivent avec ce rythme-là depuis 1959.
-
-Un tip : va sur marinetraffic.com avant de te déplacer. Tu vas pouvoir timer ton arrivée pour voir un navire franchir l'écluse. Crois-moi, ça vaut le détour.
-
-### 🗄️ Script BD
-```json
-{
-  "language": "fr",
-  "content": "Tu vois ce mur d'eau là-bas? C'est pas juste une écluse — c'est la porte d'entrée du continent.\n\nL'écluse de Saint-Lambert, c'est la première de la Voie maritime du Saint-Laurent. Inaugurée en 1959, et pas par n'importe qui — la reine Élisabeth II en personne, avec le président Eisenhower à ses côtés. Quand même.\n\nLe concept est simple mais complètement fou : on prend des navires océaniques de 200 mètres de long, pis on les monte de 4,6 mètres pour les envoyer jusqu'aux Grands Lacs. La construction de la Voie maritime, c'était un des plus gros chantiers d'ingénierie en Amérique du Nord au 20e siècle. Mais ça a coûté cher en vies humaines aussi — des quartiers entiers expropriés, des villages disparus sous les eaux le long du Saint-Laurent.\n\nLe show est encore gratuit aujourd'hui. De mars à décembre, monte dans la tour d'observation — tu vas voir ces géants d'acier passer à quelques mètres de toi. Y'a quelque chose d'hypnotique là-dedans. Les Lambertois vivent avec ce rythme-là depuis 1959.\n\nUn tip : va sur marinetraffic.com avant de te déplacer. Tu vas pouvoir timer ton arrivée pour voir un navire franchir l'écluse. Crois-moi, ça vaut le détour.",
-  "voice_id": null,
-  "voice_settings": {"stability": 0.5, "clarity": 0.75},
-  "persona": "marco"
-}
-```
 
 ---
 
@@ -154,31 +104,6 @@ Un tip : va sur marinetraffic.com avant de te déplacer. Tu vas pouvoir timer to
 }
 ```
 
-### 🎙️ Script audio (fr)
-> Persona: Marco
-> Mots: 202
-> Durée estimée: 81s
-
-Imagine un tube de fer fermé de 3 kilomètres, au-dessus du fleuve Saint-Laurent, avec un train qui passe dedans. Claustrophobes, s'abstenir.
-
-C'est exactement ça, le pont Victoria original. Inauguré en 1860 par le Prince de Galles — le futur roi Édouard VII — c'était le plus long pont au monde à l'époque. Pis surtout, le tout premier lien entre Montréal et la Rive-Sud. Avant ça, pour traverser, t'avais le canot ou le traversier. Bonne chance en janvier.
-
-Le chantier a duré six ans. Trois mille ouvriers, dont plusieurs y ont laissé leur vie, à poser des piliers dans un fleuve qui gèle solide l'hiver. Pis une fois fini? Les trains passaient dans ce fameux tube métallique tellement étouffant et enfumé que c'était devenu invivable. Résultat : en 1897, on a ouvert le tube et reconstruit le pont en poutres d'acier. Beaucoup mieux pour respirer.
-
-Mais le vrai impact du pont Victoria? C'est lui qui a transformé Saint-Lambert. D'un petit hameau agricole, la ville est devenue une banlieue résidentielle connectée à Montréal — et même à New York par le rail.
-
-En été, tu peux traverser à pied ou à vélo par la passerelle saisonnière. La vue sur le skyline de Montréal? Spectaculaire.
-
-### 🗄️ Script BD
-```json
-{
-  "language": "fr",
-  "content": "Imagine un tube de fer fermé de 3 kilomètres, au-dessus du fleuve Saint-Laurent, avec un train qui passe dedans. Claustrophobes, s'abstenir.\n\nC'est exactement ça, le pont Victoria original. Inauguré en 1860 par le Prince de Galles — le futur roi Édouard VII — c'était le plus long pont au monde à l'époque. Pis surtout, le tout premier lien entre Montréal et la Rive-Sud. Avant ça, pour traverser, t'avais le canot ou le traversier. Bonne chance en janvier.\n\nLe chantier a duré six ans. Trois mille ouvriers, dont plusieurs y ont laissé leur vie, à poser des piliers dans un fleuve qui gèle solide l'hiver. Pis une fois fini? Les trains passaient dans ce fameux tube métallique tellement étouffant et enfumé que c'était devenu invivable. Résultat : en 1897, on a ouvert le tube et reconstruit le pont en poutres d'acier. Beaucoup mieux pour respirer.\n\nMais le vrai impact du pont Victoria? C'est lui qui a transformé Saint-Lambert. D'un petit hameau agricole, la ville est devenue une banlieue résidentielle connectée à Montréal — et même à New York par le rail.\n\nEn été, tu peux traverser à pied ou à vélo par la passerelle saisonnière. La vue sur le skyline de Montréal? Spectaculaire.",
-  "voice_id": null,
-  "voice_settings": {"stability": 0.5, "clarity": 0.75},
-  "persona": "marco"
-}
-```
 
 ---
 
@@ -212,33 +137,6 @@ En été, tu peux traverser à pied ou à vélo par la passerelle saisonnière. 
 }
 ```
 
-### 🎙️ Script audio (fr)
-> Persona: Marco
-> Mots: 195
-> Durée estimée: 78s
-
-Arrête-toi une seconde. La maison devant toi, au 725 Robitaille, c'est une des adresses les plus marquantes de l'histoire du Québec. Pis y'a aucune plaque pour te le dire.
-
-C'est ici que le ministre Pierre Laporte a été kidnappé. Le 10 octobre 1970, à 18h18 précises. Il jouait au football avec son neveu sur le terrain en avant quand une voiture s'est arrêtée. Des membres de la cellule Chénier du FLQ l'ont forcé à monter. Comme ça. Devant sa maison, dans sa rue tranquille de banlieue.
-
-Sept jours plus tard, son corps était retrouvé dans le coffre d'une voiture près de l'aéroport de Saint-Hubert. Pierre Laporte est le seul ministre québécois assassiné de toute l'histoire du Canada.
-
-L'enlèvement a déclenché la Crise d'Octobre — Pierre Elliott Trudeau a invoqué la Loi sur les mesures de guerre, l'armée est débarquée dans les rues. Le Québec entier a basculé en quelques jours.
-
-Regarde cette rue. C'est une rue résidentielle ordinaire. C'est exactement ça qui frappe. L'histoire s'est passée ici, dans le quotidien le plus banal.
-
-C'est une résidence privée — reste sur le trottoir, sois discret. Mais prends le temps de sentir le poids de cet endroit.
-
-### 🗄️ Script BD
-```json
-{
-  "language": "fr",
-  "content": "Arrête-toi une seconde. La maison devant toi, au 725 Robitaille, c'est une des adresses les plus marquantes de l'histoire du Québec. Pis y'a aucune plaque pour te le dire.\n\nC'est ici que le ministre Pierre Laporte a été kidnappé. Le 10 octobre 1970, à 18h18 précises. Il jouait au football avec son neveu sur le terrain en avant quand une voiture s'est arrêtée. Des membres de la cellule Chénier du FLQ l'ont forcé à monter. Comme ça. Devant sa maison, dans sa rue tranquille de banlieue.\n\nSept jours plus tard, son corps était retrouvé dans le coffre d'une voiture près de l'aéroport de Saint-Hubert. Pierre Laporte est le seul ministre québécois assassiné de toute l'histoire du Canada.\n\nL'enlèvement a déclenché la Crise d'Octobre — Pierre Elliott Trudeau a invoqué la Loi sur les mesures de guerre, l'armée est débarquée dans les rues. Le Québec entier a basculé en quelques jours.\n\nRegarde cette rue. C'est une rue résidentielle ordinaire. C'est exactement ça qui frappe. L'histoire s'est passée ici, dans le quotidien le plus banal.\n\nC'est une résidence privée — reste sur le trottoir, sois discret. Mais prends le temps de sentir le poids de cet endroit.",
-  "voice_id": null,
-  "voice_settings": {"stability": 0.5, "clarity": 0.75},
-  "persona": "marco"
-}
-```
 
 ---
 
@@ -272,33 +170,6 @@ C'est une résidence privée — reste sur le trottoir, sois discret. Mais prend
 }
 ```
 
-### 🎙️ Script audio (fr)
-> Persona: Marco
-> Mots: 209
-> Durée estimée: 84s
-
-Encore une maison en pierre sur Riverside? Oui, mais celle-ci a son propre caractère. Fais-moi confiance.
-
-La Maison Sharpe — ou Maison Antoine-Sainte-Marie si on remonte aux origines — date de 1775. C'est l'une des plus anciennes de Saint-Lambert et elle est classée monument historique depuis 1974.
-
-Ce qui est fascinant ici, c'est l'histoire des premiers habitants. Au 18e siècle, les familles Marsil, Achim et Sainte-Marie vivaient toutes le long de ce chemin — qu'on appelait alors le chemin du Bord-de-l'eau. Leurs terres avaient été concédées par les Jésuites. Imagine : t'es un colon français, les Jésuites te donnent un lot en bordure du Saint-Laurent, pis tu bâtis ta maison en pierre avec ce que la terre te fournit.
-
-La famille Sharpe est arrivée plus tard, mais c'est leur nom qui est resté accroché à la maison. Comme quoi c'est pas toujours les premiers propriétaires qui marquent la mémoire.
-
-Regarde la façade — ces pierres-là sont là depuis 250 ans. Elles ont vu le Régime français, la Conquête anglaise, la Confédération, pis tout le reste.
-
-Si t'es à pied, profites-en. La Maison Marsil est au 349, la Maison Auclair au 405, pis tu es ici au 789. Tout le long de Riverside, c'est un corridor patrimonial à ciel ouvert.
-
-### 🗄️ Script BD
-```json
-{
-  "language": "fr",
-  "content": "Encore une maison en pierre sur Riverside? Oui, mais celle-ci a son propre caractère. Fais-moi confiance.\n\nLa Maison Sharpe — ou Maison Antoine-Sainte-Marie si on remonte aux origines — date de 1775. C'est l'une des plus anciennes de Saint-Lambert et elle est classée monument historique depuis 1974.\n\nCe qui est fascinant ici, c'est l'histoire des premiers habitants. Au 18e siècle, les familles Marsil, Achim et Sainte-Marie vivaient toutes le long de ce chemin — qu'on appelait alors le chemin du Bord-de-l'eau. Leurs terres avaient été concédées par les Jésuites. Imagine : t'es un colon français, les Jésuites te donnent un lot en bordure du Saint-Laurent, pis tu bâtis ta maison en pierre avec ce que la terre te fournit.\n\nLa famille Sharpe est arrivée plus tard, mais c'est leur nom qui est resté accroché à la maison. Comme quoi c'est pas toujours les premiers propriétaires qui marquent la mémoire.\n\nRegarde la façade — ces pierres-là sont là depuis 250 ans. Elles ont vu le Régime français, la Conquête anglaise, la Confédération, pis tout le reste.\n\nSi t'es à pied, profites-en. La Maison Marsil est au 349, la Maison Auclair au 405, pis tu es ici au 789. Tout le long de Riverside, c'est un corridor patrimonial à ciel ouvert.",
-  "voice_id": null,
-  "voice_settings": {"stability": 0.5, "clarity": 0.75},
-  "persona": "marco"
-}
-```
 
 ---
 
@@ -332,31 +203,6 @@ Si t'es à pied, profites-en. La Maison Marsil est au 349, la Maison Auclair au 
 }
 ```
 
-### 🎙️ Script audio (fr)
-> Persona: Marco
-> Mots: 203
-> Durée estimée: 81s
-
-Lève les yeux. Cette façade en pierre multicolore avec sa grande rosace? C'est pas juste une église — c'est une histoire de résilience.
-
-En 1936, l'église catholique précédente a passé au feu. Complètement. Mais au lieu de se décourager, la communauté a décidé de reconstruire immédiatement, au même endroit. Pis pas n'importe comment — l'architecte Gaston Gagnier s'est inspiré du style de Dom Paul Bellot, un moine bénédictin français qui allait révolutionner l'architecture religieuse au Québec. Le résultat, c'est ce que tu as devant toi.
-
-Mais reculons un peu dans le temps. Les catholiques de Saint-Lambert se sont battus pendant des décennies juste pour avoir leur propre paroisse. En 1886, ils faisaient encore la messe dans une maison privée — la Maison Marsil, un peu plus loin sur Riverside. La paroisse a été officiellement créée seulement en 1894. Ça a été long.
-
-Fait que quand le feu a tout détruit en 1936, c'était pas juste une église qui brûlait — c'était des décennies de combat. La reconstruction rapide, c'était un message : on lâche pas.
-
-Regarde la rosace au-dessus du portail principal, pis la statue de saint Lambert. Pour voir l'intérieur, vérifie les heures de messe ou passe pendant les Journées du patrimoine.
-
-### 🗄️ Script BD
-```json
-{
-  "language": "fr",
-  "content": "Lève les yeux. Cette façade en pierre multicolore avec sa grande rosace? C'est pas juste une église — c'est une histoire de résilience.\n\nEn 1936, l'église catholique précédente a passé au feu. Complètement. Mais au lieu de se décourager, la communauté a décidé de reconstruire immédiatement, au même endroit. Pis pas n'importe comment — l'architecte Gaston Gagnier s'est inspiré du style de Dom Paul Bellot, un moine bénédictin français qui allait révolutionner l'architecture religieuse au Québec. Le résultat, c'est ce que tu as devant toi.\n\nMais reculons un peu dans le temps. Les catholiques de Saint-Lambert se sont battus pendant des décennies juste pour avoir leur propre paroisse. En 1886, ils faisaient encore la messe dans une maison privée — la Maison Marsil, un peu plus loin sur Riverside. La paroisse a été officiellement créée seulement en 1894. Ça a été long.\n\nFait que quand le feu a tout détruit en 1936, c'était pas juste une église qui brûlait — c'était des décennies de combat. La reconstruction rapide, c'était un message : on lâche pas.\n\nRegarde la rosace au-dessus du portail principal, pis la statue de saint Lambert. Pour voir l'intérieur, vérifie les heures de messe ou passe pendant les Journées du patrimoine.",
-  "voice_id": null,
-  "voice_settings": {"stability": 0.5, "clarity": 0.75},
-  "persona": "marco"
-}
-```
 
 ---
 
@@ -390,33 +236,6 @@ Regarde la rosace au-dessus du portail principal, pis la statue de saint Lambert
 }
 ```
 
-### 🎙️ Script audio (fr)
-> Persona: Marco
-> Mots: 194
-> Durée estimée: 78s
-
-En 2007, quelqu'un a volé les noms des morts.
-
-Je te niaise pas. La plaque de bronze originale du cénotaphe — celle avec les 132 noms de soldats tombés pendant les deux guerres mondiales — a été arrachée et volée. Probablement pour la valeur du métal. Imagine le culot.
-
-Mais on recule. Ce monument-là a été inauguré en 1922 par le général Arthur Currie. Pas un nobody — c'était LE commandant du Corps expéditionnaire canadien pendant la Première Guerre mondiale. Il a personnellement contribué au financement de la construction. Soixante citoyens de Saint-Lambert sont tombés au combat. Pour une petite ville, c'est énorme.
-
-Quand la plaque a été volée, la communauté s'est mobilisée. En novembre 2007, une nouvelle plaque de granit a été inaugurée. Cette fois-ci, les noms sont gravés dans la pierre. Essaie de voler ça.
-
-Prends le temps de lire les noms. Chaque nom, c'est un gars de Saint-Lambert qui est parti pis qui est pas revenu. Des voisins, des fils, des frères.
-
-Si t'es dans le coin autour du 11 novembre, il y a une cérémonie commémorative ici au Parc Mercille. C'est sobre, c'est émouvant. Ça vaut la peine d'y être.
-
-### 🗄️ Script BD
-```json
-{
-  "language": "fr",
-  "content": "En 2007, quelqu'un a volé les noms des morts.\n\nJe te niaise pas. La plaque de bronze originale du cénotaphe — celle avec les 132 noms de soldats tombés pendant les deux guerres mondiales — a été arrachée et volée. Probablement pour la valeur du métal. Imagine le culot.\n\nMais on recule. Ce monument-là a été inauguré en 1922 par le général Arthur Currie. Pas un nobody — c'était LE commandant du Corps expéditionnaire canadien pendant la Première Guerre mondiale. Il a personnellement contribué au financement de la construction. Soixante citoyens de Saint-Lambert sont tombés au combat. Pour une petite ville, c'est énorme.\n\nQuand la plaque a été volée, la communauté s'est mobilisée. En novembre 2007, une nouvelle plaque de granit a été inaugurée. Cette fois-ci, les noms sont gravés dans la pierre. Essaie de voler ça.\n\nPrends le temps de lire les noms. Chaque nom, c'est un gars de Saint-Lambert qui est parti pis qui est pas revenu. Des voisins, des fils, des frères.\n\nSi t'es dans le coin autour du 11 novembre, il y a une cérémonie commémorative ici au Parc Mercille. C'est sobre, c'est émouvant. Ça vaut la peine d'y être.",
-  "voice_id": null,
-  "voice_settings": {"stability": 0.5, "clarity": 0.75},
-  "persona": "marco"
-}
-```
 
 ---
 
@@ -450,31 +269,6 @@ Si t'es dans le coin autour du 11 novembre, il y a une cérémonie commémorativ
 }
 ```
 
-### 🎙️ Script audio (fr)
-> Persona: Marco
-> Mots: 197
-> Durée estimée: 79s
-
-Trois maisons, un chemin, 275 ans d'histoire. T'es en plein milieu du corridor patrimonial de Riverside.
-
-La Maison Auclair, construite vers 1750, c'est la troisième du trio de maisons en pierre classées monuments historiques de Saint-Lambert. Avec la Maison Marsil au 349 et la Maison Sharpe au 789, elles forment un chapelet de pierres qui raconte la Nouvelle-France en bordure du fleuve.
-
-À l'origine, cette maison a été bâtie pour la famille Melville. Mais c'est quand Alexis Marsil l'a achetée en 1842 qu'elle est vraiment entrée dans la lignée lambertoise. Les Marsil, c'était une des familles fondatrices du coin — tu retrouves leur nom partout ici. La maison est restée dans la famille Marsil-Auclair pendant des générations.
-
-Ce qui est spécial avec Riverside Drive, c'est que tu peux littéralement marcher à travers les siècles. Chaque maison en pierre que tu croises, c'est un chapitre. Les familles qui vivaient ici cultivaient des terres concédées par les Jésuites, face au Saint-Laurent. Un mode de vie qui a disparu quand le pont Victoria a tout changé en 1860.
-
-Regarde la façade — typique du Régime français. Solide, simple, faite pour durer. Pis elle a duré. Ça fait presque trois siècles.
-
-### 🗄️ Script BD
-```json
-{
-  "language": "fr",
-  "content": "Trois maisons, un chemin, 275 ans d'histoire. T'es en plein milieu du corridor patrimonial de Riverside.\n\nLa Maison Auclair, construite vers 1750, c'est la troisième du trio de maisons en pierre classées monuments historiques de Saint-Lambert. Avec la Maison Marsil au 349 et la Maison Sharpe au 789, elles forment un chapelet de pierres qui raconte la Nouvelle-France en bordure du fleuve.\n\nÀ l'origine, cette maison a été bâtie pour la famille Melville. Mais c'est quand Alexis Marsil l'a achetée en 1842 qu'elle est vraiment entrée dans la lignée lambertoise. Les Marsil, c'était une des familles fondatrices du coin — tu retrouves leur nom partout ici. La maison est restée dans la famille Marsil-Auclair pendant des générations.\n\nCe qui est spécial avec Riverside Drive, c'est que tu peux littéralement marcher à travers les siècles. Chaque maison en pierre que tu croises, c'est un chapitre. Les familles qui vivaient ici cultivaient des terres concédées par les Jésuites, face au Saint-Laurent. Un mode de vie qui a disparu quand le pont Victoria a tout changé en 1860.\n\nRegarde la façade — typique du Régime français. Solide, simple, faite pour durer. Pis elle a duré. Ça fait presque trois siècles.",
-  "voice_id": null,
-  "voice_settings": {"stability": 0.5, "clarity": 0.75},
-  "persona": "marco"
-}
-```
 
 ---
 
@@ -508,31 +302,6 @@ Regarde la façade — typique du Régime français. Solide, simple, faite pour 
 }
 ```
 
-### 🎙️ Script audio (fr)
-> Persona: Marco
-> Mots: 195
-> Durée estimée: 78s
-
-D'église à loge maçonnique. Avoue que c'est pas un parcours banal pour un bâtiment.
-
-Le petit édifice en pierre devant toi, c'est l'ancienne église anglicane St. Barnabas — le plus vieil édifice non résidentiel de Saint-Lambert. Construite entre 1884 et 1886, c'était la première église de la communauté anglophone protestante.
-
-Quand les anglicans se sont construit une église plus grande en 1928, le bâtiment a connu une reconversion... disons inattendue. Pendant près de 70 ans, c'était un temple maçonnique. Les francs-maçons de Saint-Lambert qui se réunissaient dans une ancienne église — y'a un certain sens de l'ironie là-dedans.
-
-En 2000, la ville l'a cité monument historique. Mais l'histoire se corse en 2009 : le maire a voulu le démolir. La Société d'histoire Mouillepied — oui, c'est leur vrai nom — s'y est farouchement opposée. Le bâtiment a survécu. Mais en 2021, son statut de monument a été abrogé. Son avenir? Personne le sait vraiment.
-
-Regarde l'architecture néo-gothique victorienne — les ogives, la pierre de taille. C'est un petit bijou discret, juste à côté de la grande église catholique. Deux solitudes architecturales, côte à côte sur l'avenue Lorne. C'est tout Saint-Lambert résumé en un coup d'œil.
-
-### 🗄️ Script BD
-```json
-{
-  "language": "fr",
-  "content": "D'église à loge maçonnique. Avoue que c'est pas un parcours banal pour un bâtiment.\n\nLe petit édifice en pierre devant toi, c'est l'ancienne église anglicane St. Barnabas — le plus vieil édifice non résidentiel de Saint-Lambert. Construite entre 1884 et 1886, c'était la première église de la communauté anglophone protestante.\n\nQuand les anglicans se sont construit une église plus grande en 1928, le bâtiment a connu une reconversion... disons inattendue. Pendant près de 70 ans, c'était un temple maçonnique. Les francs-maçons de Saint-Lambert qui se réunissaient dans une ancienne église — y'a un certain sens de l'ironie là-dedans.\n\nEn 2000, la ville l'a cité monument historique. Mais l'histoire se corse en 2009 : le maire a voulu le démolir. La Société d'histoire Mouillepied — oui, c'est leur vrai nom — s'y est farouchement opposée. Le bâtiment a survécu. Mais en 2021, son statut de monument a été abrogé. Son avenir? Personne le sait vraiment.\n\nRegarde l'architecture néo-gothique victorienne — les ogives, la pierre de taille. C'est un petit bijou discret, juste à côté de la grande église catholique. Deux solitudes architecturales, côte à côte sur l'avenue Lorne. C'est tout Saint-Lambert résumé en un coup d'œil.",
-  "voice_id": null,
-  "voice_settings": {"stability": 0.5, "clarity": 0.75},
-  "persona": "marco"
-}
-```
 
 ---
 
@@ -566,33 +335,6 @@ Regarde l'architecture néo-gothique victorienne — les ogives, la pierre de ta
 }
 ```
 
-### 🎙️ Script audio (fr)
-> Persona: Marco
-> Mots: 188
-> Durée estimée: 75s
-
-Tu savais que les plus beaux stylos-plumes au Canada étaient fabriqués ici? Genre, exactement ici.
-
-En 1908, la compagnie Waterman — fondée à New York en 1884 — a choisi Saint-Lambert pour installer son usine canadienne. Le bâtiment en brique que tu vois, c'est là que des artisans assemblaient des stylos-plumes de luxe pendant des décennies.
-
-Pourquoi Saint-Lambert? Simple : les terrains étaient abordables et surtout, le pont Victoria offrait une connexion ferroviaire directe avec New York. En 1908, être branché sur le rail, c'était comme avoir la fibre optique aujourd'hui. La marchandise partait d'ici pour tout le marché canadien.
-
-Les Waterman, c'était les iPhone de l'époque — un objet de statut, un symbole de réussite. Écrire avec un Waterman, ça voulait dire quelque chose.
-
-Aujourd'hui, l'usine est devenue des lofts résidentiels. C'est un peu le résumé parfait de l'évolution de Saint-Lambert : d'une ville ouvrière et industrielle à une banlieue résidentielle cossue. Les machines sont parties, les gens sont restés.
-
-Regarde la façade en brique — tu vois encore le squelette industriel sous la conversion résidentielle. Les grandes fenêtres, les lignes droites. C'est du beau recyclage architectural.
-
-### 🗄️ Script BD
-```json
-{
-  "language": "fr",
-  "content": "Tu savais que les plus beaux stylos-plumes au Canada étaient fabriqués ici? Genre, exactement ici.\n\nEn 1908, la compagnie Waterman — fondée à New York en 1884 — a choisi Saint-Lambert pour installer son usine canadienne. Le bâtiment en brique que tu vois, c'est là que des artisans assemblaient des stylos-plumes de luxe pendant des décennies.\n\nPourquoi Saint-Lambert? Simple : les terrains étaient abordables et surtout, le pont Victoria offrait une connexion ferroviaire directe avec New York. En 1908, être branché sur le rail, c'était comme avoir la fibre optique aujourd'hui. La marchandise partait d'ici pour tout le marché canadien.\n\nLes Waterman, c'était les iPhone de l'époque — un objet de statut, un symbole de réussite. Écrire avec un Waterman, ça voulait dire quelque chose.\n\nAujourd'hui, l'usine est devenue des lofts résidentiels. C'est un peu le résumé parfait de l'évolution de Saint-Lambert : d'une ville ouvrière et industrielle à une banlieue résidentielle cossue. Les machines sont parties, les gens sont restés.\n\nRegarde la façade en brique — tu vois encore le squelette industriel sous la conversion résidentielle. Les grandes fenêtres, les lignes droites. C'est du beau recyclage architectural.",
-  "voice_id": null,
-  "voice_settings": {"stability": 0.5, "clarity": 0.75},
-  "persona": "marco"
-}
-```
 
 ---
 
@@ -626,31 +368,6 @@ Regarde la façade en brique — tu vois encore le squelette industriel sous la 
 }
 ```
 
-### 🎙️ Script audio (fr)
-> Persona: Marco
-> Mots: 191
-> Durée estimée: 76s
-
-Une école de banlieue, ça a l'air plate de même. Mais attends de savoir qui l'a dessinée.
-
-La St. Lambert Academy a été fondée en 1896. L'architecte original, c'était Robert Findlay — un des grands noms de l'architecture montréalaise. Mais le vrai punch, c'est l'agrandissement de 1924 par la firme Ross & Macdonald. Si tu connais pas ce nom, tu connais leurs bâtiments — la Gare Windsor, une aile du Château Frontenac, l'ancien Hôtel Mont-Royal à Montréal.
-
-Que cette firme-là ait accepté de travailler sur une école de banlieue, ça en dit long sur l'ambition — et le portefeuille — de la communauté anglophone de Saint-Lambert au début du 20e siècle. C'était pas une petite ville endormie. C'était un milieu bourgeois qui voulait du prestige jusque dans ses écoles.
-
-Regarde la partie néo-Tudor du bâtiment — les briques polychromes, les détails d'ornementation. C'est la section de 1924, celle de Ross & Macdonald. Tu vois la différence avec le reste? C'est comme comparer du prêt-à-porter avec de la haute couture.
-
-L'école est toujours active, fait que tu admires de l'extérieur. Depuis l'avenue Notre-Dame, t'as la meilleure vue sur la partie architecturalement intéressante.
-
-### 🗄️ Script BD
-```json
-{
-  "language": "fr",
-  "content": "Une école de banlieue, ça a l'air plate de même. Mais attends de savoir qui l'a dessinée.\n\nLa St. Lambert Academy a été fondée en 1896. L'architecte original, c'était Robert Findlay — un des grands noms de l'architecture montréalaise. Mais le vrai punch, c'est l'agrandissement de 1924 par la firme Ross & Macdonald. Si tu connais pas ce nom, tu connais leurs bâtiments — la Gare Windsor, une aile du Château Frontenac, l'ancien Hôtel Mont-Royal à Montréal.\n\nQue cette firme-là ait accepté de travailler sur une école de banlieue, ça en dit long sur l'ambition — et le portefeuille — de la communauté anglophone de Saint-Lambert au début du 20e siècle. C'était pas une petite ville endormie. C'était un milieu bourgeois qui voulait du prestige jusque dans ses écoles.\n\nRegarde la partie néo-Tudor du bâtiment — les briques polychromes, les détails d'ornementation. C'est la section de 1924, celle de Ross & Macdonald. Tu vois la différence avec le reste? C'est comme comparer du prêt-à-porter avec de la haute couture.\n\nL'école est toujours active, fait que tu admires de l'extérieur. Depuis l'avenue Notre-Dame, t'as la meilleure vue sur la partie architecturalement intéressante.",
-  "voice_id": null,
-  "voice_settings": {"stability": 0.5, "clarity": 0.75},
-  "persona": "marco"
-}
-```
 
 ---
 
@@ -684,33 +401,6 @@ L'école est toujours active, fait que tu admires de l'extérieur. Depuis l'aven
 }
 ```
 
-### 🎙️ Script audio (fr)
-> Persona: Marco
-> Mots: 198
-> Durée estimée: 79s
-
-Plus de 125 ans que ces murs-là forment des générations de Lambertois. Ça force le respect.
-
-Le Collège Durocher Saint-Lambert, c'est une institution fondée en 1898 par les Sœurs des Saints Noms de Jésus et de Marie. Au départ, c'était réservé aux filles. Aujourd'hui c'est mixte — les temps changent.
-
-Le nom vient de l'abbé Flavien Durocher, une figure importante de l'Église catholique au 19e siècle. Pis ce qui est frappant, c'est l'endroit : en plein sur Riverside Drive, entouré de maisons patrimoniales de 250 ans. L'éducation et le patrimoine, côte à côte depuis plus d'un siècle.
-
-Faut se rappeler qu'au moment de sa fondation, Saint-Lambert était une ville profondément duelle — francophones catholiques d'un bord, anglophones protestants de l'autre. Ce collège-là, c'était un pilier de la communauté francophone. Une façon d'affirmer sa présence dans une ville où les institutions anglophones avaient le haut du pavé.
-
-Regarde le bâtiment principal depuis Riverside. Le campus s'étend sur plusieurs bâtiments — c'est impressionnant pour une ville de banlieue. Y'a quelque chose de touchant à imaginer les milliers d'élèves qui ont foulé ce sol depuis 1898.
-
-C'est une école active, alors on admire de l'extérieur. Mais l'histoire est là, partout autour.
-
-### 🗄️ Script BD
-```json
-{
-  "language": "fr",
-  "content": "Plus de 125 ans que ces murs-là forment des générations de Lambertois. Ça force le respect.\n\nLe Collège Durocher Saint-Lambert, c'est une institution fondée en 1898 par les Sœurs des Saints Noms de Jésus et de Marie. Au départ, c'était réservé aux filles. Aujourd'hui c'est mixte — les temps changent.\n\nLe nom vient de l'abbé Flavien Durocher, une figure importante de l'Église catholique au 19e siècle. Pis ce qui est frappant, c'est l'endroit : en plein sur Riverside Drive, entouré de maisons patrimoniales de 250 ans. L'éducation et le patrimoine, côte à côte depuis plus d'un siècle.\n\nFaut se rappeler qu'au moment de sa fondation, Saint-Lambert était une ville profondément duelle — francophones catholiques d'un bord, anglophones protestants de l'autre. Ce collège-là, c'était un pilier de la communauté francophone. Une façon d'affirmer sa présence dans une ville où les institutions anglophones avaient le haut du pavé.\n\nRegarde le bâtiment principal depuis Riverside. Le campus s'étend sur plusieurs bâtiments — c'est impressionnant pour une ville de banlieue. Y'a quelque chose de touchant à imaginer les milliers d'élèves qui ont foulé ce sol depuis 1898.\n\nC'est une école active, alors on admire de l'extérieur. Mais l'histoire est là, partout autour.",
-  "voice_id": null,
-  "voice_settings": {"stability": 0.5, "clarity": 0.75},
-  "persona": "marco"
-}
-```
 
 ---
 
@@ -744,31 +434,6 @@ C'est une école active, alors on admire de l'extérieur. Mais l'histoire est l�
 }
 ```
 
-### 🎙️ Script audio (fr)
-> Persona: Marco
-> Mots: 202
-> Durée estimée: 81s
-
-« Maximus in minimis. » Se montrer grand jusque dans les plus petits détails. C'est la devise de Saint-Lambert. Pis honnêtement? Cette ville-là a prouvé que c'est pas juste des mots.
-
-L'hôtel de ville est ici, au cœur du noyau villageois — l'intersection d'Argyle et Victoria, le « Village » lambertois. C'est le centre névralgique depuis que Saint-Lambert est devenue municipalité le 1er juillet 1857, sous le premier maire Louis Bétournay.
-
-Mais l'épisode que je veux te raconter, c'est 2002. Le gouvernement du Québec a forcé Saint-Lambert à fusionner avec Longueuil. Avalée. Disparue de la carte. Les résidents ont pas accepté ça. En 2004, référendum de défusion : 41,4 % des électeurs inscrits ont voté pour la séparation — largement au-dessus du seuil requis. Le 1er janvier 2006, Saint-Lambert redevenait indépendante. Un acte de résistance civique assez rare au Québec. Maximus in minimis en action.
-
-Depuis ce coin de rue, t'es à deux pas des boutiques et restos de la rue Victoria — le petit centre commercial historique. C'est un bon point de départ pour explorer le Village.
-
-Pis si t'as besoin de toilettes, l'hôtel de ville est ouvert au public pendant les heures d'affaires. Pas glamour comme conseil, mais toujours pratique.
-
-### 🗄️ Script BD
-```json
-{
-  "language": "fr",
-  "content": "« Maximus in minimis. » Se montrer grand jusque dans les plus petits détails. C'est la devise de Saint-Lambert. Pis honnêtement? Cette ville-là a prouvé que c'est pas juste des mots.\n\nL'hôtel de ville est ici, au cœur du noyau villageois — l'intersection d'Argyle et Victoria, le « Village » lambertois. C'est le centre névralgique depuis que Saint-Lambert est devenue municipalité le 1er juillet 1857, sous le premier maire Louis Bétournay.\n\nMais l'épisode que je veux te raconter, c'est 2002. Le gouvernement du Québec a forcé Saint-Lambert à fusionner avec Longueuil. Avalée. Disparue de la carte. Les résidents ont pas accepté ça. En 2004, référendum de défusion : 41,4 % des électeurs inscrits ont voté pour la séparation — largement au-dessus du seuil requis. Le 1er janvier 2006, Saint-Lambert redevenait indépendante. Un acte de résistance civique assez rare au Québec. Maximus in minimis en action.\n\nDepuis ce coin de rue, t'es à deux pas des boutiques et restos de la rue Victoria — le petit centre commercial historique. C'est un bon point de départ pour explorer le Village.\n\nPis si t'as besoin de toilettes, l'hôtel de ville est ouvert au public pendant les heures d'affaires. Pas glamour comme conseil, mais toujours pratique.",
-  "voice_id": null,
-  "voice_settings": {"stability": 0.5, "clarity": 0.75},
-  "persona": "marco"
-}
-```
 
 ---
 

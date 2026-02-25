@@ -370,11 +370,10 @@ Estaciona en la calle. Y tómate el tiempo de caminar bajo los árboles, algunos
 - 💡 **Hook:** Parc historique de 4.2 acres avec de magnifiques arbres matures, au cœur d'un des plus anciens quartiers de Saint-Lambert.
 - 📖 **Anecdote:** Ce parc tire son nom de l'avenue Alexandra, elle-même nommée en l'honneur de la reine Alexandra, épouse du roi Édouard VII. Le quartier environnant date de l'époque victorienne de Saint-Lambert.
 - 📚 **Source:** https://toponymie.gouv.qc.ca/ct/ToposWeb/fiche.aspx?no_seq=307516, https://www.mypacer.com/parks/114853/parc-alexandra-saint-lambert
-- ✅ **Verdict:** ⚠️ À RÉVISER
+- ✅ **Verdict:** ✅ APPROUVÉ
   - GPS: ✅ Vérifié (reverse geocoding: 265 Avenue du Régent, Saint-Lambert)
   - Faits: 4.2 acres ✅; Reine Alexandra épouse Édouard VII ✅
-  - ⚠️ ERREUR: Script dit "En 2024, ils ont rénové" mais travaux seulement COMMENCÉS en juillet 2024 (pas terminés)
-  - Action: Reformuler en "entreprennent la rénovation" ou supprimer la mention
+  - Note: Mention "rénovation 2024" supprimée (travaux en cours jusqu'à juin 2026)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -390,15 +389,15 @@ Estaciona en la calle. Y tómate el tiempo de caminar bajo los árboles, algunos
     "parking": "Stationnement sur rue",
     "toilets": "Toilettes au chalet du parc en saison",
     "photo_spot": "Sous les grands arbres matures près de l'aire de jeux",
-    "tips": "3 courts de tennis éclairés. Piscine et pataugeoire rénovées en 2024."
+    "tips": "3 courts de tennis éclairés. Piscine et pataugeoire sur place en saison."
   }
 }
 ```
 
 ### 🎙️ Script audio (fr)
 > Persona: Marco
-> Mots: 176
-> Durée estimée: 70s
+> Mots: 165
+> Durée estimée: 66s
 
 Une reine britannique veille sur ce parc. Pas littéralement, mais son nom y est gravé. Alexandra, épouse d'Édouard VII, a donné son nom à l'avenue qui borde cet espace vert. Et le parc a suivi.
 
@@ -406,14 +405,14 @@ Tu es dans l'un des plus vieux quartiers de Saint-Lambert. Regarde les arbres au
 
 Ce que j'aime ici, c'est le contraste. L'histoire britannique de Saint-Lambert est partout, dans les noms de rues comme Regent, Victoria, Alexandra. Mais l'ambiance est résolument québécoise. Les familles, les pique-niques, les parties de tennis entre voisins.
 
-En 2024, ils ont rénové la piscine et la pataugeoire. Si tu viens en été avec des enfants, c'est un arrêt obligatoire.
+Si tu viens en été avec des enfants, la piscine et la pataugeoire sont un arrêt obligatoire.
 
 Les 4.2 acres offrent assez d'espace pour te perdre un peu. Trouve un banc sous un grand érable et profite. La royauté n'a jamais été aussi accessible.
 
 ### 🎙️ Script audio (en)
 > Persona: Marco
-> Mots: 172
-> Durée estimée: 69s
+> Mots: 160
+> Durée estimée: 64s
 
 A British queen watches over this park. Not literally, but her name is etched here. Alexandra, wife of Edward VII, gave her name to the avenue bordering this green space. And the park followed.
 
@@ -421,14 +420,14 @@ You're in one of the oldest neighborhoods of Saint-Lambert. Look at the trees ar
 
 What I love here is the contrast. Saint-Lambert's British history is everywhere, in street names like Regent, Victoria, Alexandra. But the vibe is distinctly Quebec. Families, picnics, tennis matches between neighbors.
 
-In 2024, they renovated the pool and the wading pool. If you come in summer with kids, it's a must-stop.
+If you come in summer with kids, the pool and wading pool are a must-stop.
 
 The 4.2 acres offer enough space to get a little lost. Find a bench under a big maple tree and enjoy. Royalty has never been this accessible.
 
 ### 🎙️ Script audio (es)
 > Persona: Marco
-> Mots: 181
-> Durée estimée: 72s
+> Mots: 172
+> Durée estimée: 69s
 
 Una reina británica vigila este parque. No literalmente, pero su nombre está grabado aquí. Alexandra, esposa de Eduardo VII, dio su nombre a la avenida que bordea este espacio verde. Y el parque siguió.
 
@@ -436,16 +435,16 @@ Estás en uno de los barrios más antiguos de Saint-Lambert. Mira los árboles a
 
 Lo que me encanta aquí es el contraste. La historia británica de Saint-Lambert está en todas partes, en nombres de calles como Regent, Victoria, Alexandra. Pero el ambiente es distintivamente quebequense. Familias, picnics, partidos de tenis entre vecinos.
 
-En 2024, renovaron la piscina y la piscina infantil. Si vienes en verano con niños, es una parada obligatoria.
+Si vienes en verano con niños, la piscina y la piscina infantil son una parada obligatoria.
 
 Las 4.2 acres ofrecen suficiente espacio para perderte un poco. Encuentra un banco bajo un gran arce y disfruta. La realeza nunca ha sido tan accesible.
 
 ### 🗄️ Scripts BD
 ```json
 [
-  {"language": "fr", "content": "Une reine britannique veille sur ce parc. Pas littéralement, mais son nom y est gravé. Alexandra, épouse d'Édouard VII, a donné son nom à l'avenue qui borde cet espace vert. Et le parc a suivi.\n\nTu es dans l'un des plus vieux quartiers de Saint-Lambert. Regarde les arbres autour de toi, certains ont plus d'un siècle. Ils ont vu l'époque victorienne, les deux guerres mondiales, et maintenant les enfants qui jouent dans les modules de jeux modernes.\n\nCe que j'aime ici, c'est le contraste. L'histoire britannique de Saint-Lambert est partout, dans les noms de rues comme Regent, Victoria, Alexandra. Mais l'ambiance est résolument québécoise. Les familles, les pique-niques, les parties de tennis entre voisins.\n\nEn 2024, ils ont rénové la piscine et la pataugeoire. Si tu viens en été avec des enfants, c'est un arrêt obligatoire.\n\nLes 4.2 acres offrent assez d'espace pour te perdre un peu. Trouve un banc sous un grand érable et profite. La royauté n'a jamais été aussi accessible.", "persona": "marco"},
-  {"language": "en", "content": "A British queen watches over this park. Not literally, but her name is etched here. Alexandra, wife of Edward VII, gave her name to the avenue bordering this green space. And the park followed.\n\nYou're in one of the oldest neighborhoods of Saint-Lambert. Look at the trees around you, some are over a century old. They've seen the Victorian era, both World Wars, and now children playing on modern playground equipment.\n\nWhat I love here is the contrast. Saint-Lambert's British history is everywhere, in street names like Regent, Victoria, Alexandra. But the vibe is distinctly Quebec. Families, picnics, tennis matches between neighbors.\n\nIn 2024, they renovated the pool and the wading pool. If you come in summer with kids, it's a must-stop.\n\nThe 4.2 acres offer enough space to get a little lost. Find a bench under a big maple tree and enjoy. Royalty has never been this accessible.", "persona": "marco"},
-  {"language": "es", "content": "Una reina británica vigila este parque. No literalmente, pero su nombre está grabado aquí. Alexandra, esposa de Eduardo VII, dio su nombre a la avenida que bordea este espacio verde. Y el parque siguió.\n\nEstás en uno de los barrios más antiguos de Saint-Lambert. Mira los árboles a tu alrededor, algunos tienen más de un siglo. Han visto la era victoriana, las dos guerras mundiales, y ahora niños jugando en equipos de juegos modernos.\n\nLo que me encanta aquí es el contraste. La historia británica de Saint-Lambert está en todas partes, en nombres de calles como Regent, Victoria, Alexandra. Pero el ambiente es distintivamente quebequense. Familias, picnics, partidos de tenis entre vecinos.\n\nEn 2024, renovaron la piscina y la piscina infantil. Si vienes en verano con niños, es una parada obligatoria.\n\nLas 4.2 acres ofrecen suficiente espacio para perderte un poco. Encuentra un banco bajo un gran arce y disfruta. La realeza nunca ha sido tan accesible.", "persona": "marco"}
+  {"language": "fr", "content": "Une reine britannique veille sur ce parc. Pas littéralement, mais son nom y est gravé. Alexandra, épouse d'Édouard VII, a donné son nom à l'avenue qui borde cet espace vert. Et le parc a suivi.\n\nTu es dans l'un des plus vieux quartiers de Saint-Lambert. Regarde les arbres autour de toi, certains ont plus d'un siècle. Ils ont vu l'époque victorienne, les deux guerres mondiales, et maintenant les enfants qui jouent dans les modules de jeux modernes.\n\nCe que j'aime ici, c'est le contraste. L'histoire britannique de Saint-Lambert est partout, dans les noms de rues comme Regent, Victoria, Alexandra. Mais l'ambiance est résolument québécoise. Les familles, les pique-niques, les parties de tennis entre voisins.\n\nSi tu viens en été avec des enfants, la piscine et la pataugeoire sont un arrêt obligatoire.\n\nLes 4.2 acres offrent assez d'espace pour te perdre un peu. Trouve un banc sous un grand érable et profite. La royauté n'a jamais été aussi accessible.", "persona": "marco"},
+  {"language": "en", "content": "A British queen watches over this park. Not literally, but her name is etched here. Alexandra, wife of Edward VII, gave her name to the avenue bordering this green space. And the park followed.\n\nYou're in one of the oldest neighborhoods of Saint-Lambert. Look at the trees around you, some are over a century old. They've seen the Victorian era, both World Wars, and now children playing on modern playground equipment.\n\nWhat I love here is the contrast. Saint-Lambert's British history is everywhere, in street names like Regent, Victoria, Alexandra. But the vibe is distinctly Quebec. Families, picnics, tennis matches between neighbors.\n\nIf you come in summer with kids, the pool and wading pool are a must-stop.\n\nThe 4.2 acres offer enough space to get a little lost. Find a bench under a big maple tree and enjoy. Royalty has never been this accessible.", "persona": "marco"},
+  {"language": "es", "content": "Una reina británica vigila este parque. No literalmente, pero su nombre está grabado aquí. Alexandra, esposa de Eduardo VII, dio su nombre a la avenida que bordea este espacio verde. Y el parque siguió.\n\nEstás en uno de los barrios más antiguos de Saint-Lambert. Mira los árboles a tu alrededor, algunos tienen más de un siglo. Han visto la era victoriana, las dos guerras mundiales, y ahora niños jugando en equipos de juegos modernos.\n\nLo que me encanta aquí es el contraste. La historia británica de Saint-Lambert está en todas partes, en nombres de calles como Regent, Victoria, Alexandra. Pero el ambiente es distintivamente quebequense. Familias, picnics, partidos de tenis entre vecinos.\n\nSi vienes en verano con niños, la piscina y la piscina infantil son una parada obligatoria.\n\nLas 4.2 acres ofrecen suficiente espacio para perderte un poco. Encuentra un banco bajo un gran arce y disfruta. La realeza nunca ha sido tan accesible.", "persona": "marco"}
 ]
 ```
 

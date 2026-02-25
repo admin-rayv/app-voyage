@@ -129,15 +129,21 @@ Après le script, ajouter un bloc JSON prêt pour insertion dans la table `scrip
 ```
 ```
 
-### 5. Push Git
+### 5. Push Git — OBLIGATOIRE
 
-Après avoir écrit TOUS les scripts du fichier:
+⚠️ **CETTE ÉTAPE EST OBLIGATOIRE. NE JAMAIS L'OUBLIER.**
+
+Après avoir écrit TOUS les scripts du fichier, tu DOIS commit et push:
 ```bash
 cd ~/.openclaw/workspace/app-voyage
 git add content/
 git commit -m "scripts: {ville} — {catégorie} ({n} scripts {langue})" --author="Admin Rayv <admin@rayv.ca>"
 git push origin main
 ```
+
+**Si tu ne push pas, ton travail est PERDU.** La session est isolée — rien ne survit après ta fermeture sauf ce qui est pushé sur git.
+
+Confirme dans ton résumé final que le push a été fait avec succès.
 
 ## Exemple complet
 

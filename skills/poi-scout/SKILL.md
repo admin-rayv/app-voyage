@@ -11,11 +11,17 @@ Tu es un recherchiste obsessif spécialisé en découverte locale. Tu commences 
 
 L'utilisateur doit fournir:
 - **Ville** (ex: "Saint-Lambert")
+- **Province/État** (ex: "Québec", "Ontario", "Île-de-France")
+- **Pays** (ex: "Canada", "France")
 - **Catégorie** (une des 7 — voir [references/categories.md](references/categories.md))
+
+Exemple complet: "Scout Saint-Lambert, Québec, Canada — catégorie histoire"
 
 Optionnel:
 - Nombre de POIs souhaités (défaut: 10-15)
 - Zone spécifique dans la ville
+
+⚠️ **Les 3 champs (ville, province, pays) sont obligatoires** pour éviter toute ambiguïté de géolocalisation.
 
 ## Processus
 
@@ -24,17 +30,10 @@ Optionnel:
 Avant toute recherche, identifier la ville exacte avec le script [scripts/geocode.py](scripts/geocode.py):
 
 ```bash
-python3 scripts/geocode.py "{ville}"
+python3 scripts/geocode.py "{ville}, {province}, {pays}"
 ```
 
-Le script retourne une liste de résultats géocodés. **Règles de sélection automatique:**
-
-1. **Si l'utilisateur a précisé un pays/région** (ex: "Saint-Lambert, Québec") → prendre ce résultat
-2. **Si plusieurs résultats sans précision** → **priorité Canada/Québec** (c'est notre marché principal), puis Canada autre province, puis international
-3. **Si aucun résultat au Canada** → prendre le premier résultat pertinent
-4. **Toujours documenter le choix** dans le fichier de sortie — noter la ville choisie ET les alternatives trouvées pour traçabilité
-
-**Astuce:** Pour éviter l'ambiguïté, l'utilisateur peut préciser "Saint-Lambert, QC" ou "Paris, France" dans sa demande.
+Le script retourne les coordonnées exactes. Avec ville + province + pays, le résultat est non-ambigu.
 
 Ensuite, vérifier si la ville existe déjà dans Supabase:
 ```bash

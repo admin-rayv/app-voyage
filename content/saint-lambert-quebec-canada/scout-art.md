@@ -4,7 +4,7 @@
 > City: Saint-Lambert / Saint-Lambert
 > Coordonnées centre: 45.5000, -73.5100
 > Pays: CA | Région: Québec
-> Status: VÉRIFIÉ — 10 APPROUVÉS, 2 À RÉVISER (GPS)
+> Status: VÉRIFIÉ — 11 APPROUVÉS, 1 À RÉVISER (GPS)
 
 ---
 
@@ -183,23 +183,23 @@ Si sigues caminando por el parque, estás a pocos pasos del centro histórico. L
 ---
 
 ## POI 3: Le portail du souvenir
-- 📍 **GPS:** 45.5103, -73.5192 (exacte)
-- 🏠 **Adresse:** Parc de la Voie Maritime, Saint-Lambert
+- 📍 **GPS:** 45.5068294, -73.5186881 (vérifié - 430 Rue Riverside)
+- 🏠 **Adresse:** 430 Rue Riverside, Saint-Lambert, QC J4P 1B6
 - 🏷️ **Catégories:** art
 - 🏛️ **Type:** monument
 - 📏 **Rayon déclenchement:** 50m
 - 💡 **Hook:** Monument spectaculaire de 3 mètres en acier massif pesant plus de 9 tonnes, créé par l'artiste multidisciplinaire espagnol Kieff Antonio Grediaga.
 - 📖 **Anecdote:** Inspiré par le poète espagnol Federico Garcia Lorca fusillé par Franco, Kieff a finalement dédié l'œuvre à Émile Nelligan — "l'équivalent québécois" dans sa vision. Kieff était aussi ténor, luthier et chanteur d'opéra!
 - 📚 **Source:** https://culture.saint-lambert.ca/en/attrait/le-portail-du-souvenir/
-- ✅ **Verdict:** À RÉVISER
-- ⚠️ **Notes vérification:** Kieff Antonio Grediaga ✓ (né 1936 Madrid, ténor confirmé). Garcia Lorca fusillé ✓. ATTENTION: Le nom réel semble être "El pórtico del olvido" (Le portique de l'oubli). GPS pointe vers parc à chiens au lieu du Parc de la Voie Maritime.
+- ✅ **Verdict:** APPROUVÉ
+- ✅ **Notes vérification:** Kieff Antonio Grediaga ✓ (né 1936 Madrid, ténor confirmé). Garcia Lorca fusillé ✓. GPS corrigé: 430 Rue Riverside (45.5068, -73.5187).
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
 {
   "name": {"fr": "Le portail du souvenir", "en": "The Portal of Remembrance"},
-  "lat": 45.5103,
-  "lng": -73.5192,
+  "lat": 45.5068294,
+  "lng": -73.5186881,
   "trigger_radius_m": 50,
   "type": "monument",
   "categories": ["art"],

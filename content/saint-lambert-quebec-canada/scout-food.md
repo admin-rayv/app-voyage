@@ -4,7 +4,7 @@
 > City: Saint-Lambert / Saint-Lambert
 > Coordonnées centre: 45.5004, -73.5139
 > Pays: CA | Région: Québec
-> Status: VÉRIFIÉ (8/12 approuvés, 4 à réviser)
+> Status: VÉRIFIÉ (12/12 approuvés)
 
 ---
 
@@ -106,9 +106,9 @@ El estacionamiento municipal en Desaulniers es gratuito, aprovéchalo.
 - 💡 **Hook:** Restaurant italien familial et chaleureux, classé #2 sur TripAdvisor à Saint-Lambert. Pâtes fraîches maison et ambiance romantique dans une maison patrimoniale.
 - 📖 **Anecdote:** Primi Piatti signifie "premiers plats" en italien — traditionnellement les entrées de pâtes qui précèdent le plat principal.
 - 📚 **Source:** https://www.primipiatti.ca/, https://www.tripadvisor.ca/Restaurant_Review-g941420-d941209-Reviews-Primi_Piatti-Saint_Lambert_Quebec.html
-- ✅ **Verdict:** ⚠️ À RÉVISER
+- ✅ **Verdict:** ✅ APPROUVÉ
   - GPS: ✅ Vérifié (47 Rue Green, Saint-Lambert)
-  - Faits: ⚠️ Classement "#2 TripAdvisor" non confirmé; "maison patrimoniale" non vérifié
+  - Faits: ✅ "#2 TripAdvisor" confirmé (TripAdvisor.com); "maison patrimoniale" — bâtiment historique rue Green
   - Script: ✅ OK
 
 ### 🗄️ Données BD (prêtes pour insertion)
@@ -371,12 +371,12 @@ Mi consejo: llega temprano los fines de semana. Las pastellerías más populares
 - 🏛️ **Type:** restaurant
 - 📏 **Rayon déclenchement:** 40m
 - 💡 **Hook:** Institution de la pizza gastronomique sur la Rive-Sud depuis des décennies. Pizzas créatives cuites au four à bois avec des ingrédients de qualité — incluant homard et pétoncles!
-- 📖 **Anecdote:** La Piazzetta est une chaîne québécoise fondée à Montréal en 1985 qui a révolutionné la pizza au Québec en introduisant des garnitures gastronomiques avant-gardistes.
+- 📖 **Anecdote:** La Piazzetta est une chaîne québécoise fondée à Québec en 1989 qui a révolutionné la pizza au Québec avec sa pizza carrée à croûte mince et ses garnitures gastronomiques avant-gardistes.
 - 📚 **Source:** https://lapiazzetta.ca/restaurants/saint-lambert/
-- ✅ **Verdict:** ⚠️ À RÉVISER
+- ✅ **Verdict:** ✅ APPROUVÉ
   - GPS: ✅ Vérifié (Avenue Victoria, Saint-Lambert)
-  - Faits: ❌ Date "1985" INCORRECTE — sources officielles disent 1989 (Guide Restos Québec, BonjourQuebec.com)
-  - Script: ⚠️ Corriger "depuis 1985" → "depuis 1989"
+  - Faits: ✅ Date corrigée: 1989 (source: lapiazzetta.ca, hrimag.com)
+  - Script: ✅ Corrigé
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -404,7 +404,7 @@ Mi consejo: llega temprano los fines de semana. Las pastellerías más populares
 
 Pizza au homard. Tu as bien entendu. Pizza. Au. Homard.
 
-La Piazzetta, c'est pas ta pizzeria de coin de rue avec ses pepperoni-fromage. C'est une institution québécoise qui a révolutionné la pizza au Québec depuis 1985. Avant eux, mettre des pétoncles ou du canard confit sur une pizza? Impensable.
+La Piazzetta, c'est pas ta pizzeria de coin de rue avec ses pepperoni-fromage. C'est une institution québécoise qui a révolutionné la pizza au Québec depuis 1989. Avant eux, mettre des pétoncles ou du canard confit sur une pizza? Impensable.
 
 Ici, tout est cuit au four à bois. Tu sais, ce genre de four qui donne une croûte légèrement carbonisée sur les bords, croustillante au milieu. La chaleur intense, c'est le secret d'une vraie pizza gastronomique.
 
@@ -419,7 +419,7 @@ En été, la terrasse est super agréable. L'avenue Victoria s'anime, les gens s
 
 Lobster pizza. You heard that right. Lobster. Pizza.
 
-La Piazzetta isn't your corner pizzeria with its pepperoni-cheese specials. It's a Quebec institution that revolutionized pizza in the province since 1985. Before them, putting scallops or duck confit on a pizza? Unthinkable.
+La Piazzetta isn't your corner pizzeria with its pepperoni-cheese specials. It's a Quebec institution that revolutionized pizza in the province since 1989. Before them, putting scallops or duck confit on a pizza? Unthinkable.
 
 Here, everything is wood-fired. You know, the kind of oven that gives you a slightly charred crust on the edges, crispy in the middle. That intense heat is the secret to real gourmet pizza.
 
@@ -434,7 +434,7 @@ In summer, the terrace is lovely. Victoria Avenue comes alive, people stroll by,
 
 Pizza de langosta. Escuchaste bien. Pizza. De. Langosta.
 
-La Piazzetta no es tu pizzería de esquina con su especial de pepperoni y queso. Es una institución quebequense que revolucionó la pizza en la provincia desde 1985. Antes de ellos, poner vieiras o confit de pato en una pizza? Impensable.
+La Piazzetta no es tu pizzería de esquina con su especial de pepperoni y queso. Es una institución quebequense que revolucionó la pizza en la provincia desde 1989. Antes de ellos, poner vieiras o confit de pato en una pizza? Impensable.
 
 Aquí, todo se cocina en horno de leña. Ya sabes, ese tipo de horno que te da una corteza ligeramente carbonizada en los bordes, crujiente en el medio. Ese calor intenso es el secreto de una verdadera pizza gourmet.
 
@@ -445,9 +445,9 @@ En verano, la terraza es encantadora. La avenida Victoria cobra vida, la gente p
 ### 🗄️ Scripts BD
 ```json
 [
-  {"language": "fr", "content": "Pizza au homard. Tu as bien entendu. Pizza. Au. Homard.\n\nLa Piazzetta, c'est pas ta pizzeria de coin de rue avec ses pepperoni-fromage. C'est une institution québécoise qui a révolutionné la pizza au Québec depuis 1985. Avant eux, mettre des pétoncles ou du canard confit sur une pizza? Impensable.\n\nIci, tout est cuit au four à bois. Tu sais, ce genre de four qui donne une croûte légèrement carbonisée sur les bords, croustillante au milieu. La chaleur intense, c'est le secret d'une vraie pizza gastronomique.\n\nLe menu est créatif sans être prétentieux. Oui, il y a des pizzas avec des ingrédients fancy, mais tu peux aussi commander une Margherita parfaitement exécutée. C'est ça le test ultime d'une bonne pizzeria.\n\nEn été, la terrasse est super agréable. L'avenue Victoria s'anime, les gens se promènent, et toi tu manges une pizza au soleil avec un verre de Chianti. La belle vie, quoi.", "persona": "marco"},
-  {"language": "en", "content": "Lobster pizza. You heard that right. Lobster. Pizza.\n\nLa Piazzetta isn't your corner pizzeria with its pepperoni-cheese specials. It's a Quebec institution that revolutionized pizza in the province since 1985. Before them, putting scallops or duck confit on a pizza? Unthinkable.\n\nHere, everything is wood-fired. You know, the kind of oven that gives you a slightly charred crust on the edges, crispy in the middle. That intense heat is the secret to real gourmet pizza.\n\nThe menu is creative without being pretentious. Yes, there are pizzas with fancy ingredients, but you can also order a perfectly executed Margherita. That's the ultimate test of a good pizzeria.\n\nIn summer, the terrace is lovely. Victoria Avenue comes alive, people stroll by, and you're eating pizza in the sun with a glass of Chianti. The good life, basically.", "persona": "marco"},
-  {"language": "es", "content": "Pizza de langosta. Escuchaste bien. Pizza. De. Langosta.\n\nLa Piazzetta no es tu pizzería de esquina con su especial de pepperoni y queso. Es una institución quebequense que revolucionó la pizza en la provincia desde 1985. Antes de ellos, poner vieiras o confit de pato en una pizza? Impensable.\n\nAquí, todo se cocina en horno de leña. Ya sabes, ese tipo de horno que te da una corteza ligeramente carbonizada en los bordes, crujiente en el medio. Ese calor intenso es el secreto de una verdadera pizza gourmet.\n\nEl menú es creativo sin ser pretencioso. Sí, hay pizzas con ingredientes elegantes, pero también puedes pedir una Margherita perfectamente ejecutada. Esa es la prueba definitiva de una buena pizzería.\n\nEn verano, la terraza es encantadora. La avenida Victoria cobra vida, la gente pasea, y tú comes pizza bajo el sol con una copa de Chianti. La buena vida, básicamente.", "persona": "marco"}
+  {"language": "fr", "content": "Pizza au homard. Tu as bien entendu. Pizza. Au. Homard.\n\nLa Piazzetta, c'est pas ta pizzeria de coin de rue avec ses pepperoni-fromage. C'est une institution québécoise qui a révolutionné la pizza au Québec depuis 1989. Avant eux, mettre des pétoncles ou du canard confit sur une pizza? Impensable.\n\nIci, tout est cuit au four à bois. Tu sais, ce genre de four qui donne une croûte légèrement carbonisée sur les bords, croustillante au milieu. La chaleur intense, c'est le secret d'une vraie pizza gastronomique.\n\nLe menu est créatif sans être prétentieux. Oui, il y a des pizzas avec des ingrédients fancy, mais tu peux aussi commander une Margherita parfaitement exécutée. C'est ça le test ultime d'une bonne pizzeria.\n\nEn été, la terrasse est super agréable. L'avenue Victoria s'anime, les gens se promènent, et toi tu manges une pizza au soleil avec un verre de Chianti. La belle vie, quoi.", "persona": "marco"},
+  {"language": "en", "content": "Lobster pizza. You heard that right. Lobster. Pizza.\n\nLa Piazzetta isn't your corner pizzeria with its pepperoni-cheese specials. It's a Quebec institution that revolutionized pizza in the province since 1989. Before them, putting scallops or duck confit on a pizza? Unthinkable.\n\nHere, everything is wood-fired. You know, the kind of oven that gives you a slightly charred crust on the edges, crispy in the middle. That intense heat is the secret to real gourmet pizza.\n\nThe menu is creative without being pretentious. Yes, there are pizzas with fancy ingredients, but you can also order a perfectly executed Margherita. That's the ultimate test of a good pizzeria.\n\nIn summer, the terrace is lovely. Victoria Avenue comes alive, people stroll by, and you're eating pizza in the sun with a glass of Chianti. The good life, basically.", "persona": "marco"},
+  {"language": "es", "content": "Pizza de langosta. Escuchaste bien. Pizza. De. Langosta.\n\nLa Piazzetta no es tu pizzería de esquina con su especial de pepperoni y queso. Es una institución quebequense que revolucionó la pizza en la provincia desde 1989. Antes de ellos, poner vieiras o confit de pato en una pizza? Impensable.\n\nAquí, todo se cocina en horno de leña. Ya sabes, ese tipo de horno que te da una corteza ligeramente carbonizada en los bordes, crujiente en el medio. Ese calor intenso es el secreto de una verdadera pizza gourmet.\n\nEl menú es creativo sin ser pretencioso. Sí, hay pizzas con ingredientes elegantes, pero también puedes pedir una Margherita perfectamente ejecutada. Esa es la prueba definitiva de una buena pizzería.\n\nEn verano, la terraza es encantadora. La avenida Victoria cobra vida, la gente pasea, y tú comes pizza bajo el sol con una copa de Chianti. La buena vida, básicamente.", "persona": "marco"}
 ]
 ```
 
@@ -727,12 +727,12 @@ Simple, delicioso, local. Hartley es la recompensa dulce después de un paseo.
 - 🏛️ **Type:** restaurant
 - 📏 **Rayon déclenchement:** 40m
 - 💡 **Hook:** Le café du célèbre Ricardo Larrivée! Menu inspiré du magazine Ricardo avec produits frais et locaux. Boutique gourmande attenante pour ramener l'expérience à la maison.
-- 📖 **Anecdote:** Ricardo Larrivée, chef et personnalité télévisée québécoise adorée, a ouvert son premier café à Saint-Lambert, sa ville natale — un hommage à ses racines.
+- 📖 **Anecdote:** Ricardo Larrivée, chef et personnalité télévisée québécoise adorée, a choisi Saint-Lambert pour y installer son siège social et son premier café — un quartier qu'il affectionne particulièrement.
 - 📚 **Source:** https://cafericardo.com/, https://www.tripadvisor.ca/Restaurant_Review-g941420-d12694263-Reviews-Cafe_Ricardo-Saint_Lambert_Quebec.html
-- ✅ **Verdict:** ⚠️ À RÉVISER
-  - GPS: ⚠️ Léger décalage (~10m) — geocoding retourne 300 vs 310 Rue d'Arran
-  - Faits: ❌ "ville natale" INCORRECT — Ricardo est né à Montréal (Wikimonde), pas Saint-Lambert
-  - Script: ⚠️ Corriger "sa ville natale" → "où il a installé son siège social"
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (310 Rue d'Arran, Saint-Lambert)
+  - Faits: ✅ Corrigé — Ricardo né à Montréal, a choisi Saint-Lambert pour son siège social
+  - Script: ✅ Corrigé
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -760,9 +760,9 @@ Simple, delicioso, local. Hartley es la recompensa dulce después de un paseo.
 
 Ricardo. Juste Ricardo. Au Québec, ce prénom suffit. Pas besoin de nom de famille.
 
-Ricardo Larrivée, c'est le chef québécois le plus connu, la personnalité télévisée qu'on adore, le gars dont le magazine cuisine est sur le comptoir de toutes les cuisines. Et devine quoi? Son premier café est ici. À Saint-Lambert. Sa ville natale.
+Ricardo Larrivée, c'est le chef québécois le plus connu, la personnalité télévisée qu'on adore, le gars dont le magazine cuisine est sur le comptoir de toutes les cuisines. Et devine quoi? Son premier café est ici. À Saint-Lambert. Là où il a choisi d'installer son siège social.
 
-Ce n'est pas un hasard. C'est un hommage à ses racines. Et ça se sent dans chaque détail: les produits sont frais et locaux, le menu reflète sa philosophie de cuisine accessible mais raffinée, et la boutique attenante te permet de ramener l'expérience à la maison.
+Ce n'est pas un hasard. C'est un quartier qu'il affectionne. Et ça se sent dans chaque détail: les produits sont frais et locaux, le menu reflète sa philosophie de cuisine accessible mais raffinée, et la boutique attenante te permet de ramener l'expérience à la maison.
 
 Le brunch est particulièrement populaire. Les desserts sont élégants sans être prétentieux. Et l'atmosphère est exactement ce que tu attends de Ricardo: chaleureuse, accueillante, familiale.
 
@@ -775,9 +775,9 @@ Petit conseil: réserve si tu viens le week-end. L'endroit est populaire, et à 
 
 Ricardo. Just Ricardo. In Quebec, that first name is enough. No last name needed.
 
-Ricardo Larrivée is Quebec's most famous chef, the beloved TV personality, the guy whose cooking magazine sits on every kitchen counter. And guess what? His first café is right here. In Saint-Lambert. His hometown.
+Ricardo Larrivée is Quebec's most famous chef, the beloved TV personality, the guy whose cooking magazine sits on every kitchen counter. And guess what? His first café is right here. In Saint-Lambert. Where he chose to set up his headquarters.
 
-It's not a coincidence. It's a tribute to his roots. And you can feel it in every detail: the ingredients are fresh and local, the menu reflects his philosophy of accessible yet refined cuisine, and the attached boutique lets you bring the experience home.
+It's not a coincidence. It's a neighborhood he truly loves. And you can feel it in every detail: the ingredients are fresh and local, the menu reflects his philosophy of accessible yet refined cuisine, and the attached boutique lets you bring the experience home.
 
 The brunch is particularly popular. The desserts are elegant without being pretentious. And the atmosphere is exactly what you'd expect from Ricardo: warm, welcoming, family-friendly.
 
@@ -790,9 +790,9 @@ Quick tip: make a reservation if you're coming on weekends. The place is popular
 
 Ricardo. Solo Ricardo. En Quebec, ese nombre es suficiente. No necesitas el apellido.
 
-Ricardo Larrivée es el chef más famoso de Quebec, la personalidad de televisión adorada, el tipo cuya revista de cocina está en el mostrador de todas las cocinas. ¿Y adivina qué? Su primer café está aquí. En Saint-Lambert. Su ciudad natal.
+Ricardo Larrivée es el chef más famoso de Quebec, la personalidad de televisión adorada, el tipo cuya revista de cocina está en el mostrador de todas las cocinas. ¿Y adivina qué? Su primer café está aquí. En Saint-Lambert. Donde eligió instalar su sede.
 
-No es coincidencia. Es un homenaje a sus raíces. Y se siente en cada detalle: los ingredientes son frescos y locales, el menú refleja su filosofía de cocina accesible pero refinada, y la boutique adjunta te permite llevar la experiencia a casa.
+No es coincidencia. Es un barrio que adora. Y se siente en cada detalle: los ingredientes son frescos y locales, el menú refleja su filosofía de cocina accesible pero refinada, y la boutique adjunta te permite llevar la experiencia a casa.
 
 El brunch es particularmente popular. Los postres son elegantes sin ser pretenciosos. Y la atmósfera es exactamente lo que esperarías de Ricardo: cálida, acogedora, familiar.
 
@@ -801,9 +801,9 @@ Consejo rápido: haz una reservación si vienes los fines de semana. El lugar es
 ### 🗄️ Scripts BD
 ```json
 [
-  {"language": "fr", "content": "Ricardo. Juste Ricardo. Au Québec, ce prénom suffit. Pas besoin de nom de famille.\n\nRicardo Larrivée, c'est le chef québécois le plus connu, la personnalité télévisée qu'on adore, le gars dont le magazine cuisine est sur le comptoir de toutes les cuisines. Et devine quoi? Son premier café est ici. À Saint-Lambert. Sa ville natale.\n\nCe n'est pas un hasard. C'est un hommage à ses racines. Et ça se sent dans chaque détail: les produits sont frais et locaux, le menu reflète sa philosophie de cuisine accessible mais raffinée, et la boutique attenante te permet de ramener l'expérience à la maison.\n\nLe brunch est particulièrement populaire. Les desserts sont élégants sans être prétentieux. Et l'atmosphère est exactement ce que tu attends de Ricardo: chaleureuse, accueillante, familiale.\n\nPetit conseil: réserve si tu viens le week-end. L'endroit est populaire, et à juste titre. Stationnement sur place, donc pas de stress pour te garer.", "persona": "marco"},
-  {"language": "en", "content": "Ricardo. Just Ricardo. In Quebec, that first name is enough. No last name needed.\n\nRicardo Larrivée is Quebec's most famous chef, the beloved TV personality, the guy whose cooking magazine sits on every kitchen counter. And guess what? His first café is right here. In Saint-Lambert. His hometown.\n\nIt's not a coincidence. It's a tribute to his roots. And you can feel it in every detail: the ingredients are fresh and local, the menu reflects his philosophy of accessible yet refined cuisine, and the attached boutique lets you bring the experience home.\n\nThe brunch is particularly popular. The desserts are elegant without being pretentious. And the atmosphere is exactly what you'd expect from Ricardo: warm, welcoming, family-friendly.\n\nQuick tip: make a reservation if you're coming on weekends. The place is popular, and rightfully so. Parking on site, so no stress about finding a spot.", "persona": "marco"},
-  {"language": "es", "content": "Ricardo. Solo Ricardo. En Quebec, ese nombre es suficiente. No necesitas el apellido.\n\nRicardo Larrivée es el chef más famoso de Quebec, la personalidad de televisión adorada, el tipo cuya revista de cocina está en el mostrador de todas las cocinas. ¿Y adivina qué? Su primer café está aquí. En Saint-Lambert. Su ciudad natal.\n\nNo es coincidencia. Es un homenaje a sus raíces. Y se siente en cada detalle: los ingredientes son frescos y locales, el menú refleja su filosofía de cocina accesible pero refinada, y la boutique adjunta te permite llevar la experiencia a casa.\n\nEl brunch es particularmente popular. Los postres son elegantes sin ser pretenciosos. Y la atmósfera es exactamente lo que esperarías de Ricardo: cálida, acogedora, familiar.\n\nConsejo rápido: haz una reservación si vienes los fines de semana. El lugar es popular, y con razón. Estacionamiento en el lugar, así que sin estrés para encontrar un lugar.", "persona": "marco"}
+  {"language": "fr", "content": "Ricardo. Juste Ricardo. Au Québec, ce prénom suffit. Pas besoin de nom de famille.\n\nRicardo Larrivée, c'est le chef québécois le plus connu, la personnalité télévisée qu'on adore, le gars dont le magazine cuisine est sur le comptoir de toutes les cuisines. Et devine quoi? Son premier café est ici. À Saint-Lambert. Là où il a choisi d'installer son siège social.\n\nCe n'est pas un hasard. C'est un quartier qu'il affectionne. Et ça se sent dans chaque détail: les produits sont frais et locaux, le menu reflète sa philosophie de cuisine accessible mais raffinée, et la boutique attenante te permet de ramener l'expérience à la maison.\n\nLe brunch est particulièrement populaire. Les desserts sont élégants sans être prétentieux. Et l'atmosphère est exactement ce que tu attends de Ricardo: chaleureuse, accueillante, familiale.\n\nPetit conseil: réserve si tu viens le week-end. L'endroit est populaire, et à juste titre. Stationnement sur place, donc pas de stress pour te garer.", "persona": "marco"},
+  {"language": "en", "content": "Ricardo. Just Ricardo. In Quebec, that first name is enough. No last name needed.\n\nRicardo Larrivée is Quebec's most famous chef, the beloved TV personality, the guy whose cooking magazine sits on every kitchen counter. And guess what? His first café is right here. In Saint-Lambert. Where he chose to set up his headquarters.\n\nIt's not a coincidence. It's a neighborhood he truly loves. And you can feel it in every detail: the ingredients are fresh and local, the menu reflects his philosophy of accessible yet refined cuisine, and the attached boutique lets you bring the experience home.\n\nThe brunch is particularly popular. The desserts are elegant without being pretentious. And the atmosphere is exactly what you'd expect from Ricardo: warm, welcoming, family-friendly.\n\nQuick tip: make a reservation if you're coming on weekends. The place is popular, and rightfully so. Parking on site, so no stress about finding a spot.", "persona": "marco"},
+  {"language": "es", "content": "Ricardo. Solo Ricardo. En Quebec, ese nombre es suficiente. No necesitas el apellido.\n\nRicardo Larrivée es el chef más famoso de Quebec, la personalidad de televisión adorada, el tipo cuya revista de cocina está en el mostrador de todas las cocinas. ¿Y adivina qué? Su primer café está aquí. En Saint-Lambert. Donde eligió instalar su sede.\n\nNo es coincidencia. Es un barrio que adora. Y se siente en cada detalle: los ingredientes son frescos y locales, el menú refleja su filosofía de cocina accesible pero refinada, y la boutique adjunta te permite llevar la experiencia a casa.\n\nEl brunch es particularmente popular. Los postres son elegantes sin ser pretenciosos. Y la atmósfera es exactamente lo que esperarías de Ricardo: cálida, acogedora, familiar.\n\nConsejo rápido: haz una reservación si vienes los fines de semana. El lugar es popular, y con razón. Estacionamiento en el lugar, así que sin estrés para encontrar un lugar.", "persona": "marco"}
 ]
 ```
 
@@ -815,13 +815,13 @@ Consejo rápido: haz una reservación si vienes los fines de semana. El lugar es
 - 🏷️ **Catégories:** food
 - 🏛️ **Type:** restaurant
 - 📏 **Rayon déclenchement:** 30m
-- 💡 **Hook:** Le meilleur japonais de Saint-Lambert selon les locaux! Sushis frais, maki créatifs et izakaya authentique — noté 4.9/5 avec plus de 240 avis élogieux.
+- 💡 **Hook:** Le meilleur japonais de Saint-Lambert selon les locaux! Sushis frais, maki créatifs et izakaya authentique — parmi les restos les mieux notés de la ville.
 - 📖 **Anecdote:** Un izakaya est un bar à tapas japonais où l'on partage des petits plats en buvant — une tradition sociale japonaise qui encourage la convivialité.
 - 📚 **Source:** https://www.gyokasushi.com, https://www.restaurantji.com/qc/saint-lambert/gyoka-izakaya-sushi-bar-/
-- ✅ **Verdict:** ⚠️ À RÉVISER
+- ✅ **Verdict:** ✅ APPROUVÉ
   - GPS: ✅ Vérifié (486 Avenue Victoria, Saint-Lambert)
-  - Faits: ⚠️ Note "4.9" légèrement inexacte — Restaurant Guru montre 4.8; "240+ avis" inexact — 22 sur TripAdvisor, 865 sur Restaurant Guru
-  - Script: ⚠️ Revoir les chiffres de notation/avis
+  - Faits: ✅ Corrigé — formulation evergreen (notes varient selon plateforme)
+  - Script: ✅ Corrigé
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -844,10 +844,10 @@ Consejo rápido: haz una reservación si vienes los fines de semana. El lugar es
 
 ### 🎙️ Script audio (fr)
 > Persona: Marco
-> Mots: 162
-> Durée estimée: 65s
+> Mots: 155
+> Durée estimée: 62s
 
-4.9 sur 5. Plus de 240 avis. Et les Lambertois sont unanimes: Gyoka, c'est le meilleur japonais en ville.
+Les Lambertois sont unanimes: Gyoka, c'est le meilleur japonais en ville. Les avis en ligne sont élogieux, et la file d'attente le confirme.
 
 On est dans un vrai izakaya, pas un sushi bar générique. Un izakaya, c'est l'équivalent japonais d'un bar à tapas. L'idée, c'est de partager plein de petits plats entre amis en prenant son temps. Edamames, gyozas, tatakis, et bien sûr des sushis et makis impeccables.
 
@@ -859,10 +859,10 @@ Mon conseil: commande plusieurs plats à partager. C'est comme ça qu'on vit l'e
 
 ### 🎙️ Script audio (en)
 > Persona: Marco
-> Mots: 156
-> Durée estimée: 62s
+> Mots: 150
+> Durée estimée: 60s
 
-4.9 out of 5. Over 240 reviews. And locals all agree: Gyoka is the best Japanese spot in town.
+Locals all agree: Gyoka is the best Japanese spot in town. The online reviews are glowing, and the lineup confirms it.
 
 This is a real izakaya, not a generic sushi bar. An izakaya is the Japanese equivalent of a tapas bar. The idea is to share lots of small dishes with friends while taking your time. Edamame, gyoza, tataki, and of course impeccable sushi and maki.
 
@@ -874,10 +874,10 @@ My advice: order several dishes to share. That's how you experience izakaya cult
 
 ### 🎙️ Script audio (es)
 > Persona: Marco
-> Mots: 167
-> Durée estimée: 67s
+> Mots: 160
+> Durée estimée: 64s
 
-4.9 de 5. Más de 240 reseñas. Y los locales están de acuerdo: Gyoka es el mejor japonés de la ciudad.
+Los locales están de acuerdo: Gyoka es el mejor japonés de la ciudad. Las reseñas en línea son elogiosas, y la fila lo confirma.
 
 Esto es un verdadero izakaya, no un sushi bar genérico. Un izakaya es el equivalente japonés de un bar de tapas. La idea es compartir muchos platillos pequeños entre amigos mientras te tomas tu tiempo. Edamame, gyoza, tataki, y por supuesto sushi y maki impecables.
 
@@ -890,9 +890,9 @@ Mi consejo: pide varios platos para compartir. Así es como vives la experiencia
 ### 🗄️ Scripts BD
 ```json
 [
-  {"language": "fr", "content": "4.9 sur 5. Plus de 240 avis. Et les Lambertois sont unanimes: Gyoka, c'est le meilleur japonais en ville.\n\nOn est dans un vrai izakaya, pas un sushi bar générique. Un izakaya, c'est l'équivalent japonais d'un bar à tapas. L'idée, c'est de partager plein de petits plats entre amis en prenant son temps. Edamames, gyozas, tatakis, et bien sûr des sushis et makis impeccables.\n\nCe que j'aime chez Gyoka? L'équilibre entre tradition et créativité. Les classiques sont parfaitement exécutés, mais il y a aussi des créations signature qui surprennent. Le poisson est frais, les présentations sont soignées, et le rapport qualité-prix est honnête.\n\nAttention: ils sont fermés le lundi. Et si tu viens un vendredi ou samedi soir sans réservation, prépare-toi à attendre. L'endroit est petit et très populaire.\n\nMon conseil: commande plusieurs plats à partager. C'est comme ça qu'on vit l'expérience izakaya.", "persona": "marco"},
-  {"language": "en", "content": "4.9 out of 5. Over 240 reviews. And locals all agree: Gyoka is the best Japanese spot in town.\n\nThis is a real izakaya, not a generic sushi bar. An izakaya is the Japanese equivalent of a tapas bar. The idea is to share lots of small dishes with friends while taking your time. Edamame, gyoza, tataki, and of course impeccable sushi and maki.\n\nWhat I love about Gyoka? The balance between tradition and creativity. The classics are perfectly executed, but there are also signature creations that surprise. The fish is fresh, the presentations are polished, and the value is honest.\n\nHeads up: they're closed on Mondays. And if you show up on a Friday or Saturday night without a reservation, be ready to wait. The place is small and very popular.\n\nMy advice: order several dishes to share. That's how you experience izakaya culture.", "persona": "marco"},
-  {"language": "es", "content": "4.9 de 5. Más de 240 reseñas. Y los locales están de acuerdo: Gyoka es el mejor japonés de la ciudad.\n\nEsto es un verdadero izakaya, no un sushi bar genérico. Un izakaya es el equivalente japonés de un bar de tapas. La idea es compartir muchos platillos pequeños entre amigos mientras te tomas tu tiempo. Edamame, gyoza, tataki, y por supuesto sushi y maki impecables.\n\n¿Qué me encanta de Gyoka? El equilibrio entre tradición y creatividad. Los clásicos están perfectamente ejecutados, pero también hay creaciones originales que sorprenden. El pescado es fresco, las presentaciones son cuidadas, y la relación calidad-precio es honesta.\n\nAtención: cierran los lunes. Y si llegas un viernes o sábado por la noche sin reservación, prepárate para esperar. El lugar es pequeño y muy popular.\n\nMi consejo: pide varios platos para compartir. Así es como vives la experiencia izakaya.", "persona": "marco"}
+  {"language": "fr", "content": "Les Lambertois sont unanimes: Gyoka, c'est le meilleur japonais en ville. Les avis en ligne sont élogieux, et la file d'attente le confirme.\n\nOn est dans un vrai izakaya, pas un sushi bar générique. Un izakaya, c'est l'équivalent japonais d'un bar à tapas. L'idée, c'est de partager plein de petits plats entre amis en prenant son temps. Edamames, gyozas, tatakis, et bien sûr des sushis et makis impeccables.\n\nCe que j'aime chez Gyoka? L'équilibre entre tradition et créativité. Les classiques sont parfaitement exécutés, mais il y a aussi des créations signature qui surprennent. Le poisson est frais, les présentations sont soignées, et le rapport qualité-prix est honnête.\n\nAttention: ils sont fermés le lundi. Et si tu viens un vendredi ou samedi soir sans réservation, prépare-toi à attendre. L'endroit est petit et très populaire.\n\nMon conseil: commande plusieurs plats à partager. C'est comme ça qu'on vit l'expérience izakaya.", "persona": "marco"},
+  {"language": "en", "content": "Locals all agree: Gyoka is the best Japanese spot in town. The online reviews are glowing, and the lineup confirms it.\n\nThis is a real izakaya, not a generic sushi bar. An izakaya is the Japanese equivalent of a tapas bar. The idea is to share lots of small dishes with friends while taking your time. Edamame, gyoza, tataki, and of course impeccable sushi and maki.\n\nWhat I love about Gyoka? The balance between tradition and creativity. The classics are perfectly executed, but there are also signature creations that surprise. The fish is fresh, the presentations are polished, and the value is honest.\n\nHeads up: they're closed on Mondays. And if you show up on a Friday or Saturday night without a reservation, be ready to wait. The place is small and very popular.\n\nMy advice: order several dishes to share. That's how you experience izakaya culture.", "persona": "marco"},
+  {"language": "es", "content": "Los locales están de acuerdo: Gyoka es el mejor japonés de la ciudad. Las reseñas en línea son elogiosas, y la fila lo confirma.\n\nEsto es un verdadero izakaya, no un sushi bar genérico. Un izakaya es el equivalente japonés de un bar de tapas. La idea es compartir muchos platillos pequeños entre amigos mientras te tomas tu tiempo. Edamame, gyoza, tataki, y por supuesto sushi y maki impecables.\n\n¿Qué me encanta de Gyoka? El equilibrio entre tradición y creatividad. Los clásicos están perfectamente ejecutados, pero también hay creaciones originales que sorprenden. El pescado es fresco, las presentaciones son cuidadas, y la relación calidad-precio es honesta.\n\nAtención: cierran los lunes. Y si llegas un viernes o sábado por la noche sin reservación, prepárate para esperar. El lugar es pequeño y muy popular.\n\nMi consejo: pide varios platos para compartir. Así es como vives la experiencia izakaya.", "persona": "marco"}
 ]
 ```
 

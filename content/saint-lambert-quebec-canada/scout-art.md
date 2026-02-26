@@ -4,12 +4,12 @@
 > City: Saint-Lambert / Saint-Lambert
 > Coordonnées centre: 45.5000, -73.5100
 > Pays: CA | Région: Québec
-> Status: VÉRIFIÉ — 9 APPROUVÉS, 3 À RÉVISER (GPS)
+> Status: VÉRIFIÉ — 10 APPROUVÉS, 2 À RÉVISER (GPS)
 
 ---
 
 ## POI 1: Jardin géographique
-- 📍 **GPS:** 45.4898, -73.5015 (point suggéré - rond-point)
+- 📍 **GPS:** 45.478886, -73.500454 (vérifié - rond-point Simard/Riverside)
 - 🏠 **Adresse:** Rond-point boulevard Simard et rue Riverside
 - 🏷️ **Catégories:** art
 - 🏛️ **Type:** monument
@@ -17,15 +17,15 @@
 - 💡 **Hook:** Installation monumentale de 19 axes formant un "boisé" métallique avec 10 cartes géographiques en fil de fer — une métaphore de l'intégration des communautés culturelles à Saint-Lambert.
 - 📖 **Anecdote:** Cadeau de la Corporation du 150e anniversaire de Saint-Lambert, cette œuvre de Joëlle et Rolf Morosoli transforme les automobilistes circulant autour du rond-point en voyageurs virtuels vers des pays lointains!
 - 📚 **Source:** https://culture.saint-lambert.ca/en/attrait/jardin-geographique/
-- ✅ **Verdict:** À RÉVISER
-- ⚠️ **Notes vérification:** GPS incorrect (pointe vers Rue Saint-Thomas au lieu du rond-point Simard/Riverside). Faits vérifiés: Joëlle et Rolf Morosoli ✓, 150e anniversaire 2007 ✓
+- ✅ **Verdict:** APPROUVÉ
+- ✅ **Notes vérification:** GPS corrigé (45.478886, -73.500454 = rond-point Simard/Riverside). Faits vérifiés: Joëlle et Rolf Morosoli ✓, 150e anniversaire 2007 ✓
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
 {
   "name": {"fr": "Jardin géographique", "en": "Geographic Garden"},
-  "lat": 45.4898,
-  "lng": -73.5015,
+  "lat": 45.478886,
+  "lng": -73.500454,
   "trigger_radius_m": 60,
   "type": "monument",
   "categories": ["art"],

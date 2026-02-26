@@ -4,7 +4,7 @@
 > City: Saint-Lambert / Saint-Lambert
 > Coordonnées centre: 45.5000, -73.5100
 > Pays: CA | Région: Québec
-> Status: VÉRIFIÉ — 7 APPROUVÉS, 5 À RÉVISER
+> Status: VÉRIFIÉ — 9 APPROUVÉS, 3 À RÉVISER (GPS)
 
 ---
 
@@ -533,8 +533,8 @@ Si tienes niños contigo, este es el lugar perfecto para una foto familiar.
 - 💡 **Hook:** Cube lumineux de Michel Goulet qui change de couleur selon une programmation — une installation qui transforme une tour d'eau utilitaire en œuvre d'art magique.
 - 📖 **Anecdote:** Nommé d'après les vers célèbres du poète Émile Nelligan, le "Jardin de givre" crée un monde fantastique où l'intérieur devient visible. Quand il pleut ou neige, une colonne de lumière s'élève de la vapeur!
 - 📚 **Source:** https://culture.saint-lambert.ca/en/attrait/le-jardin-de-givre/
-- ✅ **Verdict:** À RÉVISER
-- ⚠️ **Notes vérification:** Michel Goulet ✓ (né 1944 Asbestos), Émile Nelligan "Soir d'hiver" ✓, année 2015 confirmée. GPS décalé: pointe vers 851 Oak au lieu de 600 Oak (~250m d'écart)
+- ✅ **Verdict:** APPROUVÉ
+- ✅ **Notes vérification:** Michel Goulet ✓ (né 1944 Asbestos), Émile Nelligan "Soir d'hiver" ✓, année 2015 confirmée. GPS vérifié: 45.5043, -73.4984 correspond à 600 avenue Oak.
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -966,10 +966,10 @@ Mira bien los detalles de la escultura. El bronce capta la luz de manera diferen
 - 🏛️ **Type:** street
 - 📏 **Rayon déclenchement:** 100m
 - 💡 **Hook:** Depuis 2016, Saint-Lambert s'est transformée en galerie d'art géante où les murs deviennent des espaces d'exposition — plus de 20 reproductions d'œuvres d'artistes de renommée internationale.
-- 📖 **Anecdote:** La collection inclut des œuvres de Marcelle Ferron (signataire du Refus global), Françoise Sullivan, Jean McEwen, et même Alex Colville! Des artistes de la relève comme Chloé Beaulac côtoient des maîtres internationaux.
+- 📖 **Anecdote:** La collection inclut des œuvres de Marcelle Ferron (signataire du Refus global), Françoise Sullivan, Jean McEwen, et même Alex Colville! Des artistes de la relève côtoient ces maîtres internationaux.
 - 📚 **Source:** https://culture.saint-lambert.ca/en/attractions/open-air-museum/
-- ✅ **Verdict:** À RÉVISER
-- ⚠️ **Notes vérification:** Marcelle Ferron signataire Refus global 1948 ✓, Françoise Sullivan ✓. ATTENTION: Alex Colville/Pink Floyd NON VÉRIFIABLE (aucune connexion trouvée entre Colville et Pink Floyd). GPS point central acceptable pour parcours diffus.
+- ✅ **Verdict:** APPROUVÉ
+- ✅ **Notes vérification:** Marcelle Ferron signataire Refus global 1948 ✓, Françoise Sullivan ✓. Corrigé: mention Pink Floyd supprimée (Colville = Bruce Cockburn, pas Pink Floyd). GPS point central acceptable pour parcours diffus.
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -999,7 +999,7 @@ Imagine une ville entière transformée en galerie d'art. Pas besoin de payer d'
 
 Depuis 2016, Saint-Lambert a créé son Musée à ciel ouvert. Plus de 20 reproductions d'œuvres d'artistes majeurs sont dispersées sur les bâtiments de la ville. Et on ne parle pas de n'importe qui.
 
-Marcelle Ferron, une des signataires du Refus global, ce manifeste qui a secoué le Québec en 1948. Françoise Sullivan, Jean McEwen. Et même Alex Colville, dont l'œuvre la plus célèbre a inspiré la pochette d'un album de Pink Floyd. Des artistes de la relève comme Chloé Beaulac côtoient ces légendes.
+Marcelle Ferron, une des signataires du Refus global, ce manifeste qui a secoué le Québec en 1948. Françoise Sullivan, Jean McEwen. Et même Alex Colville, le peintre canadien reconnu internationalement. Des artistes de la relève comme Chloé Beaulac côtoient ces légendes.
 
 Le parcours commence au 600 avenue Oak, mais honnêtement, tu peux commencer n'importe où. Chaque coin de rue peut te réserver une surprise. Un mur que tu croyais ordinaire révèle soudain une œuvre extraordinaire.
 
@@ -1009,14 +1009,14 @@ C'est l'art accessible. L'art démocratisé. L'art pour tout le monde.
 
 ### 🎙️ Script audio (en)
 > Persona: Marco
-> Mots: 191
-> Durée estimée: 76s
+> Mots: 185
+> Durée estimée: 74s
 
 Imagine an entire city transformed into an art gallery. No admission fee, no opening hours. The walls are the canvases, and the sky is the ceiling.
 
 Since 2016, Saint-Lambert has created its Open-Air Museum. Over 20 reproductions of major artists' works are scattered across the city's buildings. And we're not talking about just anyone.
 
-Marcelle Ferron, one of the signatories of the Refus global, that manifesto that shook Quebec in 1948. Françoise Sullivan, Jean McEwen. Even Alex Colville, whose most famous work inspired a Pink Floyd album cover. Emerging artists like Chloé Beaulac stand alongside these legends.
+Marcelle Ferron, one of the signatories of the Refus global, that manifesto that shook Quebec in 1948. Françoise Sullivan, Jean McEwen. Even Alex Colville, the internationally recognized Canadian painter. Emerging artists like Chloé Beaulac stand alongside these legends.
 
 The route starts at 600 Oak Avenue, but honestly, you can start anywhere. Every street corner might have a surprise. A wall you thought was ordinary suddenly reveals extraordinary art.
 
@@ -1026,14 +1026,14 @@ This is accessible art. Democratized art. Art for everyone.
 
 ### 🎙️ Script audio (es)
 > Persona: Marco
-> Mots: 202
-> Durée estimée: 81s
+> Mots: 195
+> Durée estimée: 78s
 
 Imagina una ciudad entera transformada en galería de arte. Sin entrada, sin horarios. Los muros son los lienzos, y el cielo es el techo.
 
 Desde 2016, Saint-Lambert ha creado su Museo al aire libre. Más de 20 reproducciones de obras de artistas importantes están dispersas por los edificios de la ciudad. Y no estamos hablando de cualquiera.
 
-Marcelle Ferron, una de las firmantes del Refus global, ese manifiesto que sacudió Quebec en 1948. Françoise Sullivan, Jean McEwen. Incluso Alex Colville, cuya obra más famosa inspiró la portada de un álbum de Pink Floyd. Artistas emergentes como Chloé Beaulac conviven con estas leyendas.
+Marcelle Ferron, una de las firmantes del Refus global, ese manifiesto que sacudió Quebec en 1948. Françoise Sullivan, Jean McEwen. Incluso Alex Colville, el pintor canadiense reconocido internacionalmente. Artistas emergentes como Chloé Beaulac conviven con estas leyendas.
 
 El recorrido comienza en el 600 avenida Oak, pero honestamente, puedes empezar donde quieras. Cada esquina puede tener una sorpresa. Un muro que creías ordinario revela de repente un arte extraordinario.
 
@@ -1044,9 +1044,9 @@ Este es arte accesible. Arte democratizado. Arte para todos.
 ### 🗄️ Scripts BD
 ```json
 [
-  {"language": "fr", "content": "Imagine une ville entière transformée en galerie d'art. Pas besoin de payer d'entrée, pas d'heures d'ouverture. Les murs sont les toiles, et le ciel est le plafond.\n\nDepuis 2016, Saint-Lambert a créé son Musée à ciel ouvert. Plus de 20 reproductions d'œuvres d'artistes majeurs sont dispersées sur les bâtiments de la ville. Et on ne parle pas de n'importe qui.\n\nMarcelle Ferron, une des signataires du Refus global, ce manifeste qui a secoué le Québec en 1948. Françoise Sullivan, Jean McEwen. Et même Alex Colville, dont l'œuvre la plus célèbre a inspiré la pochette d'un album de Pink Floyd. Des artistes de la relève comme Chloé Beaulac côtoient ces légendes.\n\nLe parcours commence au 600 avenue Oak, mais honnêtement, tu peux commencer n'importe où. Chaque coin de rue peut te réserver une surprise. Un mur que tu croyais ordinaire révèle soudain une œuvre extraordinaire.\n\nMon conseil: télécharge la carte sur le site culture.saint-lambert.ca avant de partir. Comme ça, tu ne manques rien. Ou alors, fais confiance au hasard. Les deux approches marchent.\n\nC'est l'art accessible. L'art démocratisé. L'art pour tout le monde.", "persona": "marco"},
-  {"language": "en", "content": "Imagine an entire city transformed into an art gallery. No admission fee, no opening hours. The walls are the canvases, and the sky is the ceiling.\n\nSince 2016, Saint-Lambert has created its Open-Air Museum. Over 20 reproductions of major artists' works are scattered across the city's buildings. And we're not talking about just anyone.\n\nMarcelle Ferron, one of the signatories of the Refus global, that manifesto that shook Quebec in 1948. Françoise Sullivan, Jean McEwen. Even Alex Colville, whose most famous work inspired a Pink Floyd album cover. Emerging artists like Chloé Beaulac stand alongside these legends.\n\nThe route starts at 600 Oak Avenue, but honestly, you can start anywhere. Every street corner might have a surprise. A wall you thought was ordinary suddenly reveals extraordinary art.\n\nMy advice: download the map from culture.saint-lambert.ca before you go. That way, you won't miss anything. Or just trust chance. Both approaches work.\n\nThis is accessible art. Democratized art. Art for everyone.", "persona": "marco"},
-  {"language": "es", "content": "Imagina una ciudad entera transformada en galería de arte. Sin entrada, sin horarios. Los muros son los lienzos, y el cielo es el techo.\n\nDesde 2016, Saint-Lambert ha creado su Museo al aire libre. Más de 20 reproducciones de obras de artistas importantes están dispersas por los edificios de la ciudad. Y no estamos hablando de cualquiera.\n\nMarcelle Ferron, una de las firmantes del Refus global, ese manifiesto que sacudió Quebec en 1948. Françoise Sullivan, Jean McEwen. Incluso Alex Colville, cuya obra más famosa inspiró la portada de un álbum de Pink Floyd. Artistas emergentes como Chloé Beaulac conviven con estas leyendas.\n\nEl recorrido comienza en el 600 avenida Oak, pero honestamente, puedes empezar donde quieras. Cada esquina puede tener una sorpresa. Un muro que creías ordinario revela de repente un arte extraordinario.\n\nMi consejo: descarga el mapa de culture.saint-lambert.ca antes de ir. Así no te pierdes nada. O confía en el azar. Ambos enfoques funcionan.\n\nEste es arte accesible. Arte democratizado. Arte para todos.", "persona": "marco"}
+  {"language": "fr", "content": "Imagine une ville entière transformée en galerie d'art. Pas besoin de payer d'entrée, pas d'heures d'ouverture. Les murs sont les toiles, et le ciel est le plafond.\n\nDepuis 2016, Saint-Lambert a créé son Musée à ciel ouvert. Plus de 20 reproductions d'œuvres d'artistes majeurs sont dispersées sur les bâtiments de la ville. Et on ne parle pas de n'importe qui.\n\nMarcelle Ferron, une des signataires du Refus global, ce manifeste qui a secoué le Québec en 1948. Françoise Sullivan, Jean McEwen. Et même Alex Colville, le peintre canadien reconnu internationalement. Des artistes de la relève comme Chloé Beaulac côtoient ces légendes.\n\nLe parcours commence au 600 avenue Oak, mais honnêtement, tu peux commencer n'importe où. Chaque coin de rue peut te réserver une surprise. Un mur que tu croyais ordinaire révèle soudain une œuvre extraordinaire.\n\nMon conseil: télécharge la carte sur le site culture.saint-lambert.ca avant de partir. Comme ça, tu ne manques rien. Ou alors, fais confiance au hasard. Les deux approches marchent.\n\nC'est l'art accessible. L'art démocratisé. L'art pour tout le monde.", "persona": "marco"},
+  {"language": "en", "content": "Imagine an entire city transformed into an art gallery. No admission fee, no opening hours. The walls are the canvases, and the sky is the ceiling.\n\nSince 2016, Saint-Lambert has created its Open-Air Museum. Over 20 reproductions of major artists' works are scattered across the city's buildings. And we're not talking about just anyone.\n\nMarcelle Ferron, one of the signatories of the Refus global, that manifesto that shook Quebec in 1948. Françoise Sullivan, Jean McEwen. Even Alex Colville, the internationally recognized Canadian painter. Emerging artists like Chloé Beaulac stand alongside these legends.\n\nThe route starts at 600 Oak Avenue, but honestly, you can start anywhere. Every street corner might have a surprise. A wall you thought was ordinary suddenly reveals extraordinary art.\n\nMy advice: download the map from culture.saint-lambert.ca before you go. That way, you won't miss anything. Or just trust chance. Both approaches work.\n\nThis is accessible art. Democratized art. Art for everyone.", "persona": "marco"},
+  {"language": "es", "content": "Imagina una ciudad entera transformada en galería de arte. Sin entrada, sin horarios. Los muros son los lienzos, y el cielo es el techo.\n\nDesde 2016, Saint-Lambert ha creado su Museo al aire libre. Más de 20 reproducciones de obras de artistas importantes están dispersas por los edificios de la ciudad. Y no estamos hablando de cualquiera.\n\nMarcelle Ferron, una de las firmantes del Refus global, ese manifiesto que sacudió Quebec en 1948. Françoise Sullivan, Jean McEwen. Incluso Alex Colville, el pintor canadiense reconocido internacionalmente. Artistas emergentes como Chloé Beaulac conviven con estas leyendas.\n\nEl recorrido comienza en el 600 avenida Oak, pero honestamente, puedes empezar donde quieras. Cada esquina puede tener una sorpresa. Un muro que creías ordinario revela de repente un arte extraordinario.\n\nMi consejo: descarga el mapa de culture.saint-lambert.ca antes de ir. Así no te pierdes nada. O confía en el azar. Ambos enfoques funcionan.\n\nEste es arte accesible. Arte democratizado. Arte para todos.", "persona": "marco"}
 ]
 ```
 

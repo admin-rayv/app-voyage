@@ -4,7 +4,7 @@
 > City: Saint-Lambert / Saint Lambert
 > Coordonnées centre: 45.5000, -73.5100
 > Pays: CA | Région: Montérégie
-> Status: EN ATTENTE DE VALIDATION
+> Status: VÉRIFIÉ (11/12 approuvés)
 
 ---
 
@@ -17,7 +17,10 @@
 - 💡 **Hook:** Rendez-vous incontournable des gourmands chaque jeudi de mai à octobre. Le marché réunit les meilleurs producteurs agroalimentaires de la Montérégie dans une ambiance conviviale et festive.
 - 📖 **Anecdote:** Le marché inclut "La Petite Scène", une initiative locale soutenue par la Caisse Desjardins qui met en vedette des musiciens locaux pendant que les clients font leurs achats.
 - 📚 **Source:** https://www.marchefermierstlambert.com/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (reverse geocoding confirme 55 Avenue Argyle, Saint-Lambert)
+  - Faits: ✅ Jeudis mai-octobre confirmé, La Petite Scène existe, marché d'hiver confirmé
+  - Note: Soutien Caisse Desjardins pour La Petite Scène non confirmé directement
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -103,7 +106,9 @@ En invierno, el mercado no desaparece. Se traslada al Centro Multifuncional en H
 - 💡 **Hook:** Le cœur culturel de Saint-Lambert. Cette salle polyvalente accueille spectacles, théâtre, conférences, ateliers et événements communautaires toute l'année.
 - 📖 **Anecdote:** C'est ici que se tiennent les Jeunesses Musicales Canada et les spectacles officiels de la ville, faisant de Saint-Lambert un véritable pôle culturel de la Rive-Sud.
 - 📚 **Source:** https://www.saint-lambert.ca/fr/centre-multi
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (reverse geocoding confirme "Centre multifonctionnel, 81 Rue Hooper")
+  - Faits: ✅ Jeunesses Musicales Canada confirmé (source: jmcanada.ca)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -189,7 +194,9 @@ Un consejo práctico: el estacionamiento gratuito está detrás del edificio. Y 
 - 💡 **Hook:** L'une des bibliothèques les plus achalandées au Québec! Un véritable hub communautaire offrant bien plus que des livres: conférences, ateliers, clubs de lecture et heures du conte.
 - 📖 **Anecdote:** La bibliothèque abrite également les locaux de la Société d'histoire Mouillepied, qui préserve la mémoire locale depuis 1974.
 - 📚 **Source:** https://www.saint-lambert.ca/fr/bibliotheque
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (reverse geocoding confirme "Bibliothèque de Saint-Lambert, 490 Avenue Mercille")
+  - Faits: ✅ Société d'histoire Mouillepied depuis 1974 confirmé (source: organismes.saint-lambert.ca)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -275,7 +282,9 @@ Un plus: la biblioteca ofrece préstamo de tabletas electrónicas e incluso serv
 - 💡 **Hook:** Le cœur de la vie récréative et communautaire de Saint-Lambert. Inauguré en 2011, ce bâtiment moderne offre gymnase, salles multifonctionnelles, cubicules de musique et salle de conférence.
 - 📖 **Anecdote:** Le centre propose des "fêtes d'enfants" animées par la Ville, une option originale et abordable pour les anniversaires des petits Lambertois.
 - 📚 **Source:** https://www.saint-lambert.ca/fr/bottin-coordonnees/centre-de-loisirs
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (geocoding "600 avenue Oak" confirme les coordonnées)
+  - Faits: ✅ Inauguré 2011 confirmé, fêtes d'enfants confirmées (source: saint-lambert.ca)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -361,7 +370,9 @@ Para conocer las actividades del momento, consulta el programa Loisirs à la car
 - 💡 **Hook:** Ce centre d'activités pour aînés est abrité dans une maison patrimoniale du XIXe siècle. Le Conseil des aînés y offre cours, activités, conférences et une boutique d'articles faits main.
 - 📖 **Anecdote:** La Ville de Saint-Lambert a acquis ce bâtiment patrimonial en 1973 et l'a d'abord transformé en centre culturel avant de le dédier aux aînés.
 - 📚 **Source:** https://ainesstlambertseniors.ca/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (reverse geocoding confirme "574 Avenue Notre-Dame")
+  - Faits: ✅ Acquise par la Ville en 1973, XIXe siècle, centre pour aînés confirmé (source: patrimoine-culturel.gouv.qc.ca)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -447,7 +458,10 @@ Y aquí hay un secreto que poca gente conoce: cuando visitas, te ofrecen café y
 - 💡 **Hook:** Le Carrefour Jeunesse-Emploi de la région offre des services gratuits et bilingues d'aide à l'emploi, d'orientation scolaire et de sensibilisation à l'entrepreneuriat pour les 16-35 ans.
 - 📖 **Anecdote:** Espace Pivot organise "Vocation en art", un programme qui permet aux jeunes passionnés d'art de diffuser leurs œuvres et de développer leur réseau.
 - 📚 **Source:** https://espacepivot.ca/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ⚠️ À RÉVISER
+  - GPS: ✅ Vérifié (reverse geocoding confirme "465 Avenue Victoria")
+  - Faits: ✅ CJE, services 16-35 ans bilingues confirmés
+  - Note: ⚠️ "Vocation en art" est un programme provincial des CJE, pas confirmé spécifiquement pour Espace Pivot
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -533,7 +547,9 @@ Un consejo: pide una cita en lugar de presentarte sin avisar. Y echa un vistazo 
 - 💡 **Hook:** Cette école d'art sans but lucratif offre depuis des décennies des cours de musique, danse, arts visuels et camps d'été dans un contexte bilingue sur la Rive-Sud.
 - 📖 **Anecdote:** Le Centre gère maintenant le South Shore Children's Chorus (Chœur des enfants de la Rive-Sud), perpétuant une tradition musicale locale.
 - 📚 **Source:** https://centrepreville.org/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (reverse geocoding confirme "845 Chemin Tiffin")
+  - Faits: ✅ South Shore Children's Chorus sous leur gestion confirmé (source: centrepreville.org)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -619,7 +635,9 @@ Ya sea que busques clases privadas o grupales, se adaptan. Las inscripciones est
 - 💡 **Hook:** Le lawn bowling dans un cadre enchanteur! Ce club actif depuis des décennies offre essais gratuits et formation pour découvrir ce sport convivial accessible à tous.
 - 📖 **Anecdote:** En 2025, le club a remporté des médailles aux championnats provinciaux et nationaux, dont l'or au championnat national masculin en doubles!
 - 📚 **Source:** https://organismes.saint-lambert.ca/fructueuse-saison-2025-honneurs-et-reconnaissances-pour-le-club-de-boulingrin/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (reverse geocoding confirme zone Coulée verte/parc Lespérance)
+  - Faits: ✅ Médailles 2025 confirmées - or national doubles masculin (source: organismes.saint-lambert.ca)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -705,7 +723,9 @@ El estacionamiento está en el centro de recreación en Oak, a pocos pasos. Qui�
 - 💡 **Hook:** Un parcours de golf accessible en plein cœur de Saint-Lambert. L'hiver, le terrain se transforme en espace gratuit pour le ski de fond et la glissade!
 - 📖 **Anecdote:** Le terrain municipal devient un paradis hivernal pour les familles, offrant des activités gratuites dès que la neige s'installe.
 - 📚 **Source:** https://golfstlambert.com/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (reverse geocoding confirme "Club de Golf St-Lambert")
+  - Faits: ✅ Activités hivernales gratuites (ski fond, glissade) confirmées (source: saint-lambert.ca)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -791,7 +811,9 @@ Para el golf, reserva en línea para asegurar tu horario. Gran estacionamiento e
 - 💡 **Hook:** Depuis 1974, cette société d'histoire préserve la mémoire de Saint-Lambert à travers archives, photographies, artefacts et publications. Elle organise conférences, expositions et visites guidées.
 - 📖 **Anecdote:** Le nom "Mouillepied" fait référence au sobriquet historique des habitants de Saint-Lambert, qui devaient traverser les marécages pour se rendre à Montréal!
 - 📚 **Source:** https://histoiresaintlambert.org/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (même coordonnées que la bibliothèque - dans ses locaux)
+  - Faits: ✅ Depuis 1974 confirmé, origine du nom "pieds mouillés/marécages" confirmée (source: histoiresaintlambert.org)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -877,7 +899,9 @@ Los encontrarás en el edificio de la biblioteca, en Mercille. Estos voluntarios
 - 💡 **Hook:** LA piscine estivale de Saint-Lambert! Ouverte de juin à août, elle accueille familles et nageurs dans le plus grand parc de la ville, avec pataugeoire et jeux d'eau.
 - 📖 **Anecdote:** C'est la première piscine à ouvrir chaque année (dès mi-juin) pour la présaison, avant les autres installations aquatiques de la ville.
 - 📚 **Source:** https://www.saint-lambert.ca/fr/piscines-exterieures
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (dans le parc de la Voie maritime - zone correcte)
+  - Faits: ✅ Ouverte juin-août, première à ouvrir en présaison (mi-juin) confirmé (source: saint-lambert.ca)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -963,7 +987,9 @@ El estacionamiento es gratuito en el parque, y hay vestuarios en el lugar. Piens
 - 💡 **Hook:** Le spot des riders lambertois! Ce skatepark en béton offre plusieurs modules pour planches à roulettes, BMX et trottinettes dans un environnement sécuritaire.
 - 📖 **Anecdote:** Le skatepark est situé stratégiquement entre la piscine et le parc canin, créant un véritable pôle d'activités pour les familles et les jeunes.
 - 📚 **Source:** https://www.saint-lambert.ca/fr/terrains-sportifs
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (dans le parc de la Voie maritime - zone correcte)
+  - Faits: ✅ Skatepark confirmé dans le parc de la Voie maritime (source: saint-lambert.ca)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -1042,3 +1068,120 @@ Se recomienda encarecidamente el casco, aunque no siempre esté de moda entre lo
 
 **Total:** 12 POIs trouvés
 **Fichier:** content/saint-lambert-quebec-canada/scout-vie-locale.md
+
+---
+
+## 📋 Rapport de vérification
+
+**Date:** 2026-02-25
+**Vérificateur:** POI Checker
+
+### Résumé
+| Verdict | Nombre |
+|---------|--------|
+| ✅ APPROUVÉ | 11 |
+| ⚠️ À RÉVISER | 1 |
+| ❌ REJETÉ | 0 |
+| ❓ NON VÉRIFIÉ | 0 |
+
+### Détails par POI
+
+#### POI 1: Marché fermier du Vieux Saint-Lambert
+- **GPS:** ✅ Vérifié (reverse geocoding confirme "55 Avenue Argyle, Saint-Lambert")
+- **Faits vérifiés:**
+  - "Jeudis de mai à octobre" → ✅ Confirmé (source: tourisme-monteregie.qc.ca, bonjourquebec.com)
+  - "La Petite Scène" → ✅ Confirmé (source: marchefermierstlambert.com)
+  - Soutien Caisse Desjardins → ❓ Non confirmé directement
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 2: Centre multifonctionnel de Saint-Lambert
+- **GPS:** ✅ Vérifié (reverse geocoding confirme "Centre multifonctionnel, 81 Rue Hooper")
+- **Faits vérifiés:**
+  - "Jeunesses Musicales Canada" → ✅ Confirmé (source: jmcanada.ca)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 3: Bibliothèque de Saint-Lambert
+- **GPS:** ✅ Vérifié (reverse geocoding confirme "Bibliothèque de Saint-Lambert, 490 Avenue Mercille")
+- **Faits vérifiés:**
+  - "Société d'histoire Mouillepied depuis 1974" → ✅ Confirmé (source: organismes.saint-lambert.ca, histoiresaintlambert.org)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 4: Centre de loisirs de Saint-Lambert
+- **GPS:** ✅ Vérifié (geocoding "600 avenue Oak" confirme les coordonnées exactes)
+- **Faits vérifiés:**
+  - "Inauguré en 2011" → ✅ Confirmé (source: saint-lambert.ca)
+  - "Fêtes d'enfants organisées par la Ville" → ✅ Confirmé (source: saint-lambert.ca/fr/familles)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 5: Maison Desaulniers
+- **GPS:** ✅ Vérifié (reverse geocoding confirme "574 Avenue Notre-Dame")
+- **Faits vérifiés:**
+  - "Maison patrimoniale du XIXe siècle" → ✅ Confirmé (source: patrimoine-culturel.gouv.qc.ca)
+  - "Acquise par la Ville en 1973" → ✅ Confirmé (source: patrimoine-culturel.gouv.qc.ca)
+  - "Centre pour aînés 55+" → ✅ Confirmé (source: ainesstlambertseniors.ca)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 6: Espace Pivot
+- **GPS:** ✅ Vérifié (reverse geocoding confirme "465 Avenue Victoria")
+- **Faits vérifiés:**
+  - "Carrefour Jeunesse-Emploi, 16-35 ans, bilingue" → ✅ Confirmé (source: espacepivot.ca, sante.gouv.qc.ca)
+  - "Programme Vocation en art" → ⚠️ Programme provincial des CJE, mais participation spécifique d'Espace Pivot non confirmée
+- **Action recommandée:** Vérifier si Espace Pivot participe au programme Vocation en art ou reformuler l'anecdote
+- **Verdict:** ⚠️ À RÉVISER
+
+#### POI 7: Centre d'art de Préville
+- **GPS:** ✅ Vérifié (reverse geocoding confirme "845 Chemin Tiffin")
+- **Faits vérifiés:**
+  - "South Shore Children's Chorus sous leur gestion" → ✅ Confirmé (source: centrepreville.org)
+  - "École sans but lucratif bilingue" → ✅ Confirmé (source: centrepreville.org)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 8: Club de boulingrin Saint-Lambert
+- **GPS:** ✅ Vérifié (reverse geocoding confirme zone Coulée verte/parc Lespérance)
+- **Faits vérifiés:**
+  - "Médailles en 2025" → ✅ Confirmé (source: organismes.saint-lambert.ca)
+  - "Or au championnat national masculin en doubles" → ✅ Confirmé (source: organismes.saint-lambert.ca)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 9: Club de Golf Saint-Lambert
+- **GPS:** ✅ Vérifié (reverse geocoding confirme "Club de Golf St-Lambert")
+- **Faits vérifiés:**
+  - "Activités hivernales gratuites (ski fond, glissade)" → ✅ Confirmé (source: saint-lambert.ca, tvrs.ca, lecourrierdusud.ca)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 10: Société d'histoire Mouillepied
+- **GPS:** ✅ Vérifié (même coordonnées que la bibliothèque - dans ses locaux)
+- **Faits vérifiés:**
+  - "Fondée en 1974" → ✅ Confirmé (source: histoiresaintlambert.org, organismes.saint-lambert.ca)
+  - "Nom Mouillepied = pieds mouillés à cause des marécages" → ✅ Confirmé (source: histoiresaintlambert.org)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 11: Piscine extérieure du parc de la Voie maritime
+- **GPS:** ✅ Vérifié (dans le parc de la Voie maritime - zone correcte)
+- **Faits vérifiés:**
+  - "Ouverte de juin à fin août" → ✅ Confirmé (source: saint-lambert.ca)
+  - "Première à ouvrir en présaison (mi-juin)" → ✅ Confirmé (source: old.saint-lambert.ca)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 12: Skatepark de Saint-Lambert
+- **GPS:** ✅ Vérifié (dans le parc de la Voie maritime - zone correcte)
+- **Faits vérifiés:**
+  - "Skatepark dans le parc de la Voie maritime" → ✅ Confirmé (source: saint-lambert.ca)
+- **Verdict:** ✅ APPROUVÉ
+
+### Sources utilisées
+- patrimoine-culturel.gouv.qc.ca
+- saint-lambert.ca
+- organismes.saint-lambert.ca
+- histoiresaintlambert.org
+- jmcanada.ca
+- centrepreville.org
+- espacepivot.ca
+- marchefermierstlambert.com
+- tourisme-monteregie.qc.ca
+- bonjourquebec.com
+- tvrs.ca
+- lecourrierdusud.ca
+- sante.gouv.qc.ca
+- chronogolf.ca
+- golfcanada.ca

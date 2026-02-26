@@ -4,7 +4,7 @@
 > City: Saint-Lambert / Saint-Lambert
 > Coordonnées centre: 45.5000, -73.5100
 > Pays: CA | Région: Montérégie
-> Status: EN ATTENTE DE VALIDATION
+> Status: VÉRIFIÉ (8 approuvés, 4 à réviser)
 
 ---
 
@@ -17,7 +17,10 @@
 - 💡 **Hook:** Avant de s'appeler Saint-Lambert, cette zone portait le nom coloré de "Mouille-Pied" — parce que les chasseurs du 17e siècle revenaient constamment avec les pieds trempés des marécages environnants!
 - 📖 **Anecdote:** Le nom "Mouille-Pied" était si marquant qu'il est resté gravé dans la mémoire collective: la Société d'histoire locale s'appelle encore aujourd'hui la "Société d'histoire Mouillepied".
 - 📚 **Source:** https://thecanadianencyclopedia.ca/en/article/saint-lambert
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (Avenue Victoria, centre historique de Saint-Lambert)
+  - Faits: ✅ Nom Mouille-Pied confirmé (Canadian Encyclopedia, Mémoire du Québec)
+  - Script: ✅ OK
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -103,7 +106,10 @@ Si quieres sumergirte más en esta historia, la Sociedad Mouillepied organiza vi
 - 💡 **Hook:** En 1688, des colons français ont érigé le Fort Saint-Lambert pour se défendre contre les attaques des Haudenosaunee (Iroquois). Aujourd'hui, il ne reste aucune trace visible de cette fortification disparue.
 - 📖 **Anecdote:** Le fort a été construit alors que le territoire appartenait aux Jésuites, qui avaient reçu ces terres en 1647. La zone était un véritable front de défense durant les guerres iroquoises.
 - 📚 **Source:** https://thecanadianencyclopedia.ca/en/article/saint-lambert
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (Rue Riverside, près de la Maison Marsil)
+  - Faits: ✅ Fort de 1688 confirmé (Canadian Encyclopedia), Jésuites depuis 1647 confirmé
+  - Script: ✅ OK
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -189,7 +195,11 @@ Pero en algún lugar bajo tus pies, quizás a solo unos metros de profundidad, l
 - 💡 **Hook:** Avant d'être un terrain de golf, le Country Club de Montreal était un club de POLO! Reconverti le 17 novembre 1910, c'est le 2e plus vieux parcours de golf du Grand Montréal.
 - 📖 **Anecdote:** Les élites anglophones de Montréal y jouaient au polo à cheval avant que le golf ne devienne la nouvelle mode sportive des classes aisées au tournant du siècle.
 - 📚 **Source:** https://en.wikipedia.org/wiki/Country_Club_of_Montreal
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ⚠️ À RÉVISER
+  - GPS: ✅ OK (~67m de l'adresse réelle)
+  - Faits: ✅ Polo→golf le 17 novembre 1910 confirmé (Wikipedia), 2e plus vieux golf confirmé
+  - ⚠️ **ERREUR ADRESSE:** "101 chemin Simard" devrait être "5 rue Riverside"
+  - Script: ✅ OK
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -275,7 +285,10 @@ Es un club privado, así que no puedes entrar sin ser miembro. Pero desde el Che
 - 💡 **Hook:** Ce petit parc ornemental porte le nom du Grand Trunk Railway of Canada, la compagnie ferroviaire mythique incorporée en 1852 qui a littéralement façonné Saint-Lambert.
 - 📖 **Anecdote:** Le Grand Trunk Railway a construit le pont Victoria et fait de Saint-Lambert un nœud ferroviaire majeur. Dans les années 1950, jusqu'à 80-100 trains passaient par jour dans la ville!
 - 📚 **Source:** https://www.saint-lambert.ca/en/contact-directory/parc-grand-trunk
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (Rue du Prince-Arthur, correspondance parfaite avec site officiel)
+  - Faits: ✅ Grand Trunk Railway incorporé 1852 confirmé, pont Victoria confirmé, 80-100 trains/jour confirmé
+  - Script: ✅ OK
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -361,7 +374,10 @@ Este parque es un homenaje discreto a la época en que Saint-Lambert vivía al r
 - 💡 **Hook:** De 1909 à 1956, un tramway électrique (le Montreal & Southern Counties Railway) reliait Saint-Lambert à Montréal via le pont Victoria. Ce parc était un lieu de rassemblement prisé à l'époque du tramway.
 - 📖 **Anecdote:** Le tramway traversait le pont Victoria sur son épaule nord. Son arrêt à Saint-Lambert a transformé la petite ville en banlieue résidentielle prisée — un des premiers cas de "transit-oriented development" au Québec!
 - 📚 **Source:** https://culture.saint-lambert.ca/en/attrait/victoria-bridge-and-our-railway-heritage/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (Avenue Saint-Denis, près de la gare - confirmé par ville)
+  - Faits: ✅ Tramway M&SC 1909-1956 confirmé (Wikipedia), traversée pont Victoria confirmée
+  - Script: ✅ OK
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -447,7 +463,10 @@ El tranvía desapareció en 1956, reemplazado por el automóvil. Pero si miras h
 - 💡 **Hook:** L'avenue Victoria n'est pas qu'une simple rue — c'est la ligne de démarcation historique entre deux seigneuries: La Prairie (aux Jésuites depuis 1647) et Longueuil (à Charles Le Moyne depuis 1657).
 - 📖 **Anecdote:** Cette frontière invisible datant du régime français définit encore aujourd'hui la division territoriale de la ville. Côté ouest: l'ancienne seigneurie des Jésuites. Côté est: l'ancienne seigneurie Le Moyne.
 - 📚 **Source:** https://greenerpasture.com/Places/Details/2280
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (sur le tracé de l'Avenue Victoria)
+  - Faits: ✅ Seigneurie La Prairie aux Jésuites 1647 confirmé, Longueuil à Charles Le Moyne 1657 confirmé
+  - Script: ✅ OK
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -533,7 +552,11 @@ Cruza la calle. Acabas de pasar de una señoría a otra. Es un gesto ordinario, 
 - 💡 **Hook:** Cette maison en pierre des champs datant d'environ 1768 cache un secret: un piano est littéralement PRISONNIER du sous-sol — impossible de le sortir sans démolir le plancher d'origine!
 - 📖 **Anecdote:** Les documents notariés de 1674 mentionnent une concession de terre des Jésuites à cet endroit. Certains croient que la maison pourrait dater de 1669, ce qui en ferait l'une des plus anciennes du Québec!
 - 📚 **Source:** https://www.lapresse.ca/maison/immobilier/maisons-de-luxe/201012/09/01-4350758-maison-du-xviiie-siecle-a-saint-lambert.php
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (30 Rue de Bretagne, quartier Préville-en-bas)
+  - Faits: ✅ Document 1674 confirmé, maison ~1768 confirmé, piano prisonnier confirmé (La Presse 2010)
+  - Note: Date de 1669 reste hypothétique (mentionné comme incertain dans l'article)
+  - Script: ✅ OK
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -619,7 +642,11 @@ Es propiedad privada, así que quédate en la acera. Pero desde ahí, tienes una
 - 💡 **Hook:** Cette société d'histoire porte le nom ORIGINAL de Saint-Lambert: "Mouillepied"! Un clin d'œil au passé marécageux de la ville qui a persisté dans la mémoire collective.
 - 📖 **Anecdote:** Fondée au début des années 1980, la société a publié "Saint Lambert Through the Years" pour le 150e anniversaire de la ville en 2007. Leurs archives contiennent des trésors sur l'histoire locale.
 - 📚 **Source:** http://histoiresaintlambert.org/en/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ⚠️ À RÉVISER
+  - GPS: ⚠️ Décalé de ~250m (reverse geocoding donne 851 avenue Oak au lieu de 600)
+  - Faits: ✅ Fondée début 1980 confirmé, adresse 600 avenue Oak confirmée (FHQ, QAHN)
+  - ⚠️ **CORRECTION GPS:** Ajuster vers 45.5010, -73.5020 (plus proche de 600 avenue Oak)
+  - Script: ✅ OK
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -705,7 +732,12 @@ Su oficina en 600 Oak Avenue es modesta, pero los archivos que contiene son teso
 - 💡 **Hook:** Saint-Lambert était la DERNIÈRE municipalité "ville sèche" au Québec! La Loi Scott de 1878 (prohibition locale) y est restée en vigueur bien plus longtemps qu'ailleurs.
 - 📖 **Anecdote:** Pendant que le reste du Québec célébrait la fin de la prohibition dans les années 1920-1930, les Lambertois devaient traverser à Longueuil ou Montréal pour prendre un verre!
 - 📚 **Source:** https://fr.wikipedia.org/wiki/Saint-Lambert_(Montérégie)
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ⚠️ À RÉVISER
+  - GPS: ✅ Vérifié (55 Avenue Argyle = Hôtel de Ville, parfait)
+  - Faits: ✅ Règles prohibition héritées confirmées (CBC 2017), Loi Scott 1878 confirmée
+  - ⚠️ **EXAGÉRATION:** Affirmation "DERNIÈRE ville sèche du Québec" non confirmée
+  - ⚠️ **CORRECTION:** Remplacer par "l'une des dernières villes à conserver des règles de prohibition"
+  - Script: ✅ Sinon OK
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -791,7 +823,10 @@ Hoy, frente al Ayuntamiento, esa época parece surrealista. Saint-Lambert ahora 
 - 💡 **Hook:** Pour accommoder la Voie maritime (1958), les ingénieurs ont créé une solution unique au monde: deux ponts-bascules qui dévient le trafic routier et ferroviaire quand un navire passe!
 - 📖 **Anecdote:** Le système fonctionne comme une valse: quand un navire entre dans l'écluse, le trafic est dévié vers le pont sud; quand il sort, vers le pont nord. Une chorégraphie d'acier et de béton!
 - 📚 **Source:** https://historicbridges.org/bridges/browser/?bridgebrowser=quebec/victoria/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (près de l'écluse Saint-Lambert, zone de la Voie maritime)
+  - Faits: ✅ Voie maritime 1958 confirmé (Wikipedia, HistoricBridges), déviation confirmée
+  - Script: ✅ OK
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -877,7 +912,10 @@ Si quieres ver el espectáculo, acércate a la plataforma de observación cerca 
 - 💡 **Hook:** Dans les années 1950, Saint-Lambert était un SPECTACLE ferroviaire: jusqu'à 80-100 trains passaient CHAQUE JOUR! Les résidents se rassemblaient au triangle de virage pour admirer ce défilé sans fin.
 - 📖 **Anecdote:** Le soir avant un long week-end ou un jour férié, le triangle de virage offrait un spectacle inoubliable: des trains partant vers l'est et le sud se croisaient dans une danse mécanique.
 - 📚 **Source:** https://culture.saint-lambert.ca/en/attrait/victoria-bridge-and-our-railway-heritage/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS: ✅ Vérifié (Rue de l'Écluse, proche zone ferroviaire historique)
+  - Faits: ✅ "80 to 100 trains would pass each day" confirmé (culture.saint-lambert.ca)
+  - Script: ✅ OK
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -963,7 +1001,11 @@ Hoy, los trenes Exo y VIA Rail todavía pasan, pero es mucho más tranquilo. Una
 - 💡 **Hook:** Ce parcours de golf public de 9 trous existe depuis 1931 — et l'hiver, il se transforme en paradis de ski de fond et de raquette! Un des rares golfs publics avec double vocation saisonnière.
 - 📖 **Anecdote:** En plein cœur de la ville, ce terrain offre un contraste saisissant: l'été les golfeurs s'affrontent, l'hiver les fondeurs sillonnent les mêmes fairways devenus pistes enneigées.
 - 📚 **Source:** https://www.saint-lambert.ca/en/contact-directory/saint-lambert-golf
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ⚠️ À RÉVISER
+  - GPS: ✅ Vérifié (reverse geocoding confirme "Club de Golf St-Lambert")
+  - Faits: ✅ Ouvert 1931 confirmé, 9 trous confirmé, ski de fond hiver confirmé
+  - ⚠️ **ERREUR ADRESSE:** "395 avenue Oak" devrait être "325 rue du Docteur-Chevrier" ou "325 Golf"
+  - Script: ✅ OK
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -1042,3 +1084,135 @@ Si estás en la ciudad durante la temporada cálida, prueba el campo de golf. La
 
 **Total:** 12 POIs trouvés
 **Fichier:** content/saint-lambert-quebec-canada/scout-insolite.md
+
+---
+
+## 📋 Rapport de vérification
+
+**Date:** 2026-02-25
+**Vérificateur:** POI Checker (cron automatisé)
+
+### Résumé
+| Verdict | Nombre |
+|---------|--------|
+| ✅ APPROUVÉ | 8 |
+| ⚠️ À RÉVISER | 4 |
+| ❌ REJETÉ | 0 |
+| ❓ NON VÉRIFIÉ | 0 |
+
+### Détails par POI
+
+#### POI 1: Zone historique Mouille-Pied
+- **GPS:** ✅ Vérifié (Avenue Victoria, centre historique de Saint-Lambert)
+- **Faits vérifiés:**
+  - "Mouille-Pied" comme ancien nom → ✅ Confirmé (thecanadianencyclopedia.ca, memoireduquebec.com)
+  - Société d'histoire Mouillepied → ✅ Confirmé (histoiresaintlambert.org)
+  - Chasseurs avec pieds mouillés → ✅ Confirmé (marécages historiques documentés)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 2: Site du Fort Saint-Lambert (1688)
+- **GPS:** ✅ Vérifié (Rue Riverside, près de la Maison Marsil)
+- **Faits vérifiés:**
+  - Fort érigé en 1688 → ✅ Confirmé (thecanadianencyclopedia.ca: "In 1688, colonists erected Fort Saint-Lambert against Haudenosaunee attacks")
+  - Terres aux Jésuites depuis 1647 → ✅ Confirmé (toponymie.gouv.qc.ca, patrimoine-culturel.gouv.qc.ca)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 3: Country Club de Montreal
+- **GPS:** ✅ OK (45.4861, -73.5071 est à ~67m de l'adresse réelle 5 rue Riverside)
+- **Faits vérifiés:**
+  - Originalement un club de polo → ✅ Confirmé (Wikipedia)
+  - Converti en golf le 17 novembre 1910 → ✅ Confirmé (Wikipedia: "club's vocation changed to golf on November 17, 1910")
+  - 2e plus vieux parcours du Grand Montréal → ✅ Confirmé (Wikipedia)
+- **⚠️ PROBLÈME:** L'adresse indiquée "101 chemin Simard" est **INCORRECTE**. L'adresse réelle est **5 rue Riverside** (Yellow Pages, sources multiples).
+- **Verdict:** ⚠️ À RÉVISER — Corriger l'adresse
+
+#### POI 4: Parc Grand Trunk
+- **GPS:** ✅ Vérifié (Rue du Prince-Arthur — correspondance parfaite avec site officiel: 45.498446, -73.508260)
+- **Faits vérifiés:**
+  - Grand Trunk Railway incorporé en 1852 → ✅ Confirmé (Wikipedia: "incorporated on November 10, 1852")
+  - A construit le pont Victoria → ✅ Confirmé (thecanadianencyclopedia.ca)
+  - 80-100 trains/jour dans les années 1950 → ✅ Confirmé (culture.saint-lambert.ca)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 5: Parc de la Gare
+- **GPS:** ✅ Vérifié (Avenue Saint-Denis, près de la gare — confirmé par saint-lambert.ca)
+- **Faits vérifiés:**
+  - Tramway M&SC de 1909 à 1956 → ✅ Confirmé (Wikipedia, fr.wikipedia.org)
+  - Traversée du pont Victoria → ✅ Confirmé (culture.saint-lambert.ca)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 6: Avenue Victoria — Frontière des seigneuries
+- **GPS:** ✅ Vérifié (sur le tracé de l'Avenue Victoria)
+- **Faits vérifiés:**
+  - Seigneurie La Prairie aux Jésuites 1647 → ✅ Confirmé (toponymie.gouv.qc.ca: "concédée aux Jésuites par François de Lauson, le 1er avril 1647")
+  - Seigneurie Longueuil à Charles Le Moyne 1657 → ✅ Confirmé (archives.longueuil.quebec, biographi.ca)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 7: Maison O'Donnell
+- **GPS:** ✅ Vérifié (30 Rue de Bretagne, quartier Préville-en-bas)
+- **Faits vérifiés:**
+  - Document notarié de 1674 → ✅ Confirmé (La Presse 2010)
+  - Maison datant d'environ 1768 → ✅ Confirmé (La Presse: "archives de La Presse font référence à la maison O'Donnell [...] comme datant de 1768")
+  - Piano prisonnier du sous-sol → ✅ Confirmé (La Presse: "un piano fait prisonnier du sous-sol... impossible de le déménager «sauf si on casse le plancher»")
+- **Note:** La date de 1669 reste **hypothétique** (l'article mentionne l'incertitude sur l'année d'érection)
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 8: Société d'histoire Mouillepied
+- **GPS:** ⚠️ Décalé (reverse geocoding donne 851 avenue Oak, l'adresse officielle est 600 avenue Oak)
+- **Faits vérifiés:**
+  - Fondée au début des années 1980 → ✅ Confirmé (histoiresaintlambert.org: "At the beginning of 1980, the committee became autonomous")
+  - Adresse 600 avenue Oak → ✅ Confirmé (histoirequebec.qc.ca, qahn.org)
+- **⚠️ PROBLÈME:** GPS à corriger vers ~45.5010, -73.5020 pour être plus proche du 600 avenue Oak
+- **Verdict:** ⚠️ À RÉVISER — Ajuster le GPS
+
+#### POI 9: Dernière ville sèche du Québec
+- **GPS:** ✅ Vérifié (55 Avenue Argyle = Hôtel de Ville, parfait)
+- **Faits vérifiés:**
+  - Saint-Lambert avait des règles de prohibition → ✅ Confirmé (CBC 2017: "prohibition-era alcohol rules")
+  - Loi Scott de 1878 → ✅ Confirmé (CBC: "the Scott Act [...] allowed Canadian municipalities and counties to hold referendums")
+- **⚠️ PROBLÈME:** L'affirmation qu'elle était la **"DERNIÈRE"** ville sèche du Québec n'est **pas confirmée**. L'article CBC ne dit pas "dernière", seulement que Saint-Lambert conservait ces règles en 2017.
+- **Verdict:** ⚠️ À RÉVISER — Nuancer l'affirmation ("l'une des dernières" plutôt que "la dernière")
+
+#### POI 10: Déviation du pont Victoria
+- **GPS:** ✅ Vérifié (près de l'écluse Saint-Lambert, zone de la Voie maritime)
+- **Faits vérifiés:**
+  - Voie maritime construite en 1958 → ✅ Confirmé (Wikipedia, historicbridges.org)
+  - Déviation de Saint-Lambert → ✅ Confirmé (Wikipedia: "The St. Lambert Diversion around the St. Lambert Locks was added in 1958")
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 11: Spectacle des 100 trains
+- **GPS:** ✅ Vérifié (Rue de l'Écluse, proche zone ferroviaire historique)
+- **Faits vérifiés:**
+  - 80-100 trains par jour dans les années 1950 → ✅ Confirmé (culture.saint-lambert.ca: "around 80 to 100 trains would pass each day over the Saint-Lambert lines")
+- **Verdict:** ✅ APPROUVÉ
+
+#### POI 12: Club de golf Saint-Lambert
+- **GPS:** ✅ Vérifié (reverse geocoding confirme "Club de Golf St-Lambert, 325 Rue du Docteur-Chevrier")
+- **Faits vérifiés:**
+  - Ouvert en 1931 → ✅ Confirmé (golflink.com, golfpass.com)
+  - Parcours de 9 trous → ✅ Confirmé (golfstlambert.com)
+  - Ski de fond l'hiver → ✅ Confirmé (saint-lambert.ca)
+- **⚠️ PROBLÈME:** L'adresse indiquée "395 avenue Oak" est **INCORRECTE**. L'adresse réelle est **325 rue du Docteur-Chevrier** (ou "325 Golf").
+- **Verdict:** ⚠️ À RÉVISER — Corriger l'adresse
+
+### Sources utilisées pour vérification
+
+| Source | Type | Fiabilité |
+|--------|------|-----------|
+| thecanadianencyclopedia.ca | Encyclopédie | ✅ Haute |
+| culture.saint-lambert.ca | Site officiel municipal | ✅ Haute |
+| saint-lambert.ca | Site officiel municipal | ✅ Haute |
+| patrimoine-culturel.gouv.qc.ca | Gouvernement Québec | ✅ Haute |
+| toponymie.gouv.qc.ca | Gouvernement Québec | ✅ Haute |
+| Wikipedia (en/fr) | Encyclopédie | ✅ Moyenne-Haute |
+| lapresse.ca | Presse reconnue | ✅ Haute |
+| cbc.ca | Presse reconnue | ✅ Haute |
+| histoiresaintlambert.org | Société d'histoire locale | ✅ Haute |
+| historicbridges.org | Site spécialisé | ✅ Moyenne |
+
+### Actions requises
+
+1. **POI 3 (Country Club):** Changer adresse de "101 chemin Simard" à "5 rue Riverside"
+2. **POI 8 (Société Mouillepied):** Ajuster GPS vers ~45.5010, -73.5020
+3. **POI 9 (Ville sèche):** Nuancer le hook — remplacer "DERNIÈRE" par "l'une des dernières"
+4. **POI 12 (Golf):** Changer adresse de "395 avenue Oak" à "325 rue du Docteur-Chevrier"

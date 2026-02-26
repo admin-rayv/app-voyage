@@ -1,3 +1,5 @@
+> ✅ **PUSHED TO DB:** 2026-02-25 — 12 POIs, 36 scripts
+
 # 🔍 POIs trouvés: Saint-Lambert — insolite
 > Date: 2026-02-25
 > City ID: f1fba711... (existante)

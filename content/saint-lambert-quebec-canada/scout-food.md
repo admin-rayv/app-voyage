@@ -1,4 +1,5 @@
 # 🔍 POIs trouvés: Saint-Lambert — food
+> ✅ **PUSHED TO DB:** 2026-02-25 — 12 POIs, 36 scripts
 > Date: 2026-02-25
 > City ID: f1fba711... (existante)
 > City: Saint-Lambert / Saint-Lambert

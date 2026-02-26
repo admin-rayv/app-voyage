@@ -4,7 +4,7 @@
 > City: Saint-Lambert / Saint-Lambert
 > Coordonnées centre: 45.5000, -73.5100
 > Pays: CA | Région: Québec
-> Status: EN ATTENTE DE VALIDATION
+> Status: VÉRIFIÉ — 7 APPROUVÉS, 5 À RÉVISER
 
 ---
 
@@ -17,7 +17,8 @@
 - 💡 **Hook:** Installation monumentale de 19 axes formant un "boisé" métallique avec 10 cartes géographiques en fil de fer — une métaphore de l'intégration des communautés culturelles à Saint-Lambert.
 - 📖 **Anecdote:** Cadeau de la Corporation du 150e anniversaire de Saint-Lambert, cette œuvre de Joëlle et Rolf Morosoli transforme les automobilistes circulant autour du rond-point en voyageurs virtuels vers des pays lointains!
 - 📚 **Source:** https://culture.saint-lambert.ca/en/attrait/jardin-geographique/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** À RÉVISER
+- ⚠️ **Notes vérification:** GPS incorrect (pointe vers Rue Saint-Thomas au lieu du rond-point Simard/Riverside). Faits vérifiés: Joëlle et Rolf Morosoli ✓, 150e anniversaire 2007 ✓
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -103,7 +104,8 @@ Estaciona en Simard si quieres ver los mapas de cerca. Conduciendo, pasa demasia
 - 💡 **Hook:** Œuvre phare du centre-ville créée en 1989 par Jean Brillant — un immense cercle de granit entouré d'une bande d'acier à patine bronze, symbole universel du progrès d'une ville.
 - 📖 **Anecdote:** Les blocs de granit sont taillés selon la méthode des architectes romains et grecs, chaque angle mesuré pour s'emboîter parfaitement. Les sections ressemblent aux touches d'un piano!
 - 📚 **Source:** https://culture.saint-lambert.ca/en/attrait/le-cercle-de-vie/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** APPROUVÉ
+- ✅ **Notes vérification:** Jean Brillant ✓ (né 1959 Rimouski), année 1989 ✓, GPS vérifié (Avenue Saint-Denis/Parc de la Gare)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -189,7 +191,8 @@ Si sigues caminando por el parque, estás a pocos pasos del centro histórico. L
 - 💡 **Hook:** Monument spectaculaire de 3 mètres en acier massif pesant plus de 9 tonnes, créé par l'artiste multidisciplinaire espagnol Kieff Antonio Grediaga.
 - 📖 **Anecdote:** Inspiré par le poète espagnol Federico Garcia Lorca fusillé par Franco, Kieff a finalement dédié l'œuvre à Émile Nelligan — "l'équivalent québécois" dans sa vision. Kieff était aussi ténor, luthier et chanteur d'opéra!
 - 📚 **Source:** https://culture.saint-lambert.ca/en/attrait/le-portail-du-souvenir/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** À RÉVISER
+- ⚠️ **Notes vérification:** Kieff Antonio Grediaga ✓ (né 1936 Madrid, ténor confirmé). Garcia Lorca fusillé ✓. ATTENTION: Le nom réel semble être "El pórtico del olvido" (Le portique de l'oubli). GPS pointe vers parc à chiens au lieu du Parc de la Voie Maritime.
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -275,7 +278,8 @@ Colócate frente al monumento con el río San Lorenzo a tus espaldas. La foto es
 - 💡 **Hook:** Sculpture en béton de 48 pouces de diamètre représentant un bouton géant — hommage aux objets du quotidien par l'artiste Esther Lapointe.
 - 📖 **Anecdote:** Esther Lapointe observait sa sœur Myreille, couturière, utiliser aiguilles et boutons. Tragiquement, Esther est décédée à 33 ans en 1980, percutée par un conducteur ivre. Elle a été nommée membre honoraire du Conseil de la Sculpture du Québec en 1990 aux côtés de Jordi Bonet.
 - 📚 **Source:** https://culture.saint-lambert.ca/en/attrait/le-bouton/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** APPROUVÉ
+- ✅ **Notes vérification:** Esther Lapointe ✓ (1947-1980), décédée le 18 octobre 1980 par conducteur ivre ✓, GPS 500 avenue Victoria EXACT ✓
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -355,7 +359,8 @@ Acércate y mira la textura del concreto. Los cuatro agujeros, los detalles. Es 
 - 💡 **Hook:** Trois adolescents en résine grandeur nature assis sur deux bancs — une œuvre poignante de Roger Langevin dénonçant l'intimidation.
 - 📖 **Anecdote:** L'artiste invite les visiteurs à s'asseoir sur le banc à côté de la jeune fille isolée et à partager la photo pour amplifier le message contre l'intimidation. Une place est réservée pour vous!
 - 📚 **Source:** https://culture.saint-lambert.ca/en/attrait/lesseulee/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** APPROUVÉ
+- ✅ **Notes vérification:** Roger Langevin ✓, trois adolescents sur deux bancs ✓, œuvre anti-intimidation ✓ (existe en 12 exemplaires), GPS Gordon Park ✓
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -441,7 +446,8 @@ Así que adelante. Siéntate junto a ella. Toma la foto. Y la próxima vez que v
 - 💡 **Hook:** Arc-en-ciel coloré tenu par des enfants souriants aux bras levés — une sculpture optimiste de Roger Langevin représentant l'espoir et l'avenir.
 - 📖 **Anecdote:** Cette œuvre existe en 4 exemplaires identiques: Montréal, Candiac, Châteauguay et Saint-Lambert. Roger Langevin cherche "un équilibre entre un monde profondément troublé et une société idéale".
 - 📚 **Source:** https://culture.saint-lambert.ca/en/attrait/la-porte-de-lavenir/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** À RÉVISER
+- ⚠️ **Notes vérification:** Roger Langevin ✓, 4 exemplaires (Montréal, Candiac, Châteauguay, Saint-Lambert) ✓. PROBLÈME GPS: Coordonnées identiques à POI 9 (Les Braves) - un des deux GPS est incorrect!
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -527,7 +533,8 @@ Si tienes niños contigo, este es el lugar perfecto para una foto familiar.
 - 💡 **Hook:** Cube lumineux de Michel Goulet qui change de couleur selon une programmation — une installation qui transforme une tour d'eau utilitaire en œuvre d'art magique.
 - 📖 **Anecdote:** Nommé d'après les vers célèbres du poète Émile Nelligan, le "Jardin de givre" crée un monde fantastique où l'intérieur devient visible. Quand il pleut ou neige, une colonne de lumière s'élève de la vapeur!
 - 📚 **Source:** https://culture.saint-lambert.ca/en/attrait/le-jardin-de-givre/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** À RÉVISER
+- ⚠️ **Notes vérification:** Michel Goulet ✓ (né 1944 Asbestos), Émile Nelligan "Soir d'hiver" ✓, année 2015 confirmée. GPS décalé: pointe vers 851 Oak au lieu de 600 Oak (~250m d'écart)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -613,7 +620,8 @@ Anota la dirección: 600 avenida Oak. Vuelve después del atardecer si puedes. N
 - 💡 **Hook:** Piano public transformé en œuvre d'art urbain en 2020 — une toile de paysage urbain qui intègre des reproductions d'autres œuvres dans sa composition.
 - 📖 **Anecdote:** L'artiste a créé un "tableau dans le tableau" — ses propres œuvres sont cachées dans le paysage urbain peint sur le piano. C'est un jeu de positionnement où le piano devient lui-même une galerie d'exposition!
 - 📚 **Source:** https://culture.saint-lambert.ca/en/attrait/piano-public/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** APPROUVÉ
+- ✅ **Notes vérification:** Année 2020 ✓, GPS Gordon Park ✓ (même emplacement que L'Esseulée - cohérent)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -699,7 +707,8 @@ Y si tienes la suerte de encontrar a alguien que toca realmente bien? Quédate. 
 - 💡 **Hook:** Impressionnante sculpture de bronze représentant un soldat, offerte par le général Arthur Currie — un site de commémoration majeur à Saint-Lambert.
 - 📖 **Anecdote:** Emanuel Otto Hahn, sculpteur allemand, a fondé la Sculptors Society of Canada en 1928 et en fut le premier président. Il a travaillé 40 ans comme designer de monuments tout en enseignant à l'Ontario College of Art.
 - 📚 **Source:** https://culture.saint-lambert.ca/en/attrait/les-braves/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** APPROUVÉ
+- ✅ **Notes vérification:** Emanuel Otto Hahn ✓, fondateur SSC 1928 + 1er président ✓, inauguré par le général Arthur Currie le 9 juillet 1922 ✓, GPS correct (reverse geocoding retourne "The Men of St-Lambert")
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -785,7 +794,8 @@ Si pasas por aquí el 11 de noviembre, verás a la gente reunirse. Las amapolas,
 - 💡 **Hook:** Galerie d'art familiale depuis 1985 — le rendez-vous incontournable des amateurs d'art québécois et canadien sur la Rive-Sud de Montréal.
 - 📖 **Anecdote:** Plus qu'une galerie, c'est aussi le spécialiste de l'encadrement sur mesure dans le Grand Montréal. Ils représentent des artistes québécois de renom et offrent des services d'évaluation d'œuvres d'art.
 - 📚 **Source:** https://balcondart.com/en/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** APPROUVÉ
+- ✅ **Notes vérification:** Depuis octobre 1985 ✓, 650 avenue Notre-Dame ✓, GPS EXACT ✓
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -871,7 +881,8 @@ Verifica los horarios en su sitio web antes de visitarlos, no están abiertos to
 - 💡 **Hook:** Sculpture de 6 pieds et demi par Heide Messing représentant la famille Beauchamp — pionniers dans la promotion des arts à Saint-Lambert.
 - 📖 **Anecdote:** Née à Kassel en Allemagne, Heide Messing vit au Québec depuis 1953. Ses œuvres en pierre, bronze et béton monumental reflètent le rôle des femmes dans la société contemporaine et sont exposées en Amérique du Nord, en Europe et au Japon.
 - 📚 **Source:** https://culture.saint-lambert.ca/en/attrait/la-releve-la-famille/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** APPROUVÉ
+- ✅ **Notes vérification:** Heide Messing ✓ (née Kassel, Allemagne, au Québec depuis 1953 ✓), GPS 320 avenue Victoria EXACT ✓
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -957,7 +968,8 @@ Mira bien los detalles de la escultura. El bronce capta la luz de manera diferen
 - 💡 **Hook:** Depuis 2016, Saint-Lambert s'est transformée en galerie d'art géante où les murs deviennent des espaces d'exposition — plus de 20 reproductions d'œuvres d'artistes de renommée internationale.
 - 📖 **Anecdote:** La collection inclut des œuvres de Marcelle Ferron (signataire du Refus global), Françoise Sullivan, Jean McEwen, et même Alex Colville! Des artistes de la relève comme Chloé Beaulac côtoient des maîtres internationaux.
 - 📚 **Source:** https://culture.saint-lambert.ca/en/attractions/open-air-museum/
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** À RÉVISER
+- ⚠️ **Notes vérification:** Marcelle Ferron signataire Refus global 1948 ✓, Françoise Sullivan ✓. ATTENTION: Alex Colville/Pink Floyd NON VÉRIFIABLE (aucune connexion trouvée entre Colville et Pink Floyd). GPS point central acceptable pour parcours diffus.
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -1042,3 +1054,121 @@ Este es arte accesible. Arte democratizado. Arte para todos.
 
 **Total:** 12 POIs trouvés
 **Fichier:** content/saint-lambert-quebec-canada/scout-art.md
+
+---
+
+## 📋 RAPPORT DE VÉRIFICATION
+> **Date:** 2026-02-25
+> **Vérificateur:** POI Checker Agent
+> **Méthode:** Reverse geocoding + recherches web multiples
+
+### Résumé des verdicts
+
+| POI | Nom | Verdict | Problèmes identifiés |
+|-----|-----|---------|---------------------|
+| 1 | Jardin géographique | ⚠️ À RÉVISER | GPS incorrect |
+| 2 | Le cercle de vie | ✅ APPROUVÉ | - |
+| 3 | Le portail du souvenir | ⚠️ À RÉVISER | GPS incorrect + nom réel à vérifier |
+| 4 | Le Bouton | ✅ APPROUVÉ | - |
+| 5 | L'Esseulée | ✅ APPROUVÉ | - |
+| 6 | La porte de l'avenir | ⚠️ À RÉVISER | GPS identique au POI 9! |
+| 7 | Le jardin de givre | ⚠️ À RÉVISER | GPS décalé ~250m |
+| 8 | Piano public de Gordon Park | ✅ APPROUVÉ | - |
+| 9 | Les Braves | ✅ APPROUVÉ | - |
+| 10 | Le Balcon d'Art | ✅ APPROUVÉ | - |
+| 11 | La relève (la famille) | ✅ APPROUVÉ | - |
+| 12 | Musée à ciel ouvert | ⚠️ À RÉVISER | Anecdote Alex Colville/Pink Floyd non vérifiable |
+
+**Statistiques:**
+- ✅ APPROUVÉ: 7/12 (58%)
+- ⚠️ À RÉVISER: 5/12 (42%)
+- ❌ REJETÉ: 0/12 (0%)
+
+### Détails des vérifications GPS
+
+| POI | Coordonnées | Reverse geocoding | Attendu | Statut |
+|-----|-------------|-------------------|---------|--------|
+| 1 | 45.4898, -73.5015 | 365 Rue Saint-Thomas | Rond-point Simard/Riverside | ❌ |
+| 2 | 45.4993, -73.5072 | Avenue Saint-Denis | Parc de la Gare | ✅ |
+| 3 | 45.5103, -73.5192 | Parc à chiens Saint-Lambert | Parc de la Voie Maritime | ❌ |
+| 4 | 45.5016, -73.5110 | 500 Avenue Victoria | 500 avenue Victoria | ✅ |
+| 5 | 45.5020, -73.5134 | Avenue Victoria (memorial) | Gordon Park | ✅ |
+| 6 | 45.5026, -73.5109 | "The Men of St-Lambert" | Parc Mercille | ❌ (même que POI 9) |
+| 7 | 45.5043, -73.4984 | 851 Avenue Oak | 600 avenue Oak | ❌ (~250m) |
+| 8 | 45.5020, -73.5134 | Avenue Victoria (memorial) | Gordon Park | ✅ (même que POI 5) |
+| 9 | 45.5026, -73.5109 | "The Men of St-Lambert" | Parc Mercille | ✅ |
+| 10 | 45.5007, -73.5063 | 650,652 Avenue Notre-Dame | 650 avenue Notre-Dame | ✅ |
+| 11 | 45.5031, -73.5156 | 320 Avenue Victoria | 320 avenue Victoria | ✅ |
+| 12 | 45.5000, -73.5100 | Rue de Woodstock (parking) | Centre-ville (diffus) | ✅ |
+
+### Vérification des faits - Sources consultées
+
+**POI 1 - Jardin géographique:**
+- Source: culture.saint-lambert.ca ✓
+- Joëlle et Rolf Morosoli confirmés ✓
+- 150e anniversaire Saint-Lambert (1857→2007) ✓
+
+**POI 2 - Le cercle de vie:**
+- Source: culture.saint-lambert.ca ✓
+- Jean Brillant né 1959 à Rimouski ✓
+- Année 1989 confirmée ✓
+
+**POI 3 - Le portail du souvenir:**
+- Source: Wikipedia, fm1033.ca ✓
+- Kieff Antonio Grediaga né 28 mai 1936 Madrid ✓
+- Ténor, luthier, chanteur d'opéra confirmés ✓
+- Federico Garcia Lorca fusillé 19 août 1936 ✓
+- ⚠️ Le nom officiel semble être "El pórtico del olvido" (Le portique de l'oubli)
+
+**POI 4 - Le Bouton:**
+- Source: culture.saint-lambert.ca, dictionnaire.espaceartactuel.com ✓
+- Esther Lapointe (1947-1980) ✓
+- Décédée le 18 octobre 1980 par conducteur ivre ✓
+- Sculpture créée en 1977 pour le Lorne Park ✓
+
+**POI 5 - L'Esseulée:**
+- Source: UQAR, Radio-Canada, Wikipedia ✓
+- Roger Langevin confirmé ✓
+- Œuvre contre l'intimidation, 12 exemplaires au Québec ✓
+- Trois adolescents sur deux bancs ✓
+
+**POI 6 - La porte de l'avenir:**
+- Source: artpublic.ville.montreal.qc.ca, culture.saint-lambert.ca ✓
+- Roger Langevin confirmé ✓
+- 4 exemplaires: Montréal (Île-des-Sœurs), Candiac, Châteauguay, Saint-Lambert ✓
+
+**POI 7 - Le jardin de givre:**
+- Source: culture.saint-lambert.ca ✓
+- Michel Goulet né 1944 à Asbestos ✓
+- Émile Nelligan "Soir d'hiver" - "Ma vitre est un jardin de givre" ✓
+- Année 2015, aluminium anodisé ✓
+
+**POI 9 - Les Braves:**
+- Source: Wikipedia, thewhig.com, veterans.gc.ca ✓
+- Emanuel Otto Hahn (sculpteur allemand-canadien) ✓
+- Fondateur Sculptors Society of Canada 1928, 1er président ✓
+- Inauguré le 9 juillet 1922 par le général Sir Arthur Currie ✓
+
+**POI 10 - Le Balcon d'Art:**
+- Source: balcondart.com, TripAdvisor ✓
+- Fondé en octobre 1985 ✓
+- Adresse 650 avenue Notre-Dame confirmée ✓
+
+**POI 11 - La relève:**
+- Source: balcondart.com ✓
+- Heide Messing née à Kassel, Allemagne ✓
+- Au Québec depuis 1953 ✓
+
+**POI 12 - Musée à ciel ouvert:**
+- Source: culture.saint-lambert.ca ✓
+- Marcelle Ferron signataire Refus global 1948 ✓
+- Françoise Sullivan confirmée ✓
+- ⚠️ Alex Colville / Pink Floyd: AUCUNE source trouvée liant Colville à Pink Floyd. L'album "Atom Heart Mother" a une vache sur la pochette créée par Hipgnosis, pas par Colville.
+
+### Actions recommandées
+
+1. **POI 1 (Jardin géographique):** Corriger GPS vers ~45.4885, -73.5040 (rond-point réel)
+2. **POI 3 (Le portail du souvenir):** Vérifier le nom officiel et corriger GPS
+3. **POI 6 (La porte de l'avenir):** Obtenir les coordonnées exactes du Parc Mercille
+4. **POI 7 (Le jardin de givre):** Corriger GPS vers ~45.5020, -73.5000 (600 Oak)
+5. **POI 12 (Musée à ciel ouvert):** Retirer ou corriger l'anecdote sur Alex Colville et Pink Floyd

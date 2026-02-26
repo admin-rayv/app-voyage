@@ -4,7 +4,7 @@
 > City: Saint-Lambert / Saint-Lambert
 > Coordonnées centre: 45.5000, -73.5100
 > Pays: CA | Région: Québec
-> Status: VÉRIFIÉ — 11 APPROUVÉS, 1 À RÉVISER (GPS)
+> Status: VÉRIFIÉ — 12/12 APPROUVÉS ✅
 
 ---
 
@@ -438,7 +438,7 @@ Así que adelante. Siéntate junto a ella. Toma la foto. Y la próxima vez que v
 ---
 
 ## POI 6: La porte de l'avenir
-- 📍 **GPS:** 45.5026, -73.5109 (exacte)
+- 📍 **GPS:** 45.5164052, -73.5188545 (vérifié - 470 Rue Riverside)
 - 🏠 **Adresse:** Parc Mercille, Saint-Lambert
 - 🏷️ **Catégories:** art
 - 🏛️ **Type:** monument
@@ -446,15 +446,15 @@ Así que adelante. Siéntate junto a ella. Toma la foto. Y la próxima vez que v
 - 💡 **Hook:** Arc-en-ciel coloré tenu par des enfants souriants aux bras levés — une sculpture optimiste de Roger Langevin représentant l'espoir et l'avenir.
 - 📖 **Anecdote:** Cette œuvre existe en 4 exemplaires identiques: Montréal, Candiac, Châteauguay et Saint-Lambert. Roger Langevin cherche "un équilibre entre un monde profondément troublé et une société idéale".
 - 📚 **Source:** https://culture.saint-lambert.ca/en/attrait/la-porte-de-lavenir/
-- ✅ **Verdict:** À RÉVISER
-- ⚠️ **Notes vérification:** Roger Langevin ✓, 4 exemplaires (Montréal, Candiac, Châteauguay, Saint-Lambert) ✓. PROBLÈME GPS: Coordonnées identiques à POI 9 (Les Braves) - un des deux GPS est incorrect!
+- ✅ **Verdict:** APPROUVÉ
+- ✅ **Notes vérification:** Roger Langevin ✓, 4 exemplaires (Montréal, Candiac, Châteauguay, Saint-Lambert) ✓. GPS corrigé: 470 Rue Riverside (45.5164, -73.5189).
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
 {
   "name": {"fr": "La porte de l'avenir", "en": "The Gateway to the Future"},
-  "lat": 45.5026,
-  "lng": -73.5109,
+  "lat": 45.5164052,
+  "lng": -73.5188545,
   "trigger_radius_m": 40,
   "type": "monument",
   "categories": ["art"],

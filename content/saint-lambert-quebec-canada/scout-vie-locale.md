@@ -456,12 +456,12 @@ Y aquí hay un secreto que poca gente conoce: cuando visitas, te ofrecen café y
 - 🏛️ **Type:** building
 - 📏 **Rayon déclenchement:** 40m
 - 💡 **Hook:** Le Carrefour Jeunesse-Emploi de la région offre des services gratuits et bilingues d'aide à l'emploi, d'orientation scolaire et de sensibilisation à l'entrepreneuriat pour les 16-35 ans.
-- 📖 **Anecdote:** Espace Pivot organise "Vocation en art", un programme qui permet aux jeunes passionnés d'art de diffuser leurs œuvres et de développer leur réseau.
+- 📖 **Anecdote:** Espace Pivot offre des services entièrement gratuits et bilingues — une ressource précieuse pour les jeunes de 16 à 35 ans qui naviguent le marché du travail ou veulent se lancer en affaires.
 - 📚 **Source:** https://espacepivot.ca/
 - ✅ **Verdict:** ⚠️ À RÉVISER
   - GPS: ✅ Vérifié (reverse geocoding confirme "465 Avenue Victoria")
   - Faits: ✅ CJE, services 16-35 ans bilingues confirmés
-  - Note: ⚠️ "Vocation en art" est un programme provincial des CJE, pas confirmé spécifiquement pour Espace Pivot
+  - Note: ✅ Mention "Vocation en art" supprimée — remplacée par description générale des services
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -491,7 +491,7 @@ Si tu as entre 16 et 35 ans et que tu te cherches un peu, écoute bien. Cet endr
 
 Espace Pivot, c'est le Carrefour Jeunesse-Emploi de la région. Concrètement? Des services gratuits et bilingues pour t'aider à trouver un emploi, à t'orienter dans tes études, ou même à te lancer en affaires si l'entrepreneuriat te parle.
 
-Ce qui me plaît particulièrement, c'est leur programme Vocation en art. Si tu es un jeune artiste, ils t'aident à diffuser tes œuvres et à développer ton réseau professionnel. C'est rare de trouver ce genre de soutien concret pour les créatifs.
+Ce qui me plaît, c'est que tout est gratuit et que l'accompagnement est personnalisé. Peu importe où tu en es, ils ont quelqu'un pour t'aider à voir plus clair.
 
 Tu n'as pas besoin d'être en difficulté pour cogner à leur porte. Même si tu veux juste explorer tes options ou peaufiner ton CV, ils sont là. C'est gratuit, alors pourquoi s'en priver?
 
@@ -506,7 +506,7 @@ If you're between 16 and 35 and feeling a bit lost, listen up. This place could 
 
 Espace Pivot is the region's Youth Employment Center. In practical terms? Free bilingual services to help you find a job, figure out your studies, or even start a business if entrepreneurship speaks to you.
 
-What I particularly like is their Vocation en art program. If you're a young artist, they help you showcase your work and develop your professional network. It's rare to find this kind of concrete support for creatives.
+What I like is that everything is free and the support is personalized. No matter where you're at, they have someone to help you see things more clearly.
 
 You don't need to be struggling to knock on their door. Even if you just want to explore your options or polish your resume, they're there. It's free, so why not take advantage?
 
@@ -521,7 +521,7 @@ Si tienes entre 16 y 35 años y estás un poco perdido, escucha bien. Este lugar
 
 Espace Pivot es el Centro de Empleo Juvenil de la región. ¿En términos prácticos? Servicios gratuitos y bilingües para ayudarte a encontrar empleo, orientarte en tus estudios, o incluso lanzarte en los negocios si el emprendimiento te llama.
 
-Lo que me gusta particularmente es su programa Vocation en art. Si eres un joven artista, te ayudan a difundir tus obras y desarrollar tu red profesional. Es raro encontrar este tipo de apoyo concreto para los creativos.
+Lo que me gusta es que todo es gratuito y el apoyo es personalizado. Sin importar dónde estés, tienen a alguien para ayudarte a ver las cosas más claramente.
 
 No necesitas estar en dificultades para tocar a su puerta. Incluso si solo quieres explorar tus opciones o pulir tu currículum, están ahí. Es gratis, así que ¿por qué no aprovecharlo?
 
@@ -530,9 +530,9 @@ Un consejo: pide una cita en lugar de presentarte sin avisar. Y echa un vistazo 
 ### 🗄️ Scripts BD
 ```json
 [
-  {"language": "fr", "content": "Si tu as entre 16 et 35 ans et que tu te cherches un peu, écoute bien. Cet endroit pourrait changer ta trajectoire.\n\nEspace Pivot, c'est le Carrefour Jeunesse-Emploi de la région. Concrètement? Des services gratuits et bilingues pour t'aider à trouver un emploi, à t'orienter dans tes études, ou même à te lancer en affaires si l'entrepreneuriat te parle.\n\nCe qui me plaît particulièrement, c'est leur programme Vocation en art. Si tu es un jeune artiste, ils t'aident à diffuser tes œuvres et à développer ton réseau professionnel. C'est rare de trouver ce genre de soutien concret pour les créatifs.\n\nTu n'as pas besoin d'être en difficulté pour cogner à leur porte. Même si tu veux juste explorer tes options ou peaufiner ton CV, ils sont là. C'est gratuit, alors pourquoi s'en priver?\n\nUn conseil: prends rendez-vous plutôt que de te pointer à l'improviste. Et jette un œil à leur tableau d'affichage d'offres d'emploi, il y a souvent des opportunités intéressantes.", "persona": "marco"},
-  {"language": "en", "content": "If you're between 16 and 35 and feeling a bit lost, listen up. This place could change your trajectory.\n\nEspace Pivot is the region's Youth Employment Center. In practical terms? Free bilingual services to help you find a job, figure out your studies, or even start a business if entrepreneurship speaks to you.\n\nWhat I particularly like is their Vocation en art program. If you're a young artist, they help you showcase your work and develop your professional network. It's rare to find this kind of concrete support for creatives.\n\nYou don't need to be struggling to knock on their door. Even if you just want to explore your options or polish your resume, they're there. It's free, so why not take advantage?\n\nA tip: make an appointment rather than just showing up. And check out their job posting board, there are often interesting opportunities.", "persona": "marco"},
-  {"language": "es", "content": "Si tienes entre 16 y 35 años y estás un poco perdido, escucha bien. Este lugar podría cambiar tu trayectoria.\n\nEspace Pivot es el Centro de Empleo Juvenil de la región. ¿En términos prácticos? Servicios gratuitos y bilingües para ayudarte a encontrar empleo, orientarte en tus estudios, o incluso lanzarte en los negocios si el emprendimiento te llama.\n\nLo que me gusta particularmente es su programa Vocation en art. Si eres un joven artista, te ayudan a difundir tus obras y desarrollar tu red profesional. Es raro encontrar este tipo de apoyo concreto para los creativos.\n\nNo necesitas estar en dificultades para tocar a su puerta. Incluso si solo quieres explorar tus opciones o pulir tu currículum, están ahí. Es gratis, así que ¿por qué no aprovecharlo?\n\nUn consejo: pide una cita en lugar de presentarte sin avisar. Y echa un vistazo a su tablero de ofertas de empleo, a menudo hay oportunidades interesantes.", "persona": "marco"}
+  {"language": "fr", "content": "Si tu as entre 16 et 35 ans et que tu te cherches un peu, écoute bien. Cet endroit pourrait changer ta trajectoire.\n\nEspace Pivot, c'est le Carrefour Jeunesse-Emploi de la région. Concrètement? Des services gratuits et bilingues pour t'aider à trouver un emploi, à t'orienter dans tes études, ou même à te lancer en affaires si l'entrepreneuriat te parle.\n\nCe qui me plaît, c'est que tout est gratuit et que l'accompagnement est personnalisé. Peu importe où tu en es, ils ont quelqu'un pour t'aider à voir plus clair.\n\nTu n'as pas besoin d'être en difficulté pour cogner à leur porte. Même si tu veux juste explorer tes options ou peaufiner ton CV, ils sont là. C'est gratuit, alors pourquoi s'en priver?\n\nUn conseil: prends rendez-vous plutôt que de te pointer à l'improviste. Et jette un œil à leur tableau d'affichage d'offres d'emploi, il y a souvent des opportunités intéressantes.", "persona": "marco"},
+  {"language": "en", "content": "If you're between 16 and 35 and feeling a bit lost, listen up. This place could change your trajectory.\n\nEspace Pivot is the region's Youth Employment Center. In practical terms? Free bilingual services to help you find a job, figure out your studies, or even start a business if entrepreneurship speaks to you.\n\nWhat I like is that everything is free and the support is personalized. No matter where you're at, they have someone to help you see things more clearly.\n\nYou don't need to be struggling to knock on their door. Even if you just want to explore your options or polish your resume, they're there. It's free, so why not take advantage?\n\nA tip: make an appointment rather than just showing up. And check out their job posting board, there are often interesting opportunities.", "persona": "marco"},
+  {"language": "es", "content": "Si tienes entre 16 y 35 años y estás un poco perdido, escucha bien. Este lugar podría cambiar tu trayectoria.\n\nEspace Pivot es el Centro de Empleo Juvenil de la región. ¿En términos prácticos? Servicios gratuitos y bilingües para ayudarte a encontrar empleo, orientarte en tus estudios, o incluso lanzarte en los negocios si el emprendimiento te llama.\n\nLo que me gusta es que todo es gratuito y el apoyo es personalizado. Sin importar dónde estés, tienen a alguien para ayudarte a ver las cosas más claramente.\n\nNo necesitas estar en dificultades para tocar a su puerta. Incluso si solo quieres explorar tus opciones o pulir tu currículum, están ahí. Es gratis, así que ¿por qué no aprovecharlo?\n\nUn consejo: pide una cita en lugar de presentarte sin avisar. Y echa un vistazo a su tablero de ofertas de empleo, a menudo hay oportunidades interesantes.", "persona": "marco"}
 ]
 ```
 

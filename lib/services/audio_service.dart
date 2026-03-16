@@ -1,88 +1,68 @@
-import 'dart:io';
-import 'package:just_audio/just_audio.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:dio/dio.dart';
-import '../config/constants.dart';
+import 'dart:async';
+import 'tts_service.dart';
+import 'supabase_service.dart';
 
-/// Service Audio
-/// Gestion de la lecture et du cache audio
+/// Service Audio — Pont entre les scripts Supabase et le TTS natif.
+///
+/// Récupère le texte du script depuis Supabase, puis le lit
+/// via flutter_tts (voix native du téléphone).
+/// Pas de génération MP3, pas d'API externe, 100% offline après sync.
 
 class AudioService {
-  final AudioPlayer _player = AudioPlayer();
-  final Dio _dio = Dio();
-  
-  AudioPlayer get player => _player;
-  
-  /// Générer et jouer l'audio pour un script
+  final TtsService _tts = TtsService();
+  final SupabaseService _supabase = SupabaseService();
+
+  TtsService get tts => _tts;
+
+  /// Initialiser le service.
+  Future<void> init() async {
+    await _tts.init();
+  }
+
+  /// Jouer le script audio d'un POI.
+  ///
+  /// [scriptId] — UUID du script dans Supabase
+  /// Récupère le texte + langue, puis lance la lecture TTS.
   Future<void> playScript(String scriptId) async {
-    // Vérifier le cache local d'abord
-    final cacheFile = await _getCacheFile(scriptId);
-    
-    if (await cacheFile.exists()) {
-      // Jouer depuis le cache
-      await _player.setFilePath(cacheFile.path);
-    } else {
-      // Générer via Edge Function et mettre en cache
-      await _generateAndCache(scriptId, cacheFile);
-      await _player.setFilePath(cacheFile.path);
-    }
-    
-    await _player.play();
+    final script = await _supabase.getScript(scriptId);
+    if (script == null) return;
+
+    final text = script['content'] as String;
+    final language = script['language'] as String? ?? 'fr';
+
+    await _tts.speak(text, language: language);
   }
-  
-  /// Pause
+
+  /// Jouer un texte directement (sans passer par Supabase).
+  ///
+  /// Utile pour les previews ou le mode offline avec cache local.
+  Future<void> playText(String text, {String language = 'fr'}) async {
+    await _tts.speak(text, language: language);
+  }
+
+  /// Pause.
   Future<void> pause() async {
-    await _player.pause();
+    await _tts.pause();
   }
-  
-  /// Stop
+
+  /// Stop.
   Future<void> stop() async {
-    await _player.stop();
+    await _tts.stop();
   }
-  
-  /// Seek
-  Future<void> seek(Duration position) async {
-    await _player.seek(position);
+
+  /// Stream d'état (playing, paused, stopped).
+  Stream<TtsState> get stateStream => _tts.stateStream;
+
+  bool get isPlaying => _tts.isPlaying;
+  bool get isPaused => _tts.isPaused;
+
+  /// Modifier la vitesse de lecture.
+  Future<void> setSpeechRate(double rate) async {
+    await _tts.setSpeechRate(rate);
   }
-  
-  /// Obtenir le fichier cache pour un script
-  Future<File> _getCacheFile(String scriptId) async {
-    final dir = await getApplicationDocumentsDirectory();
-    final cacheDir = Directory('${dir.path}/${AppConstants.audioCacheDir}');
-    if (!await cacheDir.exists()) {
-      await cacheDir.create(recursive: true);
-    }
-    return File('${cacheDir.path}/$scriptId.mp3');
-  }
-  
-  /// Générer l'audio et le mettre en cache
-  Future<void> _generateAndCache(String scriptId, File cacheFile) async {
-    final response = await _dio.post(
-      '${AppConstants.supabaseUrl}/functions/v1/${AppConstants.generateAudioFunction}',
-      data: {'script_id': scriptId},
-      options: Options(
-        responseType: ResponseType.bytes,
-        headers: {
-          'Authorization': 'Bearer ${AppConstants.supabaseAnonKey}',
-          'Content-Type': 'application/json',
-        },
-      ),
-    );
-    
-    await cacheFile.writeAsBytes(response.data);
-  }
-  
-  /// Nettoyer le cache
-  Future<void> clearCache() async {
-    final dir = await getApplicationDocumentsDirectory();
-    final cacheDir = Directory('${dir.path}/${AppConstants.audioCacheDir}');
-    if (await cacheDir.exists()) {
-      await cacheDir.delete(recursive: true);
-    }
-  }
-  
-  /// Dispose
+
+  /// Libérer les ressources.
   void dispose() {
-    _player.dispose();
+    _tts.dispose();
   }
 }

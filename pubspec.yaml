@@ -45,6 +45,7 @@ dependencies:
   # Audio
   just_audio: ^0.9.36
   audio_session: ^0.1.18
+  flutter_tts: ^4.2.0
   
   # Location & GPS
   geolocator: ^13.0.0

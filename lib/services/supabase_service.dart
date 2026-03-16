@@ -52,6 +52,16 @@ class SupabaseService {
     return List<Map<String, dynamic>>.from(response);
   }
   
+  // Récupérer un script par ID
+  Future<Map<String, dynamic>?> getScript(String scriptId) async {
+    final response = await client
+        .from('scripts')
+        .select()
+        .eq('id', scriptId)
+        .maybeSingle();
+    return response;
+  }
+
   // Récupérer les scripts d'un point
   static Future<List<Map<String, dynamic>>> getScripts(String pointId, String language) async {
     final response = await client

@@ -21,9 +21,11 @@ class AppConstants {
   static const int gpsDistanceFilterMeters = 10;
   
   // Cache settings
-  static const String audioCacheDir = 'audio_cache';
   static const String mapCacheDir = 'map_cache';
+  static const String offlineDbName = 'app_voyage.db';
   
-  // API endpoints
-  static const String generateAudioFunction = 'generate-audio';
+  // TTS settings
+  static const double defaultSpeechRate = 0.45;
+  static const double defaultPitch = 1.0;
+  static const String defaultLanguage = 'fr-CA';
 }

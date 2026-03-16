@@ -1,12 +1,13 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../config/constants.dart';
 
-/// Service Supabase
-/// Gestion de la connexion et des requêtes
+/// Service Supabase — Requêtes vers la base de données.
+///
+/// Architecture POI-first: les POIs sont standalone (city_id, pas tour_id).
 
 class SupabaseService {
   static SupabaseClient? _client;
-  
+
   static Future<void> initialize() async {
     await Supabase.initialize(
       url: AppConstants.supabaseUrl,
@@ -14,60 +15,87 @@ class SupabaseService {
     );
     _client = Supabase.instance.client;
   }
-  
+
   static SupabaseClient get client {
     if (_client == null) {
       throw Exception('Supabase not initialized. Call initialize() first.');
     }
     return _client!;
   }
-  
-  // Récupérer toutes les villes
+
+  // ── Cities ──
+
+  /// Récupérer toutes les villes.
   static Future<List<Map<String, dynamic>>> getCities() async {
-    final response = await client
-        .from('cities')
-        .select()
-        .order('name');
+    final response = await client.from('cities').select().order('name');
     return List<Map<String, dynamic>>.from(response);
   }
-  
-  // Récupérer les parcours d'une ville
-  static Future<List<Map<String, dynamic>>> getTours(String cityId) async {
-    final response = await client
-        .from('tours')
-        .select()
-        .eq('city_id', cityId)
-        .eq('status', 'published')
-        .order('name');
-    return List<Map<String, dynamic>>.from(response);
-  }
-  
-  // Récupérer les points d'un parcours
-  static Future<List<Map<String, dynamic>>> getPoints(String tourId) async {
-    final response = await client
-        .from('points')
-        .select()
-        .eq('tour_id', tourId)
-        .order('order_index');
-    return List<Map<String, dynamic>>.from(response);
-  }
-  
-  // Récupérer un script par ID
-  Future<Map<String, dynamic>?> getScript(String scriptId) async {
-    final response = await client
-        .from('scripts')
-        .select()
-        .eq('id', scriptId)
-        .maybeSingle();
+
+  /// Récupérer une ville par slug.
+  static Future<Map<String, dynamic>?> getCityBySlug(String slug) async {
+    final response =
+        await client.from('cities').select().eq('slug', slug).maybeSingle();
     return response;
   }
 
-  // Récupérer les scripts d'un point
-  static Future<List<Map<String, dynamic>>> getScripts(String pointId, String language) async {
+  // ── Points (POIs) ──
+
+  /// Récupérer tous les POIs publiés d'une ville.
+  static Future<List<Map<String, dynamic>>> getPoints(String cityId) async {
+    final response = await client
+        .from('points')
+        .select()
+        .eq('city_id', cityId)
+        .eq('is_published', true);
+    return List<Map<String, dynamic>>.from(response);
+  }
+
+  /// Récupérer les POIs d'une ville filtrés par catégorie.
+  static Future<List<Map<String, dynamic>>> getPointsByCategory(
+    String cityId,
+    String category,
+  ) async {
+    final response = await client
+        .from('points')
+        .select()
+        .eq('city_id', cityId)
+        .eq('is_published', true)
+        .contains('categories', [category]);
+    return List<Map<String, dynamic>>.from(response);
+  }
+
+  // ── Scripts ──
+
+  /// Récupérer un script par ID.
+  Future<Map<String, dynamic>?> getScript(String scriptId) async {
+    final response =
+        await client.from('scripts').select().eq('id', scriptId).maybeSingle();
+    return response;
+  }
+
+  /// Récupérer le script d'un POI dans une langue donnée.
+  static Future<Map<String, dynamic>?> getScriptForPoint(
+    String pointId,
+    String language,
+  ) async {
     final response = await client
         .from('scripts')
         .select()
         .eq('point_id', pointId)
+        .eq('language', language)
+        .maybeSingle();
+    return response;
+  }
+
+  /// Récupérer tous les scripts d'une ville dans une langue (pour offline sync).
+  static Future<List<Map<String, dynamic>>> getScriptsForCity(
+    String cityId,
+    String language,
+  ) async {
+    final response = await client
+        .from('scripts')
+        .select('*, points!inner(city_id)')
+        .eq('points.city_id', cityId)
         .eq('language', language);
     return List<Map<String, dynamic>>.from(response);
   }

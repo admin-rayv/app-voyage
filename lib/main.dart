@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'config/theme.dart';
 import 'config/routes.dart';
+import 'services/supabase_service.dart';
 
 /// App Voyage - Point d'entrée
 /// Guide audio géolocalisé
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
+  // Initialiser Supabase
+  await SupabaseService.initialize();
+
   runApp(
     const ProviderScope(
       child: AppVoyage(),

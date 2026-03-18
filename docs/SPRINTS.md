@@ -10,7 +10,7 @@
 - **Livrables concrets** à chaque fin de sprint
 - **Test terrain** avant de passer au suivant
 - **POI-first:** on collecte des POIs standalone, pas des parcours
-- Saint-Lambert d'abord → Montréal ensuite
+- Saint-Lambert d'abord → petites villes Rive-Sud/Montérégie ensuite
 
 ---
 
@@ -27,7 +27,7 @@
 - [ ] Repo GitHub avec CI/CD basic
 - [ ] Projet Supabase créé et configuré
 - [ ] Schéma de base de données implémenté (POI-first)
-- [ ] Compte ElevenLabs configuré
+- [ ] flutter_tts intégré (voix native du téléphone)
 - [ ] **Collecter TOUS les POIs de Saint-Lambert** (15-20 POIs)
 - [ ] Scripts audio auto-contenus pour chaque POI
 - [ ] POIs dans la DB avec coordonnées GPS précises
@@ -41,7 +41,7 @@
 - [ ] Packages essentiels installés:
   - `supabase_flutter` (backend)
   - `mapbox_maps_flutter` (cartes)
-  - `just_audio` (lecteur audio)
+  - `flutter_tts` (voix native)
   - `geolocator` (GPS)
   - `flutter_local_notifications`
 - [ ] Configuration iOS (permissions, capabilities)
@@ -204,25 +204,37 @@
 - Mode offline
 - Testé sur le terrain
 
-**Décision:** Go/No-Go pour la Phase 2 (Montréal)
+**Décision:** Go/No-Go pour la Phase 2 (expansion villes Rive-Sud)
 
 ---
 
-## Phase 2: MVP (Montréal + Features) 🏙️
+## Phase 2: MVP (Villes Rive-Sud + Features) 🏙️
 
 > Commence seulement après validation du prototype Saint-Lambert
 
-### Sprint 6: Contenu Montréal — POIs par quartier
-**Durée:** 2-3 semaines  
-**Focus:** Collecter les POIs de Montréal (commencer par Vieux-Montréal)
+### Sprint 6: Contenu — 5 villes touristiques de la Rive-Sud / Montérégie
+**Durée:** 3-4 semaines  
+**Focus:** Créer le contenu pour 5 petites villes à potentiel touristique, utilisables pour approcher des partenariats municipaux.
 
-#### Livrables
-- [ ] Collecter 25-30 POIs Vieux-Montréal
-- [ ] Collecter 15-20 POIs Plateau
-- [ ] Scripts audio auto-contenus FR + EN
-- [ ] Catégorisation de tous les POIs
-- [ ] Infos logistiques (parking, toilettes, cafés)
-- [ ] Données dans Supabase
+#### Villes cibles (à confirmer)
+1. **Saint-Bruno-de-Montarville** — Mont Saint-Bruno, parc national, village historique
+2. **Mont-Saint-Hilaire** — Réserve de biosphère UNESCO, vignobles, arts
+3. **Chambly** — Fort Chambly (lieu historique national), canal, brasseries
+4. **Boucherville** — Îles-de-Boucherville (parc national), patrimoine Nouvelle-France
+5. **Longueuil** — Co-cathédrale, vieux Longueuil, parc Michel-Chartrand
+
+#### Livrables par ville
+- [ ] 12-15 POIs avec coordonnées GPS précises
+- [ ] Scripts audio auto-contenus FR + EN + ES
+- [ ] Catégorisation par thématique
+- [ ] Vérification factuelle (poi-checker)
+- [ ] POIs et scripts dans Supabase
+
+#### Stratégie partenariats
+Ces villes servent de **démo concrète** pour approcher les offices de tourisme et municipalités. "Votre ville est déjà dans l'app — voulez-vous être partenaire officiel?"
+
+#### Critère de succès
+> "5 villes avec 12-15 POIs chacune dans Supabase, prêtes à être démontrées à des partenaires potentiels."
 
 ---
 
@@ -283,23 +295,23 @@
 
 ---
 
-### Sprint 10: Tours curatés + Paiements (V2)
+### Sprint 10: Auth + Paiements
 **Durée:** 2-3 semaines  
-**Focus:** Collections thématiques payantes + monétisation
+**Focus:** Comptes utilisateurs + monétisation
 
 #### User Stories incluses
 | ID | Story | Priorité |
 |----|-------|----------|
-| US-501 | Utiliser sans compte | 🟡 Should |
+| US-501 | Utiliser sans compte (mode gratuit limité) | 🟡 Should |
 | US-502 | Créer un compte | 🟡 Should |
-| US-503 | Acheter un tour curaté | 🟡 Should |
+| US-503 | Acheter l'accès à une ville | 🟡 Should |
 
 #### Livrables
-- [ ] Créer 2-3 tours curatés (collections de POIs)
 - [ ] Auth Supabase (email + Google + Apple)
+- [ ] Mode gratuit: 2-3 POIs par ville en preview
 - [ ] In-App Purchase iOS
 - [ ] In-App Purchase Android
-- [ ] POIs gratuits, tours curatés payants
+- [ ] Achat par ville (7.99$ CAD) ou bundle (14.99$ CAD)
 - [ ] Restauration des achats
 
 ---
@@ -336,13 +348,13 @@
 **Durée totale estimée:** 14-18 semaines (après Phase 1)
 
 **Livrable:** App MVP prête pour le public:
-- Tous les POIs Saint-Lambert (~20)
-- POIs Montréal (50+, Vieux-Mtl + Plateau)
+- Saint-Lambert (~81 POIs)
+- 5 villes Rive-Sud/Montérégie (12-15 POIs chacune)
 - Exploration libre avec GPS auto-trigger
 - Filtrage par catégorie
 - Mode offline
 - Sync groupe
-- Tours curatés payants (V2)
+- Paiement par ville (7.99$ CAD)
 - Sur App Store + Google Play
 
 ---
@@ -358,9 +370,9 @@ Phase 1: Prototype Saint-Lambert
                                                                      Total: ~10-11 semaines
 
 Phase 2: MVP Montréal + Features
-|---Sprint 6---|---Sprint 7---|--Sprint 8--|-----Sprint 9-----|---Sprint 10---|--S11--|--S12--|
-   POIs Mtl      Multi-lang    Onboarding    Sync Groupe        Tours+Paie     Beta   Launch
-  (2-3 sem)      (2 sem)       (1-2 sem)      (3 sem)           (2-3 sem)    (2 sem) (1-2 sem)
+|----Sprint 6----|---Sprint 7---|--Sprint 8--|-----Sprint 9-----|---Sprint 10---|--S11--|--S12--|
+  5 villes RS      Multi-lang    Onboarding    Sync Groupe        Auth+Paie      Beta   Launch
+  (3-4 sem)        (2 sem)       (1-2 sem)      (3 sem)           (2-3 sem)    (2 sem) (1-2 sem)
 
                                                                      Total: ~14-18 semaines
 ```
@@ -387,4 +399,4 @@ Phase 2: MVP Montréal + Features
 
 ---
 
-*Dernière mise à jour: 2026-02-23*
+*Dernière mise à jour: 2026-03-15*

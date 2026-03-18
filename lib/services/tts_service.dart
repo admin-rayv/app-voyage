@@ -141,11 +141,9 @@ class TtsService {
     return (voices as List)
         .where((v) =>
             v['locale']?.toString().startsWith(locale.substring(0, 2)) == true)
-        .map((v) => {
-              return {
-                'name': v['name']?.toString() ?? '',
-                'locale': v['locale']?.toString() ?? '',
-              };
+        .map<Map<String, String>>((v) => {
+              'name': v['name']?.toString() ?? '',
+              'locale': v['locale']?.toString() ?? '',
             })
         .toList();
   }

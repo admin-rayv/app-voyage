@@ -3,6 +3,7 @@ import '../models/city.dart';
 import '../services/supabase_service.dart';
 import '../config/categories.dart';
 import '../config/theme.dart';
+import 'map_screen.dart';
 
 /// Écran d'accueil — Liste des villes disponibles.
 ///
@@ -158,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // Navigation vers la carte de la ville
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => _PlaceholderMapScreen(city: city),
+              builder: (_) => MapScreen(city: city),
             ),
           );
         },
@@ -347,30 +348,4 @@ class _CityWithStats {
   });
 }
 
-/// Placeholder pour l'écran carte (sera remplacé dans le ticket carte).
-class _PlaceholderMapScreen extends StatelessWidget {
-  final City city;
-  const _PlaceholderMapScreen({required this.city});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(city.localizedName('fr'))),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.map, size: 80, color: Colors.grey),
-            const SizedBox(height: 16),
-            Text(
-              'Carte de ${city.localizedName('fr')}',
-              style: const TextStyle(fontSize: 20),
-            ),
-            const SizedBox(height: 8),
-            const Text('🚧 Sprint 1 — Ticket carte à venir'),
-          ],
-        ),
-      ),
-    );
-  }
-}

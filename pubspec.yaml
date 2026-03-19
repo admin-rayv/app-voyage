@@ -39,8 +39,9 @@ dependencies:
   supabase_flutter: ^2.8.0
   dio: ^5.4.0
   
-  # Maps
-  mapbox_maps_flutter: ^2.4.0
+  # Maps (OpenStreetMap — 100% gratuit, pas de clé API)
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
   
   # Audio
   just_audio: ^0.9.36

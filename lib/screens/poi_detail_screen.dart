@@ -267,6 +267,11 @@ class _PoiDetailScreenState extends State<PoiDetailScreen> {
                   ],
                   const SizedBox(height: 24),
 
+                  // Infos logistiques
+                  if (widget.poi.logistics != null &&
+                      widget.poi.logistics!.isNotEmpty)
+                    _buildLogisticsSection(),
+
                   // Bouton itinéraire
                   SizedBox(
                     width: double.infinity,
@@ -283,6 +288,85 @@ class _PoiDetailScreenState extends State<PoiDetailScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildLogisticsSection() {
+    final logistics = widget.poi.logistics!;
+    final items = <_LogisticsItem>[];
+
+    if (logistics['toilets'] != null && logistics['toilets'].toString().isNotEmpty) {
+      items.add(_LogisticsItem(Icons.wc, 'Toilettes', logistics['toilets'].toString()));
+    }
+    if (logistics['parking'] != null && logistics['parking'].toString().isNotEmpty) {
+      items.add(_LogisticsItem(Icons.local_parking, 'Stationnement', logistics['parking'].toString()));
+    }
+    if (logistics['photo_spot'] != null && logistics['photo_spot'].toString().isNotEmpty) {
+      items.add(_LogisticsItem(Icons.camera_alt, 'Photo', logistics['photo_spot'].toString()));
+    }
+    if (logistics['tips'] != null && logistics['tips'].toString().isNotEmpty) {
+      items.add(_LogisticsItem(Icons.lightbulb_outline, 'Bon à savoir', logistics['tips'].toString()));
+    }
+    if (logistics['accessibility'] != null && logistics['accessibility'].toString().isNotEmpty) {
+      items.add(_LogisticsItem(Icons.accessible, 'Accessibilité', logistics['accessibility'].toString()));
+    }
+    if (logistics['hours'] != null && logistics['hours'].toString().isNotEmpty) {
+      items.add(_LogisticsItem(Icons.schedule, 'Horaires', logistics['hours'].toString()));
+    }
+
+    if (items.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Infos pratiques',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        const SizedBox(height: 12),
+        ...items.map((item) => Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: AppTheme.primaryColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(item.icon, size: 18, color: AppTheme.primaryColor),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.label,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      item.value,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: AppTheme.textSecondary,
+                        height: 1.4,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        )),
+        const SizedBox(height: 12),
+      ],
     );
   }
 
@@ -400,4 +484,13 @@ class _PoiDetailScreenState extends State<PoiDetailScreen> {
       ),
     );
   }
+}
+
+/// Item d'info logistique (icône + label + valeur).
+class _LogisticsItem {
+  final IconData icon;
+  final String label;
+  final String value;
+
+  const _LogisticsItem(this.icon, this.label, this.value);
 }

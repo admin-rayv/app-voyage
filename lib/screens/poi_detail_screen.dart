@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/point.dart' as models;
 import '../models/script.dart';
@@ -27,26 +30,56 @@ class PoiDetailScreen extends StatefulWidget {
   State<PoiDetailScreen> createState() => _PoiDetailScreenState();
 }
 
-class _PoiDetailScreenState extends State<PoiDetailScreen> {
+class _PoiDetailScreenState extends State<PoiDetailScreen>
+    with SingleTickerProviderStateMixin {
+  static const String _ttsSpeedPrefKey = 'tts_speed';
+  static const Map<String, double> _speedOptions = {
+    '0.75x': 0.39,
+    '1x': 0.52,
+    '1.25x': 0.65,
+    '1.5x': 0.78,
+  };
+
   final AudioService _audio = AudioService();
   Script? _currentScript;
   String _selectedLanguage = 'fr';
   bool _isLoadingScript = true;
   bool _isSpeaking = false;
-
+  bool _isPaused = false;
+  double _selectedSpeed = 0.52;
+  late final AnimationController _pulseController;
+  StreamSubscription<TtsState>? _stateSubscription;
 
   @override
   void initState() {
     super.initState();
-    _audio.init();
-    _audio.stateStream.listen((state) {
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    );
+    unawaited(_initializeAudio());
+    _stateSubscription = _audio.stateStream.listen((state) {
+      final isSpeaking = state == TtsState.playing;
+      final isPaused = state == TtsState.paused;
+      if (isSpeaking) {
+        _pulseController.repeat(reverse: true);
+      } else {
+        _pulseController.stop();
+        _pulseController.value = 0;
+      }
       if (mounted) {
         setState(() {
-          _isSpeaking = state == TtsState.playing;
+          _isSpeaking = isSpeaking;
+          _isPaused = isPaused;
         });
       }
     });
     _loadScript();
+  }
+
+  Future<void> _initializeAudio() async {
+    await _audio.init();
+    await _loadSavedSpeechRate();
   }
 
   Future<void> _loadScript() async {
@@ -68,7 +101,9 @@ class _PoiDetailScreenState extends State<PoiDetailScreen> {
 
   Future<void> _togglePlayback() async {
     if (_isSpeaking) {
-      await _audio.stop();
+      await _audio.pause();
+    } else if (_isPaused) {
+      await _audio.resume();
     } else if (_currentScript != null) {
       await _audio.playText(
         _currentScript!.content,
@@ -82,6 +117,36 @@ class _PoiDetailScreenState extends State<PoiDetailScreen> {
     await _audio.stop();
     setState(() => _selectedLanguage = lang);
     await _loadScript();
+  }
+
+  Future<void> _loadSavedSpeechRate() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedRate = prefs.getDouble(_ttsSpeedPrefKey) ?? 0.52;
+    final selectedRate = _speedOptions.values.contains(savedRate)
+        ? savedRate
+        : 0.52;
+    await _audio.tts.setSpeechRate(selectedRate);
+    await _audio.setSpeechRate(selectedRate);
+    if (!mounted) return;
+    setState(() => _selectedSpeed = selectedRate);
+  }
+
+  Future<void> _setSpeechRate(double rate) async {
+    final prefs = await SharedPreferences.getInstance();
+    await _audio.tts.setSpeechRate(rate);
+    await _audio.setSpeechRate(rate);
+    await prefs.setDouble(_ttsSpeedPrefKey, rate);
+    if (!mounted) return;
+    setState(() => _selectedSpeed = rate);
+  }
+
+  Future<void> _restartPlayback() async {
+    if (_currentScript == null) return;
+    await _audio.stop();
+    await _audio.playText(
+      _currentScript!.content,
+      language: _selectedLanguage,
+    );
   }
 
   Future<void> _openNavigation() async {
@@ -106,6 +171,8 @@ class _PoiDetailScreenState extends State<PoiDetailScreen> {
 
   @override
   void dispose() {
+    _stateSubscription?.cancel();
+    _pulseController.dispose();
     _audio.dispose();
     super.dispose();
   }
@@ -373,6 +440,8 @@ class _PoiDetailScreenState extends State<PoiDetailScreen> {
   }
 
   Widget _buildAudioPlayer() {
+    final theme = Theme.of(context);
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -396,7 +465,6 @@ class _PoiDetailScreenState extends State<PoiDetailScreen> {
             ],
           ),
           const SizedBox(height: 16),
-          // Bouton play/stop
           if (_isLoadingScript)
             const CircularProgressIndicator()
           else if (_currentScript == null)
@@ -404,56 +472,151 @@ class _PoiDetailScreenState extends State<PoiDetailScreen> {
               'Aucun script disponible',
               style: TextStyle(color: AppTheme.textSecondary),
             )
-          else
+          else ...[
+            // flutter_tts does not expose seek/position, so ±15 sec actions
+            // restart the current script from the beginning instead.
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Bouton principal
-                GestureDetector(
-                  onTap: _togglePlayback,
-                  child: Container(
-                    width: 64,
-                    height: 64,
-                    decoration: BoxDecoration(
-                      color: AppTheme.primaryColor,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color:
-                              AppTheme.primaryColor.withValues(alpha: 0.3),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
+                _buildSeekButton(
+                  icon: Icons.fast_rewind,
+                  label: '15',
+                  onTap: _restartPlayback,
+                ),
+                const SizedBox(width: 20),
+                Column(
+                  children: [
+                    GestureDetector(
+                      onTap: _togglePlayback,
+                      child: ScaleTransition(
+                        scale: Tween<double>(begin: 1, end: 1.08).animate(
+                          CurvedAnimation(
+                            parent: _pulseController,
+                            curve: Curves.easeInOut,
+                          ),
                         ),
-                      ],
+                        child: Container(
+                          width: 72,
+                          height: 72,
+                          decoration: BoxDecoration(
+                            color: AppTheme.primaryColor,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppTheme.primaryColor.withValues(
+                                  alpha: 0.3,
+                                ),
+                                blurRadius: 12,
+                                offset: const Offset(0, 6),
+                              ),
+                            ],
+                          ),
+                          child: Icon(
+                            _isSpeaking ? Icons.pause : Icons.play_arrow,
+                            color: Colors.white,
+                            size: 34,
+                          ),
+                        ),
+                      ),
                     ),
-                    child: Icon(
-                      _isSpeaking ? Icons.stop : Icons.play_arrow,
-                      color: Colors.white,
-                      size: 32,
+                    const SizedBox(height: 12),
+                    TextButton.icon(
+                      onPressed:
+                          (_isSpeaking || _isPaused) ? _audio.stop : null,
+                      icon: const Icon(Icons.stop, size: 16),
+                      label: const Text('Stop'),
+                      style: TextButton.styleFrom(
+                        foregroundColor: AppTheme.primaryColor,
+                      ),
                     ),
-                  ),
+                  ],
+                ),
+                const SizedBox(width: 20),
+                _buildSeekButton(
+                  icon: Icons.fast_forward,
+                  label: '15',
+                  onTap: _restartPlayback,
                 ),
               ],
             ),
-          if (_isSpeaking) ...[
+            const SizedBox(height: 16),
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 8,
+              runSpacing: 8,
+              children: _speedOptions.entries.map((entry) {
+                final isSelected = _selectedSpeed == entry.value;
+                return ChoiceChip(
+                  label: Text(entry.key),
+                  selected: isSelected,
+                  onSelected: (_) => _setSpeechRate(entry.value),
+                );
+              }).toList(),
+            ),
             const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.volume_up,
-                    size: 16, color: AppTheme.primaryColor),
-                const SizedBox(width: 6),
-                Text(
-                  'En cours de lecture...',
-                  style: TextStyle(
-                    color: AppTheme.primaryColor,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: (_isSpeaking || _isPaused)
+                  ? Column(
+                      key: ValueKey<bool>(_isSpeaking),
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              _isSpeaking
+                                  ? Icons.volume_up
+                                  : Icons.pause_circle_outline,
+                              size: 16,
+                              color: AppTheme.primaryColor,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              _isSpeaking
+                                  ? 'En cours de lecture...'
+                                  : 'Lecture en pause',
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: AppTheme.primaryColor,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        const LinearProgressIndicator(),
+                      ],
+                    )
+                  : const SizedBox.shrink(),
             ),
           ],
         ],
+      ),
+    );
+  }
+
+  Widget _buildSeekButton({
+    required IconData icon,
+    required String label,
+    required Future<void> Function() onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(24),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+        child: Column(
+          children: [
+            Icon(icon, color: AppTheme.primaryColor, size: 26),
+            const SizedBox(height: 2),
+            Text(
+              label,
+              style: TextStyle(
+                color: AppTheme.primaryColor,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

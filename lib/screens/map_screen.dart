@@ -8,6 +8,7 @@ import '../services/supabase_service.dart';
 import '../config/categories.dart';
 import '../config/theme.dart';
 import 'poi_detail_screen.dart';
+import '../widgets/poi_list_item.dart';
 
 /// Écran carte — Affiche tous les POIs d'une ville sur OpenStreetMap.
 
@@ -23,6 +24,7 @@ class _MapScreenState extends State<MapScreen> {
   final MapController _mapController = MapController();
   List<models.Point> _allPoints = [];
   final Set<String> _activeFilters = {};
+  bool _showList = false;
   bool _isLoading = true;
   String? _error;
   LatLng? _userPosition;
@@ -230,7 +232,13 @@ class _MapScreenState extends State<MapScreen> {
       appBar: AppBar(
         title: Text(widget.city.localizedName('fr')),
         actions: [
-          if (_userPosition != null)
+          // Toggle carte/liste
+          IconButton(
+            icon: Icon(_showList ? Icons.map : Icons.list),
+            onPressed: () => setState(() => _showList = !_showList),
+            tooltip: _showList ? 'Voir la carte' : 'Voir la liste',
+          ),
+          if (_userPosition != null && !_showList)
             IconButton(
               icon: const Icon(Icons.my_location),
               onPressed: _centerOnUser,
@@ -266,7 +274,9 @@ class _MapScreenState extends State<MapScreen> {
               : Column(
                   children: [
                     _buildFilterBar(),
-                    Expanded(child: _buildMap()),
+                    Expanded(
+                      child: _showList ? _buildList() : _buildMap(),
+                    ),
                   ],
                 ),
     );
@@ -318,6 +328,57 @@ class _MapScreenState extends State<MapScreen> {
           }),
         ],
       ),
+    );
+  }
+
+  Widget _buildList() {
+    var points = _filteredPoints.toList();
+
+    // Trier par distance si position dispo
+    if (_userPosition != null) {
+      points.sort((a, b) {
+        final distA = Geolocator.distanceBetween(
+            _userPosition!.latitude, _userPosition!.longitude, a.lat, a.lng);
+        final distB = Geolocator.distanceBetween(
+            _userPosition!.latitude, _userPosition!.longitude, b.lat, b.lng);
+        return distA.compareTo(distB);
+      });
+    }
+
+    if (points.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.search_off, size: 48, color: Colors.grey[400]),
+            const SizedBox(height: 12),
+            const Text('Aucun POI trouvé avec ces filtres'),
+          ],
+        ),
+      );
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      itemCount: points.length,
+      itemBuilder: (context, index) {
+        final poi = points[index];
+        return PoiListItem(
+          poi: poi,
+          userPosition: _userPosition,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => PoiDetailScreen(
+                  poi: poi,
+                  userPosition: _userPosition,
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 

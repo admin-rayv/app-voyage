@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:just_audio/just_audio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../models/audio_state.dart';
 import 'tts_service.dart';
 import 'edge_tts_service.dart';
 import 'supabase_service.dart';
@@ -12,6 +14,20 @@ import 'supabase_service.dart';
 /// 3. flutter_tts natif (fallback) → voix du téléphone, toujours dispo
 
 class AudioService {
+  AudioService._internal();
+
+  static final AudioService _instance = AudioService._internal();
+  factory AudioService() => _instance;
+
+  static const String _speedPrefKey = 'tts_speed';
+  static const Duration _positionTick = Duration(milliseconds: 500);
+  static final Map<double, double> _speedToSpeechRate = {
+    0.75: 0.39,
+    1.0: 0.52,
+    1.25: 0.65,
+    1.5: 0.78,
+  };
+
   final TtsService _tts = TtsService();
   final EdgeTtsService _edgeTts = EdgeTtsService();
   final SupabaseService _supabase = SupabaseService();
@@ -20,115 +36,271 @@ class AudioService {
   TtsService get tts => _tts;
   EdgeTtsService get edgeTts => _edgeTts;
 
-  // État
+  bool _isInitialized = false;
+  StreamSubscription<TtsState>? _ttsStateSubscription;
+  StreamSubscription<PlayerState>? _playerStateSubscription;
+  Timer? _positionTimer;
+
   bool _isPlaying = false;
   bool _isPaused = false;
   bool _usingEdgeTts = false;
+  double _speed = 1.0;
+  String? _currentText;
+  AudioState _state = const AudioState(
+    playState: AudioPlayState.stopped,
+    position: Duration.zero,
+    duration: Duration.zero,
+    speed: 1.0,
+  );
 
   bool get isPlaying => _isPlaying;
   bool get isPaused => _isPaused;
-  /// True si la dernière lecture utilise Edge TTS (bonne qualité).
   bool get usingEdgeTts => _usingEdgeTts;
+  double get speed => _speed;
+  AudioState get currentState => _state;
 
-  // Stream d'état
-  final _stateController = StreamController<TtsState>.broadcast();
-  Stream<TtsState> get stateStream => _stateController.stream;
+  final _stateController = StreamController<AudioState>.broadcast();
+  Stream<AudioState> get stateStream => _stateController.stream;
 
-  /// Initialiser les services audio.
   Future<void> init() async {
-    await _tts.init();
+    if (_isInitialized) return;
+    _isInitialized = true;
 
-    // Écouter l'état du player just_audio
-    _player.playerStateStream.listen((state) {
+    await _tts.init();
+    await _loadSavedSpeed();
+    await _applySpeed();
+
+    _ttsStateSubscription = _tts.stateStream.listen(_handleTtsState);
+    _playerStateSubscription = _player.playerStateStream.listen((state) {
       if (!_usingEdgeTts) return; // Seulement quand on utilise Edge TTS
       if (state.processingState == ProcessingState.completed) {
-        _isPlaying = false;
-        _isPaused = false;
-        _stateController.add(TtsState.stopped);
+        _finishPlayback(resetPosition: true);
       } else if (state.playing) {
-        _isPlaying = true;
-        _isPaused = false;
-        _stateController.add(TtsState.playing);
+        _setPlaybackState(AudioPlayState.playing);
       } else if (!state.playing &&
           state.processingState == ProcessingState.ready) {
-        _isPaused = true;
-        _isPlaying = false;
-        _stateController.add(TtsState.paused);
+        _setPlaybackState(AudioPlayState.paused);
       }
     });
   }
 
-  /// Jouer le script audio d'un POI.
-  ///
-  /// [scriptId] — UUID du script dans Supabase
-  /// Tente Edge TTS (cache ou live), sinon fallback flutter_tts.
-  Future<void> playScript(String scriptId) async {
+  Future<void> playScript(String scriptId, {String? poiName}) async {
+    await init();
     final script = await _supabase.getScript(scriptId);
     if (script == null) return;
 
     final text = script['content'] as String;
     final language = script['language'] as String? ?? 'fr';
 
-    await _playWithFallback(
+    await play(
       scriptId: scriptId,
       text: text,
       language: language,
+      poiName: poiName,
     );
   }
 
-  /// Jouer un texte directement (preview / mode offline).
-  Future<void> playText(String text, {String language = 'fr'}) async {
-    await _playWithFallback(
-      scriptId: 'preview-${text.hashCode}',
+  Future<void> playText(
+    String text, {
+    String language = 'fr',
+    String? poiName,
+  }) async {
+    await play(
+      scriptId: null,
       text: text,
       language: language,
+      poiName: poiName,
     );
   }
 
-  /// Logique de fallback: Edge TTS → flutter_tts natif.
-  Future<void> _playWithFallback({
-    required String scriptId,
+  Future<void> play({
     required String text,
     required String language,
+    String? scriptId,
+    String? poiName,
   }) async {
-    // Arrêter toute lecture en cours
-    await stop();
+    await init();
+    final resolvedScriptId = scriptId ?? 'preview-${text.hashCode}';
+    final estimatedDuration = _estimateDuration(text);
+    _currentText = text;
 
-    // Tenter Edge TTS (cache ou génération live)
+    _state = _state.copyWith(
+      playState: AudioPlayState.loading,
+      position: Duration.zero,
+      duration: estimatedDuration,
+      speed: _speed,
+      currentPoiName: poiName,
+      currentScriptId: resolvedScriptId,
+    );
+    _emitState();
+
+    await stop(keepMetadata: true, emitState: false);
+
+    _state = _state.copyWith(
+      playState: AudioPlayState.loading,
+      position: Duration.zero,
+      duration: estimatedDuration,
+      speed: _speed,
+      currentPoiName: poiName,
+      currentScriptId: resolvedScriptId,
+    );
+    _emitState();
+
     final audioPath = await _edgeTts.getAudioPath(
-      scriptId: scriptId,
+      scriptId: resolvedScriptId,
       text: text,
       language: language,
     );
 
     if (audioPath != null) {
-      // Lecture MP3 via just_audio
       _usingEdgeTts = true;
       try {
         await _player.setFilePath(audioPath);
         await _player.play();
         return;
-      } catch (e) {
-        // Si erreur de lecture MP3, fallback
+      } catch (_) {
+        _usingEdgeTts = false;
       }
     }
 
-    // Fallback: flutter_tts natif
     _usingEdgeTts = false;
     await _tts.speak(text, language: language);
+  }
 
-    // Relayer les états TTS natif
-    _tts.stateStream.listen((state) {
-      if (!_usingEdgeTts) {
-        _isPlaying = state == TtsState.playing;
-        _isPaused = state == TtsState.paused;
-        _stateController.add(state);
-      }
+  void _handleTtsState(TtsState state) {
+    if (_usingEdgeTts) return;
+
+    switch (state) {
+      case TtsState.playing:
+        _setPlaybackState(AudioPlayState.playing);
+        break;
+      case TtsState.paused:
+        _setPlaybackState(AudioPlayState.paused);
+        break;
+      case TtsState.stopped:
+        _finishPlayback(resetPosition: true);
+        break;
+    }
+  }
+
+  Duration _estimateDuration(String text) {
+    final words = text
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((word) => word.isNotEmpty)
+        .length;
+    final seconds = ((words * 0.4) / _speed).round();
+    return Duration(seconds: seconds <= 0 ? 1 : seconds);
+  }
+
+  void _setPlaybackState(AudioPlayState playState) {
+    _isPlaying = playState == AudioPlayState.playing;
+    _isPaused = playState == AudioPlayState.paused;
+
+    if (playState == AudioPlayState.playing) {
+      _startPositionTimer();
+    } else {
+      _stopPositionTimer();
+    }
+
+    _state = _state.copyWith(
+      playState: playState,
+      speed: _speed,
+    );
+    _emitState();
+  }
+
+  void _finishPlayback({required bool resetPosition}) {
+    _stopPositionTimer();
+    _isPlaying = false;
+    _isPaused = false;
+    _usingEdgeTts = false;
+    _state = _state.copyWith(
+      playState: AudioPlayState.stopped,
+      position: resetPosition ? Duration.zero : _state.position,
+    );
+    _emitState();
+  }
+
+  void _startPositionTimer() {
+    _positionTimer?.cancel();
+    _positionTimer = Timer.periodic(_positionTick, (_) {
+      final nextPosition = _state.position + _positionTick;
+      final cappedPosition = nextPosition > _state.duration
+          ? _state.duration
+          : nextPosition;
+      _state = _state.copyWith(position: cappedPosition);
+      _emitState();
     });
   }
 
-  /// Pause.
+  void _stopPositionTimer() {
+    _positionTimer?.cancel();
+    _positionTimer = null;
+  }
+
+  void _emitState() {
+    if (!_stateController.isClosed) {
+      _stateController.add(_state);
+    }
+  }
+
+  Future<void> _loadSavedSpeed() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedSpeed = prefs.getDouble(_speedPrefKey);
+    _speed = _normalizeSpeed(savedSpeed);
+    _state = _state.copyWith(speed: _speed);
+  }
+
+  double _normalizeSpeed(double? speed) {
+    if (speed == null) return 1.0;
+    for (final value in _speedToSpeechRate.keys) {
+      if ((value - speed).abs() < 0.001) {
+        return value;
+      }
+    }
+    return 1.0;
+  }
+
+  double _speechRateForSpeed(double speed) {
+    return _speedToSpeechRate[_normalizeSpeed(speed)] ?? _speedToSpeechRate[1.0]!;
+  }
+
+  Future<void> _applySpeed() async {
+    await _player.setSpeed(_speed);
+    await _tts.setSpeechRate(_speechRateForSpeed(_speed));
+    final updatedDuration = _currentText == null
+        ? _state.duration
+        : _estimateDuration(_currentText!);
+    final cappedPosition = _state.position > updatedDuration
+        ? updatedDuration
+        : _state.position;
+    _state = _state.copyWith(
+      speed: _speed,
+      duration: updatedDuration,
+      position: cappedPosition,
+    );
+    _emitState();
+  }
+
+  Future<void> setSpeed(double speed) async {
+    await init();
+    _speed = _normalizeSpeed(speed);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(_speedPrefKey, _speed);
+    await _applySpeed();
+  }
+
+  Future<void> setSpeechRate(double rate) async {
+    final entry = _speedToSpeechRate.entries.firstWhere(
+      (item) => (item.value - rate).abs() < 0.001,
+      orElse: () => const MapEntry(1.0, 0.52),
+    );
+    await setSpeed(entry.key);
+  }
+
   Future<void> pause() async {
+    await init();
     if (_usingEdgeTts) {
       await _player.pause();
     } else {
@@ -136,8 +308,8 @@ class AudioService {
     }
   }
 
-  /// Reprendre.
   Future<void> resume() async {
+    await init();
     if (_usingEdgeTts) {
       await _player.play();
     } else {
@@ -145,31 +317,36 @@ class AudioService {
     }
   }
 
-  /// Stop.
-  Future<void> stop() async {
+  Future<void> stop({
+    bool keepMetadata = false,
+    bool emitState = true,
+  }) async {
     if (_usingEdgeTts) {
       await _player.stop();
     }
     await _tts.stop();
+    _stopPositionTimer();
     _isPlaying = false;
     _isPaused = false;
     _usingEdgeTts = false;
-    _stateController.add(TtsState.stopped);
+    _state = _state.copyWith(
+      playState: AudioPlayState.stopped,
+      position: Duration.zero,
+      clearCurrentPoiName: !keepMetadata,
+      clearCurrentScriptId: !keepMetadata,
+    );
+    if (!keepMetadata) {
+      _currentText = null;
+    }
+    if (emitState) {
+      _emitState();
+    }
   }
 
-  /// Modifier la vitesse de lecture.
-  Future<void> setSpeechRate(double rate) async {
-    // Pour just_audio: 1.0 = normal, 0.5 = lent, 2.0 = rapide
-    await _player.setSpeed(rate * 2); // Convertir échelle TTS → just_audio
-    await _tts.setSpeechRate(rate);
-  }
-
-  /// Télécharger tous les audios d'une ville pour écoute offline.
   Future<void> downloadCityAudios({
     required String cityId,
     required void Function(int current, int total) onProgress,
   }) async {
-    // Télécharger les 3 langues
     for (final lang in ['fr', 'en', 'es']) {
       final scripts = await SupabaseService.getScriptsForCity(cityId, lang);
       await _edgeTts.downloadAll(
@@ -179,21 +356,22 @@ class AudioService {
     }
   }
 
-  /// Taille du cache audio en MB.
   Future<double> getCacheSizeMB() async {
     final bytes = await _edgeTts.getCacheSize();
     return bytes / (1024 * 1024);
   }
 
-  /// Vider le cache.
   Future<void> clearCache() async {
     await _edgeTts.clearCache();
   }
 
-  /// Libérer les ressources.
   void dispose() {
+    _positionTimer?.cancel();
+    _playerStateSubscription?.cancel();
+    _ttsStateSubscription?.cancel();
     _player.dispose();
     _tts.dispose();
     _stateController.close();
+    _isInitialized = false;
   }
 }

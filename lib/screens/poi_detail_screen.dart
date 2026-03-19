@@ -4,13 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../models/audio_state.dart';
 import '../models/point.dart' as models;
 import '../models/script.dart';
 import '../services/supabase_service.dart';
 import '../services/audio_service.dart';
-import '../services/tts_service.dart';
 import '../config/categories.dart';
 import '../config/theme.dart';
 
@@ -32,12 +31,11 @@ class PoiDetailScreen extends StatefulWidget {
 
 class _PoiDetailScreenState extends State<PoiDetailScreen>
     with SingleTickerProviderStateMixin {
-  static const String _ttsSpeedPrefKey = 'tts_speed';
   static const Map<String, double> _speedOptions = {
-    '0.75x': 0.39,
-    '1x': 0.52,
-    '1.25x': 0.65,
-    '1.5x': 0.78,
+    '0.75x': 0.75,
+    '1x': 1.0,
+    '1.25x': 1.25,
+    '1.5x': 1.5,
   };
 
   final AudioService _audio = AudioService();
@@ -46,9 +44,15 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
   bool _isLoadingScript = true;
   bool _isSpeaking = false;
   bool _isPaused = false;
-  double _selectedSpeed = 0.52;
+  double _selectedSpeed = 1.0;
+  AudioState _audioState = const AudioState(
+    playState: AudioPlayState.stopped,
+    position: Duration.zero,
+    duration: Duration.zero,
+    speed: 1.0,
+  );
   late final AnimationController _pulseController;
-  StreamSubscription<TtsState>? _stateSubscription;
+  StreamSubscription<AudioState>? _stateSubscription;
 
   @override
   void initState() {
@@ -59,8 +63,8 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
     );
     unawaited(_initializeAudio());
     _stateSubscription = _audio.stateStream.listen((state) {
-      final isSpeaking = state == TtsState.playing;
-      final isPaused = state == TtsState.paused;
+      final isSpeaking = state.playState == AudioPlayState.playing;
+      final isPaused = state.playState == AudioPlayState.paused;
       if (isSpeaking) {
         _pulseController.repeat(reverse: true);
       } else {
@@ -71,6 +75,8 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
         setState(() {
           _isSpeaking = isSpeaking;
           _isPaused = isPaused;
+          _selectedSpeed = state.speed;
+          _audioState = state;
         });
       }
     });
@@ -79,7 +85,11 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
 
   Future<void> _initializeAudio() async {
     await _audio.init();
-    await _loadSavedSpeechRate();
+    if (!mounted) return;
+    setState(() {
+      _selectedSpeed = _audio.speed;
+      _audioState = _audio.currentState;
+    });
   }
 
   Future<void> _loadScript() async {
@@ -108,6 +118,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
       await _audio.playText(
         _currentScript!.content,
         language: _selectedLanguage,
+        poiName: widget.poi.localizedName(_selectedLanguage),
       );
     }
   }
@@ -119,25 +130,10 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
     await _loadScript();
   }
 
-  Future<void> _loadSavedSpeechRate() async {
-    final prefs = await SharedPreferences.getInstance();
-    final savedRate = prefs.getDouble(_ttsSpeedPrefKey) ?? 0.52;
-    final selectedRate = _speedOptions.values.contains(savedRate)
-        ? savedRate
-        : 0.52;
-    await _audio.tts.setSpeechRate(selectedRate);
-    await _audio.setSpeechRate(selectedRate);
+  Future<void> _setSpeechRate(double speed) async {
+    await _audio.setSpeed(speed);
     if (!mounted) return;
-    setState(() => _selectedSpeed = selectedRate);
-  }
-
-  Future<void> _setSpeechRate(double rate) async {
-    final prefs = await SharedPreferences.getInstance();
-    await _audio.tts.setSpeechRate(rate);
-    await _audio.setSpeechRate(rate);
-    await prefs.setDouble(_ttsSpeedPrefKey, rate);
-    if (!mounted) return;
-    setState(() => _selectedSpeed = rate);
+    setState(() => _selectedSpeed = speed);
   }
 
   Future<void> _restartPlayback() async {
@@ -146,6 +142,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
     await _audio.playText(
       _currentScript!.content,
       language: _selectedLanguage,
+      poiName: widget.poi.localizedName(_selectedLanguage),
     );
   }
 
@@ -173,7 +170,6 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
   void dispose() {
     _stateSubscription?.cancel();
     _pulseController.dispose();
-    _audio.dispose();
     super.dispose();
   }
 
@@ -441,6 +437,10 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
 
   Widget _buildAudioPlayer() {
     final theme = Theme.of(context);
+    final progress = _audioState.duration.inMilliseconds > 0
+        ? _audioState.position.inMilliseconds /
+            _audioState.duration.inMilliseconds
+        : 0.0;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -583,7 +583,9 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
                           ],
                         ),
                         const SizedBox(height: 8),
-                        const LinearProgressIndicator(),
+                        LinearProgressIndicator(
+                          value: progress.clamp(0.0, 1.0).toDouble(),
+                        ),
                       ],
                     )
                   : const SizedBox.shrink(),

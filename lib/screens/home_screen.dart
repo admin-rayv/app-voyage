@@ -159,10 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // Navigation vers la carte de la ville
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => MapScreen(
-                cityId: city.id,
-                cityName: city.localizedName('fr'),
-              ),
+              builder: (_) => MapScreen(city: city),
             ),
           );
         },

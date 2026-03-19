@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../screens/home_screen.dart';
-import '../screens/map_screen.dart';
 import '../screens/tour_detail_screen.dart';
 import '../screens/active_tour_screen.dart';
 
@@ -15,15 +14,6 @@ final GoRouter appRouter = GoRouter(
       path: '/',
       name: 'home',
       builder: (context, state) => const HomeScreen(),
-    ),
-    GoRoute(
-      path: '/city/:cityId/map',
-      name: 'cityMap',
-      builder: (context, state) {
-        final cityId = state.pathParameters['cityId']!;
-        final cityName = state.uri.queryParameters['name'] ?? 'Carte';
-        return MapScreen(cityId: cityId, cityName: cityName);
-      },
     ),
     GoRoute(
       path: '/tour/:tourId',

@@ -388,11 +388,11 @@ class _PoiDetailScreenState extends State<PoiDetailScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildLanguageChip('fr', '🇫🇷 FR'),
+              _buildLanguageChip('fr', 'FR'),
               const SizedBox(width: 8),
-              _buildLanguageChip('en', '🇬🇧 EN'),
+              _buildLanguageChip('en', 'EN'),
               const SizedBox(width: 8),
-              _buildLanguageChip('es', '🇪🇸 ES'),
+              _buildLanguageChip('es', 'ES'),
             ],
           ),
           const SizedBox(height: 16),

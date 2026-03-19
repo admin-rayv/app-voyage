@@ -24,9 +24,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String? _testingVoice;
 
   static const _languages = [
-    {'code': 'fr', 'label': 'Français', 'flag': '🇨🇦', 'testText': 'Bienvenue à Saint-Lambert! Je suis Marco, ton guide.'},
-    {'code': 'en', 'label': 'English', 'flag': '🇺🇸', 'testText': 'Welcome to Saint-Lambert! I\'m Marco, your guide.'},
-    {'code': 'es', 'label': 'Español', 'flag': '🇪🇸', 'testText': '¡Bienvenido a Saint-Lambert! Soy Marco, tu guía.'},
+    {'code': 'fr', 'label': 'Français', 'flag': '', 'testText': 'Bienvenue à Saint-Lambert! Je suis Marco, ton guide.'},
+    {'code': 'en', 'label': 'English', 'flag': '', 'testText': 'Welcome to Saint-Lambert! I\'m Marco, your guide.'},
+    {'code': 'es', 'label': 'Español', 'flag': '', 'testText': '¡Bienvenido a Saint-Lambert! Soy Marco, tu guía.'},
   ];
 
   @override
@@ -146,7 +146,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           child: Row(
             children: [
-              Text(flag, style: const TextStyle(fontSize: 24)),
+              Icon(Icons.translate, color: AppTheme.primaryColor),
               const SizedBox(width: 8),
               Text(
                 label,

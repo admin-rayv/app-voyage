@@ -7,6 +7,7 @@ import '../models/point.dart' as models;
 import '../services/supabase_service.dart';
 import '../config/categories.dart';
 import '../config/theme.dart';
+import 'poi_detail_screen.dart';
 
 /// Écran carte — Affiche tous les POIs d'une ville sur OpenStreetMap.
 
@@ -203,7 +204,15 @@ class _MapScreenState extends State<MapScreen> {
               child: ElevatedButton.icon(
                 onPressed: () {
                   Navigator.pop(context);
-                  // TODO: navigation vers écran détail POI
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => PoiDetailScreen(
+                        poi: poi,
+                        userPosition: _userPosition,
+                      ),
+                    ),
+                  );
                 },
                 icon: const Icon(Icons.info_outline),
                 label: const Text('Voir le détail'),

@@ -34,10 +34,10 @@ class TtsService {
 
   /// Initialiser le service TTS.
   Future<void> init() async {
-    // Config Marco — voix masculine, rythme guide touristique
-    await _tts.setSpeechRate(0.42); // Posé, pas pressé
+    // Config Marco — rythme naturel, plus d'expression
+    await _tts.setSpeechRate(0.52); // Rythme conversationnel naturel
     await _tts.setVolume(1.0);
-    await _tts.setPitch(0.95); // Légèrement plus grave = plus masculin
+    await _tts.setPitch(1.05); // Légèrement plus haut = plus d'intonation
 
     // Callbacks
     _tts.setStartHandler(() {

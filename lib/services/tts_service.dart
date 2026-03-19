@@ -22,22 +22,22 @@ class TtsService {
   final _stateController = StreamController<TtsState>.broadcast();
   Stream<TtsState> get stateStream => _stateController.stream;
 
-  // Voix préférées par langue
+  // Voix préférées par langue — voix masculines pour Marco 🎙️
   static const Map<String, List<String>> _preferredVoices = {
-    'fr-CA': ['Amélie', 'Amelie'],
-    'fr-FR': ['Thomas', 'Audrey'],
-    'en-US': ['Samantha', 'Daniel'],
-    'en-GB': ['Daniel', 'Martha'],
-    'es-ES': ['Paulina', 'Jorge'],
-    'es-MX': ['Paulina', 'Juan'],
+    'fr-CA': ['Nicolas', 'Thomas', 'Jean-Pierre'],
+    'fr-FR': ['Thomas', 'Nicolas'],
+    'en-US': ['Daniel', 'Aaron', 'Tom'],
+    'en-GB': ['Daniel', 'Oliver'],
+    'es-ES': ['Jorge', 'Diego', 'Juan'],
+    'es-MX': ['Juan', 'Jorge'],
   };
 
   /// Initialiser le service TTS.
   Future<void> init() async {
-    // Config de base
-    await _tts.setSpeechRate(0.45); // Un peu plus lent = plus naturel
+    // Config Marco — voix masculine, rythme guide touristique
+    await _tts.setSpeechRate(0.42); // Posé, pas pressé
     await _tts.setVolume(1.0);
-    await _tts.setPitch(1.0);
+    await _tts.setPitch(0.95); // Légèrement plus grave = plus masculin
 
     // Callbacks
     _tts.setStartHandler(() {
@@ -168,14 +168,22 @@ class TtsService {
       }
     }
 
-    // Fallback: première voix "Enhanced" ou "Premium" disponible
-    for (final voice in voices) {
-      final name = voice['name']?.toString() ?? '';
-      final voiceLocale = voice['locale']?.toString() ?? '';
-      if (voiceLocale.startsWith(langPrefix) &&
-          (name.contains('Enhanced') || name.contains('Premium'))) {
-        await _tts.setVoice({'name': name, 'locale': voiceLocale});
-        return;
+    // Fallback: voix Enhanced/Premium masculine si disponible
+    for (final quality in ['Premium', 'Enhanced']) {
+      for (final voice in voices) {
+        final name = voice['name']?.toString() ?? '';
+        final voiceLocale = voice['locale']?.toString() ?? '';
+        if (voiceLocale.startsWith(langPrefix) && name.contains(quality)) {
+          // Éviter les voix féminines connues
+          final femaleNames = ['Amelie', 'Amélie', 'Samantha', 'Paulina',
+            'Audrey', 'Martha', 'Siri', 'Karen', 'Moira', 'Tessa'];
+          final isFemale = femaleNames.any(
+            (f) => name.toLowerCase().contains(f.toLowerCase()));
+          if (!isFemale) {
+            await _tts.setVoice({'name': name, 'locale': voiceLocale});
+            return;
+          }
+        }
       }
     }
   }

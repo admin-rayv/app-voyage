@@ -23,7 +23,7 @@ class AppConstants {
   static const String offlineDbName = 'app_voyage.db';
   
   // TTS settings
-  static const double defaultSpeechRate = 0.45;
-  static const double defaultPitch = 1.0;
+  static const double defaultSpeechRate = 0.42;
+  static const double defaultPitch = 0.95;
   static const String defaultLanguage = 'fr-CA';
 }

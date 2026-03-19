@@ -4,6 +4,7 @@ import '../services/supabase_service.dart';
 import '../config/categories.dart';
 import '../config/theme.dart';
 import 'map_screen.dart';
+import 'debug_voices_screen.dart';
 
 /// Écran d'accueil — Liste des villes disponibles.
 ///
@@ -139,9 +140,23 @@ class _HomeScreenState extends State<HomeScreen> {
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 16),
-          Text(
-            'Explore une ville',
-            style: Theme.of(context).textTheme.titleLarge,
+          Row(
+            children: [
+              Text(
+                'Explore une ville',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const Spacer(),
+              // Debug button — temporaire
+              IconButton(
+                icon: const Icon(Icons.record_voice_over, size: 20),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const DebugVoicesScreen()),
+                ),
+                tooltip: 'Debug voix TTS',
+              ),
+            ],
           ),
         ],
       ),

@@ -5,6 +5,7 @@ import '../config/categories.dart';
 import '../config/theme.dart';
 import 'map_screen.dart';
 import 'debug_voices_screen.dart';
+import '../widgets/voice_setup_dialog.dart';
 
 /// Écran d'accueil — Liste des villes disponibles.
 ///
@@ -25,6 +26,10 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _citiesFuture = _loadCities();
+    // Vérifier les voix TTS au premier lancement
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      VoiceSetupDialog.checkAndShow(context);
+    });
   }
 
   Future<List<_CityWithStats>> _loadCities() async {

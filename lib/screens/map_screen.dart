@@ -308,7 +308,7 @@ class _MapScreenState extends State<MapScreen> {
               padding: const EdgeInsets.only(right: 6),
               child: FilterChip(
                 selected: isActive,
-                label: Text('${cat.emoji} $count'),
+                label: Text('${cat.emoji} ${cat.labelFr} ($count)'),
                 onSelected: (_) => _toggleFilter(cat.key),
                 selectedColor: cat.color.withValues(alpha: 0.2),
                 checkmarkColor: cat.color,
@@ -348,7 +348,10 @@ class _MapScreenState extends State<MapScreen> {
               height: 36,
               child: GestureDetector(
                 onTap: () => _showPoiPreview(poi),
-                child: Container(
+                child: AnimatedOpacity(
+                  opacity: 1.0,
+                  duration: const Duration(milliseconds: 300),
+                  child: Container(
                   decoration: BoxDecoration(
                     color: color,
                     shape: BoxShape.circle,
@@ -367,6 +370,7 @@ class _MapScreenState extends State<MapScreen> {
                       style: const TextStyle(fontSize: 16),
                     ),
                   ),
+                ),
                 ),
               ),
             );

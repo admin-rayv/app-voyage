@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../models/point.dart' as models;
 import '../models/script.dart';
 import '../services/supabase_service.dart';
+import '../services/audio_service.dart';
 import '../services/tts_service.dart';
 import '../config/categories.dart';
 import '../config/theme.dart';
@@ -27,7 +28,7 @@ class PoiDetailScreen extends StatefulWidget {
 }
 
 class _PoiDetailScreenState extends State<PoiDetailScreen> {
-  final TtsService _tts = TtsService();
+  final AudioService _audio = AudioService();
   Script? _currentScript;
   String _selectedLanguage = 'fr';
   bool _isLoadingScript = true;
@@ -36,8 +37,8 @@ class _PoiDetailScreenState extends State<PoiDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _tts.init();
-    _tts.stateStream.listen((state) {
+    _audio.init();
+    _audio.stateStream.listen((state) {
       if (mounted) {
         setState(() {
           _isSpeaking = state == TtsState.playing;
@@ -66,9 +67,9 @@ class _PoiDetailScreenState extends State<PoiDetailScreen> {
 
   Future<void> _togglePlayback() async {
     if (_isSpeaking) {
-      await _tts.stop();
+      await _audio.stop();
     } else if (_currentScript != null) {
-      await _tts.speak(
+      await _audio.playText(
         _currentScript!.content,
         language: _selectedLanguage,
       );
@@ -77,7 +78,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen> {
 
   Future<void> _changeLanguage(String lang) async {
     if (lang == _selectedLanguage) return;
-    await _tts.stop();
+    await _audio.stop();
     setState(() => _selectedLanguage = lang);
     await _loadScript();
   }
@@ -104,7 +105,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen> {
 
   @override
   void dispose() {
-    _tts.dispose();
+    _audio.dispose();
     super.dispose();
   }
 

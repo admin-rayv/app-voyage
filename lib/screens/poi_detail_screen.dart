@@ -33,6 +33,8 @@ class _PoiDetailScreenState extends State<PoiDetailScreen> {
   String _selectedLanguage = 'fr';
   bool _isLoadingScript = true;
   bool _isSpeaking = false;
+  List<VoiceInfo> _availableVoices = [];
+  String? _selectedVoiceName;
 
   @override
   void initState() {
@@ -46,6 +48,18 @@ class _PoiDetailScreenState extends State<PoiDetailScreen> {
       }
     });
     _loadScript();
+    _loadVoices();
+  }
+
+  Future<void> _loadVoices() async {
+    final voices = await _audio.tts.getLocalVoices(_selectedLanguage);
+    final userVoice = await _audio.tts.getUserVoice(_selectedLanguage);
+    if (mounted) {
+      setState(() {
+        _availableVoices = voices;
+        _selectedVoiceName = userVoice;
+      });
+    }
   }
 
   Future<void> _loadScript() async {
@@ -81,6 +95,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen> {
     await _audio.stop();
     setState(() => _selectedLanguage = lang);
     await _loadScript();
+    await _loadVoices();
   }
 
   Future<void> _openNavigation() async {
@@ -394,6 +409,38 @@ class _PoiDetailScreenState extends State<PoiDetailScreen> {
               _buildLanguageChip('es', '🇪🇸 ES'),
             ],
           ),
+          // Sélecteur de voix
+          if (_availableVoices.isNotEmpty) ...[
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.record_voice_over, size: 14, color: AppTheme.textSecondary),
+                const SizedBox(width: 6),
+                DropdownButton<String>(
+                  value: _availableVoices.any((v) => v.name == _selectedVoiceName)
+                      ? _selectedVoiceName
+                      : null,
+                  hint: Text('Voix par défaut', style: TextStyle(fontSize: 12, color: AppTheme.textSecondary)),
+                  isDense: true,
+                  style: TextStyle(fontSize: 12, color: AppTheme.textPrimary),
+                  underline: const SizedBox.shrink(),
+                  items: _availableVoices.map((v) {
+                    return DropdownMenuItem(
+                      value: v.name,
+                      child: Text(v.displayName, style: const TextStyle(fontSize: 12)),
+                    );
+                  }).toList(),
+                  onChanged: (voiceName) async {
+                    if (voiceName != null) {
+                      setState(() => _selectedVoiceName = voiceName);
+                      await _audio.tts.setUserVoice(_selectedLanguage, voiceName);
+                    }
+                  },
+                ),
+              ],
+            ),
+          ],
           const SizedBox(height: 16),
           // Bouton play/stop
           if (_isLoadingScript)

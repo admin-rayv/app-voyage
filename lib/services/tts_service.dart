@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Service TTS — Lecture audio des scripts via voix natives du téléphone.
 ///
@@ -13,7 +14,6 @@ class TtsService {
   bool _isPlaying = false;
   bool _isPaused = false;
   String? _currentText;
-  String _currentLanguage = 'fr-CA';
 
   bool get isPlaying => _isPlaying;
   bool get isPaused => _isPaused;
@@ -22,22 +22,23 @@ class TtsService {
   final _stateController = StreamController<TtsState>.broadcast();
   Stream<TtsState> get stateStream => _stateController.stream;
 
-  // Voix préférées par langue — voix masculines pour Marco 🎙️
-  static const Map<String, List<String>> _preferredVoices = {
-    'fr-CA': ['Nicolas', 'Thomas', 'Jean-Pierre'],
-    'fr-FR': ['Thomas', 'Nicolas'],
-    'en-US': ['Daniel', 'Aaron', 'Tom'],
-    'en-GB': ['Daniel', 'Oliver'],
-    'es-ES': ['Jorge', 'Diego', 'Juan'],
-    'es-MX': ['Juan', 'Jorge'],
+  // Voix forcées par défaut — testées et approuvées sur Android
+  static const Map<String, String> _defaultVoices = {
+    'fr': 'fr-ca-x-cac-local',
+    'en': 'en-us-x-tpd-local',
+    'es': '', // à définir — fallback auto
   };
+
+  // Clés SharedPreferences pour les voix choisies par l'utilisateur
+  static const String _prefKeyVoiceFr = 'tts_voice_fr';
+  static const String _prefKeyVoiceEn = 'tts_voice_en';
+  static const String _prefKeyVoiceEs = 'tts_voice_es';
 
   /// Initialiser le service TTS.
   Future<void> init() async {
-    // Config Marco — rythme naturel, plus d'expression
-    await _tts.setSpeechRate(0.52); // Rythme conversationnel naturel
+    await _tts.setSpeechRate(0.52);
     await _tts.setVolume(1.0);
-    await _tts.setPitch(1.05); // Légèrement plus haut = plus d'intonation
+    await _tts.setPitch(1.05);
 
     // Callbacks
     _tts.setStartHandler(() {
@@ -77,20 +78,14 @@ class TtsService {
     });
   }
 
-  /// Configurer la langue et sélectionner la meilleure voix disponible.
-  ///
-  /// [language] — Code ISO: 'fr', 'en', ou 'es'
+  /// Configurer la langue et sélectionner la voix (user pref → default → fallback).
   Future<void> setLanguage(String language) async {
     final locale = _languageToLocale(language);
-    _currentLanguage = locale;
     await _tts.setLanguage(locale);
-    await _selectBestVoice(locale);
+    await _selectVoice(language);
   }
 
   /// Lire un script audio.
-  ///
-  /// [text] — Le contenu du script
-  /// [language] — Code ISO optionnel ('fr', 'en', 'es')
   Future<void> speak(String text, {String? language}) async {
     if (language != null) {
       await setLanguage(language);
@@ -106,8 +101,6 @@ class TtsService {
 
   /// Reprendre après une pause.
   Future<void> resume() async {
-    // flutter_tts n'a pas de vrai resume — on re-speak le texte
-    // Note: sur iOS, pause/resume natif fonctionne
     if (_isPaused) {
       await _tts.speak(_currentText ?? '');
     }
@@ -119,86 +112,118 @@ class TtsService {
   }
 
   /// Modifier la vitesse de lecture.
-  ///
-  /// [rate] — 0.0 à 1.0 (0.5 = normal, plus bas = plus lent)
   Future<void> setSpeechRate(double rate) async {
     await _tts.setSpeechRate(rate);
   }
 
   /// Modifier la hauteur de la voix.
-  ///
-  /// [pitch] — 0.5 à 2.0 (1.0 = normal)
   Future<void> setPitch(double pitch) async {
     await _tts.setPitch(pitch);
   }
 
-  /// Lister les voix disponibles pour une langue.
-  Future<List<Map<String, String>>> getAvailableVoices(String language) async {
+  /// Lister les voix LOCALES disponibles pour une langue.
+  /// Retourne les voix filtrées par locale, triées avec "local" en premier.
+  Future<List<VoiceInfo>> getLocalVoices(String language) async {
     final locale = _languageToLocale(language);
+    final langPrefix = locale.substring(0, 2);
     final voices = await _tts.getVoices;
     if (voices == null) return [];
 
-    return (voices as List)
-        .where((v) =>
-            v['locale']?.toString().startsWith(locale.substring(0, 2)) == true)
-        .map<Map<String, String>>((v) => {
-              'name': v['name']?.toString() ?? '',
-              'locale': v['locale']?.toString() ?? '',
-            })
-        .toList();
-  }
-
-  /// Sélectionner la meilleure voix disponible pour un locale.
-  Future<void> _selectBestVoice(String locale) async {
-    final voices = await _tts.getVoices;
-    if (voices == null) return;
-
-    final preferred = _preferredVoices[locale] ?? [];
-    final langPrefix = locale.substring(0, 2);
-
-    // Chercher une voix préférée
-    for (final pref in preferred) {
-      for (final voice in voices) {
-        final name = voice['name']?.toString() ?? '';
-        final voiceLocale = voice['locale']?.toString() ?? '';
-        if (name.contains(pref) && voiceLocale.startsWith(langPrefix)) {
-          await _tts.setVoice({'name': name, 'locale': voiceLocale});
-          return;
-        }
+    final results = <VoiceInfo>[];
+    for (final v in (voices as List)) {
+      final name = v['name']?.toString() ?? '';
+      final voiceLocale = v['locale']?.toString() ?? '';
+      if (voiceLocale.startsWith(langPrefix)) {
+        final isLocal = name.contains('-local');
+        results.add(VoiceInfo(
+          name: name,
+          locale: voiceLocale,
+          isLocal: isLocal,
+        ));
       }
     }
 
-    // Fallback: voix Enhanced/Premium masculine si disponible
-    for (final quality in ['Premium', 'Enhanced']) {
-      for (final voice in voices) {
-        final name = voice['name']?.toString() ?? '';
-        final voiceLocale = voice['locale']?.toString() ?? '';
-        if (voiceLocale.startsWith(langPrefix) && name.contains(quality)) {
-          // Éviter les voix féminines connues
-          final femaleNames = ['Amelie', 'Amélie', 'Samantha', 'Paulina',
-            'Audrey', 'Martha', 'Siri', 'Karen', 'Moira', 'Tessa'];
-          final isFemale = femaleNames.any(
-            (f) => name.toLowerCase().contains(f.toLowerCase()));
-          if (!isFemale) {
-            await _tts.setVoice({'name': name, 'locale': voiceLocale});
-            return;
-          }
-        }
+    // Trier : local d'abord, puis par nom
+    results.sort((a, b) {
+      if (a.isLocal && !b.isLocal) return -1;
+      if (!a.isLocal && b.isLocal) return 1;
+      return a.name.compareTo(b.name);
+    });
+
+    return results;
+  }
+
+  /// Sauvegarder la voix choisie par l'utilisateur pour une langue.
+  Future<void> setUserVoice(String language, String voiceName) async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = _prefKeyForLanguage(language);
+    await prefs.setString(key, voiceName);
+    // Appliquer immédiatement
+    await _applyVoice(voiceName, _languageToLocale(language));
+  }
+
+  /// Obtenir la voix actuellement choisie pour une langue.
+  Future<String?> getUserVoice(String language) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_prefKeyForLanguage(language));
+  }
+
+  /// Sélectionner la voix : user pref → default → premier local dispo.
+  Future<void> _selectVoice(String language) async {
+    final locale = _languageToLocale(language);
+
+    // 1. Voix choisie par l'utilisateur
+    final prefs = await SharedPreferences.getInstance();
+    final userVoice = prefs.getString(_prefKeyForLanguage(language));
+    if (userVoice != null && userVoice.isNotEmpty) {
+      if (await _applyVoice(userVoice, locale)) return;
+    }
+
+    // 2. Voix par défaut testée
+    final defaultVoice = _defaultVoices[language] ?? '';
+    if (defaultVoice.isNotEmpty) {
+      if (await _applyVoice(defaultVoice, locale)) return;
+    }
+
+    // 3. Fallback : première voix locale disponible
+    final localVoices = await getLocalVoices(language);
+    if (localVoices.isNotEmpty) {
+      await _applyVoice(localVoices.first.name, locale);
+    }
+  }
+
+  /// Appliquer une voix spécifique. Retourne true si trouvée.
+  Future<bool> _applyVoice(String voiceName, String locale) async {
+    final voices = await _tts.getVoices;
+    if (voices == null) return false;
+
+    for (final v in (voices as List)) {
+      final name = v['name']?.toString() ?? '';
+      if (name == voiceName) {
+        final voiceLocale = v['locale']?.toString() ?? locale;
+        await _tts.setVoice({'name': name, 'locale': voiceLocale});
+        return true;
       }
+    }
+    return false;
+  }
+
+  String _prefKeyForLanguage(String language) {
+    switch (language) {
+      case 'fr': return _prefKeyVoiceFr;
+      case 'en': return _prefKeyVoiceEn;
+      case 'es': return _prefKeyVoiceEs;
+      default: return 'tts_voice_$language';
     }
   }
 
   /// Convertir un code langue ISO en locale complet.
   String _languageToLocale(String language) {
     switch (language) {
-      case 'fr':
-        return 'fr-CA';
-      case 'en':
-        return 'en-US';
-      case 'es':
-        return 'es-ES';
-      default:
-        return language;
+      case 'fr': return 'fr-CA';
+      case 'en': return 'en-US';
+      case 'es': return 'es-ES';
+      default: return language;
     }
   }
 
@@ -211,3 +236,28 @@ class TtsService {
 
 /// États possibles du TTS.
 enum TtsState { playing, paused, stopped }
+
+/// Info d'une voix disponible.
+class VoiceInfo {
+  final String name;
+  final String locale;
+  final bool isLocal;
+
+  const VoiceInfo({
+    required this.name,
+    required this.locale,
+    required this.isLocal,
+  });
+
+  /// Nom lisible pour l'UI.
+  String get displayName {
+    // "fr-ca-x-cac-local" → "fr-CA cac (local)"
+    final parts = name.split('-');
+    if (parts.length >= 5) {
+      final voiceId = parts[4];
+      final type = isLocal ? 'local' : 'network';
+      return '${locale} — $voiceId ($type)';
+    }
+    return name;
+  }
+}

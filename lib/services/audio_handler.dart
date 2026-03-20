@@ -1,10 +1,11 @@
-import 'package:audio_service/audio_service.dart';
+import 'package:audio_service/audio_service.dart' as audio_svc;
 import 'package:flutter_tts/flutter_tts.dart';
 
 import 'tts_service.dart';
 
 /// Handler audio dédié au TTS pour exposer une vraie session média système.
-class AppAudioHandler extends BaseAudioHandler with SeekHandler {
+class AppAudioHandler extends audio_svc.BaseAudioHandler
+    with audio_svc.SeekHandler {
   final FlutterTts _tts = FlutterTts();
   late final Future<void> _ready;
 
@@ -19,7 +20,7 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
   AppAudioHandler() {
     _ready = _configureTts();
     _publishPlaybackState(
-      processingState: AudioProcessingState.idle,
+      processingState: audio_svc.AudioProcessingState.idle,
       playing: false,
     );
   }
@@ -33,7 +34,7 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
       _isPlaying = true;
       _isPaused = false;
       _publishPlaybackState(
-        processingState: AudioProcessingState.ready,
+        processingState: audio_svc.AudioProcessingState.ready,
         playing: true,
       );
     });
@@ -42,7 +43,7 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
       _isPlaying = false;
       _isPaused = false;
       _publishPlaybackState(
-        processingState: AudioProcessingState.idle,
+        processingState: audio_svc.AudioProcessingState.completed,
         playing: false,
       );
     });
@@ -51,7 +52,7 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
       _isPlaying = false;
       _isPaused = false;
       _publishPlaybackState(
-        processingState: AudioProcessingState.idle,
+        processingState: audio_svc.AudioProcessingState.idle,
         playing: false,
       );
     });
@@ -60,7 +61,7 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
       _isPlaying = false;
       _isPaused = true;
       _publishPlaybackState(
-        processingState: AudioProcessingState.ready,
+        processingState: audio_svc.AudioProcessingState.ready,
         playing: false,
       );
     });
@@ -69,7 +70,7 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
       _isPlaying = true;
       _isPaused = false;
       _publishPlaybackState(
-        processingState: AudioProcessingState.ready,
+        processingState: audio_svc.AudioProcessingState.ready,
         playing: true,
       );
     });
@@ -78,7 +79,7 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
       _isPlaying = false;
       _isPaused = false;
       _publishPlaybackState(
-        processingState: AudioProcessingState.idle,
+        processingState: audio_svc.AudioProcessingState.idle,
         playing: false,
       );
     });
@@ -94,11 +95,12 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
     await _ready;
     _currentText = text;
     _currentLanguage = language;
-    _currentTitle = title?.trim().isNotEmpty == true ? title!.trim() : 'Lecture audio';
+    _currentTitle =
+        title?.trim().isNotEmpty == true ? title!.trim() : 'Lecture audio';
     _currentDuration = duration ?? Duration.zero;
 
     mediaItem.add(
-      MediaItem(
+      audio_svc.MediaItem(
         id: mediaId ?? 'tts-${text.hashCode}',
         album: 'App Voyage',
         title: _currentTitle,
@@ -108,7 +110,7 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
     );
 
     _publishPlaybackState(
-      processingState: AudioProcessingState.ready,
+      processingState: audio_svc.AudioProcessingState.loading,
       playing: false,
     );
 
@@ -123,8 +125,8 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
     await _tts.setSpeechRate(rate);
     _publishPlaybackState(
       processingState: _isPlaying || _isPaused
-          ? AudioProcessingState.ready
-          : AudioProcessingState.idle,
+          ? audio_svc.AudioProcessingState.ready
+          : audio_svc.AudioProcessingState.idle,
       playing: _isPlaying,
     );
   }
@@ -151,7 +153,7 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
     _isPlaying = false;
     _isPaused = false;
     _publishPlaybackState(
-      processingState: AudioProcessingState.idle,
+      processingState: audio_svc.AudioProcessingState.idle,
       playing: false,
     );
   }
@@ -160,7 +162,10 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
   Future<void> seek(Duration position) async {}
 
   @override
-  Future<dynamic> customAction(String name, [Map<String, dynamic>? extras]) async {
+  Future<dynamic> customAction(
+    String name, [
+    Map<String, dynamic>? extras,
+  ]) async {
     switch (name) {
       case 'speak':
         final payload = extras ?? const <String, dynamic>{};
@@ -170,7 +175,8 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
           language: payload['language'] as String? ?? 'fr',
           title: payload['title'] as String?,
           mediaId: payload['mediaId'] as String?,
-          duration: durationMs == null ? null : Duration(milliseconds: durationMs),
+          duration:
+              durationMs == null ? null : Duration(milliseconds: durationMs),
         );
         return true;
       case 'setSpeechRate':
@@ -184,24 +190,32 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
   }
 
   void _publishPlaybackState({
-    required AudioProcessingState processingState,
+    required audio_svc.AudioProcessingState processingState,
     required bool playing,
   }) {
-    final controls = <MediaControl>[
-      if (!playing) MediaControl.play,
-      if (playing) MediaControl.pause,
-      MediaControl.stop,
+    final controls = <audio_svc.MediaControl>[
+      if (!playing) audio_svc.MediaControl.play,
+      if (playing) audio_svc.MediaControl.pause,
+      audio_svc.MediaControl.stop,
     ];
 
     playbackState.add(
-      PlaybackState(
+      audio_svc.PlaybackState(
         controls: controls,
-        androidCompactActionIndices: List<int>.generate(controls.length, (index) => index),
+        androidCompactActionIndices: List<int>.generate(
+          controls.length,
+          (index) => index,
+        ),
         processingState: processingState,
         playing: playing,
         updatePosition: Duration.zero,
         bufferedPosition: Duration.zero,
         speed: 1.0,
+        systemActions: const {
+          audio_svc.MediaAction.play,
+          audio_svc.MediaAction.pause,
+          audio_svc.MediaAction.stop,
+        },
       ),
     );
   }

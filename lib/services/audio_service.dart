@@ -43,7 +43,6 @@ class AudioService {
   StreamSubscription<AudioInterruptionEvent>? _interruptionSubscription;
   Timer? _positionTimer;
   bool _shouldResumeAfterInterruption = false;
-  int _playbackRequestToken = 0;
 
   bool _isPlaying = false;
   bool _isPaused = false;
@@ -65,6 +64,10 @@ class AudioService {
 
   final _stateController = StreamController<AudioState>.broadcast();
   Stream<AudioState> get stateStream => _stateController.stream;
+
+  static Future<void> bootstrap() async {
+    await _instance.init();
+  }
 
   Future<void> init() async {
     if (_isInitialized) return;
@@ -203,12 +206,10 @@ class AudioService {
     models.Point? poi,
   }) async {
     final handler = await _requireAudioHandler();
-    final requestToken = ++_playbackRequestToken;
     final resolvedScriptId = scriptId ?? 'preview-${text.hashCode}';
     final estimatedDuration = _estimateDuration(text);
 
     await stop(keepMetadata: true, emitState: false);
-    _playbackRequestToken = requestToken;
     _currentText = text;
     _currentLanguage = language;
     _state = _state.copyWith(
@@ -416,7 +417,6 @@ class AudioService {
     bool emitState = true,
   }) async {
     _shouldResumeAfterInterruption = false;
-    _playbackRequestToken++;
 
     if (_audioHandler != null) {
       await _audioHandler!.stop();

@@ -64,7 +64,8 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
           (index) => index,
         ),
         processingState: _processingStateFor(state.playState),
-        playing: state.playState == AudioPlayState.playing,
+        playing: state.playState == AudioPlayState.playing ||
+            state.playState == AudioPlayState.loading,
         updatePosition: state.position,
         bufferedPosition: state.duration,
         speed: state.speed,
@@ -80,7 +81,10 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
           audio_svc.MediaControl.stop,
         ];
       case AudioPlayState.loading:
-        return const [audio_svc.MediaControl.stop];
+        return const [
+          audio_svc.MediaControl.pause,
+          audio_svc.MediaControl.stop,
+        ];
       case AudioPlayState.paused:
       case AudioPlayState.stopped:
         return const [

@@ -86,13 +86,16 @@ class AudioService {
                   androidNotificationChannelId:
                       'com.appvoyage.audio.playback',
                   androidNotificationChannelName: 'Lecture audio',
+                  androidNotificationIcon: 'mipmap/ic_launcher',
                   androidNotificationOngoing: false,
                   androidStopForegroundOnPause: false,
                 ),
               )
               as AppAudioHandler;
-    } catch (e) {
+      debugPrint('[AudioService] audio_service init success');
+    } catch (e, stackTrace) {
       debugPrint('[AudioService] audio_service init failed: $e');
+      debugPrint('$stackTrace');
       _audioHandler = null;
     }
 
@@ -119,6 +122,7 @@ class AudioService {
   Future<void> _setSessionActive(bool active) async {
     final session = await AudioSession.instance;
     await session.setActive(active);
+    debugPrint('[AudioService] audio_session active=$active');
   }
 
   Future<void> _configureAudioSession() async {

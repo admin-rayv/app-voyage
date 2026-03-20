@@ -19,7 +19,8 @@ class MiniPlayer extends StatelessWidget {
       builder: (context, snapshot) {
         final state = snapshot.data ?? audioService.currentState;
         final isVisible = state.playState == AudioPlayState.playing ||
-            state.playState == AudioPlayState.paused;
+            state.playState == AudioPlayState.paused ||
+            state.playState == AudioPlayState.loading;
         final duration = state.duration;
         final progress = duration.inMilliseconds <= 0
             ? 0.0

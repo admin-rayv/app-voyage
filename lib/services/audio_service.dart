@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -271,6 +272,7 @@ class AudioService {
 
   void _emitState() {
     if (!_stateController.isClosed) {
+      debugPrint('[AudioService] state=${_state.playState} poi=${_state.currentPoiName} usingEdge=$_usingEdgeTts');
       _stateController.add(_state);
     }
   }

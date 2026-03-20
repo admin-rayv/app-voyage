@@ -1,11 +1,11 @@
 package com.appvoyage.app_voyage
 
 import android.content.Intent
-import io.flutter.embedding.android.FlutterFragmentActivity
+import com.ryanheise.audioservice.AudioServiceFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
-class MainActivity : FlutterFragmentActivity() {
+class MainActivity : AudioServiceFragmentActivity() {
     private val CHANNEL = "com.rayv.appvoyage/tts_settings"
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {

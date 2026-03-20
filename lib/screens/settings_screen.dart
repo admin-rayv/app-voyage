@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/tts_service.dart';
+import '../services/debug_log.dart';
 import '../config/theme.dart';
 
 /// Écran Paramètres — Configuration des voix TTS par langue.
@@ -85,6 +86,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Paramètres'),
+        actions: [
+          IconButton(
+            icon: const Text('🐛', style: TextStyle(fontSize: 20)),
+            tooltip: 'Logs de debug',
+            onPressed: () => showDebugLogs(context),
+          ),
+        ],
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -275,6 +283,57 @@ class _SettingsScreenState extends State<SettingsScreen> {
           onPressed: isTesting ? null : () => _testVoice(voice, testText),
         ),
         onTap: () => _selectVoice(langCode, voice.name),
+      ),
+    );
+  }
+
+  static void showDebugLogs(BuildContext context) {
+    final logs = DebugLog().entries;
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (ctx) => DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        minChildSize: 0.3,
+        maxChildSize: 0.95,
+        expand: false,
+        builder: (ctx, scrollController) => Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                children: [
+                  const Text('🐛 Logs de debug',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  const Spacer(),
+                  TextButton(
+                    onPressed: () {
+                      DebugLog().clear();
+                      Navigator.pop(ctx);
+                    },
+                    child: const Text('Effacer'),
+                  ),
+                ],
+              ),
+            ),
+            const Divider(height: 1),
+            Expanded(
+              child: logs.isEmpty
+                  ? const Center(child: Text('Aucun log'))
+                  : ListView.builder(
+                      controller: scrollController,
+                      itemCount: logs.length,
+                      itemBuilder: (ctx, i) => Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 2),
+                        child: Text(logs[logs.length - 1 - i],
+                            style: const TextStyle(
+                                fontSize: 11, fontFamily: 'monospace')),
+                      ),
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }

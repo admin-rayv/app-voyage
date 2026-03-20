@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
 import '../models/city.dart';
 import '../services/supabase_service.dart';
 import '../config/categories.dart';
 import '../config/theme.dart';
-import 'map_screen.dart';
-import 'settings_screen.dart';
 import '../widgets/voice_setup_dialog.dart';
 
 /// Écran d'accueil — Liste des villes disponibles.
@@ -154,10 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const Spacer(),
               IconButton(
                 icon: const Icon(Icons.settings, size: 22),
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const SettingsScreen()),
-                ),
+                onPressed: () => context.pushNamed('settings'),
                 tooltip: 'Paramètres',
               ),
             ],
@@ -175,12 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () {
-          // Navigation vers la carte de la ville
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => MapScreen(city: city),
-            ),
-          );
+          context.pushNamed('map', extra: city);
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -366,5 +358,3 @@ class _CityWithStats {
     required this.categories,
   });
 }
-
-

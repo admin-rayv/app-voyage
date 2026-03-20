@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:go_router/go_router.dart';
+
+import '../config/route_data.dart';
 import '../models/city.dart';
 import '../models/point.dart' as models;
 import '../services/supabase_service.dart';
 import '../config/categories.dart';
 import '../config/theme.dart';
-import 'poi_detail_screen.dart';
 import '../widgets/poi_list_item.dart';
 
 /// Écran carte — Affiche tous les POIs d'une ville sur OpenStreetMap.
@@ -206,13 +208,11 @@ class _MapScreenState extends State<MapScreen> {
               child: ElevatedButton.icon(
                 onPressed: () {
                   Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => PoiDetailScreen(
-                        poi: poi,
-                        userPosition: _userPosition,
-                      ),
+                  this.context.pushNamed(
+                    'poiDetail',
+                    extra: PoiDetailRouteData(
+                      poi: poi,
+                      userPosition: _userPosition,
                     ),
                   );
                 },
@@ -367,13 +367,11 @@ class _MapScreenState extends State<MapScreen> {
           poi: poi,
           userPosition: _userPosition,
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => PoiDetailScreen(
-                  poi: poi,
-                  userPosition: _userPosition,
-                ),
+            context.pushNamed(
+              'poiDetail',
+              extra: PoiDetailRouteData(
+                poi: poi,
+                userPosition: _userPosition,
               ),
             );
           },

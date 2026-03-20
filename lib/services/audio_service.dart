@@ -74,22 +74,27 @@ class AudioService {
     if (_isInitialized) return;
     _isInitialized = true;
 
-    _audioHandler =
-        await audio_svc.AudioService.init(
-              builder: () => AppAudioHandler(
-                onPlayRequested: _resumeFromSystemControls,
-                onPauseRequested: () => pause(),
-                onStopRequested: () => stop(),
-              ),
-              config: const audio_svc.AudioServiceConfig(
-                androidNotificationChannelId:
-                    'com.appvoyage.audio.playback',
-                androidNotificationChannelName: 'Lecture audio',
-                androidNotificationOngoing: false,
-                androidStopForegroundOnPause: false,
-              ),
-            )
-            as AppAudioHandler;
+    try {
+      _audioHandler =
+          await audio_svc.AudioService.init(
+                builder: () => AppAudioHandler(
+                  onPlayRequested: _resumeFromSystemControls,
+                  onPauseRequested: () => pause(),
+                  onStopRequested: () => stop(),
+                ),
+                config: const audio_svc.AudioServiceConfig(
+                  androidNotificationChannelId:
+                      'com.appvoyage.audio.playback',
+                  androidNotificationChannelName: 'Lecture audio',
+                  androidNotificationOngoing: false,
+                  androidStopForegroundOnPause: false,
+                ),
+              )
+              as AppAudioHandler;
+    } catch (e) {
+      debugPrint('[AudioService] audio_service init failed: $e');
+      _audioHandler = null;
+    }
 
     await _tts.init();
     await _configureAudioSession();

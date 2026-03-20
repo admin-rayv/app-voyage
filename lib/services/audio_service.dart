@@ -191,7 +191,7 @@ class AudioService {
     final resolvedScriptId = scriptId ?? 'preview-${text.hashCode}';
     final estimatedDuration = _estimateDuration(text);
     _currentText = text;
-    _audioHandler?.updateMediaItem(
+    _audioHandler?.setCurrentMediaItem(
       poiName: poiName,
       duration: estimatedDuration,
       scriptId: resolvedScriptId,
@@ -235,7 +235,7 @@ class AudioService {
         final actualDuration = _player.duration;
         if (actualDuration != null) {
           _state = _state.copyWith(duration: actualDuration);
-          _audioHandler?.updateMediaItem(
+          _audioHandler?.setCurrentMediaItem(
             poiName: poiName,
             duration: actualDuration,
             scriptId: resolvedScriptId,
@@ -370,7 +370,7 @@ class AudioService {
       position: cappedPosition,
     );
     if (_currentText != null) {
-      _audioHandler?.updateMediaItem(
+      _audioHandler?.setCurrentMediaItem(
         poiName: _state.currentPoiName,
         duration: updatedDuration,
         scriptId: _state.currentScriptId,

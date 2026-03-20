@@ -27,7 +27,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
   @override
   Future<void> stop() => _onStopRequested();
 
-  void updateMediaItem({
+  void setCurrentMediaItem({
     required String? poiName,
     required Duration duration,
     String? scriptId,

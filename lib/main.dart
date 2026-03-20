@@ -16,7 +16,11 @@ void main() async {
   await SupabaseService.initialize();
 
   // Initialiser la session média avant de construire l'UI.
-  await AudioService.bootstrap();
+  try {
+    await AudioService.bootstrap();
+  } catch (e) {
+    debugPrint('[main] AudioService.bootstrap() failed: $e');
+  }
 
   runApp(
     const ProviderScope(

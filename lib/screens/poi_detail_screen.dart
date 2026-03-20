@@ -119,6 +119,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
         _currentScript!.content,
         language: _selectedLanguage,
         poiName: widget.poi.localizedName(_selectedLanguage),
+        poi: widget.poi,
       );
     }
   }
@@ -143,6 +144,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
       _currentScript!.content,
       language: _selectedLanguage,
       poiName: widget.poi.localizedName(_selectedLanguage),
+      poi: widget.poi,
     );
   }
 

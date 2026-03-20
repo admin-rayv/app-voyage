@@ -4,6 +4,7 @@ import 'package:audio_session/audio_session.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/audio_state.dart';
+import '../models/point.dart' as models;
 import 'tts_service.dart';
 import 'edge_tts_service.dart';
 import 'supabase_service.dart';
@@ -133,12 +134,14 @@ class AudioService {
     String text, {
     String language = 'fr',
     String? poiName,
+    models.Point? poi,
   }) async {
     await play(
       scriptId: null,
       text: text,
       language: language,
       poiName: poiName,
+      poi: poi,
     );
   }
 
@@ -147,6 +150,7 @@ class AudioService {
     required String language,
     String? scriptId,
     String? poiName,
+    models.Point? poi,
   }) async {
     await init();
     final resolvedScriptId = scriptId ?? 'preview-${text.hashCode}';
@@ -159,6 +163,7 @@ class AudioService {
       duration: estimatedDuration,
       speed: _speed,
       currentPoiName: poiName,
+      currentPoi: poi,
       currentScriptId: resolvedScriptId,
     );
     _emitState();
@@ -172,6 +177,7 @@ class AudioService {
       duration: estimatedDuration,
       speed: _speed,
       currentPoiName: poiName,
+      currentPoi: poi,
       currentScriptId: resolvedScriptId,
     );
     _emitState();
@@ -368,6 +374,7 @@ class AudioService {
       playState: AudioPlayState.stopped,
       position: Duration.zero,
       clearCurrentPoiName: !keepMetadata,
+      clearCurrentPoi: !keepMetadata,
       clearCurrentScriptId: !keepMetadata,
     );
     if (!keepMetadata) {

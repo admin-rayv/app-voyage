@@ -1,9 +1,12 @@
+import 'point.dart' as models;
+
 class AudioState {
   final AudioPlayState playState;
   final Duration position;
   final Duration duration;
   final double speed;
   final String? currentPoiName;
+  final models.Point? currentPoi;
   final String? currentScriptId;
 
   const AudioState({
@@ -12,6 +15,7 @@ class AudioState {
     required this.duration,
     required this.speed,
     this.currentPoiName,
+    this.currentPoi,
     this.currentScriptId,
   });
 
@@ -22,6 +26,8 @@ class AudioState {
     double? speed,
     String? currentPoiName,
     bool clearCurrentPoiName = false,
+    models.Point? currentPoi,
+    bool clearCurrentPoi = false,
     String? currentScriptId,
     bool clearCurrentScriptId = false,
   }) {
@@ -33,6 +39,7 @@ class AudioState {
       currentPoiName: clearCurrentPoiName
           ? null
           : currentPoiName ?? this.currentPoiName,
+      currentPoi: clearCurrentPoi ? null : currentPoi ?? this.currentPoi,
       currentScriptId: clearCurrentScriptId
           ? null
           : currentScriptId ?? this.currentScriptId,

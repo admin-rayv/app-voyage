@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import '../config/route_data.dart';
 import '../config/theme.dart';
 import '../models/audio_state.dart';
+import '../models/point.dart' as models;
 import '../services/audio_service.dart';
 
 class MiniPlayer extends StatelessWidget {
@@ -31,6 +34,7 @@ class MiniPlayer extends StatelessWidget {
                 .clamp(0.0, 1.0);
         final canResume = state.playState == AudioPlayState.paused;
         final canPause = state.playState == AudioPlayState.playing;
+        final models.Point? currentPoi = state.currentPoi;
 
         return SafeArea(
           top: false,
@@ -58,17 +62,46 @@ class MiniPlayer extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        const Text('🏛️', style: TextStyle(fontSize: 18)),
-                        const SizedBox(width: 10),
                         Expanded(
-                          child: Text(
-                            state.currentPoiName ?? 'Lecture audio',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(fontWeight: FontWeight.w700),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(12),
+                            onTap: currentPoi == null
+                                ? null
+                                : () {
+                                    context.pushNamed(
+                                      'poiDetail',
+                                      extra: PoiDetailRouteData(
+                                        poi: currentPoi,
+                                        userPosition: null,
+                                      ),
+                                    );
+                                  },
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 6),
+                              child: Row(
+                                children: [
+                                  const Text(
+                                    '🏛️',
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      state.currentPoiName ?? 'Lecture audio',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                         IconButton(

@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'config/theme.dart';
 import 'config/routes.dart';
-import 'services/audio_service.dart';
 import 'services/supabase_service.dart';
 
 /// App Voyage - Point d'entrée
@@ -14,7 +13,6 @@ void main() async {
 
   // Initialiser Supabase
   await SupabaseService.initialize();
-  await AudioService().init();
 
   runApp(
     const ProviderScope(

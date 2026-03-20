@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'package:audio_service/audio_service.dart' as audio_svc;
 import 'package:flutter/foundation.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/audio_state.dart';
 import '../models/point.dart' as models;
-import 'audio_handler.dart';
 import 'tts_service.dart';
 import 'edge_tts_service.dart';
 import 'supabase_service.dart';
@@ -17,6 +15,11 @@ import 'supabase_service.dart';
 /// 1. Cache local (MP3 déjà téléchargé) → lecture instantanée offline
 /// 2. Edge TTS (si internet) → génère MP3 + cache + lecture
 /// 3. flutter_tts natif (fallback) → voix du téléphone, toujours dispo
+///
+/// TODO(lock-screen): `flutter_tts` ne publie pas de session média pilotable
+/// par `audio_service` dans cette architecture. Les contrôles système restent
+/// désactivés tant qu'un vrai backend audio piloté par une session média n'est
+/// pas branché sur la lecture effective.
 
 class AudioService {
   AudioService._internal();
@@ -42,18 +45,20 @@ class AudioService {
   EdgeTtsService get edgeTts => _edgeTts;
 
   bool _isInitialized = false;
+  Future<void>? _initFuture;
   StreamSubscription<TtsState>? _ttsStateSubscription;
   StreamSubscription<PlayerState>? _playerStateSubscription;
   StreamSubscription<AudioInterruptionEvent>? _interruptionSubscription;
-  AppAudioHandler? _audioHandler;
   Timer? _positionTimer;
   bool _shouldResumeAfterInterruption = false;
+  int _playbackRequestToken = 0;
 
   bool _isPlaying = false;
   bool _isPaused = false;
   bool _usingEdgeTts = false;
   double _speed = 1.0;
   String? _currentText;
+  String? _currentLanguage;
   AudioState _state = const AudioState(
     playState: AudioPlayState.stopped,
     position: Duration.zero,
@@ -72,41 +77,30 @@ class AudioService {
 
   Future<void> init() async {
     if (_isInitialized) return;
-    _isInitialized = true;
-
-    try {
-      _audioHandler =
-          await audio_svc.AudioService.init(
-                builder: () => AppAudioHandler(
-                  onPlayRequested: _resumeFromSystemControls,
-                  onPauseRequested: () => pause(),
-                  onStopRequested: () => stop(),
-                ),
-                config: const audio_svc.AudioServiceConfig(
-                  androidNotificationChannelId:
-                      'com.appvoyage.audio.playback',
-                  androidNotificationChannelName: 'Lecture audio',
-                  androidNotificationIcon: 'mipmap/ic_launcher',
-                  androidNotificationOngoing: false,
-                  androidStopForegroundOnPause: false,
-                ),
-              )
-              as AppAudioHandler;
-      debugPrint('[AudioService] audio_service init success');
-    } catch (e, stackTrace) {
-      debugPrint('[AudioService] audio_service init failed: $e');
-      debugPrint('$stackTrace');
-      _audioHandler = null;
+    final existingFuture = _initFuture;
+    if (existingFuture != null) {
+      await existingFuture;
+      return;
     }
 
+    final initFuture = _performInit();
+    _initFuture = initFuture;
+    try {
+      await initFuture;
+    } finally {
+      _initFuture = null;
+    }
+  }
+
+  Future<void> _performInit() async {
     await _tts.init();
     await _configureAudioSession();
     await _loadSavedSpeed();
-    await _applySpeed();
+    await _applySpeed(emitState: false);
 
     _ttsStateSubscription = _tts.stateStream.listen(_handleTtsState);
     _playerStateSubscription = _player.playerStateStream.listen((state) {
-      if (!_usingEdgeTts) return; // Seulement quand on utilise Edge TTS
+      if (!_usingEdgeTts) return;
       if (state.processingState == ProcessingState.completed) {
         _finishPlayback(resetPosition: true);
       } else if (state.playing) {
@@ -116,6 +110,7 @@ class AudioService {
         _setPlaybackState(AudioPlayState.paused);
       }
     });
+    _isInitialized = true;
     _emitState();
   }
 
@@ -197,31 +192,16 @@ class AudioService {
     models.Point? poi,
   }) async {
     await init();
+    final requestToken = ++_playbackRequestToken;
     final resolvedScriptId = scriptId ?? 'preview-${text.hashCode}';
     final estimatedDuration = _estimateDuration(text);
-    _currentText = text;
-    _audioHandler?.setCurrentMediaItem(
-      poiName: poiName,
-      duration: estimatedDuration,
-      scriptId: resolvedScriptId,
-    );
-
-    _state = _state.copyWith(
-      playState: AudioPlayState.loading,
-      position: Duration.zero,
-      duration: estimatedDuration,
-      speed: _speed,
-      currentPoiName: poiName,
-      currentPoi: poi,
-      currentScriptId: resolvedScriptId,
-    );
-    _emitState();
-
     await stop(keepMetadata: true, emitState: false);
-    await _setSessionActive(true);
+    _playbackRequestToken = requestToken;
+    _currentText = text;
+    _currentLanguage = language;
 
     _state = _state.copyWith(
-      playState: AudioPlayState.loading,
+      playState: AudioPlayState.stopped,
       position: Duration.zero,
       duration: estimatedDuration,
       speed: _speed,
@@ -229,36 +209,68 @@ class AudioService {
       currentPoi: poi,
       currentScriptId: resolvedScriptId,
     );
-    _emitState();
 
-    final audioPath = await _edgeTts.getAudioPath(
+    final hasEdgeAudio = await _startEdgePlaybackIfAvailable(
+      requestToken: requestToken,
       scriptId: resolvedScriptId,
       text: text,
       language: language,
     );
+    if (hasEdgeAudio) {
+      return;
+    }
+
+    if (requestToken != _playbackRequestToken) return;
+    await _startNativeTtsPlayback(text, language: language);
+  }
+
+  Future<bool> _startEdgePlaybackIfAvailable({
+    required int requestToken,
+    required String scriptId,
+    required String text,
+    required String language,
+  }) async {
+    final audioPath = await _edgeTts.getAudioPath(
+      scriptId: scriptId,
+      text: text,
+      language: language,
+    );
+    if (requestToken != _playbackRequestToken) {
+      return false;
+    }
 
     if (audioPath != null) {
       _usingEdgeTts = true;
       try {
         await _player.setFilePath(audioPath);
+        if (requestToken != _playbackRequestToken) {
+          await _player.stop();
+          _usingEdgeTts = false;
+          return false;
+        }
         final actualDuration = _player.duration;
         if (actualDuration != null) {
           _state = _state.copyWith(duration: actualDuration);
-          _audioHandler?.setCurrentMediaItem(
-            poiName: poiName,
-            duration: actualDuration,
-            scriptId: resolvedScriptId,
-          );
           _emitState();
         }
+        await _setSessionActive(true);
         await _player.play();
-        return;
+        return true;
       } catch (_) {
         _usingEdgeTts = false;
       }
     }
 
     _usingEdgeTts = false;
+    return false;
+  }
+
+  Future<void> _startNativeTtsPlayback(
+    String text, {
+    required String language,
+  }) async {
+    _usingEdgeTts = false;
+    await _setSessionActive(true);
     await _tts.speak(text, language: language);
   }
 
@@ -336,7 +348,6 @@ class AudioService {
   }
 
   void _emitState() {
-    _audioHandler?.updatePlaybackState(_state);
     if (!_stateController.isClosed) {
       debugPrint('[AudioService] state=${_state.playState} poi=${_state.currentPoiName} usingEdge=$_usingEdgeTts');
       _stateController.add(_state);
@@ -364,7 +375,7 @@ class AudioService {
     return _speedToSpeechRate[_normalizeSpeed(speed)] ?? _speedToSpeechRate[1.0]!;
   }
 
-  Future<void> _applySpeed() async {
+  Future<void> _applySpeed({bool emitState = true}) async {
     await _player.setSpeed(_speed);
     await _tts.setSpeechRate(_speechRateForSpeed(_speed));
     final updatedDuration = _currentText == null
@@ -378,14 +389,9 @@ class AudioService {
       duration: updatedDuration,
       position: cappedPosition,
     );
-    if (_currentText != null) {
-      _audioHandler?.setCurrentMediaItem(
-        poiName: _state.currentPoiName,
-        duration: updatedDuration,
-        scriptId: _state.currentScriptId,
-      );
+    if (emitState) {
+      _emitState();
     }
-    _emitState();
   }
 
   Future<void> setSpeed(double speed) async {
@@ -416,6 +422,10 @@ class AudioService {
 
   Future<void> resume() async {
     await init();
+    if (_state.playState == AudioPlayState.stopped) {
+      await replayCurrent();
+      return;
+    }
     await _setSessionActive(true);
     if (_usingEdgeTts) {
       await _player.play();
@@ -424,11 +434,16 @@ class AudioService {
     }
   }
 
-  Future<void> _resumeFromSystemControls() async {
-    if (_state.playState == AudioPlayState.stopped) {
-      return;
-    }
-    await resume();
+  Future<void> replayCurrent() async {
+    final text = _currentText;
+    if (text == null || text.isEmpty) return;
+    await play(
+      text: text,
+      language: _currentLanguage ?? 'fr',
+      scriptId: _state.currentScriptId,
+      poiName: _state.currentPoiName,
+      poi: _state.currentPoi,
+    );
   }
 
   Future<void> stop({
@@ -436,6 +451,7 @@ class AudioService {
     bool emitState = true,
   }) async {
     _shouldResumeAfterInterruption = false;
+    _playbackRequestToken++;
     await _setSessionActive(false);
     if (_usingEdgeTts) {
       await _player.stop();
@@ -454,7 +470,7 @@ class AudioService {
     );
     if (!keepMetadata) {
       _currentText = null;
-      _audioHandler?.clearMediaItem();
+      _currentLanguage = null;
     }
     if (emitState) {
       _emitState();
@@ -492,5 +508,6 @@ class AudioService {
     _tts.dispose();
     _stateController.close();
     _isInitialized = false;
+    _initFuture = null;
   }
 }

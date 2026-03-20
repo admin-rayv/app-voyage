@@ -22,8 +22,7 @@ class AppShell extends StatelessWidget {
       builder: (context, snapshot) {
         final state = snapshot.data ?? audioService.currentState;
         final isVisible = state.playState == AudioPlayState.playing ||
-            state.playState == AudioPlayState.paused ||
-            state.playState == AudioPlayState.loading;
+            state.playState == AudioPlayState.paused;
         final bottomInset = MediaQuery.paddingOf(context).bottom;
         final contentBottomPadding = isVisible
             ? MiniPlayer.totalHeight(bottomInset)

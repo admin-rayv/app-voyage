@@ -47,4 +47,4 @@ class AudioState {
   }
 }
 
-enum AudioPlayState { playing, paused, stopped, loading }
+enum AudioPlayState { playing, paused, stopped }

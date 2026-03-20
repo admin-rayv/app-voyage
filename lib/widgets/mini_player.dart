@@ -33,7 +33,7 @@ class MiniPlayer extends StatelessWidget {
             : (state.position.inMilliseconds / duration.inMilliseconds)
                 .clamp(0.0, 1.0);
         final isPlaying = state.playState == AudioPlayState.playing;
-        final isLoading = state.playState == AudioPlayState.loading;
+        final isPaused = state.playState == AudioPlayState.paused;
         final models.Point? currentPoi = state.currentPoi;
 
         return SafeArea(
@@ -105,27 +105,26 @@ class MiniPlayer extends StatelessWidget {
                           ),
                         ),
                         IconButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (isPlaying) {
-                              audioService.pause();
+                              await audioService.pause();
                               return;
                             }
-                            audioService.resume();
+                            if (isPaused) {
+                              await audioService.resume();
+                              return;
+                            }
+                            if (state.currentScriptId == null) return;
+                            await audioService.replayCurrent();
                           },
-                          icon: isLoading
-                              ? const SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2.2,
-                                  ),
-                                )
-                              : Icon(
-                                  isPlaying
-                                      ? Icons.pause
-                                      : Icons.play_arrow,
-                                ),
-                          tooltip: isPlaying ? 'Pause' : 'Reprendre',
+                          icon: Icon(
+                            isPlaying ? Icons.pause : Icons.play_arrow,
+                          ),
+                          tooltip: isPlaying
+                              ? 'Pause'
+                              : isPaused
+                              ? 'Reprendre'
+                              : 'Lire',
                         ),
                         IconButton(
                           onPressed: () => audioService.stop(),

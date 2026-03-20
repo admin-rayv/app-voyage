@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:audio_session/audio_session.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/audio_state.dart';
@@ -39,6 +40,7 @@ class AudioService {
   bool _isInitialized = false;
   StreamSubscription<TtsState>? _ttsStateSubscription;
   StreamSubscription<PlayerState>? _playerStateSubscription;
+  StreamSubscription<AudioInterruptionEvent>? _interruptionSubscription;
   Timer? _positionTimer;
 
   bool _isPlaying = false;
@@ -67,6 +69,7 @@ class AudioService {
     _isInitialized = true;
 
     await _tts.init();
+    await _configureAudioSession();
     await _loadSavedSpeed();
     await _applySpeed();
 
@@ -80,6 +83,31 @@ class AudioService {
       } else if (!state.playing &&
           state.processingState == ProcessingState.ready) {
         _setPlaybackState(AudioPlayState.paused);
+      }
+    });
+  }
+
+  Future<void> _setSessionActive(bool active) async {
+    final session = await AudioSession.instance;
+    await session.setActive(active);
+  }
+
+  Future<void> _configureAudioSession() async {
+    final session = await AudioSession.instance;
+    await session.configure(const AudioSessionConfiguration(
+      avAudioSessionCategory: AVAudioSessionCategory.playback,
+      avAudioSessionMode: AVAudioSessionMode.spokenAudio,
+      androidAudioAttributes: AndroidAudioAttributes(
+        contentType: AndroidAudioContentType.speech,
+        usage: AndroidAudioUsage.media,
+      ),
+      androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
+    ));
+
+    await _interruptionSubscription?.cancel();
+    _interruptionSubscription = session.interruptionEventStream.listen((event) {
+      if (event.begin && (_isPlaying || _isPaused)) {
+        pause();
       }
     });
   }
@@ -135,6 +163,7 @@ class AudioService {
     _emitState();
 
     await stop(keepMetadata: true, emitState: false);
+    await _setSessionActive(true);
 
     _state = _state.copyWith(
       playState: AudioPlayState.loading,
@@ -211,6 +240,7 @@ class AudioService {
   }
 
   void _finishPlayback({required bool resetPosition}) {
+    unawaited(_setSessionActive(false));
     _stopPositionTimer();
     _isPlaying = false;
     _isPaused = false;
@@ -301,6 +331,7 @@ class AudioService {
 
   Future<void> pause() async {
     await init();
+    await _setSessionActive(false);
     if (_usingEdgeTts) {
       await _player.pause();
     } else {
@@ -310,6 +341,7 @@ class AudioService {
 
   Future<void> resume() async {
     await init();
+    await _setSessionActive(true);
     if (_usingEdgeTts) {
       await _player.play();
     } else {
@@ -321,6 +353,7 @@ class AudioService {
     bool keepMetadata = false,
     bool emitState = true,
   }) async {
+    await _setSessionActive(false);
     if (_usingEdgeTts) {
       await _player.stop();
     }
@@ -367,6 +400,7 @@ class AudioService {
 
   void dispose() {
     _positionTimer?.cancel();
+    _interruptionSubscription?.cancel();
     _playerStateSubscription?.cancel();
     _ttsStateSubscription?.cancel();
     _player.dispose();

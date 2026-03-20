@@ -24,11 +24,25 @@ class AppShell extends StatelessWidget {
         final isVisible = state.playState == AudioPlayState.playing ||
             state.playState == AudioPlayState.paused ||
             state.playState == AudioPlayState.loading;
+        final bottomInset = MediaQuery.paddingOf(context).bottom;
+        final contentBottomPadding = isVisible
+            ? MiniPlayer.totalHeight(bottomInset)
+            : 0.0;
 
-        return Column(
+        return Stack(
+          fit: StackFit.expand,
           children: [
-            Expanded(child: child),
-            if (isVisible) const MiniPlayer(),
+            Padding(
+              padding: EdgeInsets.only(bottom: contentBottomPadding),
+              child: child,
+            ),
+            if (isVisible)
+              const Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: MiniPlayer(),
+              ),
           ],
         );
       },

@@ -8,6 +8,12 @@ class MiniPlayer extends StatelessWidget {
   const MiniPlayer({super.key});
 
   static const double height = 92;
+  static const double horizontalMargin = 12;
+  static const double bottomMargin = 12;
+
+  static double totalHeight(double bottomInset) {
+    return height + bottomMargin + bottomInset;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +29,18 @@ class MiniPlayer extends StatelessWidget {
             ? 0.0
             : (state.position.inMilliseconds / duration.inMilliseconds)
                 .clamp(0.0, 1.0);
+        final canResume = state.playState == AudioPlayState.paused;
+        final canPause = state.playState == AudioPlayState.playing;
 
         return SafeArea(
           top: false,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+            padding: const EdgeInsets.fromLTRB(
+              horizontalMargin,
+              0,
+              horizontalMargin,
+              bottomMargin,
+            ),
             child: Material(
               elevation: 10,
               color: Theme.of(context).colorScheme.surface,
@@ -59,24 +72,22 @@ class MiniPlayer extends StatelessWidget {
                           ),
                         ),
                         IconButton(
-                          onPressed: () {
-                            if (state.playState == AudioPlayState.playing) {
-                              audioService.pause();
-                            } else {
-                              audioService.resume();
-                            }
-                          },
+                          onPressed: canPause
+                              ? () => audioService.pause()
+                              : canResume
+                                  ? () => audioService.resume()
+                                  : null,
                           icon: Icon(
-                            state.playState == AudioPlayState.playing
+                            canPause
                                 ? Icons.pause
                                 : Icons.play_arrow,
                           ),
-                          tooltip: state.playState == AudioPlayState.playing
+                          tooltip: canPause
                               ? 'Pause'
                               : 'Reprendre',
                         ),
                         IconButton(
-                          onPressed: audioService.stop,
+                          onPressed: () => audioService.stop(),
                           icon: const Icon(Icons.close),
                           tooltip: 'Arrêter',
                         ),

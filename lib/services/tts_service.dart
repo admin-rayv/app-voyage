@@ -80,9 +80,7 @@ class TtsService {
 
   /// Configurer la langue et sélectionner la voix (user pref → default → fallback).
   Future<void> setLanguage(String language) async {
-    final locale = _languageToLocale(language);
-    await _tts.setLanguage(locale);
-    await _selectVoice(language);
+    await configureVoiceForTts(_tts, language);
   }
 
   /// Lire un script audio.
@@ -170,60 +168,114 @@ class TtsService {
 
   /// Sélectionner la voix : user pref → default → premier local dispo.
   Future<void> _selectVoice(String language) async {
-    final locale = _languageToLocale(language);
-
-    // 1. Voix choisie par l'utilisateur
-    final prefs = await SharedPreferences.getInstance();
-    final userVoice = prefs.getString(_prefKeyForLanguage(language));
-    if (userVoice != null && userVoice.isNotEmpty) {
-      if (await _applyVoice(userVoice, locale)) return;
-    }
-
-    // 2. Voix par défaut testée
-    final defaultVoice = _defaultVoices[language] ?? '';
-    if (defaultVoice.isNotEmpty) {
-      if (await _applyVoice(defaultVoice, locale)) return;
-    }
-
-    // 3. Fallback : première voix locale disponible
-    final localVoices = await getLocalVoices(language);
-    if (localVoices.isNotEmpty) {
-      await _applyVoice(localVoices.first.name, locale);
-    }
+    await selectVoiceForTts(_tts, language);
   }
 
   /// Appliquer une voix spécifique. Retourne true si trouvée.
   Future<bool> _applyVoice(String voiceName, String locale) async {
-    final voices = await _tts.getVoices;
+    return applyVoiceToTts(_tts, voiceName, locale);
+  }
+
+  String _prefKeyForLanguage(String language) {
+    return prefKeyForLanguage(language);
+  }
+
+  /// Convertir un code langue ISO en locale complet.
+  String _languageToLocale(String language) {
+    return languageToLocale(language);
+  }
+
+  /// Configurer une instance TTS externe avec la langue et la voix préférée.
+  static Future<void> configureVoiceForTts(FlutterTts tts, String language) async {
+    final locale = languageToLocale(language);
+    await tts.setLanguage(locale);
+    await selectVoiceForTts(tts, language);
+  }
+
+  /// Sélectionner la voix préférée pour une instance TTS donnée.
+  static Future<void> selectVoiceForTts(FlutterTts tts, String language) async {
+    final locale = languageToLocale(language);
+    final prefs = await SharedPreferences.getInstance();
+
+    final userVoice = prefs.getString(prefKeyForLanguage(language));
+    if (userVoice != null && userVoice.isNotEmpty) {
+      if (await applyVoiceToTts(tts, userVoice, locale)) return;
+    }
+
+    final defaultVoice = _defaultVoices[language] ?? '';
+    if (defaultVoice.isNotEmpty) {
+      if (await applyVoiceToTts(tts, defaultVoice, locale)) return;
+    }
+
+    final voices = await tts.getVoices;
+    if (voices == null) return;
+
+    final langPrefix = locale.substring(0, 2);
+    for (final voice in (voices as List)) {
+      final name = voice['name']?.toString() ?? '';
+      final voiceLocale = voice['locale']?.toString() ?? '';
+      if (!voiceLocale.startsWith(langPrefix)) continue;
+      if (name.contains('-local')) {
+        await tts.setVoice({'name': name, 'locale': voiceLocale});
+        return;
+      }
+    }
+
+    for (final voice in voices) {
+      final name = voice['name']?.toString() ?? '';
+      final voiceLocale = voice['locale']?.toString() ?? '';
+      if (voiceLocale.startsWith(langPrefix)) {
+        await tts.setVoice({'name': name, 'locale': voiceLocale});
+        return;
+      }
+    }
+  }
+
+  /// Appliquer une voix spécifique sur une instance TTS donnée.
+  static Future<bool> applyVoiceToTts(
+    FlutterTts tts,
+    String voiceName,
+    String locale,
+  ) async {
+    final voices = await tts.getVoices;
     if (voices == null) return false;
 
-    for (final v in (voices as List)) {
-      final name = v['name']?.toString() ?? '';
+    for (final voice in (voices as List)) {
+      final name = voice['name']?.toString() ?? '';
       if (name == voiceName) {
-        final voiceLocale = v['locale']?.toString() ?? locale;
-        await _tts.setVoice({'name': name, 'locale': voiceLocale});
+        final voiceLocale = voice['locale']?.toString() ?? locale;
+        await tts.setVoice({'name': name, 'locale': voiceLocale});
         return true;
       }
     }
     return false;
   }
 
-  String _prefKeyForLanguage(String language) {
+  /// Obtenir la clé de préférence associée à une langue.
+  static String prefKeyForLanguage(String language) {
     switch (language) {
-      case 'fr': return _prefKeyVoiceFr;
-      case 'en': return _prefKeyVoiceEn;
-      case 'es': return _prefKeyVoiceEs;
-      default: return 'tts_voice_$language';
+      case 'fr':
+        return _prefKeyVoiceFr;
+      case 'en':
+        return _prefKeyVoiceEn;
+      case 'es':
+        return _prefKeyVoiceEs;
+      default:
+        return 'tts_voice_$language';
     }
   }
 
   /// Convertir un code langue ISO en locale complet.
-  String _languageToLocale(String language) {
+  static String languageToLocale(String language) {
     switch (language) {
-      case 'fr': return 'fr-CA';
-      case 'en': return 'en-US';
-      case 'es': return 'es-ES';
-      default: return language;
+      case 'fr':
+        return 'fr-CA';
+      case 'en':
+        return 'en-US';
+      case 'es':
+        return 'es-ES';
+      default:
+        return language;
     }
   }
 

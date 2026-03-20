@@ -12,6 +12,7 @@
     <!-- Foreground Service for background location -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
     
     <!-- Wake lock for audio playback -->
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
@@ -51,7 +52,7 @@
         <!-- Foreground service for background location tracking -->
         <service
             android:name="com.pravera.flutter_foreground_task.service.ForegroundService"
-            android:foregroundServiceType="location"
+            android:foregroundServiceType="location|mediaPlayback"
             android:exported="false"/>
     </application>
     <!-- Required to query activities that can process text, see:

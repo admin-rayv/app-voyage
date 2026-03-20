@@ -44,6 +44,7 @@ class AudioService {
   StreamSubscription<PlayerState>? _playerStateSubscription;
   StreamSubscription<AudioInterruptionEvent>? _interruptionSubscription;
   Timer? _positionTimer;
+  bool _shouldResumeAfterInterruption = false;
 
   bool _isPlaying = false;
   bool _isPaused = false;
@@ -108,8 +109,21 @@ class AudioService {
 
     await _interruptionSubscription?.cancel();
     _interruptionSubscription = session.interruptionEventStream.listen((event) {
-      if (event.begin && (_isPlaying || _isPaused)) {
-        pause();
+      if (event.begin) {
+        _shouldResumeAfterInterruption = _isPlaying;
+        if (_isPlaying || _isPaused) {
+          unawaited(pause());
+        }
+        return;
+      }
+
+      if (event.type == AudioInterruptionType.pause &&
+          _shouldResumeAfterInterruption &&
+          _isPaused) {
+        _shouldResumeAfterInterruption = false;
+        unawaited(resume());
+      } else {
+        _shouldResumeAfterInterruption = false;
       }
     });
   }
@@ -361,6 +375,7 @@ class AudioService {
     bool keepMetadata = false,
     bool emitState = true,
   }) async {
+    _shouldResumeAfterInterruption = false;
     await _setSessionActive(false);
     if (_usingEdgeTts) {
       await _player.stop();

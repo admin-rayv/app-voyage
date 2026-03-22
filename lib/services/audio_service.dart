@@ -227,7 +227,7 @@ class AudioService {
     _currentText = text;
     _currentLanguage = language;
     _state = _state.copyWith(
-      playState: AudioPlayState.stopped,
+      playState: AudioPlayState.playing,
       position: Duration.zero,
       duration: estimatedDuration,
       speed: _speed,
@@ -235,6 +235,9 @@ class AudioService {
       currentPoi: poi,
       currentScriptId: resolvedScriptId,
     );
+    _isPlaying = true;
+    _isPaused = false;
+    _startPositionTimer();
     _emitState();
 
     try {

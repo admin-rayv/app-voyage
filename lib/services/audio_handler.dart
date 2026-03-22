@@ -135,6 +135,22 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler
   Future<void> play() async {
     await _ready;
     if ((_currentText ?? '').isEmpty) return;
+
+    if (_isPaused) {
+      _publishPlaybackState(
+        processingState: audio_svc.AudioProcessingState.ready,
+        playing: false,
+      );
+      await TtsService.configureVoiceForTts(_tts, _currentLanguage);
+      await _tts.setSpeechRate(_speechRate);
+      await _tts.speak(_currentText!);
+      return;
+    }
+
+    _publishPlaybackState(
+      processingState: audio_svc.AudioProcessingState.loading,
+      playing: false,
+    );
     await TtsService.configureVoiceForTts(_tts, _currentLanguage);
     await _tts.setSpeechRate(_speechRate);
     await _tts.speak(_currentText!);

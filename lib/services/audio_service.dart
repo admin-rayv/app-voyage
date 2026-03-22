@@ -227,7 +227,7 @@ class AudioService {
     _currentText = text;
     _currentLanguage = language;
     _state = _state.copyWith(
-      playState: AudioPlayState.paused,
+      playState: AudioPlayState.stopped,
       position: Duration.zero,
       duration: estimatedDuration,
       speed: _speed,
@@ -338,7 +338,14 @@ class AudioService {
 
   AudioPlayState _mapHandlerPlayState(audio_svc.PlaybackState playbackState) {
     if (playbackState.processingState == audio_svc.AudioProcessingState.idle ||
-        playbackState.processingState == audio_svc.AudioProcessingState.completed) {
+        playbackState.processingState ==
+            audio_svc.AudioProcessingState.completed) {
+      return AudioPlayState.stopped;
+    }
+    if (playbackState.processingState ==
+            audio_svc.AudioProcessingState.loading ||
+        playbackState.processingState ==
+            audio_svc.AudioProcessingState.buffering) {
       return AudioPlayState.stopped;
     }
     if (playbackState.playing) {

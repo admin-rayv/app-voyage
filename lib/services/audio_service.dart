@@ -254,7 +254,8 @@ class AudioService {
   Future<void> resume() async {
     await init();
     if (_audioHandler != null) {
-      _position = Duration.zero;
+      // Ne PAS remettre _position à zéro — on reprend après pause.
+      // Le handler gère la reprise via flutter_tts.pause()/speak().
       await _audioHandler!.play();
       return;
     }

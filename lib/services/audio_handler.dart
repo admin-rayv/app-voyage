@@ -9,11 +9,12 @@ import 'debug_log.dart';
 import 'tts_service.dart';
 
 /// Wrapper autour de FlutterTts avec Completer pour attendre la fin.
-/// Pattern identique à l'exemple officiel audio_service (Tts class).
+/// Supporte pause natif Android (flutter_tts sauvegarde la position du texte).
 class _TtsWrapper {
   final FlutterTts _flutterTts = FlutterTts();
   Completer<void>? _speechCompleter;
   bool _interruptRequested = false;
+  bool _pauseRequested = false;
   bool _playing = false;
 
   _TtsWrapper() {
@@ -22,6 +23,13 @@ class _TtsWrapper {
     });
     _flutterTts.setCancelHandler(() {
       _speechCompleter?.complete();
+    });
+    _flutterTts.setPauseHandler(() {
+      DebugLog().log('[TtsWrapper] pause handler');
+      _speechCompleter?.complete();
+    });
+    _flutterTts.setContinueHandler(() {
+      DebugLog().log('[TtsWrapper] continue handler');
     });
     _flutterTts.setErrorHandler((msg) {
       DebugLog().log('[TtsWrapper] erreur: $msg');
@@ -32,10 +40,10 @@ class _TtsWrapper {
   FlutterTts get raw => _flutterTts;
   bool get playing => _playing;
 
-  /// Parler un texte et attendre la fin (ou l'interruption).
+  /// Parler un texte et attendre la fin (ou l'interruption/pause).
   Future<void> speak(String text) async {
     _playing = true;
-    if (!_interruptRequested) {
+    if (!_interruptRequested && !_pauseRequested) {
       _speechCompleter = Completer();
       await _flutterTts.speak(text);
       await _speechCompleter!.future;
@@ -46,29 +54,42 @@ class _TtsWrapper {
       _interruptRequested = false;
       throw TtsInterruptedException();
     }
-  }
-
-  Future<void> stop() async {
-    if (_playing) {
-      await _flutterTts.stop();
-      _speechCompleter?.complete();
+    if (_pauseRequested) {
+      _pauseRequested = false;
+      throw TtsPausedException();
     }
   }
 
-  void interrupt() {
+  /// Pause natif flutter_tts — sauvegarde la position dans le texte.
+  /// Au prochain speak(), flutter_tts reprend automatiquement.
+  Future<void> pause() async {
+    if (_playing) {
+      _pauseRequested = true;
+      await _flutterTts.pause();
+      // Le pauseHandler va compléter le _speechCompleter
+    }
+  }
+
+  /// Stop complet — perd la position.
+  Future<void> stop() async {
     if (_playing) {
       _interruptRequested = true;
-      stop();
+      await _flutterTts.stop();
+      _speechCompleter?.complete();
     }
   }
 }
 
 class TtsInterruptedException {}
 
-/// Handler audio TTS — basé sur l'exemple officiel TextPlayerHandler.
+class TtsPausedException {}
+
+/// Handler audio TTS — basé sur l'exemple officiel TextPlayerHandler
+/// avec pause/resume natif flutter_tts.
 class AppAudioHandler extends audio_svc.BaseAudioHandler {
   final _tts = _TtsWrapper();
   bool _running = false;
+  bool _wasPaused = false;
   Completer<void>? _runCompleter;
 
   // Timer pour la barre de progression dans l'UI
@@ -120,6 +141,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
     _currentPoiName = poiName.trim().isEmpty ? 'Lecture audio' : poiName.trim();
     _currentPoi = poi;
     _estimatedDuration = estimatedDuration;
+    _wasPaused = false;
 
     // Informer les clients du media item
     mediaItem.add(audio_svc.MediaItem(
@@ -139,16 +161,17 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
     if (_playing) return;
     if ((_currentText ?? '').isEmpty) return;
 
-    DebugLog().log('[Handler] play');
+    DebugLog().log('[Handler] play wasPaused=$_wasPaused');
 
-    // Activer la session audio manuellement.
-    // L'exemple officiel dit: "flutter_tts doesn't activate the session,
-    // so we do it here."
+    // Activer la session audio manuellement
     final session = await AudioSession.instance;
     if (await session.setActive(true)) {
-      _position = Duration.zero;
+      // Si on reprend après pause, garder la position actuelle
+      if (!_wasPaused) {
+        _position = Duration.zero;
+      }
 
-      // Broadcaster l'état playing AVANT de parler
+      // Broadcaster l'état playing
       playbackState.add(playbackState.value.copyWith(
         controls: [
           audio_svc.MediaControl.pause,
@@ -157,15 +180,16 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
         androidCompactActionIndices: const [0, 1],
         processingState: audio_svc.AudioProcessingState.ready,
         playing: true,
-        updatePosition: Duration.zero,
+        updatePosition: _position,
       ));
 
       // Forcer l'activation des boutons media sur Android
       audio_svc.AudioService.androidForceEnableMediaButtons();
 
-      // Démarrer le timer de position pour l'UI
+      // Démarrer le timer de position
       _startPositionUpdates();
 
+      // Lancer la lecture (ou reprendre après pause)
       if (_runCompleter == null) {
         _run();
       }
@@ -181,27 +205,34 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
     var finishedNaturally = false;
 
     try {
-      // Configurer la voix
-      DebugLog().log('[Handler] config voix lang=$_currentLanguage');
-      try {
-        await TtsService.configureVoiceForTts(_tts.raw, _currentLanguage);
-      } catch (e) {
-        DebugLog().log('[Handler] erreur config voix: $e');
+      // Configurer la voix seulement si c'est une nouvelle lecture
+      if (!_wasPaused) {
+        DebugLog().log('[Handler] config voix lang=$_currentLanguage');
+        try {
+          await TtsService.configureVoiceForTts(_tts.raw, _currentLanguage);
+        } catch (e) {
+          DebugLog().log('[Handler] erreur config voix: $e');
+        }
       }
+      _wasPaused = false;
 
-      // Parler le texte
+      // Parler le texte.
+      // Si on reprend après pause, flutter_tts reprend automatiquement
+      // à la position sauvegardée (via onRangeStart index).
       DebugLog().log('[Handler] tts.speak start');
       await _tts.speak(_currentText!);
       DebugLog().log('[Handler] tts.speak done');
       finishedNaturally = true;
     } on TtsInterruptedException {
-      DebugLog().log('[Handler] TTS interrompu');
-      // Ne PAS modifier l'état ici — pause() ou stop() l'ont déjà fait.
+      DebugLog().log('[Handler] TTS interrompu (stop)');
+    } on TtsPausedException {
+      DebugLog().log('[Handler] TTS en pause');
+      // Ne rien faire — l'état a déjà été mis par pause()
     }
 
     _running = false;
 
-    // Seulement si la lecture s'est terminée naturellement (pas interruption)
+    // Seulement si la lecture s'est terminée naturellement
     if (finishedNaturally) {
       _stopPositionUpdates();
       _position = _estimatedDuration;
@@ -223,6 +254,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
     DebugLog().log('[Handler] pause');
 
     _stopPositionUpdates();
+    _wasPaused = true;
 
     playbackState.add(playbackState.value.copyWith(
       controls: [
@@ -235,7 +267,8 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
       updatePosition: _position,
     ));
 
-    _tts.interrupt();
+    // Utiliser pause natif flutter_tts — sauvegarde la position dans le texte
+    await _tts.pause();
   }
 
   @override
@@ -244,6 +277,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
 
     _stopPositionUpdates();
     _position = Duration.zero;
+    _wasPaused = false;
 
     playbackState.add(playbackState.value.copyWith(
       controls: [],
@@ -254,7 +288,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
     ));
 
     _running = false;
-    _tts.interrupt();
+    await _tts.stop();
 
     // Attendre que la lecture s'arrête complètement
     await _runCompleter?.future;
@@ -269,7 +303,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
     await _tts.raw.setSpeechRate(speed);
   }
 
-  /// Timer de position pour mettre à jour la barre de progression UI.
+  /// Timer de position pour la barre de progression UI.
   void _startPositionUpdates() {
     _positionTimer?.cancel();
     _positionTimer = Timer.periodic(const Duration(milliseconds: 500), (_) {

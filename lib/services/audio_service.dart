@@ -295,7 +295,8 @@ class AudioService {
     _isPlaying = nextPlayState == AudioPlayState.playing;
     _isPaused = nextPlayState == AudioPlayState.paused;
 
-    if (_isPlaying) {
+    // Le timer ne doit repartir qu'une fois le vrai callback de demarrage recu.
+    if (_isPlaying && !_awaitingPlaybackStart) {
       _startPositionTimer();
     } else {
       _stopPositionTimer();
@@ -485,15 +486,23 @@ class AudioService {
   }
 
   Future<void> resume() async {
+    DebugLog().log(
+      '[AudioService] resume demande state=${_state.playState} handler=${_audioHandler != null}',
+    );
     if (_state.playState == AudioPlayState.stopped) {
+      DebugLog().log('[AudioService] resume redirige vers replayCurrent');
       await replayCurrent();
       return;
     }
     await init();
     if (_audioHandler != null) {
+      _awaitingPlaybackStart = true;
+      _stopPositionTimer();
+      DebugLog().log('[AudioService] resume delegue au handler en attente du start');
       await _audioHandler!.play();
       return;
     }
+    DebugLog().log('[AudioService] resume delegue au TTS de secours');
     await _tts.resume();
   }
 

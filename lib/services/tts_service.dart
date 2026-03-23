@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'debug_log.dart';
+
 /// Service TTS — Lecture audio des scripts via voix natives du téléphone.
 ///
 /// Utilise les voix système (Apple Speech / Google TTS).
@@ -100,6 +102,11 @@ class TtsService {
   /// Reprendre après une pause.
   Future<void> resume() async {
     if (_isPaused) {
+      DebugLog().log('[TtsService] reprise demandee depuis pause');
+      await _tts.stop();
+      _isPlaying = false;
+      _isPaused = false;
+      DebugLog().log('[TtsService] reprise relance speak depuis le debut');
       await _tts.speak(_currentText ?? '');
     }
   }

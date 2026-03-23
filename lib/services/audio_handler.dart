@@ -150,21 +150,23 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler
     if ((_currentText ?? '').isEmpty) return;
 
     if (_isPaused) {
-      _isPlaying = true;
-      _isPaused = false;
-      DebugLog().log('[AppAudioHandler] play resume');
+      DebugLog().log('[AppAudioHandler] reprise demandee depuis pause');
       _publishPlaybackState(
-        processingState: audio_svc.AudioProcessingState.ready,
+        processingState: audio_svc.AudioProcessingState.loading,
         playing: true,
       );
       await TtsService.configureVoiceForTts(_tts, _currentLanguage);
       await _tts.setSpeechRate(_speechRate);
+      DebugLog().log('[AppAudioHandler] reprise stop avant nouveau speak');
+      await _tts.stop();
+      _isPlaying = false;
+      _isPaused = false;
+      DebugLog().log('[AppAudioHandler] reprise speak depuis le debut');
       await _tts.speak(_currentText!);
       return;
     }
 
-    _isPlaying = true;
-    _isPaused = false;
+    DebugLog().log('[AppAudioHandler] lecture demandee');
     DebugLog().log('[AppAudioHandler] play fresh');
     _publishPlaybackState(
       processingState: audio_svc.AudioProcessingState.loading,

@@ -60,6 +60,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
           ],
           systemActions: const {audio_svc.MediaAction.play, audio_svc.MediaAction.pause, audio_svc.MediaAction.stop},
           processingState: audio_svc.AudioProcessingState.ready,
+          androidCompactActionIndices: const [0, 1],
           updatePosition: _position,
         ),
       );
@@ -76,6 +77,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
           controls: const [audio_svc.MediaControl.play],
           systemActions: const {audio_svc.MediaAction.play, audio_svc.MediaAction.pause, audio_svc.MediaAction.stop},
           processingState: audio_svc.AudioProcessingState.completed,
+          androidCompactActionIndices: const [0],
           updatePosition: _position,
         ),
       );
@@ -120,6 +122,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
           ],
           systemActions: const {audio_svc.MediaAction.play, audio_svc.MediaAction.pause, audio_svc.MediaAction.stop},
           processingState: audio_svc.AudioProcessingState.ready,
+          androidCompactActionIndices: const [0, 1],
           updatePosition: _position,
         ),
       );
@@ -135,6 +138,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
           controls: const [audio_svc.MediaControl.play],
           systemActions: const {audio_svc.MediaAction.play, audio_svc.MediaAction.pause, audio_svc.MediaAction.stop},
           processingState: audio_svc.AudioProcessingState.idle,
+          androidCompactActionIndices: const [0],
           updatePosition: Duration.zero,
         ),
       );
@@ -194,6 +198,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
         ],
         systemActions: const {audio_svc.MediaAction.play, audio_svc.MediaAction.pause, audio_svc.MediaAction.stop},
         processingState: audio_svc.AudioProcessingState.loading,
+          androidCompactActionIndices: const [0, 1],
         updatePosition: Duration.zero,
       ),
     );
@@ -234,6 +239,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
         ],
         systemActions: const {audio_svc.MediaAction.play, audio_svc.MediaAction.pause, audio_svc.MediaAction.stop},
         processingState: audio_svc.AudioProcessingState.ready,
+          androidCompactActionIndices: const [0, 1],
         updatePosition: _position,
       ),
     );
@@ -254,6 +260,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
         controls: const [],
         systemActions: const {},
         processingState: audio_svc.AudioProcessingState.idle,
+          androidCompactActionIndices: const [],
         updatePosition: Duration.zero,
       ),
     );

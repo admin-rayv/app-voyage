@@ -15,7 +15,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
     playbackState.add(
       playbackState.value.copyWith(
         controls: const [audio_svc.MediaControl.play],
-        systemActions: const {audio_svc.MediaAction.stop},
+        systemActions: const {audio_svc.MediaAction.play, audio_svc.MediaAction.pause, audio_svc.MediaAction.stop},
         processingState: audio_svc.AudioProcessingState.idle,
         playing: false,
         updatePosition: Duration.zero,
@@ -58,7 +58,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
             audio_svc.MediaControl.pause,
             audio_svc.MediaControl.stop,
           ],
-          systemActions: const {audio_svc.MediaAction.stop},
+          systemActions: const {audio_svc.MediaAction.play, audio_svc.MediaAction.pause, audio_svc.MediaAction.stop},
           processingState: audio_svc.AudioProcessingState.ready,
           updatePosition: _position,
         ),
@@ -74,7 +74,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
         playbackState.value.copyWith(
           playing: false,
           controls: const [audio_svc.MediaControl.play],
-          systemActions: const {audio_svc.MediaAction.stop},
+          systemActions: const {audio_svc.MediaAction.play, audio_svc.MediaAction.pause, audio_svc.MediaAction.stop},
           processingState: audio_svc.AudioProcessingState.completed,
           updatePosition: _position,
         ),
@@ -98,7 +98,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
                   audio_svc.MediaControl.stop,
                 ]
               : const [audio_svc.MediaControl.play],
-          systemActions: const {audio_svc.MediaAction.stop},
+          systemActions: const {audio_svc.MediaAction.play, audio_svc.MediaAction.pause, audio_svc.MediaAction.stop},
           processingState: _wasPaused
               ? audio_svc.AudioProcessingState.ready
               : audio_svc.AudioProcessingState.idle,
@@ -118,7 +118,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
             audio_svc.MediaControl.play,
             audio_svc.MediaControl.stop,
           ],
-          systemActions: const {audio_svc.MediaAction.stop},
+          systemActions: const {audio_svc.MediaAction.play, audio_svc.MediaAction.pause, audio_svc.MediaAction.stop},
           processingState: audio_svc.AudioProcessingState.ready,
           updatePosition: _position,
         ),
@@ -133,7 +133,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
         playbackState.value.copyWith(
           playing: false,
           controls: const [audio_svc.MediaControl.play],
-          systemActions: const {audio_svc.MediaAction.stop},
+          systemActions: const {audio_svc.MediaAction.play, audio_svc.MediaAction.pause, audio_svc.MediaAction.stop},
           processingState: audio_svc.AudioProcessingState.idle,
           updatePosition: Duration.zero,
         ),
@@ -192,7 +192,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
           audio_svc.MediaControl.pause,
           audio_svc.MediaControl.stop,
         ],
-        systemActions: const {audio_svc.MediaAction.stop},
+        systemActions: const {audio_svc.MediaAction.play, audio_svc.MediaAction.pause, audio_svc.MediaAction.stop},
         processingState: audio_svc.AudioProcessingState.loading,
         updatePosition: Duration.zero,
       ),
@@ -232,7 +232,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
           audio_svc.MediaControl.play,
           audio_svc.MediaControl.stop,
         ],
-        systemActions: const {audio_svc.MediaAction.stop},
+        systemActions: const {audio_svc.MediaAction.play, audio_svc.MediaAction.pause, audio_svc.MediaAction.stop},
         processingState: audio_svc.AudioProcessingState.ready,
         updatePosition: _position,
       ),
@@ -251,8 +251,8 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
     playbackState.add(
       playbackState.value.copyWith(
         playing: false,
-        controls: const [audio_svc.MediaControl.play],
-        systemActions: const {audio_svc.MediaAction.stop},
+        controls: const [],
+        systemActions: const {},
         processingState: audio_svc.AudioProcessingState.idle,
         updatePosition: Duration.zero,
       ),

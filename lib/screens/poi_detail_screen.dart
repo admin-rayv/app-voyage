@@ -63,8 +63,12 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
     );
     unawaited(_initializeAudio());
     _stateSubscription = _audio.stateStream.listen((state) {
-      final isSpeaking = state.playState == AudioPlayState.playing;
-      final isPaused = state.playState == AudioPlayState.paused;
+      // Vérifier si l'audio en cours concerne CE POI
+      final isThisPoi = state.currentPoi?.id == widget.poi.id;
+      final isSpeaking =
+          isThisPoi && state.playState == AudioPlayState.playing;
+      final isPaused =
+          isThisPoi && state.playState == AudioPlayState.paused;
       if (isSpeaking) {
         _pulseController.repeat(reverse: true);
       } else {
@@ -76,7 +80,10 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
           _isSpeaking = isSpeaking;
           _isPaused = isPaused;
           _selectedSpeed = state.speed;
-          _audioState = state;
+          _audioState = isThisPoi ? state : state.copyWith(
+            playState: AudioPlayState.stopped,
+            position: Duration.zero,
+          );
         });
       }
     });

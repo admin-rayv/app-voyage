@@ -94,7 +94,7 @@ class AudioService {
           androidNotificationChannelId: 'com.appvoyage.app_voyage.audio',
           androidNotificationChannelName: 'Lecture audio',
           androidNotificationOngoing: true,
-          androidStopForegroundOnPause: false,
+          androidStopForegroundOnPause: true,
         ),
       );
       _audioHandler = handler as AppAudioHandler;

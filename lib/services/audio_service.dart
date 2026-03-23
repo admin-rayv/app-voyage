@@ -46,6 +46,7 @@ class AudioService {
   Timer? _positionTimer;
   bool _shouldResumeAfterInterruption = false;
   bool _ttsInitialized = false;
+  bool _awaitingPlaybackStart = false;
 
   bool _isPlaying = false;
   bool _isPaused = false;
@@ -237,6 +238,7 @@ class AudioService {
     );
     _isPlaying = true;
     _isPaused = false;
+    _awaitingPlaybackStart = handler != null;
     _startPositionTimer();
     _emitState();
 
@@ -276,6 +278,19 @@ class AudioService {
     final nextPosition = nextPlayState == AudioPlayState.stopped
         ? Duration.zero
         : _state.position;
+
+    if (playbackState.processingState == audio_svc.AudioProcessingState.ready &&
+        playbackState.playing) {
+      _awaitingPlaybackStart = false;
+    } else if (playbackState.processingState ==
+            audio_svc.AudioProcessingState.completed ||
+        playbackState.processingState == audio_svc.AudioProcessingState.idle) {
+      _awaitingPlaybackStart = false;
+    }
+
+    DebugLog().log(
+      '[AudioService] handler processing=${playbackState.processingState} playing=${playbackState.playing} awaiting=$_awaitingPlaybackStart -> $nextPlayState',
+    );
 
     _isPlaying = nextPlayState == AudioPlayState.playing;
     _isPaused = nextPlayState == AudioPlayState.paused;
@@ -345,13 +360,20 @@ class AudioService {
             audio_svc.AudioProcessingState.completed) {
       return AudioPlayState.stopped;
     }
+    if (playbackState.playing) {
+      return AudioPlayState.playing;
+    }
     if (playbackState.processingState ==
             audio_svc.AudioProcessingState.loading ||
         playbackState.processingState ==
             audio_svc.AudioProcessingState.buffering) {
-      return AudioPlayState.stopped;
+      return _awaitingPlaybackStart || _state.playState == AudioPlayState.playing
+          ? AudioPlayState.playing
+          : AudioPlayState.stopped;
     }
-    if (playbackState.playing) {
+    if (playbackState.processingState == audio_svc.AudioProcessingState.ready &&
+        _awaitingPlaybackStart &&
+        _state.playState == AudioPlayState.playing) {
       return AudioPlayState.playing;
     }
     return AudioPlayState.paused;
@@ -361,6 +383,7 @@ class AudioService {
     _stopPositionTimer();
     _isPlaying = false;
     _isPaused = false;
+    _awaitingPlaybackStart = false;
     _state = _state.copyWith(
       playState: AudioPlayState.stopped,
       position: resetPosition ? Duration.zero : _state.position,
@@ -492,6 +515,7 @@ class AudioService {
   }) async {
     await init();
     _shouldResumeAfterInterruption = false;
+    _awaitingPlaybackStart = false;
 
     if (_audioHandler != null) {
       await _audioHandler!.stop();

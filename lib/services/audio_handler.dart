@@ -1,6 +1,7 @@
 import 'package:audio_service/audio_service.dart' as audio_svc;
 import 'package:flutter_tts/flutter_tts.dart';
 
+import 'debug_log.dart';
 import 'tts_service.dart';
 
 /// Handler audio dédié au TTS pour exposer une vraie session média système.
@@ -33,6 +34,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler
     _tts.setStartHandler(() {
       _isPlaying = true;
       _isPaused = false;
+      DebugLog().log('[AppAudioHandler] callback start');
       _publishPlaybackState(
         processingState: audio_svc.AudioProcessingState.ready,
         playing: true,
@@ -42,6 +44,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler
     _tts.setCompletionHandler(() {
       _isPlaying = false;
       _isPaused = false;
+      DebugLog().log('[AppAudioHandler] callback completion');
       _publishPlaybackState(
         processingState: audio_svc.AudioProcessingState.completed,
         playing: false,
@@ -51,6 +54,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler
     _tts.setCancelHandler(() {
       _isPlaying = false;
       _isPaused = false;
+      DebugLog().log('[AppAudioHandler] callback cancel');
       _publishPlaybackState(
         processingState: audio_svc.AudioProcessingState.idle,
         playing: false,
@@ -60,6 +64,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler
     _tts.setPauseHandler(() {
       _isPlaying = false;
       _isPaused = true;
+      DebugLog().log('[AppAudioHandler] callback pause');
       _publishPlaybackState(
         processingState: audio_svc.AudioProcessingState.ready,
         playing: false,
@@ -69,6 +74,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler
     _tts.setContinueHandler(() {
       _isPlaying = true;
       _isPaused = false;
+      DebugLog().log('[AppAudioHandler] callback continue');
       _publishPlaybackState(
         processingState: audio_svc.AudioProcessingState.ready,
         playing: true,
@@ -78,6 +84,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler
     _tts.setErrorHandler((message) {
       _isPlaying = false;
       _isPaused = false;
+      DebugLog().log('[AppAudioHandler] callback error=$message');
       _publishPlaybackState(
         processingState: audio_svc.AudioProcessingState.idle,
         playing: false,
@@ -109,9 +116,14 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler
       ),
     );
 
+    _isPlaying = true;
+    _isPaused = false;
+    DebugLog().log(
+      '[AppAudioHandler] speakText title=$_currentTitle language=$language durationMs=${_currentDuration.inMilliseconds}',
+    );
     _publishPlaybackState(
       processingState: audio_svc.AudioProcessingState.loading,
-      playing: false,
+      playing: true,
     );
 
     await TtsService.configureVoiceForTts(_tts, language);
@@ -122,6 +134,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler
   Future<void> configureSpeechRate(double rate) async {
     await _ready;
     _speechRate = rate;
+    DebugLog().log('[AppAudioHandler] configureSpeechRate rate=$rate');
     await _tts.setSpeechRate(rate);
     _publishPlaybackState(
       processingState: _isPlaying || _isPaused
@@ -137,9 +150,12 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler
     if ((_currentText ?? '').isEmpty) return;
 
     if (_isPaused) {
+      _isPlaying = true;
+      _isPaused = false;
+      DebugLog().log('[AppAudioHandler] play resume');
       _publishPlaybackState(
         processingState: audio_svc.AudioProcessingState.ready,
-        playing: false,
+        playing: true,
       );
       await TtsService.configureVoiceForTts(_tts, _currentLanguage);
       await _tts.setSpeechRate(_speechRate);
@@ -147,9 +163,12 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler
       return;
     }
 
+    _isPlaying = true;
+    _isPaused = false;
+    DebugLog().log('[AppAudioHandler] play fresh');
     _publishPlaybackState(
       processingState: audio_svc.AudioProcessingState.loading,
-      playing: false,
+      playing: true,
     );
     await TtsService.configureVoiceForTts(_tts, _currentLanguage);
     await _tts.setSpeechRate(_speechRate);
@@ -159,12 +178,14 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler
   @override
   Future<void> pause() async {
     await _ready;
+    DebugLog().log('[AppAudioHandler] pause');
     await _tts.pause();
   }
 
   @override
   Future<void> stop() async {
     await _ready;
+    DebugLog().log('[AppAudioHandler] stop');
     await _tts.stop();
     _isPlaying = false;
     _isPaused = false;
@@ -209,6 +230,9 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler
     required audio_svc.AudioProcessingState processingState,
     required bool playing,
   }) {
+    DebugLog().log(
+      '[AppAudioHandler] publish processing=$processingState playing=$playing isPlaying=$_isPlaying isPaused=$_isPaused',
+    );
     final controls = <audio_svc.MediaControl>[
       if (!playing) audio_svc.MediaControl.play,
       if (playing) audio_svc.MediaControl.pause,

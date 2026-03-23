@@ -108,14 +108,10 @@ class MiniPlayer extends StatelessWidget {
                           onPressed: () async {
                             if (isPlaying) {
                               await audioService.pause();
-                              return;
                             }
-                            if (isPaused) {
+                            if (!isPlaying) {
                               await audioService.resume();
-                              return;
                             }
-                            if (state.currentScriptId == null) return;
-                            await audioService.replayCurrent();
                           },
                           icon: Icon(
                             isPlaying ? Icons.pause : Icons.play_arrow,
@@ -123,8 +119,8 @@ class MiniPlayer extends StatelessWidget {
                           tooltip: isPlaying
                               ? 'Pause'
                               : isPaused
-                              ? 'Reprendre'
-                              : 'Lire',
+                                  ? 'Reprendre'
+                                  : 'Lire',
                         ),
                         IconButton(
                           onPressed: () => audioService.stop(),

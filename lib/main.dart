@@ -15,11 +15,11 @@ void main() async {
   // Initialiser Supabase
   await SupabaseService.initialize();
 
-  // Initialiser la session média avant de construire l'UI.
+  // Initialiser l'audio avant de construire l'UI.
   try {
-    await AudioService.bootstrap();
+    await AudioService().init();
   } catch (e) {
-    debugPrint('[main] AudioService.bootstrap() failed: $e');
+    debugPrint('[main] AudioService.init() failed: $e');
   }
 
   runApp(

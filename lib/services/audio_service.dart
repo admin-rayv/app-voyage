@@ -13,7 +13,8 @@ import 'edge_tts_service.dart';
 import 'supabase_service.dart';
 import 'tts_service.dart';
 
-/// Service audio principal — coordination entre UI, session média et TTS.
+/// Service audio simplifie.
+/// Le handler expose l'etat de lecture, ce service ne fait que le relayer.
 class AudioService {
   AudioService._internal();
 
@@ -21,7 +22,6 @@ class AudioService {
   factory AudioService() => _instance;
 
   static const String _speedPrefKey = 'tts_speed';
-  static const Duration _positionTick = Duration(milliseconds: 500);
   static final Map<double, double> _speedToSpeechRate = {
     0.75: 0.39,
     1.0: 0.52,
@@ -29,30 +29,25 @@ class AudioService {
     1.5: 0.78,
   };
 
-  final TtsService _tts = TtsService();
+  final TtsService _fallbackTts = TtsService();
   final EdgeTtsService _edgeTts = EdgeTtsService();
   final SupabaseService _supabase = SupabaseService();
+  final StreamController<AudioState> _stateController =
+      StreamController<AudioState>.broadcast();
 
-  TtsService get tts => _tts;
-  EdgeTtsService get edgeTts => _edgeTts;
-
+  AppAudioHandler? _audioHandler;
   bool _isInitialized = false;
   Future<void>? _initFuture;
-  audio_svc.AudioHandler? _audioHandler;
-  StreamSubscription<audio_svc.PlaybackState>? _handlerPlaybackSubscription;
-  StreamSubscription<audio_svc.MediaItem?>? _handlerMediaItemSubscription;
-  StreamSubscription<TtsState>? _ttsStateSubscription;
-  StreamSubscription<AudioInterruptionEvent>? _interruptionSubscription;
-  Timer? _positionTimer;
-  bool _shouldResumeAfterInterruption = false;
-  bool _ttsInitialized = false;
-  bool _awaitingPlaybackStart = false;
-
-  bool _isPlaying = false;
-  bool _isPaused = false;
+  bool _usingFallbackTts = false;
   double _speed = 1.0;
+  Duration _position = Duration.zero;
+  Duration _duration = Duration.zero;
   String? _currentText;
-  String? _currentLanguage;
+  String _currentLanguage = 'fr';
+  String? _currentPoiName;
+  models.Point? _currentPoi;
+  String? _currentScriptId;
+  audio_svc.PlaybackState _playbackState = const audio_svc.PlaybackState();
   AudioState _state = const AudioState(
     playState: AudioPlayState.stopped,
     position: Duration.zero,
@@ -60,18 +55,17 @@ class AudioService {
     speed: 1.0,
   );
 
-  bool get isPlaying => _isPlaying;
-  bool get isPaused => _isPaused;
-  bool get usingEdgeTts => false;
+  StreamSubscription<audio_svc.PlaybackState>? _playbackSubscription;
+  StreamSubscription<audio_svc.MediaItem?>? _mediaItemSubscription;
+  StreamSubscription<Duration>? _positionSubscription;
+  StreamSubscription<TtsState>? _fallbackStateSubscription;
+  StreamSubscription<AudioInterruptionEvent>? _interruptionSubscription;
+
+  EdgeTtsService get edgeTts => _edgeTts;
+  TtsService get tts => _fallbackTts;
   double get speed => _speed;
   AudioState get currentState => _state;
-
-  final _stateController = StreamController<AudioState>.broadcast();
   Stream<AudioState> get stateStream => _stateController.stream;
-
-  static Future<void> bootstrap() async {
-    await _instance.init();
-  }
 
   Future<void> init() async {
     if (_isInitialized) return;
@@ -81,40 +75,20 @@ class AudioService {
       return;
     }
 
-    final initFuture = _performInit();
-    _initFuture = initFuture;
+    _initFuture = _performInit();
     try {
-      await initFuture;
+      await _initFuture;
     } finally {
       _initFuture = null;
     }
   }
 
   Future<void> _performInit() async {
-    await _initFallbackTts();
-    await _initAudioHandler();
-    await _configureAudioSession();
     await _loadSavedSpeed();
-    await _applySpeed(emitState: false);
-    _isInitialized = true;
-    _emitState();
-  }
-
-  Future<void> _initFallbackTts() async {
-    if (_ttsInitialized) return;
-
-    await _tts.init();
-    await _ttsStateSubscription?.cancel();
-    _ttsStateSubscription = _tts.stateStream.listen(_handleFallbackTtsState);
-    _ttsInitialized = true;
-    DebugLog().log('[AudioService] TTS fallback initialisé ✅');
-  }
-
-  Future<void> _initAudioHandler() async {
-    if (_audioHandler != null) return;
+    await _configureAudioSession();
 
     try {
-      _audioHandler = await audio_svc.AudioService.init(
+      final handler = await audio_svc.AudioService.init(
         builder: () => AppAudioHandler(),
         config: const audio_svc.AudioServiceConfig(
           androidNotificationChannelId: 'com.appvoyage.app_voyage.audio',
@@ -123,23 +97,24 @@ class AudioService {
           androidStopForegroundOnPause: true,
         ),
       );
+      _audioHandler = handler as AppAudioHandler;
+      _usingFallbackTts = false;
+      await _audioHandler!.setSpeed(_speechRateForSpeed(_speed));
+      _bindHandlerStreams();
+      DebugLog().log('[AudioService] audio_service initialise');
     } catch (error, stackTrace) {
-      DebugLog().log('[AudioService] échec init audio_service: $error');
+      DebugLog().log('[AudioService] fallback TTS: $error');
       debugPrintStack(stackTrace: stackTrace);
-      _audioHandler = null;
-      return;
+      await _fallbackTts.init();
+      _usingFallbackTts = true;
+      await _fallbackTts.setSpeechRate(_speechRateForSpeed(_speed));
+      await _fallbackStateSubscription?.cancel();
+      _fallbackStateSubscription =
+          _fallbackTts.stateStream.listen(_handleFallbackState);
     }
 
-    await _handlerPlaybackSubscription?.cancel();
-    _handlerPlaybackSubscription = _audioHandler!.playbackState.listen(
-      _handleHandlerPlaybackState,
-    );
-
-    await _handlerMediaItemSubscription?.cancel();
-    _handlerMediaItemSubscription = _audioHandler!.mediaItem.listen(
-      _handleHandlerMediaItem,
-    );
-    DebugLog().log('[AudioService] audio_service handler initialisé ✅');
+    _isInitialized = true;
+    _emitState();
   }
 
   Future<void> _configureAudioSession() async {
@@ -157,28 +132,43 @@ class AudioService {
 
       await _interruptionSubscription?.cancel();
       _interruptionSubscription =
-          session.interruptionEventStream.listen((event) {
-            if (event.begin) {
-              _shouldResumeAfterInterruption = _isPlaying;
-              if (_isPlaying || _isPaused) {
-                unawaited(pause());
-              }
-              return;
-            }
-
-            if (event.type == AudioInterruptionType.pause &&
-                _shouldResumeAfterInterruption &&
-                _isPaused) {
-              _shouldResumeAfterInterruption = false;
-              unawaited(resume());
-            } else {
-              _shouldResumeAfterInterruption = false;
+          session.interruptionEventStream.listen((event) async {
+            if (!event.begin) return;
+            if (_state.playState == AudioPlayState.playing) {
+              await pause();
             }
           });
     } catch (error, stackTrace) {
-      DebugLog().log('[AudioService] échec config audio session: $error');
+      DebugLog().log('[AudioService] session audio indisponible: $error');
       debugPrintStack(stackTrace: stackTrace);
     }
+  }
+
+  void _bindHandlerStreams() {
+    final handler = _audioHandler;
+    if (handler == null) return;
+
+    _playbackState = handler.playbackState.value;
+
+    _playbackSubscription?.cancel();
+    _playbackSubscription = handler.playbackState.listen((playbackState) {
+      _playbackState = playbackState;
+      _emitState();
+    });
+
+    _mediaItemSubscription?.cancel();
+    _mediaItemSubscription = handler.mediaItem.listen((item) {
+      if (item == null) return;
+      _duration = item.duration ?? _duration;
+      _currentPoiName = item.title;
+      _emitState();
+    });
+
+    _positionSubscription?.cancel();
+    _positionSubscription = audio_svc.AudioService.position.listen((position) {
+      _position = position;
+      _emitState();
+    });
   }
 
   Future<void> playScript(String scriptId, {String? poiName}) async {
@@ -186,14 +176,11 @@ class AudioService {
     final script = await _supabase.getScript(scriptId);
     if (script == null) return;
 
-    final text = script['content'] as String;
-    final language = script['language'] as String? ?? 'fr';
-
-    await play(
-      scriptId: scriptId,
-      text: text,
-      language: language,
+    await playText(
+      script['content'] as String? ?? '',
+      language: script['language'] as String? ?? 'fr',
       poiName: poiName,
+      scriptId: scriptId,
     );
   }
 
@@ -202,65 +189,144 @@ class AudioService {
     String language = 'fr',
     String? poiName,
     models.Point? poi,
-  }) async {
-    await play(
-      scriptId: null,
-      text: text,
-      language: language,
-      poiName: poiName,
-      poi: poi,
-    );
-  }
-
-  Future<void> play({
-    required String text,
-    required String language,
     String? scriptId,
-    String? poiName,
-    models.Point? poi,
   }) async {
     await init();
-    final resolvedScriptId = scriptId ?? 'preview-${text.hashCode}';
-    final estimatedDuration = _estimateDuration(text);
-    final handler = _audioHandler;
+    if (text.trim().isEmpty) return;
 
-    await stop(keepMetadata: true, emitState: false);
     _currentText = text;
     _currentLanguage = language;
+    _currentPoiName = poiName ?? 'Lecture audio';
+    _currentPoi = poi;
+    _currentScriptId = scriptId ?? 'tts-${text.hashCode}';
+    _duration = _estimateDuration(text);
+    _position = Duration.zero;
+
+    DebugLog().log(
+      '[AudioService] playText poi=$_currentPoiName lang=$language fallback=$_usingFallbackTts',
+    );
+
+    if (_audioHandler != null) {
+      await _audioHandler!.speakText(
+        text,
+        language,
+        _currentPoiName ?? 'Lecture audio',
+        poi,
+        _duration,
+      );
+      _emitState();
+      return;
+    }
+
+    await _fallbackTts.setLanguage(language);
+    await _fallbackTts.setSpeechRate(_speechRateForSpeed(_speed));
+    await _fallbackTts.speak(text, language: language);
     _state = _state.copyWith(
       playState: AudioPlayState.playing,
       position: Duration.zero,
-      duration: estimatedDuration,
+      duration: _duration,
       speed: _speed,
-      currentPoiName: poiName,
-      currentPoi: poi,
-      currentScriptId: resolvedScriptId,
+      currentPoiName: _currentPoiName,
+      currentPoi: _currentPoi,
+      currentScriptId: _currentScriptId,
     );
-    _isPlaying = true;
-    _isPaused = false;
-    _awaitingPlaybackStart = handler != null;
-    _startPositionTimer();
     _emitState();
+  }
 
-    try {
-      if (handler != null) {
-        await handler.customAction('speak', {
-          'text': text,
-          'language': language,
-          'title': poiName ?? 'Lecture audio',
-          'mediaId': resolvedScriptId,
-          'durationMs': estimatedDuration.inMilliseconds,
-        });
-        return;
-      }
-
-      await _tts.setSpeechRate(_speechRateForSpeed(_speed));
-      await _tts.speak(text, language: language);
-    } catch (error, stackTrace) {
-      DebugLog().log('[AudioService] échec lecture TTS: $error');
-      debugPrintStack(stackTrace: stackTrace);
-      _finishPlayback(resetPosition: true);
+  Future<void> pause() async {
+    await init();
+    if (_audioHandler != null) {
+      await _audioHandler!.pause();
+      return;
     }
+    await _fallbackTts.stop();
+    _state = _state.copyWith(playState: AudioPlayState.paused);
+    _emitState();
+  }
+
+  Future<void> resume() async {
+    await init();
+    if (_audioHandler != null) {
+      _position = Duration.zero;
+      await _audioHandler!.play();
+      return;
+    }
+    if ((_currentText ?? '').isEmpty) return;
+    await _fallbackTts.speak(_currentText!, language: _currentLanguage);
+    _state = _state.copyWith(
+      playState: AudioPlayState.playing,
+      position: Duration.zero,
+    );
+    _emitState();
+  }
+
+  Future<void> replayCurrent() async {
+    final text = _currentText;
+    if (text == null || text.isEmpty) return;
+    await playText(
+      text,
+      language: _currentLanguage,
+      poiName: _currentPoiName,
+      poi: _currentPoi,
+      scriptId: _currentScriptId,
+    );
+  }
+
+  Future<void> stop() async {
+    await init();
+    if (_audioHandler != null) {
+      await _audioHandler!.stop();
+    } else {
+      await _fallbackTts.stop();
+    }
+
+    _position = Duration.zero;
+    _duration = Duration.zero;
+    _currentText = null;
+    _currentLanguage = 'fr';
+    _currentPoiName = null;
+    _currentPoi = null;
+    _currentScriptId = null;
+    _state = _state.copyWith(
+      playState: AudioPlayState.stopped,
+      position: Duration.zero,
+      duration: Duration.zero,
+      currentPoiName: null,
+      currentPoi: null,
+      currentScriptId: null,
+    );
+    _emitState();
+  }
+
+  Future<void> setSpeed(double speed) async {
+    await init();
+    _speed = _normalizeSpeed(speed);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(_speedPrefKey, _speed);
+
+    final speechRate = _speechRateForSpeed(_speed);
+    if (_audioHandler != null) {
+      await _audioHandler!.setSpeed(speechRate);
+    } else {
+      await _fallbackTts.setSpeechRate(speechRate);
+    }
+
+    if (_currentText != null) {
+      _duration = _estimateDuration(_currentText!);
+      if (_position > _duration) {
+        _position = _duration;
+      }
+    }
+
+    _emitState();
+  }
+
+  Future<void> setSpeechRate(double rate) async {
+    final entry = _speedToSpeechRate.entries.firstWhere(
+      (item) => (item.value - rate).abs() < 0.001,
+      orElse: () => const MapEntry(1.0, 0.52),
+    );
+    await setSpeed(entry.key);
   }
 
   Duration _estimateDuration(String text) {
@@ -273,152 +339,75 @@ class AudioService {
     return Duration(seconds: seconds <= 0 ? 1 : seconds);
   }
 
-  void _handleHandlerPlaybackState(audio_svc.PlaybackState playbackState) {
-    final nextPlayState = _mapHandlerPlayState(playbackState);
-    final nextPosition = nextPlayState == AudioPlayState.stopped
-        ? Duration.zero
-        : _state.position;
-
-    if (playbackState.processingState == audio_svc.AudioProcessingState.ready &&
-        playbackState.playing) {
-      _awaitingPlaybackStart = false;
-    } else if (playbackState.processingState ==
-            audio_svc.AudioProcessingState.completed ||
-        playbackState.processingState == audio_svc.AudioProcessingState.idle) {
-      _awaitingPlaybackStart = false;
-    }
-
-    DebugLog().log(
-      '[AudioService] handler processing=${playbackState.processingState} playing=${playbackState.playing} awaiting=$_awaitingPlaybackStart -> $nextPlayState',
-    );
-
-    _isPlaying = nextPlayState == AudioPlayState.playing;
-    _isPaused = nextPlayState == AudioPlayState.paused;
-
-    // Le timer ne doit repartir qu'une fois le vrai callback de demarrage recu.
-    if (_isPlaying && !_awaitingPlaybackStart) {
-      _startPositionTimer();
-    } else {
-      _stopPositionTimer();
-    }
-
-    _state = _state.copyWith(
-      playState: nextPlayState,
-      position: nextPosition,
-      speed: _speed,
-    );
-    _emitState();
-  }
-
-  void _handleHandlerMediaItem(audio_svc.MediaItem? item) {
-    if (item == null) return;
-    _state = _state.copyWith(
-      currentPoiName: item.title,
-      currentScriptId: item.id,
-      duration: item.duration ?? _state.duration,
-    );
-    _emitState();
-  }
-
-  void _handleFallbackTtsState(TtsState ttsState) {
-    if (_audioHandler != null) return;
-
-    late final AudioPlayState nextPlayState;
-    switch (ttsState) {
+  void _handleFallbackState(TtsState state) {
+    switch (state) {
       case TtsState.playing:
-        nextPlayState = AudioPlayState.playing;
+        _state = _state.copyWith(playState: AudioPlayState.playing);
         break;
       case TtsState.paused:
-        nextPlayState = AudioPlayState.paused;
+        _state = _state.copyWith(playState: AudioPlayState.paused);
         break;
       case TtsState.stopped:
-        nextPlayState = AudioPlayState.stopped;
+        _state = _state.copyWith(
+          playState: AudioPlayState.stopped,
+          position: Duration.zero,
+        );
         break;
     }
-
-    _isPlaying = nextPlayState == AudioPlayState.playing;
-    _isPaused = nextPlayState == AudioPlayState.paused;
-
-    if (_isPlaying) {
-      _startPositionTimer();
-    } else {
-      _stopPositionTimer();
-    }
-
-    _state = _state.copyWith(
-      playState: nextPlayState,
-      position: nextPlayState == AudioPlayState.stopped
-          ? Duration.zero
-          : _state.position,
-      speed: _speed,
-    );
     _emitState();
   }
 
-  AudioPlayState _mapHandlerPlayState(audio_svc.PlaybackState playbackState) {
+  AudioPlayState _mapPlayState(audio_svc.PlaybackState playbackState) {
     if (playbackState.processingState == audio_svc.AudioProcessingState.idle ||
         playbackState.processingState ==
             audio_svc.AudioProcessingState.completed) {
       return AudioPlayState.stopped;
     }
-    if (playbackState.playing) {
-      return AudioPlayState.playing;
-    }
-    if (playbackState.processingState ==
-            audio_svc.AudioProcessingState.loading ||
-        playbackState.processingState ==
-            audio_svc.AudioProcessingState.buffering) {
-      return _awaitingPlaybackStart || _state.playState == AudioPlayState.playing
-          ? AudioPlayState.playing
-          : AudioPlayState.stopped;
-    }
-    if (playbackState.processingState == audio_svc.AudioProcessingState.ready &&
-        _awaitingPlaybackStart &&
-        _state.playState == AudioPlayState.playing) {
-      return AudioPlayState.playing;
-    }
-    return AudioPlayState.paused;
-  }
-
-  void _finishPlayback({required bool resetPosition}) {
-    _stopPositionTimer();
-    _isPlaying = false;
-    _isPaused = false;
-    _awaitingPlaybackStart = false;
-    _state = _state.copyWith(
-      playState: AudioPlayState.stopped,
-      position: resetPosition ? Duration.zero : _state.position,
-    );
-    _emitState();
-  }
-
-  void _startPositionTimer() {
-    _positionTimer?.cancel();
-    _positionTimer = Timer.periodic(_positionTick, (_) {
-      final nextPosition = _state.position + _positionTick;
-      final cappedPosition = nextPosition > _state.duration
-          ? _state.duration
-          : nextPosition;
-      _state = _state.copyWith(position: cappedPosition);
-      _emitState();
-    });
-  }
-
-  void _stopPositionTimer() {
-    _positionTimer?.cancel();
-    _positionTimer = null;
+    return playbackState.playing
+        ? AudioPlayState.playing
+        : AudioPlayState.paused;
   }
 
   void _emitState() {
     if (_stateController.isClosed) return;
-    DebugLog().log('[AudioService] state=${_state.playState} poi=${_state.currentPoiName}');
+
+    if (_audioHandler != null) {
+      final playState = _mapPlayState(_playbackState);
+      final position = playState == AudioPlayState.stopped
+          ? (_playbackState.processingState ==
+                  audio_svc.AudioProcessingState.completed
+              ? _duration
+              : Duration.zero)
+          : _position;
+
+      _state = AudioState(
+        playState: playState,
+        position: position,
+        duration: _duration,
+        speed: _speed,
+        currentPoiName: _currentPoiName,
+        currentPoi: _currentPoi,
+        currentScriptId: _currentScriptId,
+      );
+    } else {
+      _state = _state.copyWith(
+        speed: _speed,
+        duration: _duration,
+        currentPoiName: _currentPoiName,
+        currentPoi: _currentPoi,
+        currentScriptId: _currentScriptId,
+      );
+    }
+
+    DebugLog().log(
+      '[AudioService] state=${_state.playState} position=${_state.position.inMilliseconds} poi=${_state.currentPoiName}',
+    );
     _stateController.add(_state);
   }
 
   Future<void> _loadSavedSpeed() async {
     final prefs = await SharedPreferences.getInstance();
-    final savedSpeed = prefs.getDouble(_speedPrefKey);
-    _speed = _normalizeSpeed(savedSpeed);
+    _speed = _normalizeSpeed(prefs.getDouble(_speedPrefKey));
     _state = _state.copyWith(speed: _speed);
   }
 
@@ -433,122 +422,7 @@ class AudioService {
   }
 
   double _speechRateForSpeed(double speed) {
-    return _speedToSpeechRate[_normalizeSpeed(speed)] ?? _speedToSpeechRate[1.0]!;
-  }
-
-  Future<void> _applySpeed({bool emitState = true}) async {
-    final speechRate = _speechRateForSpeed(_speed);
-    if (_audioHandler != null) {
-      await _audioHandler!.customAction('setSpeechRate', {'rate': speechRate});
-    } else {
-      await _tts.setSpeechRate(speechRate);
-    }
-
-    final updatedDuration = _currentText == null
-        ? _state.duration
-        : _estimateDuration(_currentText!);
-    final cappedPosition = _state.position > updatedDuration
-        ? updatedDuration
-        : _state.position;
-    _state = _state.copyWith(
-      speed: _speed,
-      duration: updatedDuration,
-      position: cappedPosition,
-    );
-    if (emitState) {
-      _emitState();
-    }
-  }
-
-  Future<void> setSpeed(double speed) async {
-    await init();
-    _speed = _normalizeSpeed(speed);
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setDouble(_speedPrefKey, _speed);
-    await _applySpeed();
-  }
-
-  Future<void> setSpeechRate(double rate) async {
-    final entry = _speedToSpeechRate.entries.firstWhere(
-      (item) => (item.value - rate).abs() < 0.001,
-      orElse: () => const MapEntry(1.0, 0.52),
-    );
-    await setSpeed(entry.key);
-  }
-
-  Future<void> pause() async {
-    await init();
-    if (_audioHandler != null) {
-      await _audioHandler!.pause();
-      return;
-    }
-    await _tts.pause();
-  }
-
-  Future<void> resume() async {
-    DebugLog().log(
-      '[AudioService] resume demande state=${_state.playState} handler=${_audioHandler != null}',
-    );
-    if (_state.playState == AudioPlayState.stopped) {
-      DebugLog().log('[AudioService] resume redirige vers replayCurrent');
-      await replayCurrent();
-      return;
-    }
-    await init();
-    if (_audioHandler != null) {
-      _awaitingPlaybackStart = true;
-      _stopPositionTimer();
-      DebugLog().log('[AudioService] resume delegue au handler en attente du start');
-      await _audioHandler!.play();
-      return;
-    }
-    DebugLog().log('[AudioService] resume delegue au TTS de secours');
-    await _tts.resume();
-  }
-
-  Future<void> replayCurrent() async {
-    final text = _currentText;
-    if (text == null || text.isEmpty) return;
-    await play(
-      text: text,
-      language: _currentLanguage ?? 'fr',
-      scriptId: _state.currentScriptId,
-      poiName: _state.currentPoiName,
-      poi: _state.currentPoi,
-    );
-  }
-
-  Future<void> stop({
-    bool keepMetadata = false,
-    bool emitState = true,
-  }) async {
-    await init();
-    _shouldResumeAfterInterruption = false;
-    _awaitingPlaybackStart = false;
-
-    if (_audioHandler != null) {
-      await _audioHandler!.stop();
-    } else {
-      await _tts.stop();
-    }
-
-    _stopPositionTimer();
-    _isPlaying = false;
-    _isPaused = false;
-    _state = _state.copyWith(
-      playState: AudioPlayState.stopped,
-      position: Duration.zero,
-      clearCurrentPoiName: !keepMetadata,
-      clearCurrentPoi: !keepMetadata,
-      clearCurrentScriptId: !keepMetadata,
-    );
-    if (!keepMetadata) {
-      _currentText = null;
-      _currentLanguage = null;
-    }
-    if (emitState) {
-      _emitState();
-    }
+    return _speedToSpeechRate[_normalizeSpeed(speed)] ?? 0.52;
   }
 
   Future<void> downloadCityAudios({
@@ -574,15 +448,13 @@ class AudioService {
   }
 
   void dispose() {
-    _positionTimer?.cancel();
+    _playbackSubscription?.cancel();
+    _mediaItemSubscription?.cancel();
+    _positionSubscription?.cancel();
+    _fallbackStateSubscription?.cancel();
     _interruptionSubscription?.cancel();
-    _handlerPlaybackSubscription?.cancel();
-    _handlerMediaItemSubscription?.cancel();
-    _ttsStateSubscription?.cancel();
     _stateController.close();
     _isInitialized = false;
-    _initFuture = null;
     _audioHandler = null;
-    _ttsInitialized = false;
   }
 }

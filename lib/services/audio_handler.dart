@@ -1,30 +1,47 @@
+import 'dart:async';
+
 import 'package:audio_service/audio_service.dart' as audio_svc;
 import 'package:flutter_tts/flutter_tts.dart';
 
+import '../models/point.dart' as models;
 import 'debug_log.dart';
 import 'tts_service.dart';
 
-/// Handler audio dédié au TTS pour exposer une vraie session média système.
-class AppAudioHandler extends audio_svc.BaseAudioHandler
-    with audio_svc.SeekHandler {
+/// Handler audio TTS unique.
+/// Toute l'UI doit lire l'etat depuis `playbackState`.
+class AppAudioHandler extends audio_svc.BaseAudioHandler {
+  AppAudioHandler() {
+    _ready = _configureTts();
+    playbackState.add(
+      playbackState.value.copyWith(
+        controls: const [audio_svc.MediaControl.play],
+        systemActions: const {audio_svc.MediaAction.stop},
+        processingState: audio_svc.AudioProcessingState.idle,
+        playing: false,
+        updatePosition: Duration.zero,
+      ),
+    );
+  }
+
   final FlutterTts _tts = FlutterTts();
   late final Future<void> _ready;
 
-  bool _isPlaying = false;
-  bool _isPaused = false;
+  Timer? _positionTimer;
   String? _currentText;
   String _currentLanguage = 'fr';
-  String _currentTitle = 'Lecture audio';
-  Duration _currentDuration = Duration.zero;
+  String _currentPoiName = 'Lecture audio';
+  models.Point? _currentPoi;
+  Duration _estimatedDuration = Duration.zero;
+  Duration _position = Duration.zero;
   double _speechRate = 0.52;
+  bool _wasPaused = false;
+  bool _ignoringCancel = false;
 
-  AppAudioHandler() {
-    _ready = _configureTts();
-    _publishPlaybackState(
-      processingState: audio_svc.AudioProcessingState.idle,
-      playing: false,
-    );
-  }
+  String? get currentText => _currentText;
+  String get currentLanguage => _currentLanguage;
+  String get currentPoiName => _currentPoiName;
+  models.Point? get currentPoi => _currentPoi;
+  Duration get estimatedDuration => _estimatedDuration;
 
   Future<void> _configureTts() async {
     await _tts.setVolume(1.0);
@@ -32,116 +49,158 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler
     await _tts.setSpeechRate(_speechRate);
 
     _tts.setStartHandler(() {
-      _isPlaying = true;
-      _isPaused = false;
-      DebugLog().log('[AppAudioHandler] callback start');
-      _publishPlaybackState(
-        processingState: audio_svc.AudioProcessingState.ready,
-        playing: true,
+      DebugLog().log('[AppAudioHandler] start');
+      _startPositionUpdates();
+      playbackState.add(
+        playbackState.value.copyWith(
+          playing: true,
+          controls: const [
+            audio_svc.MediaControl.pause,
+            audio_svc.MediaControl.stop,
+          ],
+          systemActions: const {audio_svc.MediaAction.stop},
+          processingState: audio_svc.AudioProcessingState.ready,
+          updatePosition: _position,
+        ),
       );
     });
 
     _tts.setCompletionHandler(() {
-      _isPlaying = false;
-      _isPaused = false;
-      DebugLog().log('[AppAudioHandler] callback completion');
-      _publishPlaybackState(
-        processingState: audio_svc.AudioProcessingState.completed,
-        playing: false,
+      DebugLog().log('[AppAudioHandler] completion');
+      _stopPositionUpdates();
+      _position = _estimatedDuration;
+      _wasPaused = false;
+      playbackState.add(
+        playbackState.value.copyWith(
+          playing: false,
+          controls: const [audio_svc.MediaControl.play],
+          systemActions: const {audio_svc.MediaAction.stop},
+          processingState: audio_svc.AudioProcessingState.completed,
+          updatePosition: _position,
+        ),
       );
     });
 
     _tts.setCancelHandler(() {
-      _isPlaying = false;
-      _isPaused = false;
-      DebugLog().log('[AppAudioHandler] callback cancel');
-      _publishPlaybackState(
-        processingState: audio_svc.AudioProcessingState.idle,
-        playing: false,
+      if (_ignoringCancel) {
+        _ignoringCancel = false;
+        return;
+      }
+
+      DebugLog().log('[AppAudioHandler] cancel paused=$_wasPaused');
+      _stopPositionUpdates();
+      playbackState.add(
+        playbackState.value.copyWith(
+          playing: false,
+          controls: _wasPaused
+              ? const [
+                  audio_svc.MediaControl.play,
+                  audio_svc.MediaControl.stop,
+                ]
+              : const [audio_svc.MediaControl.play],
+          systemActions: const {audio_svc.MediaAction.stop},
+          processingState: _wasPaused
+              ? audio_svc.AudioProcessingState.ready
+              : audio_svc.AudioProcessingState.idle,
+          updatePosition: _position,
+        ),
       );
     });
 
     _tts.setPauseHandler(() {
-      _isPlaying = false;
-      _isPaused = true;
-      DebugLog().log('[AppAudioHandler] callback pause');
-      _publishPlaybackState(
-        processingState: audio_svc.AudioProcessingState.ready,
-        playing: false,
-      );
-    });
-
-    _tts.setContinueHandler(() {
-      _isPlaying = true;
-      _isPaused = false;
-      DebugLog().log('[AppAudioHandler] callback continue');
-      _publishPlaybackState(
-        processingState: audio_svc.AudioProcessingState.ready,
-        playing: true,
+      DebugLog().log('[AppAudioHandler] pause');
+      _stopPositionUpdates();
+      _wasPaused = true;
+      playbackState.add(
+        playbackState.value.copyWith(
+          playing: false,
+          controls: const [
+            audio_svc.MediaControl.play,
+            audio_svc.MediaControl.stop,
+          ],
+          systemActions: const {audio_svc.MediaAction.stop},
+          processingState: audio_svc.AudioProcessingState.ready,
+          updatePosition: _position,
+        ),
       );
     });
 
     _tts.setErrorHandler((message) {
-      _isPlaying = false;
-      _isPaused = false;
-      DebugLog().log('[AppAudioHandler] callback error=$message');
-      _publishPlaybackState(
-        processingState: audio_svc.AudioProcessingState.idle,
-        playing: false,
+      DebugLog().log('[AppAudioHandler] error=$message');
+      _stopPositionUpdates();
+      _wasPaused = false;
+      playbackState.add(
+        playbackState.value.copyWith(
+          playing: false,
+          controls: const [audio_svc.MediaControl.play],
+          systemActions: const {audio_svc.MediaAction.stop},
+          processingState: audio_svc.AudioProcessingState.idle,
+          updatePosition: Duration.zero,
+        ),
       );
     });
   }
 
-  Future<void> speakText({
-    required String text,
-    required String language,
-    String? title,
-    String? mediaId,
-    Duration? duration,
-  }) async {
+  Future<void> speakText(
+    String text,
+    String language,
+    String poiName,
+    models.Point? poi,
+    Duration estimatedDuration,
+  ) async {
     await _ready;
+
+    final currentPlayback = playbackState.value;
+    if (currentPlayback.playing ||
+        currentPlayback.processingState ==
+            audio_svc.AudioProcessingState.ready) {
+      _ignoringCancel = true;
+      await _tts.stop();
+    }
+
     _currentText = text;
     _currentLanguage = language;
-    _currentTitle =
-        title?.trim().isNotEmpty == true ? title!.trim() : 'Lecture audio';
-    _currentDuration = duration ?? Duration.zero;
+    _currentPoiName = poiName.trim().isEmpty ? 'Lecture audio' : poiName.trim();
+    _currentPoi = poi;
+    _estimatedDuration = estimatedDuration;
+    _position = Duration.zero;
+    _wasPaused = false;
 
     mediaItem.add(
       audio_svc.MediaItem(
-        id: mediaId ?? 'tts-${text.hashCode}',
+        id: 'tts-${text.hashCode}',
         album: 'App Voyage',
-        title: _currentTitle,
-        artist: 'Marco',
-        duration: _currentDuration == Duration.zero ? null : _currentDuration,
+        title: _currentPoiName,
+        artist: 'Guide audio',
+        duration: estimatedDuration,
       ),
     );
 
-    _isPlaying = true;
-    _isPaused = false;
-    DebugLog().log(
-      '[AppAudioHandler] speakText title=$_currentTitle language=$language durationMs=${_currentDuration.inMilliseconds}',
-    );
-    _publishPlaybackState(
-      processingState: audio_svc.AudioProcessingState.loading,
-      playing: true,
-    );
-
-    await TtsService.configureVoiceForTts(_tts, language);
-    await _tts.setSpeechRate(_speechRate);
-    await _tts.speak(text);
+    await _speakCurrentText();
   }
 
-  Future<void> configureSpeechRate(double rate) async {
-    await _ready;
-    _speechRate = rate;
-    DebugLog().log('[AppAudioHandler] configureSpeechRate rate=$rate');
-    await _tts.setSpeechRate(rate);
-    _publishPlaybackState(
-      processingState: _isPlaying || _isPaused
-          ? audio_svc.AudioProcessingState.ready
-          : audio_svc.AudioProcessingState.idle,
-      playing: _isPlaying,
+  Future<void> _speakCurrentText() async {
+    final text = _currentText;
+    if (text == null || text.isEmpty) return;
+
+    _stopPositionUpdates();
+    _position = Duration.zero;
+    playbackState.add(
+      playbackState.value.copyWith(
+        playing: true,
+        controls: const [
+          audio_svc.MediaControl.pause,
+          audio_svc.MediaControl.stop,
+        ],
+        systemActions: const {audio_svc.MediaAction.stop},
+        processingState: audio_svc.AudioProcessingState.loading,
+        updatePosition: Duration.zero,
+      ),
     );
+
+    await TtsService.configureVoiceForTts(_tts, _currentLanguage);
+    await _tts.setSpeechRate(_speechRate);
+    await _tts.speak(text);
   }
 
   @override
@@ -149,116 +208,86 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler
     await _ready;
     if ((_currentText ?? '').isEmpty) return;
 
-    if (_isPaused) {
-      DebugLog().log('[AppAudioHandler] reprise demandee depuis pause');
-      _publishPlaybackState(
-        processingState: audio_svc.AudioProcessingState.loading,
-        playing: true,
-      );
-      await TtsService.configureVoiceForTts(_tts, _currentLanguage);
-      await _tts.setSpeechRate(_speechRate);
-      DebugLog().log('[AppAudioHandler] reprise stop avant nouveau speak');
+    DebugLog().log('[AppAudioHandler] play paused=$_wasPaused');
+    if (_wasPaused) {
+      _ignoringCancel = true;
       await _tts.stop();
-      _isPlaying = false;
-      _isPaused = false;
-      DebugLog().log('[AppAudioHandler] reprise speak depuis le debut');
-      await _tts.speak(_currentText!);
-      return;
+      _position = Duration.zero;
+      _wasPaused = false;
     }
 
-    DebugLog().log('[AppAudioHandler] lecture demandee');
-    DebugLog().log('[AppAudioHandler] play fresh');
-    _publishPlaybackState(
-      processingState: audio_svc.AudioProcessingState.loading,
-      playing: true,
-    );
-    await TtsService.configureVoiceForTts(_tts, _currentLanguage);
-    await _tts.setSpeechRate(_speechRate);
-    await _tts.speak(_currentText!);
+    await _speakCurrentText();
   }
 
   @override
   Future<void> pause() async {
     await _ready;
-    DebugLog().log('[AppAudioHandler] pause');
-    await _tts.pause();
+    DebugLog().log('[AppAudioHandler] pause -> stop');
+    _wasPaused = true;
+    _stopPositionUpdates();
+    playbackState.add(
+      playbackState.value.copyWith(
+        playing: false,
+        controls: const [
+          audio_svc.MediaControl.play,
+          audio_svc.MediaControl.stop,
+        ],
+        systemActions: const {audio_svc.MediaAction.stop},
+        processingState: audio_svc.AudioProcessingState.ready,
+        updatePosition: _position,
+      ),
+    );
+    await _tts.stop();
   }
 
   @override
   Future<void> stop() async {
     await _ready;
     DebugLog().log('[AppAudioHandler] stop');
+    _wasPaused = false;
+    _position = Duration.zero;
+    _stopPositionUpdates();
     await _tts.stop();
-    _isPlaying = false;
-    _isPaused = false;
-    _publishPlaybackState(
-      processingState: audio_svc.AudioProcessingState.idle,
-      playing: false,
-    );
-  }
-
-  @override
-  Future<void> seek(Duration position) async {}
-
-  @override
-  Future<dynamic> customAction(
-    String name, [
-    Map<String, dynamic>? extras,
-  ]) async {
-    switch (name) {
-      case 'speak':
-        final payload = extras ?? const <String, dynamic>{};
-        final durationMs = payload['durationMs'] as int?;
-        await speakText(
-          text: payload['text'] as String? ?? '',
-          language: payload['language'] as String? ?? 'fr',
-          title: payload['title'] as String?,
-          mediaId: payload['mediaId'] as String?,
-          duration:
-              durationMs == null ? null : Duration(milliseconds: durationMs),
-        );
-        return true;
-      case 'setSpeechRate':
-        final rawRate = extras?['rate'];
-        final rate = rawRate is num ? rawRate.toDouble() : 0.52;
-        await configureSpeechRate(rate);
-        return true;
-      default:
-        return await super.customAction(name, extras);
-    }
-  }
-
-  void _publishPlaybackState({
-    required audio_svc.AudioProcessingState processingState,
-    required bool playing,
-  }) {
-    DebugLog().log(
-      '[AppAudioHandler] publish processing=$processingState playing=$playing isPlaying=$_isPlaying isPaused=$_isPaused',
-    );
-    final controls = <audio_svc.MediaControl>[
-      if (!playing) audio_svc.MediaControl.play,
-      if (playing) audio_svc.MediaControl.pause,
-      audio_svc.MediaControl.stop,
-    ];
-
     playbackState.add(
-      audio_svc.PlaybackState(
-        controls: controls,
-        androidCompactActionIndices: List<int>.generate(
-          controls.length,
-          (index) => index,
-        ),
-        processingState: processingState,
-        playing: playing,
+      playbackState.value.copyWith(
+        playing: false,
+        controls: const [audio_svc.MediaControl.play],
+        systemActions: const {audio_svc.MediaAction.stop},
+        processingState: audio_svc.AudioProcessingState.idle,
         updatePosition: Duration.zero,
-        bufferedPosition: Duration.zero,
-        speed: 1.0,
-        systemActions: const {
-          audio_svc.MediaAction.play,
-          audio_svc.MediaAction.pause,
-          audio_svc.MediaAction.stop,
-        },
       ),
     );
+  }
+
+  Future<void> setSpeed(double speed) async {
+    await _ready;
+    _speechRate = speed;
+    DebugLog().log('[AppAudioHandler] setSpeed rate=$speed');
+    await _tts.setSpeechRate(speed);
+    playbackState.add(
+      playbackState.value.copyWith(
+        updatePosition: _position,
+      ),
+    );
+  }
+
+  void _startPositionUpdates() {
+    _positionTimer?.cancel();
+    _positionTimer = Timer.periodic(const Duration(milliseconds: 500), (_) {
+      final nextPosition = _position + const Duration(milliseconds: 500);
+      _position = nextPosition > _estimatedDuration
+          ? _estimatedDuration
+          : nextPosition;
+      playbackState.add(
+        playbackState.value.copyWith(
+          updatePosition: _position,
+        ),
+      );
+    });
+  }
+
+  void _stopPositionUpdates() {
+    _positionTimer?.cancel();
+    _positionTimer = null;
   }
 }

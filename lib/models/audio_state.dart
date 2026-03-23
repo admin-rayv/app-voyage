@@ -24,27 +24,28 @@ class AudioState {
     Duration? position,
     Duration? duration,
     double? speed,
-    String? currentPoiName,
-    bool clearCurrentPoiName = false,
-    models.Point? currentPoi,
-    bool clearCurrentPoi = false,
-    String? currentScriptId,
-    bool clearCurrentScriptId = false,
+    Object? currentPoiName = _sentinel,
+    Object? currentPoi = _sentinel,
+    Object? currentScriptId = _sentinel,
   }) {
     return AudioState(
       playState: playState ?? this.playState,
       position: position ?? this.position,
       duration: duration ?? this.duration,
       speed: speed ?? this.speed,
-      currentPoiName: clearCurrentPoiName
-          ? null
-          : currentPoiName ?? this.currentPoiName,
-      currentPoi: clearCurrentPoi ? null : currentPoi ?? this.currentPoi,
-      currentScriptId: clearCurrentScriptId
-          ? null
-          : currentScriptId ?? this.currentScriptId,
+      currentPoiName: identical(currentPoiName, _sentinel)
+          ? this.currentPoiName
+          : currentPoiName as String?,
+      currentPoi: identical(currentPoi, _sentinel)
+          ? this.currentPoi
+          : currentPoi as models.Point?,
+      currentScriptId: identical(currentScriptId, _sentinel)
+          ? this.currentScriptId
+          : currentScriptId as String?,
     );
   }
 }
 
 enum AudioPlayState { playing, paused, stopped }
+
+const Object _sentinel = Object();

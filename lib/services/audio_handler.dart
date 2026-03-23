@@ -66,16 +66,14 @@ class _TtsWrapper {
 class TtsInterruptedException {}
 
 /// Handler audio TTS — basé sur l'exemple officiel TextPlayerHandler.
-///
-/// Différences avec l'exemple officiel:
-/// - Pas de queue (on lit un seul texte à la fois)
-/// - Configuration de la voix via TtsService
-/// - androidCompactActionIndices pour les boutons lock screen
 class AppAudioHandler extends audio_svc.BaseAudioHandler {
   final _tts = _TtsWrapper();
-  bool _interrupted = false;
   bool _running = false;
   Completer<void>? _runCompleter;
+
+  // Timer pour la barre de progression dans l'UI
+  Timer? _positionTimer;
+  Duration _position = Duration.zero;
 
   // Métadonnées du POI en cours
   String? _currentText;
@@ -102,7 +100,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
     await _tts.raw.setSpeechRate(0.52);
   }
 
-  /// Charger un texte à lire (appelé par AudioService.playText).
+  /// Charger un texte à lire.
   Future<void> speakText(
     String text,
     String language,
@@ -148,6 +146,8 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
     // so we do it here."
     final session = await AudioSession.instance;
     if (await session.setActive(true)) {
+      _position = Duration.zero;
+
       // Broadcaster l'état playing AVANT de parler
       playbackState.add(playbackState.value.copyWith(
         controls: [
@@ -157,11 +157,14 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
         androidCompactActionIndices: const [0, 1],
         processingState: audio_svc.AudioProcessingState.ready,
         playing: true,
+        updatePosition: Duration.zero,
       ));
 
-      // Forcer l'activation des boutons media sur Android.
-      // L'exemple officiel appelle ceci dans la boucle de lecture TTS.
+      // Forcer l'activation des boutons media sur Android
       audio_svc.AudioService.androidForceEnableMediaButtons();
+
+      // Démarrer le timer de position pour l'UI
+      _startPositionUpdates();
 
       if (_runCompleter == null) {
         _run();
@@ -171,10 +174,11 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
     }
   }
 
-  /// Boucle de lecture (pattern officiel: run loop).
+  /// Boucle de lecture.
   Future<void> _run() async {
     _runCompleter = Completer<void>();
     _running = true;
+    var finishedNaturally = false;
 
     try {
       // Configurer la voix
@@ -189,16 +193,18 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
       DebugLog().log('[Handler] tts.speak start');
       await _tts.speak(_currentText!);
       DebugLog().log('[Handler] tts.speak done');
+      finishedNaturally = true;
     } on TtsInterruptedException {
       DebugLog().log('[Handler] TTS interrompu');
+      // Ne PAS modifier l'état ici — pause() ou stop() l'ont déjà fait.
     }
 
     _running = false;
 
-    // Si on n'est pas déjà en idle (stop appelé pendant la lecture),
-    // marquer comme terminé
-    if (playbackState.value.processingState !=
-        audio_svc.AudioProcessingState.idle) {
+    // Seulement si la lecture s'est terminée naturellement (pas interruption)
+    if (finishedNaturally) {
+      _stopPositionUpdates();
+      _position = _estimatedDuration;
       playbackState.add(playbackState.value.copyWith(
         controls: [audio_svc.MediaControl.play],
         androidCompactActionIndices: const [0],
@@ -215,7 +221,8 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
   @override
   Future<void> pause() async {
     DebugLog().log('[Handler] pause');
-    _interrupted = false;
+
+    _stopPositionUpdates();
 
     playbackState.add(playbackState.value.copyWith(
       controls: [
@@ -225,6 +232,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
       androidCompactActionIndices: const [0, 1],
       processingState: audio_svc.AudioProcessingState.ready,
       playing: false,
+      updatePosition: _position,
     ));
 
     _tts.interrupt();
@@ -234,11 +242,15 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
   Future<void> stop() async {
     DebugLog().log('[Handler] stop');
 
+    _stopPositionUpdates();
+    _position = Duration.zero;
+
     playbackState.add(playbackState.value.copyWith(
       controls: [],
       androidCompactActionIndices: const [],
       processingState: audio_svc.AudioProcessingState.idle,
       playing: false,
+      updatePosition: Duration.zero,
     ));
 
     _running = false;
@@ -247,7 +259,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
     // Attendre que la lecture s'arrête complètement
     await _runCompleter?.future;
 
-    // Arrêter le service (désactive la notification)
+    // Désactiver la notification
     await super.stop();
   }
 
@@ -255,5 +267,22 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
   Future<void> setSpeed(double speed) async {
     DebugLog().log('[Handler] setSpeed=$speed');
     await _tts.raw.setSpeechRate(speed);
+  }
+
+  /// Timer de position pour mettre à jour la barre de progression UI.
+  void _startPositionUpdates() {
+    _positionTimer?.cancel();
+    _positionTimer = Timer.periodic(const Duration(milliseconds: 500), (_) {
+      final next = _position + const Duration(milliseconds: 500);
+      _position = next > _estimatedDuration ? _estimatedDuration : next;
+      playbackState.add(playbackState.value.copyWith(
+        updatePosition: _position,
+      ));
+    });
+  }
+
+  void _stopPositionUpdates() {
+    _positionTimer?.cancel();
+    _positionTimer = null;
   }
 }

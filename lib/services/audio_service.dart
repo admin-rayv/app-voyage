@@ -47,7 +47,7 @@ class AudioService {
   String? _currentPoiName;
   models.Point? _currentPoi;
   String? _currentScriptId;
-  audio_svc.PlaybackState _playbackState = const audio_svc.PlaybackState();
+  audio_svc.PlaybackState _playbackState = audio_svc.PlaybackState();
   AudioState _state = const AudioState(
     playState: AudioPlayState.stopped,
     position: Duration.zero,

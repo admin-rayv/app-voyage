@@ -153,6 +153,9 @@ class AudioService {
     _playbackSubscription?.cancel();
     _playbackSubscription = handler.playbackState.listen((playbackState) {
       _playbackState = playbackState;
+      // Lire la position directement du handler (pas du stream platform
+      // qui peut ne pas être connecté au premier lancement).
+      _position = playbackState.updatePosition;
       _emitState();
     });
 
@@ -164,11 +167,10 @@ class AudioService {
       _emitState();
     });
 
+    // Plus besoin du stream platform séparé — la position vient
+    // directement du playbackState ci-dessus.
     _positionSubscription?.cancel();
-    _positionSubscription = audio_svc.AudioService.position.listen((position) {
-      _position = position;
-      _emitState();
-    });
+    _positionSubscription = null;
   }
 
   Future<void> playScript(String scriptId, {String? poiName}) async {

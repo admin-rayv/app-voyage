@@ -15,8 +15,14 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
     playbackState.add(
       playbackState.value.copyWith(
         controls: const [audio_svc.MediaControl.play],
-        systemActions: const {audio_svc.MediaAction.play, audio_svc.MediaAction.pause, audio_svc.MediaAction.stop},
+        systemActions: const {
+          audio_svc.MediaAction.play,
+          audio_svc.MediaAction.pause,
+          audio_svc.MediaAction.stop,
+        },
         processingState: audio_svc.AudioProcessingState.idle,
+        androidCompactActionIndices:
+            _compactIndicesForControls(const [audio_svc.MediaControl.play]),
         playing: false,
         updatePosition: Duration.zero,
       ),
@@ -58,9 +64,16 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
             audio_svc.MediaControl.pause,
             audio_svc.MediaControl.stop,
           ],
-          systemActions: const {audio_svc.MediaAction.play, audio_svc.MediaAction.pause, audio_svc.MediaAction.stop},
+          systemActions: const {
+            audio_svc.MediaAction.play,
+            audio_svc.MediaAction.pause,
+            audio_svc.MediaAction.stop,
+          },
           processingState: audio_svc.AudioProcessingState.ready,
-          androidCompactActionIndices: const [0, 1],
+          androidCompactActionIndices: _compactIndicesForControls(const [
+            audio_svc.MediaControl.pause,
+            audio_svc.MediaControl.stop,
+          ]),
           updatePosition: _position,
         ),
       );
@@ -75,9 +88,14 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
         playbackState.value.copyWith(
           playing: false,
           controls: const [audio_svc.MediaControl.play],
-          systemActions: const {audio_svc.MediaAction.play, audio_svc.MediaAction.pause, audio_svc.MediaAction.stop},
+          systemActions: const {
+            audio_svc.MediaAction.play,
+            audio_svc.MediaAction.pause,
+            audio_svc.MediaAction.stop,
+          },
           processingState: audio_svc.AudioProcessingState.completed,
-          androidCompactActionIndices: const [0],
+          androidCompactActionIndices:
+              _compactIndicesForControls(const [audio_svc.MediaControl.play]),
           updatePosition: _position,
         ),
       );
@@ -85,6 +103,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
 
     _tts.setCancelHandler(() {
       if (_ignoringCancel) {
+        DebugLog().log('[AppAudioHandler] cancel ignore');
         _ignoringCancel = false;
         return;
       }
@@ -100,10 +119,20 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
                   audio_svc.MediaControl.stop,
                 ]
               : const [audio_svc.MediaControl.play],
-          systemActions: const {audio_svc.MediaAction.play, audio_svc.MediaAction.pause, audio_svc.MediaAction.stop},
+          systemActions: const {
+            audio_svc.MediaAction.play,
+            audio_svc.MediaAction.pause,
+            audio_svc.MediaAction.stop,
+          },
           processingState: _wasPaused
               ? audio_svc.AudioProcessingState.ready
               : audio_svc.AudioProcessingState.idle,
+          androidCompactActionIndices: _compactIndicesForControls(_wasPaused
+              ? const [
+                  audio_svc.MediaControl.play,
+                  audio_svc.MediaControl.stop,
+                ]
+              : const [audio_svc.MediaControl.play]),
           updatePosition: _position,
         ),
       );
@@ -120,9 +149,16 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
             audio_svc.MediaControl.play,
             audio_svc.MediaControl.stop,
           ],
-          systemActions: const {audio_svc.MediaAction.play, audio_svc.MediaAction.pause, audio_svc.MediaAction.stop},
+          systemActions: const {
+            audio_svc.MediaAction.play,
+            audio_svc.MediaAction.pause,
+            audio_svc.MediaAction.stop,
+          },
           processingState: audio_svc.AudioProcessingState.ready,
-          androidCompactActionIndices: const [0, 1],
+          androidCompactActionIndices: _compactIndicesForControls(const [
+            audio_svc.MediaControl.play,
+            audio_svc.MediaControl.stop,
+          ]),
           updatePosition: _position,
         ),
       );
@@ -136,9 +172,14 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
         playbackState.value.copyWith(
           playing: false,
           controls: const [audio_svc.MediaControl.play],
-          systemActions: const {audio_svc.MediaAction.play, audio_svc.MediaAction.pause, audio_svc.MediaAction.stop},
+          systemActions: const {
+            audio_svc.MediaAction.play,
+            audio_svc.MediaAction.pause,
+            audio_svc.MediaAction.stop,
+          },
           processingState: audio_svc.AudioProcessingState.idle,
-          androidCompactActionIndices: const [0],
+          androidCompactActionIndices:
+              _compactIndicesForControls(const [audio_svc.MediaControl.play]),
           updatePosition: Duration.zero,
         ),
       );
@@ -153,11 +194,13 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
     Duration estimatedDuration,
   ) async {
     await _ready;
+    DebugLog().log('[AppAudioHandler] speakText start lang=$language poi=$poiName');
 
     final currentPlayback = playbackState.value;
     if (currentPlayback.playing ||
         currentPlayback.processingState ==
             audio_svc.AudioProcessingState.ready) {
+      DebugLog().log('[AppAudioHandler] speakText stop current');
       _ignoringCancel = true;
       await _tts.stop();
     }
@@ -180,12 +223,16 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
       ),
     );
 
+    DebugLog().log('[AppAudioHandler] speakText mediaItem ok');
     await _speakCurrentText();
   }
 
   Future<void> _speakCurrentText() async {
     final text = _currentText;
-    if (text == null || text.isEmpty) return;
+    if (text == null || text.isEmpty) {
+      DebugLog().log('[AppAudioHandler] speakCurrentText vide');
+      return;
+    }
 
     _stopPositionUpdates();
     _position = Duration.zero;
@@ -196,15 +243,29 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
           audio_svc.MediaControl.pause,
           audio_svc.MediaControl.stop,
         ],
-        systemActions: const {audio_svc.MediaAction.play, audio_svc.MediaAction.pause, audio_svc.MediaAction.stop},
+        systemActions: const {
+          audio_svc.MediaAction.play,
+          audio_svc.MediaAction.pause,
+          audio_svc.MediaAction.stop,
+        },
         processingState: audio_svc.AudioProcessingState.loading,
-          androidCompactActionIndices: const [0, 1],
+        androidCompactActionIndices: _compactIndicesForControls(const [
+          audio_svc.MediaControl.pause,
+          audio_svc.MediaControl.stop,
+        ]),
         updatePosition: Duration.zero,
       ),
     );
 
-    await TtsService.configureVoiceForTts(_tts, _currentLanguage);
+    DebugLog().log('[AppAudioHandler] speakCurrentText voix start');
+    try {
+      await TtsService.configureVoiceForTts(_tts, _currentLanguage);
+      DebugLog().log('[AppAudioHandler] speakCurrentText voix ok');
+    } catch (error) {
+      DebugLog().log('[AppAudioHandler] speakCurrentText voix erreur=$error');
+    }
     await _tts.setSpeechRate(_speechRate);
+    DebugLog().log('[AppAudioHandler] speakCurrentText speak');
     await _tts.speak(text);
   }
 
@@ -237,9 +298,16 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
           audio_svc.MediaControl.play,
           audio_svc.MediaControl.stop,
         ],
-        systemActions: const {audio_svc.MediaAction.play, audio_svc.MediaAction.pause, audio_svc.MediaAction.stop},
+        systemActions: const {
+          audio_svc.MediaAction.play,
+          audio_svc.MediaAction.pause,
+          audio_svc.MediaAction.stop,
+        },
         processingState: audio_svc.AudioProcessingState.ready,
-          androidCompactActionIndices: const [0, 1],
+        androidCompactActionIndices: _compactIndicesForControls(const [
+          audio_svc.MediaControl.play,
+          audio_svc.MediaControl.stop,
+        ]),
         updatePosition: _position,
       ),
     );
@@ -260,7 +328,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
         controls: const [],
         systemActions: const {},
         processingState: audio_svc.AudioProcessingState.idle,
-          androidCompactActionIndices: const [],
+        androidCompactActionIndices: _compactIndicesForControls(const []),
         updatePosition: Duration.zero,
       ),
     );
@@ -273,6 +341,8 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
     await _tts.setSpeechRate(speed);
     playbackState.add(
       playbackState.value.copyWith(
+        androidCompactActionIndices:
+            _compactIndicesForControls(playbackState.value.controls),
         updatePosition: _position,
       ),
     );
@@ -287,6 +357,8 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
           : nextPosition;
       playbackState.add(
         playbackState.value.copyWith(
+          androidCompactActionIndices:
+              _compactIndicesForControls(playbackState.value.controls),
           updatePosition: _position,
         ),
       );
@@ -296,5 +368,13 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
   void _stopPositionUpdates() {
     _positionTimer?.cancel();
     _positionTimer = null;
+  }
+
+  List<int> _compactIndicesForControls(
+    List<audio_svc.MediaControl> controls,
+  ) {
+    if (controls.isEmpty) return const [];
+    if (controls.length == 1) return const [0];
+    return const [0, 1];
   }
 }

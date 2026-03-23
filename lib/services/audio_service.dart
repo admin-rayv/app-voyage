@@ -194,6 +194,8 @@ class AudioService {
     await init();
     if (text.trim().isEmpty) return;
 
+    DebugLog().log('[AudioService] playText start lang=$language');
+
     _currentText = text;
     _currentLanguage = language;
     _currentPoiName = poiName ?? 'Lecture audio';
@@ -207,6 +209,7 @@ class AudioService {
     );
 
     if (_audioHandler != null) {
+      DebugLog().log('[AudioService] playText -> handler');
       await _audioHandler!.speakText(
         text,
         language,
@@ -214,10 +217,12 @@ class AudioService {
         poi,
         _duration,
       );
+      DebugLog().log('[AudioService] playText -> handler ok');
       _emitState();
       return;
     }
 
+    DebugLog().log('[AudioService] playText -> fallback');
     await _fallbackTts.setLanguage(language);
     await _fallbackTts.setSpeechRate(_speechRateForSpeed(_speed));
     await _fallbackTts.speak(text, language: language);

@@ -229,7 +229,7 @@ class _MapScreenState extends State<MapScreen> {
                     icon: const Icon(Icons.play_arrow),
                     label: const Text('Écouter'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primary,
+                      backgroundColor: AppTheme.primaryColor,
                       foregroundColor: Colors.white,
                     ),
                   ),

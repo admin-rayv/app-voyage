@@ -548,20 +548,6 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 8,
-              runSpacing: 8,
-              children: _speedOptions.entries.map((entry) {
-                final isSelected = _selectedSpeed == entry.value;
-                return ChoiceChip(
-                  label: Text(entry.key),
-                  selected: isSelected,
-                  onSelected: (_) => _setSpeechRate(entry.value),
-                );
-              }).toList(),
-            ),
             const SizedBox(height: 12),
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 200),

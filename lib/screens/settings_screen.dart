@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/audio_service.dart' as audio_svc;
 import '../services/tts_service.dart';
 import '../services/debug_log.dart';
 import '../config/theme.dart';
@@ -17,7 +18,17 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   final TtsService _tts = TtsService();
+  final audio_svc.AudioService _audio = audio_svc.AudioService();
   bool _isLoading = true;
+
+  // Vitesse de lecture
+  double _selectedSpeed = 1.0;
+  static const Map<String, double> _speedOptions = {
+    '0.75x': 0.75,
+    '1x': 1.0,
+    '1.25x': 1.25,
+    '1.5x': 1.5,
+  };
 
   // Voix par langue
   final Map<String, List<VoiceInfo>> _voicesByLang = {};
@@ -34,6 +45,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void initState() {
     super.initState();
     _tts.init();
+    _audio.init().then((_) {
+      if (mounted) setState(() => _selectedSpeed = _audio.speed);
+    });
     _loadAllVoices();
   }
 
@@ -99,7 +113,44 @@ class _SettingsScreenState extends State<SettingsScreen> {
           : ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                // Header
+                // Section vitesse de lecture
+                Row(
+                  children: [
+                    Icon(Icons.speed, color: AppTheme.primaryColor),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Vitesse de lecture',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'La vitesse s\'applique à toutes les lectures.',
+                  style: TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+                ),
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: _speedOptions.entries.map((entry) {
+                    final isSelected = _selectedSpeed == entry.value;
+                    return ChoiceChip(
+                      label: Text(entry.key),
+                      selected: isSelected,
+                      onSelected: (_) async {
+                        await _audio.setSpeed(entry.value);
+                        if (mounted) {
+                          setState(() => _selectedSpeed = entry.value);
+                        }
+                      },
+                      selectedColor: AppTheme.primaryColor.withValues(alpha: 0.2),
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(height: 32),
+
+                // Header voix
                 Row(
                   children: [
                     Icon(Icons.record_voice_over, color: AppTheme.primaryColor),

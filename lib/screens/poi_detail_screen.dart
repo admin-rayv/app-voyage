@@ -31,12 +31,6 @@ class PoiDetailScreen extends StatefulWidget {
 
 class _PoiDetailScreenState extends State<PoiDetailScreen>
     with SingleTickerProviderStateMixin {
-  static const Map<String, double> _speedOptions = {
-    '0.75x': 0.75,
-    '1x': 1.0,
-    '1.25x': 1.25,
-    '1.5x': 1.5,
-  };
 
   final AudioService _audio = AudioService();
   Script? _currentScript;
@@ -482,17 +476,10 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
               style: TextStyle(color: AppTheme.textSecondary),
             )
           else ...[
-            // flutter_tts does not expose seek/position, so ±15 sec actions
-            // restart the current script from the beginning instead.
+            // Boutons play/pause et stop (pas de seek — flutter_tts ne supporte pas)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildSeekButton(
-                  icon: Icons.fast_rewind,
-                  label: '15',
-                  onTap: _restartPlayback,
-                ),
-                const SizedBox(width: 20),
                 Column(
                   children: [
                     GestureDetector(
@@ -540,12 +527,6 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
                     ),
                   ],
                 ),
-                const SizedBox(width: 20),
-                _buildSeekButton(
-                  icon: Icons.fast_forward,
-                  label: '15',
-                  onTap: _restartPlayback,
-                ),
               ],
             ),
             const SizedBox(height: 12),
@@ -587,33 +568,6 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
             ),
           ],
         ],
-      ),
-    );
-  }
-
-  Widget _buildSeekButton({
-    required IconData icon,
-    required String label,
-    required Future<void> Function() onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(24),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-        child: Column(
-          children: [
-            Icon(icon, color: AppTheme.primaryColor, size: 26),
-            const SizedBox(height: 2),
-            Text(
-              label,
-              style: TextStyle(
-                color: AppTheme.primaryColor,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

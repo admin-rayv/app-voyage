@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../config/route_data.dart';
 import '../models/city.dart';
 import '../models/point.dart' as models;
+import '../services/audio_service.dart' as audio_svc;
 import '../services/supabase_service.dart';
 import '../config/categories.dart';
 import '../config/theme.dart';
@@ -201,24 +202,57 @@ class _MapScreenState extends State<MapScreen> {
                 );
               }).toList(),
             ),
-            const SizedBox(height: 16),
-            // Bouton détail
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.pop(context);
-                  this.context.pushNamed(
-                    'poiDetail',
-                    extra: PoiDetailRouteData(
-                      poi: poi,
-                      userPosition: _userPosition,
+            const SizedBox(height: 12),
+            // Boutons écouter + détail
+            Row(
+              children: [
+                // Bouton écouter
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      // Charger le script FR et lancer la lecture
+                      final scriptJson =
+                          await SupabaseService.getScriptForPoint(
+                              poi.id, 'fr');
+                      if (scriptJson != null) {
+                        final audio = audio_svc.AudioService();
+                        await audio.init();
+                        await audio.playText(
+                          scriptJson['content'] as String? ?? '',
+                          language: 'fr',
+                          poiName: poi.localizedName('fr'),
+                          poi: poi,
+                        );
+                      }
+                    },
+                    icon: const Icon(Icons.play_arrow),
+                    label: const Text('Écouter'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.primary,
+                      foregroundColor: Colors.white,
                     ),
-                  );
-                },
-                icon: const Icon(Icons.info_outline),
-                label: const Text('Voir le détail'),
-              ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                // Bouton détail
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      this.context.pushNamed(
+                        'poiDetail',
+                        extra: PoiDetailRouteData(
+                          poi: poi,
+                          userPosition: _userPosition,
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.info_outline),
+                    label: const Text('Détail'),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

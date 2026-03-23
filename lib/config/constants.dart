@@ -2,7 +2,7 @@
 class AppConstants {
   // App Info
   static const String appName = 'App Voyage';
-  static const String appVersion = '0.4.0';
+  static const String appVersion = '0.4.1';
 
   // Supabase
   static const String supabaseUrl = 'https://lfwnpyttyoefqvhfqajb.supabase.co';
@@ -17,6 +17,10 @@ class AppConstants {
   // GPS settings
   static const int gpsUpdateIntervalMs = 5000; // 5 seconds
   static const int gpsDistanceFilterMeters = 10;
+  static const int geofenceDebounceSec = 3;
+  static const double gpsMinConfidence = 0.4;
+  static const double geofenceMaxRadiusMultiplier = 2.0;
+  static const int positionHistorySize = 10;
 
   // Cache settings
   static const String mapCacheDir = 'map_cache';

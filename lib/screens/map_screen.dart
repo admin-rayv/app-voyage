@@ -1,13 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config/route_data.dart';
 import '../models/city.dart';
 import '../models/point.dart' as models;
 import '../services/audio_service.dart' as audio_svc;
+import '../services/geofencing_service.dart';
 import '../services/supabase_service.dart';
 import '../config/categories.dart';
 import '../config/theme.dart';
@@ -23,30 +27,66 @@ class MapScreen extends StatefulWidget {
   State<MapScreen> createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _MapScreenState extends State<MapScreen>
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+  static const String _discoveryModePrefKey = 'discovery_mode_enabled';
+
   final MapController _mapController = MapController();
+  final GeofencingService _geofencingService = GeofencingService();
   List<models.Point> _allPoints = [];
   final Set<String> _activeFilters = {};
   bool _showList = false;
   bool _isLoading = true;
+  bool _discoveryModeEnabled = false;
+  bool _discoveryBusy = false;
+  bool _restoreDiscoveryModeOnLoad = false;
   String? _error;
+  String? _lastTriggeredPoiId;
   LatLng? _userPosition;
+  StreamSubscription<models.Point>? _discoverySubscription;
+  late final AnimationController _discoveryPulseController;
+  SharedPreferences? _prefs;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _discoveryPulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1100),
+    );
+    _loadDiscoveryPreference();
     _loadPoints();
     _getUserPosition();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _discoverySubscription?.cancel();
+    _discoveryPulseController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _syncDiscoveryUiWithService();
+    }
   }
 
   Future<void> _loadPoints() async {
     try {
       final pointsJson = await SupabaseService.getPoints(widget.city.id);
+      if (!mounted) return;
+
       setState(() {
         _allPoints = pointsJson.map((j) => models.Point.fromJson(j)).toList();
         _isLoading = false;
       });
+      _maybeRestoreDiscoveryMode();
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _error = e.toString();
         _isLoading = false;
@@ -65,6 +105,7 @@ class _MapScreenState extends State<MapScreen> {
         }
       }
       final pos = await Geolocator.getCurrentPosition();
+      if (!mounted) return;
       setState(() {
         _userPosition = LatLng(pos.latitude, pos.longitude);
       });
@@ -78,6 +119,313 @@ class _MapScreenState extends State<MapScreen> {
     return _allPoints
         .where((p) => p.categories.any((c) => _activeFilters.contains(c)))
         .toList();
+  }
+
+  List<models.Point> get _discoveryPoints {
+    // Le mode découverte surveille tous les POIs chargés de la ville pour ne
+    // pas dépendre des filtres visuels temporaires de la carte.
+    return _allPoints;
+  }
+
+  models.Point? get _lastTriggeredPoi {
+    final poiId = _lastTriggeredPoiId;
+    if (poiId == null) {
+      return null;
+    }
+    for (final poi in _allPoints) {
+      if (poi.id == poiId) {
+        return poi;
+      }
+    }
+    return null;
+  }
+
+  Future<void> _loadDiscoveryPreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isEnabled = prefs.getBool(_discoveryModePrefKey) ?? false;
+    if (!mounted) return;
+
+    _prefs = prefs;
+
+    if (isEnabled && _geofencingService.isMonitoring) {
+      _listenToDiscoveryTriggers();
+      _setDiscoveryModeState(enabled: true);
+      return;
+    }
+
+    if (isEnabled) {
+      _restoreDiscoveryModeOnLoad = true;
+      _maybeRestoreDiscoveryMode();
+    }
+  }
+
+  void _maybeRestoreDiscoveryMode() {
+    if (!_restoreDiscoveryModeOnLoad || _isLoading || _allPoints.isEmpty) {
+      return;
+    }
+
+    _restoreDiscoveryModeOnLoad = false;
+    unawaited(_enableDiscoveryMode(isRestoring: true));
+  }
+
+  Future<void> _toggleDiscoveryMode() async {
+    if (_discoveryBusy) {
+      return;
+    }
+
+    if (_discoveryModeEnabled || _geofencingService.isMonitoring) {
+      await _disableDiscoveryMode();
+      return;
+    }
+
+    await _enableDiscoveryMode();
+  }
+
+  Future<void> _enableDiscoveryMode({bool isRestoring = false}) async {
+    if (_discoveryBusy) {
+      return;
+    }
+
+    final points = _discoveryPoints;
+    if (points.isEmpty) {
+      await _persistDiscoveryPreference(false);
+      _showSnackBar('Aucun point disponible pour activer la découverte.');
+      return;
+    }
+
+    setState(() => _discoveryBusy = true);
+
+    try {
+      if (_geofencingService.isMonitoring) {
+        _listenToDiscoveryTriggers();
+        _setDiscoveryModeState(enabled: true);
+        await _persistDiscoveryPreference(true);
+        return;
+      }
+
+      final hasPermission = await _ensureDiscoveryPermissions();
+      if (!hasPermission || !mounted) {
+        await _persistDiscoveryPreference(false);
+        _setDiscoveryModeState(enabled: false);
+        return;
+      }
+
+      _geofencingService.resetTriggered();
+      final started = await _geofencingService.start(points);
+      if (!mounted) return;
+
+      if (!started) {
+        await _persistDiscoveryPreference(false);
+        _setDiscoveryModeState(enabled: false);
+        _showSnackBar('Impossible de démarrer le mode découverte.');
+        return;
+      }
+
+      _listenToDiscoveryTriggers();
+      _setDiscoveryModeState(enabled: true);
+      await _persistDiscoveryPreference(true);
+
+      if (!isRestoring) {
+        _showSnackBar('Mode découverte activé.');
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _discoveryBusy = false);
+      }
+    }
+  }
+
+  Future<void> _disableDiscoveryMode() async {
+    if (_discoveryBusy) {
+      return;
+    }
+
+    setState(() => _discoveryBusy = true);
+
+    try {
+      _geofencingService.stop();
+      await _discoverySubscription?.cancel();
+      _discoverySubscription = null;
+      _setDiscoveryModeState(enabled: false);
+      await _persistDiscoveryPreference(false);
+      _showSnackBar('Mode découverte désactivé.');
+    } finally {
+      if (mounted) {
+        setState(() => _discoveryBusy = false);
+      }
+    }
+  }
+
+  Future<void> _persistDiscoveryPreference(bool enabled) async {
+    final prefs = _prefs ?? await SharedPreferences.getInstance();
+    _prefs = prefs;
+    await prefs.setBool(_discoveryModePrefKey, enabled);
+  }
+
+  void _listenToDiscoveryTriggers() {
+    _discoverySubscription?.cancel();
+    _discoverySubscription = _geofencingService.triggeredPois.listen((poi) {
+      if (!mounted) return;
+
+      setState(() {
+        _lastTriggeredPoiId = poi.id;
+      });
+
+      _showSnackBar('Découverte: ${poi.localizedName('fr')} détecté.');
+    });
+  }
+
+  void _syncDiscoveryUiWithService() {
+    if (!mounted) {
+      return;
+    }
+
+    final shouldBeEnabled =
+        (_prefs?.getBool(_discoveryModePrefKey) ?? false) &&
+        _geofencingService.isMonitoring;
+
+    if (shouldBeEnabled) {
+      _listenToDiscoveryTriggers();
+    }
+
+    if (_discoveryModeEnabled != shouldBeEnabled) {
+      _setDiscoveryModeState(enabled: shouldBeEnabled);
+    }
+  }
+
+  void _setDiscoveryModeState({required bool enabled}) {
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _discoveryModeEnabled = enabled;
+      if (!enabled) {
+        _lastTriggeredPoiId = null;
+      }
+    });
+
+    if (enabled) {
+      if (!_discoveryPulseController.isAnimating) {
+        _discoveryPulseController.repeat(reverse: true);
+      }
+    } else {
+      _discoveryPulseController
+        ..stop()
+        ..reset();
+    }
+  }
+
+  Future<bool> _ensureDiscoveryPermissions() async {
+    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      if (!mounted) return false;
+      final openSettings = await _showDiscoveryDialog(
+        title: 'Activer la localisation',
+        message:
+            'Le mode découverte a besoin de la localisation du téléphone pour surveiller automatiquement les points autour de vous.',
+        confirmLabel: 'Réglages',
+      );
+      if (openSettings) {
+        await Geolocator.openLocationSettings();
+      }
+      return false;
+    }
+
+    var permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      if (!mounted) return false;
+      final shouldRequest = await _showDiscoveryDialog(
+        title: 'Autoriser la localisation',
+        message:
+            'Le mode découverte utilise votre position pour détecter les POIs proches. Autorisez la localisation pour continuer.',
+        confirmLabel: 'Continuer',
+      );
+      if (!shouldRequest) {
+        return false;
+      }
+
+      permission = await Geolocator.requestPermission();
+    }
+
+    if (permission == LocationPermission.denied) {
+      if (mounted) {
+        _showSnackBar('Autorisation GPS refusée. Mode découverte non activé.');
+      }
+      return false;
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      if (!mounted) return false;
+      final openSettings = await _showDiscoveryDialog(
+        title: 'Autorisation requise',
+        message:
+            'La localisation est bloquée de façon permanente. Ouvrez les réglages pour autoriser le mode découverte.',
+        confirmLabel: 'Ouvrir les réglages',
+      );
+      if (openSettings) {
+        await Geolocator.openAppSettings();
+      }
+      return false;
+    }
+
+    if (permission == LocationPermission.whileInUse) {
+      if (!mounted) return false;
+      final requestAlways = await _showDiscoveryDialog(
+        title: 'Accès en arrière-plan recommandé',
+        message:
+            'Pour garder la découverte active quand l’app passe en arrière-plan, autorisez "Toujours" si votre téléphone le propose.',
+        confirmLabel: 'Demander',
+      );
+      if (requestAlways) {
+        permission = await Geolocator.requestPermission();
+      }
+
+      if (!mounted) return false;
+      if (permission != LocationPermission.always) {
+        _showSnackBar('Découverte active avec accès limité au premier plan.');
+      }
+    }
+
+    return permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse;
+  }
+
+  Future<bool> _showDiscoveryDialog({
+    required String title,
+    required String message,
+    required String confirmLabel,
+  }) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('Annuler'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(confirmLabel),
+          ),
+        ],
+      ),
+    );
+
+    return result ?? false;
+  }
+
+  void _showSnackBar(String message) {
+    if (!mounted) {
+      return;
+    }
+
+    final messenger = ScaffoldMessenger.of(context);
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
   }
 
   void _toggleFilter(String category) {
@@ -104,11 +452,11 @@ class _MapScreenState extends State<MapScreen> {
     final cat = Categories.byKey(poi.primaryCategory);
     final distance = _userPosition != null
         ? Geolocator.distanceBetween(
-                _userPosition!.latitude,
-                _userPosition!.longitude,
-                poi.lat,
-                poi.lng)
-            .round()
+            _userPosition!.latitude,
+            _userPosition!.longitude,
+            poi.lat,
+            poi.lng,
+          ).round()
         : null;
 
     showModalBottomSheet(
@@ -213,8 +561,7 @@ class _MapScreenState extends State<MapScreen> {
                       Navigator.pop(context);
                       // Charger le script FR et lancer la lecture
                       final scriptJson =
-                          await SupabaseService.getScriptForPoint(
-                              poi.id, 'fr');
+                          await SupabaseService.getScriptForPoint(poi.id, 'fr');
                       if (scriptJson != null) {
                         final audio = audio_svc.AudioService();
                         await audio.init();
@@ -280,39 +627,40 @@ class _MapScreenState extends State<MapScreen> {
             ),
         ],
       ),
+      floatingActionButton: _isLoading || _error != null
+          ? null
+          : _buildDiscoveryFab(),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _error != null
-              ? Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.error_outline,
-                          size: 48, color: Colors.grey[400]),
-                      const SizedBox(height: 12),
-                      Text('Erreur: $_error'),
-                      const SizedBox(height: 12),
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            _isLoading = true;
-                            _error = null;
-                          });
-                          _loadPoints();
-                        },
-                        child: const Text('Réessayer'),
-                      ),
-                    ],
+          ? Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.error_outline, size: 48, color: Colors.grey[400]),
+                  const SizedBox(height: 12),
+                  Text('Erreur: $_error'),
+                  const SizedBox(height: 12),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _isLoading = true;
+                        _error = null;
+                      });
+                      _loadPoints();
+                    },
+                    child: const Text('Réessayer'),
                   ),
-                )
-              : Column(
-                  children: [
-                    _buildFilterBar(),
-                    Expanded(
-                      child: _showList ? _buildList() : _buildMap(),
-                    ),
-                  ],
-                ),
+                ],
+              ),
+            )
+          : Column(
+              children: [
+                _buildFilterBar(),
+                _buildDiscoveryBanner(),
+                Expanded(child: _showList ? _buildList() : _buildMap()),
+              ],
+            ),
     );
   }
 
@@ -372,9 +720,17 @@ class _MapScreenState extends State<MapScreen> {
     if (_userPosition != null) {
       points.sort((a, b) {
         final distA = Geolocator.distanceBetween(
-            _userPosition!.latitude, _userPosition!.longitude, a.lat, a.lng);
+          _userPosition!.latitude,
+          _userPosition!.longitude,
+          a.lat,
+          a.lng,
+        );
         final distB = Geolocator.distanceBetween(
-            _userPosition!.latitude, _userPosition!.longitude, b.lat, b.lng);
+          _userPosition!.latitude,
+          _userPosition!.longitude,
+          b.lat,
+          b.lng,
+        );
         return distA.compareTo(distB);
       });
     }
@@ -403,10 +759,7 @@ class _MapScreenState extends State<MapScreen> {
           onTap: () {
             context.pushNamed(
               'poiDetail',
-              extra: PoiDetailRouteData(
-                poi: poi,
-                userPosition: _userPosition,
-              ),
+              extra: PoiDetailRouteData(poi: poi, userPosition: _userPosition),
             );
           },
         );
@@ -420,8 +773,7 @@ class _MapScreenState extends State<MapScreen> {
     return FlutterMap(
       mapController: _mapController,
       options: MapOptions(
-        initialCenter:
-            LatLng(widget.city.centerLat, widget.city.centerLng),
+        initialCenter: LatLng(widget.city.centerLat, widget.city.centerLng),
         initialZoom: 14.5,
       ),
       children: [
@@ -435,35 +787,43 @@ class _MapScreenState extends State<MapScreen> {
           markers: points.map((poi) {
             final cat = Categories.byKey(poi.primaryCategory);
             final color = cat?.color ?? Categories.defaultColor;
+            final isHighlighted = _lastTriggeredPoiId == poi.id;
             return Marker(
               point: LatLng(poi.lat, poi.lng),
-              width: 36,
-              height: 36,
+              width: isHighlighted ? 44 : 36,
+              height: isHighlighted ? 44 : 36,
               child: GestureDetector(
                 onTap: () => _showPoiPreview(poi),
                 child: AnimatedOpacity(
                   opacity: 1.0,
                   duration: const Duration(milliseconds: 300),
                   child: Container(
-                  decoration: BoxDecoration(
-                    color: color,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 2),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.3),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
+                    decoration: BoxDecoration(
+                      color: color,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: isHighlighted
+                            ? Colors.lightGreenAccent
+                            : Colors.white,
+                        width: isHighlighted ? 3 : 2,
                       ),
-                    ],
-                  ),
-                  child: Center(
-                    child: Text(
-                      cat?.emoji ?? '📍',
-                      style: const TextStyle(fontSize: 16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: (isHighlighted ? Colors.green : Colors.black)
+                              .withValues(alpha: 0.3),
+                          blurRadius: isHighlighted ? 10 : 4,
+                          spreadRadius: isHighlighted ? 2 : 0,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Text(
+                        cat?.emoji ?? '📍',
+                        style: TextStyle(fontSize: isHighlighted ? 18 : 16),
+                      ),
                     ),
                   ),
-                ),
                 ),
               ),
             );
@@ -495,6 +855,136 @@ class _MapScreenState extends State<MapScreen> {
             ],
           ),
       ],
+    );
+  }
+
+  Widget _buildDiscoveryBanner() {
+    if (!_discoveryModeEnabled && !_discoveryBusy) {
+      return const SizedBox.shrink();
+    }
+
+    final triggeredCount = _geofencingService.alreadyTriggered.length;
+    final lastTriggeredPoi = _lastTriggeredPoi;
+    final isActive = _discoveryModeEnabled;
+
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.fromLTRB(12, 4, 12, 8),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: isActive
+            ? Colors.green.withValues(alpha: 0.12)
+            : Colors.grey.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: isActive
+              ? Colors.green.withValues(alpha: 0.35)
+              : Colors.grey.withValues(alpha: 0.3),
+        ),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            isActive ? Icons.explore : Icons.hourglass_top,
+            color: isActive ? Colors.green[700] : Colors.grey[700],
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  isActive
+                      ? 'Mode découverte actif'
+                      : 'Activation du mode découverte...',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: isActive ? Colors.green[800] : Colors.grey[800],
+                  ),
+                ),
+                if (lastTriggeredPoi != null)
+                  Text(
+                    'Dernier POI détecté: ${lastTriggeredPoi.localizedName('fr')}',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppTheme.textSecondary,
+                    ),
+                  )
+                else
+                  Text(
+                    isActive
+                        ? 'Surveillance de ${_discoveryPoints.length} POIs'
+                        : 'Vérification des permissions et du GPS',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppTheme.textSecondary,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          if (isActive)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(999),
+              ),
+              child: Text(
+                '$triggeredCount déclenché${triggeredCount > 1 ? 's' : ''}',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.green[800],
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDiscoveryFab() {
+    final color = _discoveryModeEnabled ? Colors.green : Colors.grey.shade700;
+    final label = _discoveryBusy
+        ? 'Activation...'
+        : _discoveryModeEnabled
+        ? 'Découverte active'
+        : 'Activer la découverte';
+
+    return AnimatedBuilder(
+      animation: _discoveryPulseController,
+      builder: (context, child) {
+        final scale = _discoveryModeEnabled
+            ? 1 + (_discoveryPulseController.value * 0.08)
+            : 1.0;
+        return Transform.scale(scale: scale, child: child);
+      },
+      child: FloatingActionButton.extended(
+        onPressed: _discoveryBusy ? null : _toggleDiscoveryMode,
+        backgroundColor: color,
+        foregroundColor: Colors.white,
+        tooltip: label,
+        icon: _discoveryBusy
+            ? const SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              )
+            : AnimatedSwitcher(
+                duration: const Duration(milliseconds: 250),
+                transitionBuilder: (child, animation) =>
+                    ScaleTransition(scale: animation, child: child),
+                child: Icon(
+                  _discoveryModeEnabled ? Icons.radar : Icons.explore_outlined,
+                  key: ValueKey<bool>(_discoveryModeEnabled),
+                ),
+              ),
+        label: Text(label),
+      ),
     );
   }
 }

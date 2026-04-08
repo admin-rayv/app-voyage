@@ -10,6 +10,7 @@ import '../models/point.dart' as models;
 import '../models/script.dart';
 import '../services/supabase_service.dart';
 import '../services/audio_service.dart';
+import '../services/user_preferences_service.dart';
 import '../config/categories.dart';
 import '../config/theme.dart';
 
@@ -19,11 +20,7 @@ class PoiDetailScreen extends StatefulWidget {
   final models.Point poi;
   final LatLng? userPosition;
 
-  const PoiDetailScreen({
-    super.key,
-    required this.poi,
-    this.userPosition,
-  });
+  const PoiDetailScreen({super.key, required this.poi, this.userPosition});
 
   @override
   State<PoiDetailScreen> createState() => _PoiDetailScreenState();
@@ -31,14 +28,12 @@ class PoiDetailScreen extends StatefulWidget {
 
 class _PoiDetailScreenState extends State<PoiDetailScreen>
     with SingleTickerProviderStateMixin {
-
   final AudioService _audio = AudioService();
   Script? _currentScript;
   String _selectedLanguage = 'fr';
   bool _isLoadingScript = true;
   bool _isSpeaking = false;
   bool _isPaused = false;
-  double _selectedSpeed = 1.0;
   AudioState _audioState = const AudioState(
     playState: AudioPlayState.stopped,
     position: Duration.zero,
@@ -59,10 +54,8 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
     _stateSubscription = _audio.stateStream.listen((state) {
       // Vérifier si l'audio en cours concerne CE POI
       final isThisPoi = state.currentPoi?.id == widget.poi.id;
-      final isSpeaking =
-          isThisPoi && state.playState == AudioPlayState.playing;
-      final isPaused =
-          isThisPoi && state.playState == AudioPlayState.paused;
+      final isSpeaking = isThisPoi && state.playState == AudioPlayState.playing;
+      final isPaused = isThisPoi && state.playState == AudioPlayState.paused;
       if (isSpeaking) {
         _pulseController.repeat(reverse: true);
       } else {
@@ -73,39 +66,47 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
         setState(() {
           _isSpeaking = isSpeaking;
           _isPaused = isPaused;
-          _selectedSpeed = state.speed;
-          _audioState = isThisPoi ? state : state.copyWith(
-            playState: AudioPlayState.stopped,
-            position: Duration.zero,
-          );
+          _audioState = isThisPoi
+              ? state
+              : state.copyWith(
+                  playState: AudioPlayState.stopped,
+                  position: Duration.zero,
+                );
         });
       }
     });
-    _loadScript();
   }
 
   Future<void> _initializeAudio() async {
     await _audio.init();
+    final preferredLanguage =
+        await UserPreferencesService.getPreferredLanguage();
+    if (!mounted) return;
+    _selectedLanguage = preferredLanguage;
+    await _loadScript();
     if (!mounted) return;
     setState(() {
-      _selectedSpeed = _audio.speed;
       _audioState = _audio.currentState;
     });
   }
 
   Future<void> _loadScript() async {
+    if (!mounted) return;
     setState(() => _isLoadingScript = true);
     try {
       final scriptJson = await SupabaseService.getScriptForPoint(
         widget.poi.id,
         _selectedLanguage,
       );
+      if (!mounted) return;
       setState(() {
-        _currentScript =
-            scriptJson != null ? Script.fromJson(scriptJson) : null;
+        _currentScript = scriptJson != null
+            ? Script.fromJson(scriptJson)
+            : null;
         _isLoadingScript = false;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() => _isLoadingScript = false);
     }
   }
@@ -128,32 +129,18 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
   Future<void> _changeLanguage(String lang) async {
     if (lang == _selectedLanguage) return;
     await _audio.stop();
+    await UserPreferencesService.setPreferredLanguage(lang);
+    if (!mounted) return;
     setState(() => _selectedLanguage = lang);
     await _loadScript();
-  }
-
-  Future<void> _setSpeechRate(double speed) async {
-    await _audio.setSpeed(speed);
-    if (!mounted) return;
-    setState(() => _selectedSpeed = speed);
-  }
-
-  Future<void> _restartPlayback() async {
-    if (_currentScript == null) return;
-    await _audio.stop();
-    await _audio.playText(
-      _currentScript!.content,
-      language: _selectedLanguage,
-      poiName: widget.poi.localizedName(_selectedLanguage),
-      poi: widget.poi,
-    );
   }
 
   Future<void> _openNavigation() async {
     final lat = widget.poi.lat;
     final lng = widget.poi.lng;
     final uri = Uri.parse(
-        'https://www.google.com/maps/dir/?api=1&destination=$lat,$lng&travelmode=walking');
+      'https://www.google.com/maps/dir/?api=1&destination=$lat,$lng&travelmode=walking',
+    );
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
@@ -198,8 +185,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
               ),
               background: FlutterMap(
                 options: MapOptions(
-                  initialCenter:
-                      LatLng(widget.poi.lat, widget.poi.lng),
+                  initialCenter: LatLng(widget.poi.lat, widget.poi.lng),
                   initialZoom: 16,
                   interactionOptions: const InteractionOptions(
                     flags: InteractiveFlag.none,
@@ -221,8 +207,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
                           decoration: BoxDecoration(
                             color: cat?.color ?? Colors.grey,
                             shape: BoxShape.circle,
-                            border:
-                                Border.all(color: Colors.white, width: 3),
+                            border: Border.all(color: Colors.white, width: 3),
                           ),
                           child: Center(
                             child: Text(
@@ -280,8 +265,11 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
                       if (distance != null)
                         Row(
                           children: [
-                            Icon(Icons.near_me,
-                                size: 16, color: AppTheme.textSecondary),
+                            Icon(
+                              Icons.near_me,
+                              size: 16,
+                              color: AppTheme.textSecondary,
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               distance < 1000
@@ -318,10 +306,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
                       ),
                       child: Text(
                         _currentScript!.content,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          height: 1.6,
-                        ),
+                        style: const TextStyle(fontSize: 15, height: 1.6),
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -363,23 +348,60 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
     final logistics = widget.poi.logistics!;
     final items = <_LogisticsItem>[];
 
-    if (logistics['toilets'] != null && logistics['toilets'].toString().isNotEmpty) {
-      items.add(_LogisticsItem(Icons.wc, 'Toilettes', logistics['toilets'].toString()));
+    if (logistics['toilets'] != null &&
+        logistics['toilets'].toString().isNotEmpty) {
+      items.add(
+        _LogisticsItem(Icons.wc, 'Toilettes', logistics['toilets'].toString()),
+      );
     }
-    if (logistics['parking'] != null && logistics['parking'].toString().isNotEmpty) {
-      items.add(_LogisticsItem(Icons.local_parking, 'Stationnement', logistics['parking'].toString()));
+    if (logistics['parking'] != null &&
+        logistics['parking'].toString().isNotEmpty) {
+      items.add(
+        _LogisticsItem(
+          Icons.local_parking,
+          'Stationnement',
+          logistics['parking'].toString(),
+        ),
+      );
     }
-    if (logistics['photo_spot'] != null && logistics['photo_spot'].toString().isNotEmpty) {
-      items.add(_LogisticsItem(Icons.camera_alt, 'Photo', logistics['photo_spot'].toString()));
+    if (logistics['photo_spot'] != null &&
+        logistics['photo_spot'].toString().isNotEmpty) {
+      items.add(
+        _LogisticsItem(
+          Icons.camera_alt,
+          'Photo',
+          logistics['photo_spot'].toString(),
+        ),
+      );
     }
     if (logistics['tips'] != null && logistics['tips'].toString().isNotEmpty) {
-      items.add(_LogisticsItem(Icons.lightbulb_outline, 'Bon à savoir', logistics['tips'].toString()));
+      items.add(
+        _LogisticsItem(
+          Icons.lightbulb_outline,
+          'Bon à savoir',
+          logistics['tips'].toString(),
+        ),
+      );
     }
-    if (logistics['accessibility'] != null && logistics['accessibility'].toString().isNotEmpty) {
-      items.add(_LogisticsItem(Icons.accessible, 'Accessibilité', logistics['accessibility'].toString()));
+    if (logistics['accessibility'] != null &&
+        logistics['accessibility'].toString().isNotEmpty) {
+      items.add(
+        _LogisticsItem(
+          Icons.accessible,
+          'Accessibilité',
+          logistics['accessibility'].toString(),
+        ),
+      );
     }
-    if (logistics['hours'] != null && logistics['hours'].toString().isNotEmpty) {
-      items.add(_LogisticsItem(Icons.schedule, 'Horaires', logistics['hours'].toString()));
+    if (logistics['hours'] != null &&
+        logistics['hours'].toString().isNotEmpty) {
+      items.add(
+        _LogisticsItem(
+          Icons.schedule,
+          'Horaires',
+          logistics['hours'].toString(),
+        ),
+      );
     }
 
     if (items.isEmpty) return const SizedBox.shrink();
@@ -387,52 +409,55 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Infos pratiques',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+        Text('Infos pratiques', style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 12),
-        ...items.map((item) => Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: AppTheme.primaryColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
+        ...items.map(
+          (item) => Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    item.icon,
+                    size: 18,
+                    color: AppTheme.primaryColor,
+                  ),
                 ),
-                child: Icon(item.icon, size: 18, color: AppTheme.primaryColor),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      item.label,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.label,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      item.value,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: AppTheme.textSecondary,
-                        height: 1.4,
+                      const SizedBox(height: 2),
+                      Text(
+                        item.value,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: AppTheme.textSecondary,
+                          height: 1.4,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        )),
+        ),
         const SizedBox(height: 12),
       ],
     );
@@ -442,7 +467,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
     final theme = Theme.of(context);
     final progress = _audioState.duration.inMilliseconds > 0
         ? _audioState.position.inMilliseconds /
-            _audioState.duration.inMilliseconds
+              _audioState.duration.inMilliseconds
         : 0.0;
 
     return Container(
@@ -450,9 +475,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
       decoration: BoxDecoration(
         color: AppTheme.primaryColor.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppTheme.primaryColor.withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: AppTheme.primaryColor.withValues(alpha: 0.2)),
       ),
       child: Column(
         children: [
@@ -517,8 +540,9 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
                     ),
                     const SizedBox(height: 12),
                     TextButton.icon(
-                      onPressed:
-                          (_isSpeaking || _isPaused) ? _audio.stop : null,
+                      onPressed: (_isSpeaking || _isPaused)
+                          ? _audio.stop
+                          : null,
                       icon: const Icon(Icons.stop, size: 16),
                       label: const Text('Stop'),
                       style: TextButton.styleFrom(
@@ -579,14 +603,10 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected
-              ? AppTheme.primaryColor
-              : Colors.transparent,
+          color: isSelected ? AppTheme.primaryColor : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected
-                ? AppTheme.primaryColor
-                : Colors.grey[300]!,
+            color: isSelected ? AppTheme.primaryColor : Colors.grey[300]!,
           ),
         ),
         child: Text(

@@ -2,7 +2,7 @@
 class AppConstants {
   // App Info
   static const String appName = 'App Voyage';
-  static const String appVersion = '0.4.2';
+  static const String appVersion = '0.4.3';
 
   // Supabase
   static const String supabaseUrl = 'https://lfwnpyttyoefqvhfqajb.supabase.co';

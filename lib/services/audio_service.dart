@@ -47,12 +47,14 @@ class AudioService {
   String? _currentPoiName;
   models.Point? _currentPoi;
   String? _currentScriptId;
+  AudioPlaybackSource _currentPlaybackSource = AudioPlaybackSource.manual;
   audio_svc.PlaybackState _playbackState = audio_svc.PlaybackState();
   AudioState _state = const AudioState(
     playState: AudioPlayState.stopped,
     position: Duration.zero,
     duration: Duration.zero,
     speed: 1.0,
+    playbackSource: AudioPlaybackSource.manual,
   );
 
   StreamSubscription<audio_svc.PlaybackState>? _playbackSubscription;
@@ -97,7 +99,7 @@ class AudioService {
           androidStopForegroundOnPause: true,
         ),
       );
-      _audioHandler = handler as AppAudioHandler;
+      _audioHandler = handler;
       _usingFallbackTts = false;
       await _audioHandler!.setSpeed(_speechRateForSpeed(_speed));
       _bindHandlerStreams();
@@ -109,8 +111,9 @@ class AudioService {
       _usingFallbackTts = true;
       await _fallbackTts.setSpeechRate(_speechRateForSpeed(_speed));
       await _fallbackStateSubscription?.cancel();
-      _fallbackStateSubscription =
-          _fallbackTts.stateStream.listen(_handleFallbackState);
+      _fallbackStateSubscription = _fallbackTts.stateStream.listen(
+        _handleFallbackState,
+      );
     }
 
     _isInitialized = true;
@@ -120,24 +123,27 @@ class AudioService {
   Future<void> _configureAudioSession() async {
     try {
       final session = await AudioSession.instance;
-      await session.configure(const AudioSessionConfiguration(
-        avAudioSessionCategory: AVAudioSessionCategory.playback,
-        avAudioSessionMode: AVAudioSessionMode.spokenAudio,
-        androidAudioAttributes: AndroidAudioAttributes(
-          contentType: AndroidAudioContentType.speech,
-          usage: AndroidAudioUsage.media,
+      await session.configure(
+        const AudioSessionConfiguration(
+          avAudioSessionCategory: AVAudioSessionCategory.playback,
+          avAudioSessionMode: AVAudioSessionMode.spokenAudio,
+          androidAudioAttributes: AndroidAudioAttributes(
+            contentType: AndroidAudioContentType.speech,
+            usage: AndroidAudioUsage.media,
+          ),
+          androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
         ),
-        androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
-      ));
+      );
 
       await _interruptionSubscription?.cancel();
-      _interruptionSubscription =
-          session.interruptionEventStream.listen((event) async {
-            if (!event.begin) return;
-            if (_state.playState == AudioPlayState.playing) {
-              await pause();
-            }
-          });
+      _interruptionSubscription = session.interruptionEventStream.listen((
+        event,
+      ) async {
+        if (!event.begin) return;
+        if (_state.playState == AudioPlayState.playing) {
+          await pause();
+        }
+      });
     } catch (error, stackTrace) {
       DebugLog().log('[AudioService] session audio indisponible: $error');
       debugPrintStack(stackTrace: stackTrace);
@@ -192,6 +198,7 @@ class AudioService {
     String? poiName,
     models.Point? poi,
     String? scriptId,
+    AudioPlaybackSource source = AudioPlaybackSource.manual,
   }) async {
     await init();
     if (text.trim().isEmpty) return;
@@ -203,11 +210,12 @@ class AudioService {
     _currentPoiName = poiName ?? 'Lecture audio';
     _currentPoi = poi;
     _currentScriptId = scriptId ?? 'tts-${text.hashCode}';
+    _currentPlaybackSource = source;
     _duration = _estimateDuration(text);
     _position = Duration.zero;
 
     DebugLog().log(
-      '[AudioService] playText poi=$_currentPoiName lang=$language fallback=$_usingFallbackTts',
+      '[AudioService] playText poi=$_currentPoiName lang=$language source=$source fallback=$_usingFallbackTts',
     );
 
     if (_audioHandler != null) {
@@ -236,6 +244,7 @@ class AudioService {
       currentPoiName: _currentPoiName,
       currentPoi: _currentPoi,
       currentScriptId: _currentScriptId,
+      playbackSource: _currentPlaybackSource,
     );
     _emitState();
   }
@@ -295,10 +304,12 @@ class AudioService {
     _currentPoiName = null;
     _currentPoi = null;
     _currentScriptId = null;
+    _currentPlaybackSource = AudioPlaybackSource.manual;
     _state = _state.copyWith(
       playState: AudioPlayState.stopped,
       position: Duration.zero,
       duration: Duration.zero,
+      playbackSource: AudioPlaybackSource.manual,
       currentPoiName: null,
       currentPoi: null,
       currentScriptId: null,
@@ -383,9 +394,9 @@ class AudioService {
       final playState = _mapPlayState(_playbackState);
       final position = playState == AudioPlayState.stopped
           ? (_playbackState.processingState ==
-                  audio_svc.AudioProcessingState.completed
-              ? _duration
-              : Duration.zero)
+                    audio_svc.AudioProcessingState.completed
+                ? _duration
+                : Duration.zero)
           : _position;
 
       _state = AudioState(
@@ -393,6 +404,7 @@ class AudioService {
         position: position,
         duration: _duration,
         speed: _speed,
+        playbackSource: _currentPlaybackSource,
         currentPoiName: _currentPoiName,
         currentPoi: _currentPoi,
         currentScriptId: _currentScriptId,
@@ -401,6 +413,7 @@ class AudioService {
       _state = _state.copyWith(
         speed: _speed,
         duration: _duration,
+        playbackSource: _currentPlaybackSource,
         currentPoiName: _currentPoiName,
         currentPoi: _currentPoi,
         currentScriptId: _currentScriptId,
@@ -439,10 +452,7 @@ class AudioService {
   }) async {
     for (final lang in ['fr', 'en', 'es']) {
       final scripts = await SupabaseService.getScriptsForCity(cityId, lang);
-      await _edgeTts.downloadAll(
-        scripts: scripts,
-        onProgress: onProgress,
-      );
+      await _edgeTts.downloadAll(scripts: scripts, onProgress: onProgress);
     }
   }
 

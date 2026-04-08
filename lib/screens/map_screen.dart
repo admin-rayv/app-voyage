@@ -9,10 +9,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config/route_data.dart';
 import '../models/city.dart';
+import '../models/discovery_playback_result.dart';
 import '../models/point.dart' as models;
+import '../models/audio_state.dart';
 import '../services/audio_service.dart' as audio_svc;
+import '../services/debug_log.dart';
+import '../services/discovery_playback_service.dart';
 import '../services/geofencing_service.dart';
 import '../services/supabase_service.dart';
+import '../services/user_preferences_service.dart';
 import '../config/categories.dart';
 import '../config/theme.dart';
 import '../widgets/poi_list_item.dart';
@@ -33,6 +38,9 @@ class _MapScreenState extends State<MapScreen>
 
   final MapController _mapController = MapController();
   final GeofencingService _geofencingService = GeofencingService();
+  final DiscoveryPlaybackService _discoveryPlaybackService =
+      DiscoveryPlaybackService();
+  final audio_svc.AudioService _audioService = audio_svc.AudioService();
   List<models.Point> _allPoints = [];
   final Set<String> _activeFilters = {};
   bool _showList = false;
@@ -42,8 +50,10 @@ class _MapScreenState extends State<MapScreen>
   bool _restoreDiscoveryModeOnLoad = false;
   String? _error;
   String? _lastTriggeredPoiId;
+  String? _lastAutoPlayedPoiId;
   LatLng? _userPosition;
   StreamSubscription<models.Point>? _discoverySubscription;
+  StreamSubscription<AudioState>? _audioStateSubscription;
   late final AnimationController _discoveryPulseController;
   SharedPreferences? _prefs;
 
@@ -58,12 +68,30 @@ class _MapScreenState extends State<MapScreen>
     _loadDiscoveryPreference();
     _loadPoints();
     _getUserPosition();
+    _audioStateSubscription = _audioService.stateStream.listen((state) {
+      if (!mounted) return;
+      if (state.playState == AudioPlayState.playing &&
+          state.playbackSource == AudioPlaybackSource.autoDiscovery &&
+          state.currentPoi != null) {
+        setState(() {
+          _lastAutoPlayedPoiId = state.currentPoi!.id;
+        });
+      }
+      if (state.playState == AudioPlayState.stopped &&
+          state.playbackSource == AudioPlaybackSource.autoDiscovery &&
+          _lastAutoPlayedPoiId != null) {
+        setState(() {
+          _lastAutoPlayedPoiId = null;
+        });
+      }
+    });
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _discoverySubscription?.cancel();
+    _audioStateSubscription?.cancel();
     _discoveryPulseController.dispose();
     super.dispose();
   }
@@ -129,6 +157,19 @@ class _MapScreenState extends State<MapScreen>
 
   models.Point? get _lastTriggeredPoi {
     final poiId = _lastTriggeredPoiId;
+    if (poiId == null) {
+      return null;
+    }
+    for (final poi in _allPoints) {
+      if (poi.id == poiId) {
+        return poi;
+      }
+    }
+    return null;
+  }
+
+  models.Point? get _lastAutoPlayedPoi {
+    final poiId = _lastAutoPlayedPoiId;
     if (poiId == null) {
       return null;
     }
@@ -264,15 +305,53 @@ class _MapScreenState extends State<MapScreen>
 
   void _listenToDiscoveryTriggers() {
     _discoverySubscription?.cancel();
-    _discoverySubscription = _geofencingService.triggeredPois.listen((poi) {
+    _discoverySubscription = _geofencingService.triggeredPois.listen((
+      poi,
+    ) async {
       if (!mounted) return;
 
       setState(() {
         _lastTriggeredPoiId = poi.id;
       });
 
-      _showSnackBar('Découverte: ${poi.localizedName('fr')} détecté.');
+      final result = await _discoveryPlaybackService.handleTriggeredPoi(poi);
+      if (!mounted) return;
+
+      if (result.played) {
+        setState(() {
+          _lastAutoPlayedPoiId = poi.id;
+        });
+      }
+
+      _showSnackBar(_buildDiscoveryMessage(result));
     });
+  }
+
+  String _buildDiscoveryMessage(DiscoveryPlaybackResult result) {
+    final poiName = result.poi.localizedName(result.language);
+    if (result.played) {
+      final delaySec = result.delayApplied.inSeconds;
+      final delayMessage = delaySec > 0 ? ' dans ${delaySec}s' : '';
+      return 'POI détecté: $poiName. Lecture automatique$delayMessage.';
+    }
+
+    switch (result.skipReason) {
+      case DiscoveryPlaybackSkipReason.autoplayDisabled:
+        return 'POI détecté: $poiName. Lecture automatique désactivée.';
+      case DiscoveryPlaybackSkipReason.pausedByUser:
+        return 'POI détecté: $poiName. Lecture ignorée car l’audio est en pause.';
+      case DiscoveryPlaybackSkipReason.manualAudioInProgress:
+        return 'POI détecté: $poiName. Lecture manuelle en cours, auto-play ignoré.';
+      case DiscoveryPlaybackSkipReason.autoAudioAlreadyPlayingPoi:
+        return 'POI détecté: $poiName déjà en lecture.';
+      case DiscoveryPlaybackSkipReason.scriptNotFound:
+      case DiscoveryPlaybackSkipReason.missingScriptContent:
+        return 'POI détecté: $poiName. Aucun script disponible.';
+      case DiscoveryPlaybackSkipReason.missingPoiName:
+        return 'POI détecté. Lecture automatique ignorée.';
+      case null:
+        return 'POI détecté: $poiName.';
+    }
   }
 
   void _syncDiscoveryUiWithService() {
@@ -302,6 +381,7 @@ class _MapScreenState extends State<MapScreen>
       _discoveryModeEnabled = enabled;
       if (!enabled) {
         _lastTriggeredPoiId = null;
+        _lastAutoPlayedPoiId = null;
       }
     });
 
@@ -559,18 +639,34 @@ class _MapScreenState extends State<MapScreen>
                   child: ElevatedButton.icon(
                     onPressed: () async {
                       Navigator.pop(context);
-                      // Charger le script FR et lancer la lecture
+                      final preferredLanguage =
+                          await UserPreferencesService.getPreferredLanguage();
                       final scriptJson =
-                          await SupabaseService.getScriptForPoint(poi.id, 'fr');
+                          await SupabaseService.getScriptForPointWithFallback(
+                            poi.id,
+                            [preferredLanguage, 'fr', 'en'],
+                          );
                       if (scriptJson != null) {
                         final audio = audio_svc.AudioService();
                         await audio.init();
+                        final language =
+                            scriptJson['language'] as String? ??
+                            preferredLanguage;
                         await audio.playText(
                           scriptJson['content'] as String? ?? '',
-                          language: 'fr',
-                          poiName: poi.localizedName('fr'),
+                          language: language,
+                          poiName: poi.localizedName(language),
                           poi: poi,
+                          scriptId: scriptJson['id'] as String?,
+                          source: AudioPlaybackSource.manual,
                         );
+                      } else {
+                        DebugLog().log(
+                          '[MapScreen] no script found for manual preview poi=${poi.id}',
+                        );
+                        if (mounted) {
+                          _showSnackBar('Aucun script disponible pour ce POI.');
+                        }
                       }
                     },
                     icon: const Icon(Icons.play_arrow),
@@ -788,10 +884,19 @@ class _MapScreenState extends State<MapScreen>
             final cat = Categories.byKey(poi.primaryCategory);
             final color = cat?.color ?? Categories.defaultColor;
             final isHighlighted = _lastTriggeredPoiId == poi.id;
+            final isAutoPlaying = _lastAutoPlayedPoiId == poi.id;
             return Marker(
               point: LatLng(poi.lat, poi.lng),
-              width: isHighlighted ? 44 : 36,
-              height: isHighlighted ? 44 : 36,
+              width: isAutoPlaying
+                  ? 50
+                  : isHighlighted
+                  ? 44
+                  : 36,
+              height: isAutoPlaying
+                  ? 50
+                  : isHighlighted
+                  ? 44
+                  : 36,
               child: GestureDetector(
                 onTap: () => _showPoiPreview(poi),
                 child: AnimatedOpacity(
@@ -799,20 +904,39 @@ class _MapScreenState extends State<MapScreen>
                   duration: const Duration(milliseconds: 300),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: color,
+                      color: isAutoPlaying ? Colors.green[700] : color,
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: isHighlighted
+                        color: isAutoPlaying
+                            ? Colors.white
+                            : isHighlighted
                             ? Colors.lightGreenAccent
                             : Colors.white,
-                        width: isHighlighted ? 3 : 2,
+                        width: isAutoPlaying
+                            ? 4
+                            : isHighlighted
+                            ? 3
+                            : 2,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: (isHighlighted ? Colors.green : Colors.black)
-                              .withValues(alpha: 0.3),
-                          blurRadius: isHighlighted ? 10 : 4,
-                          spreadRadius: isHighlighted ? 2 : 0,
+                          color:
+                              (isAutoPlaying
+                                      ? Colors.greenAccent
+                                      : isHighlighted
+                                      ? Colors.green
+                                      : Colors.black)
+                                  .withValues(alpha: 0.3),
+                          blurRadius: isAutoPlaying
+                              ? 14
+                              : isHighlighted
+                              ? 10
+                              : 4,
+                          spreadRadius: isAutoPlaying
+                              ? 3
+                              : isHighlighted
+                              ? 2
+                              : 0,
                           offset: const Offset(0, 2),
                         ),
                       ],
@@ -820,7 +944,13 @@ class _MapScreenState extends State<MapScreen>
                     child: Center(
                       child: Text(
                         cat?.emoji ?? '📍',
-                        style: TextStyle(fontSize: isHighlighted ? 18 : 16),
+                        style: TextStyle(
+                          fontSize: isAutoPlaying
+                              ? 20
+                              : isHighlighted
+                              ? 18
+                              : 16,
+                        ),
                       ),
                     ),
                   ),
@@ -866,6 +996,7 @@ class _MapScreenState extends State<MapScreen>
     final triggeredCount = _geofencingService.alreadyTriggered.length;
     final lastTriggeredPoi = _lastTriggeredPoi;
     final isActive = _discoveryModeEnabled;
+    final autoPlayedPoi = _lastAutoPlayedPoi;
 
     return Container(
       width: double.infinity,
@@ -904,7 +1035,9 @@ class _MapScreenState extends State<MapScreen>
                 ),
                 if (lastTriggeredPoi != null)
                   Text(
-                    'Dernier POI détecté: ${lastTriggeredPoi.localizedName('fr')}',
+                    autoPlayedPoi != null
+                        ? 'Lecture en cours: ${autoPlayedPoi.localizedName('fr')}'
+                        : 'Dernier POI détecté: ${lastTriggeredPoi.localizedName('fr')}',
                     style: TextStyle(
                       fontSize: 12,
                       color: AppTheme.textSecondary,

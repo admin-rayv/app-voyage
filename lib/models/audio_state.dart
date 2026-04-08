@@ -5,6 +5,7 @@ class AudioState {
   final Duration position;
   final Duration duration;
   final double speed;
+  final AudioPlaybackSource playbackSource;
   final String? currentPoiName;
   final models.Point? currentPoi;
   final String? currentScriptId;
@@ -14,6 +15,7 @@ class AudioState {
     required this.position,
     required this.duration,
     required this.speed,
+    this.playbackSource = AudioPlaybackSource.manual,
     this.currentPoiName,
     this.currentPoi,
     this.currentScriptId,
@@ -24,6 +26,7 @@ class AudioState {
     Duration? position,
     Duration? duration,
     double? speed,
+    AudioPlaybackSource? playbackSource,
     Object? currentPoiName = _sentinel,
     Object? currentPoi = _sentinel,
     Object? currentScriptId = _sentinel,
@@ -33,6 +36,7 @@ class AudioState {
       position: position ?? this.position,
       duration: duration ?? this.duration,
       speed: speed ?? this.speed,
+      playbackSource: playbackSource ?? this.playbackSource,
       currentPoiName: identical(currentPoiName, _sentinel)
           ? this.currentPoiName
           : currentPoiName as String?,
@@ -47,5 +51,7 @@ class AudioState {
 }
 
 enum AudioPlayState { playing, paused, stopped }
+
+enum AudioPlaybackSource { manual, autoDiscovery }
 
 const Object _sentinel = Object();

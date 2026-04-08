@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/audio_service.dart' as audio_svc;
 import '../services/tts_service.dart';
 import '../services/debug_log.dart';
+import '../services/user_preferences_service.dart';
 import '../config/theme.dart';
 
 /// Écran Paramètres — Configuration des voix TTS par langue.
@@ -20,6 +21,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final TtsService _tts = TtsService();
   final audio_svc.AudioService _audio = audio_svc.AudioService();
   bool _isLoading = true;
+  String _preferredLanguage = UserPreferencesService.defaultPreferredLanguage;
+  bool _discoveryAutoplayEnabled =
+      UserPreferencesService.defaultDiscoveryAutoplayEnabled;
+  int _discoveryAutoplayDelaySec =
+      UserPreferencesService.defaultDiscoveryAutoplayDelaySec;
+  bool _discoveryAutoplayVibrationEnabled =
+      UserPreferencesService.defaultDiscoveryAutoplayVibrationEnabled;
 
   // Vitesse de lecture
   double _selectedSpeed = 1.0;
@@ -36,9 +44,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String? _testingVoice;
 
   static const _languages = [
-    {'code': 'fr', 'label': 'Français', 'flag': '', 'testText': 'Bienvenue à Saint-Lambert! Je suis Marco, ton guide.'},
-    {'code': 'en', 'label': 'English', 'flag': '', 'testText': 'Welcome to Saint-Lambert! I\'m Marco, your guide.'},
-    {'code': 'es', 'label': 'Español', 'flag': '', 'testText': '¡Bienvenido a Saint-Lambert! Soy Marco, tu guía.'},
+    {
+      'code': 'fr',
+      'label': 'Français',
+      'flag': '',
+      'testText': 'Bienvenue à Saint-Lambert! Je suis Marco, ton guide.',
+    },
+    {
+      'code': 'en',
+      'label': 'English',
+      'flag': '',
+      'testText': 'Welcome to Saint-Lambert! I\'m Marco, your guide.',
+    },
+    {
+      'code': 'es',
+      'label': 'Español',
+      'flag': '',
+      'testText': '¡Bienvenido a Saint-Lambert! Soy Marco, tu guía.',
+    },
   ];
 
   @override
@@ -52,6 +75,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _loadAllVoices() async {
+    _preferredLanguage = await UserPreferencesService.getPreferredLanguage();
+    _discoveryAutoplayEnabled =
+        await UserPreferencesService.isDiscoveryAutoplayEnabled();
+    _discoveryAutoplayDelaySec =
+        await UserPreferencesService.getDiscoveryAutoplayDelaySec();
+    _discoveryAutoplayVibrationEnabled =
+        await UserPreferencesService.isDiscoveryAutoplayVibrationEnabled();
+
     for (final lang in _languages) {
       final code = lang['code'] as String;
       final voices = await _tts.getLocalVoices(code);
@@ -70,7 +101,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     await _tts.setLanguage(locale.substring(0, 2));
     // Force cette voix spécifique
     await _tts.setUserVoice(
-      locale.startsWith('fr') ? 'fr' : locale.startsWith('en') ? 'en' : 'es',
+      locale.startsWith('fr')
+          ? 'fr'
+          : locale.startsWith('en')
+          ? 'en'
+          : 'es',
       voice.name,
     );
     await _tts.speak(testText);
@@ -87,6 +122,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
     await _tts.stop();
     await _tts.setUserVoice(langCode, voiceName);
     setState(() => _selectedByLang[langCode] = voiceName);
+  }
+
+  Future<void> _selectPreferredLanguage(String language) async {
+    await UserPreferencesService.setPreferredLanguage(language);
+    if (!mounted) return;
+    setState(() => _preferredLanguage = language);
+  }
+
+  Future<void> _setDiscoveryAutoplayEnabled(bool enabled) async {
+    await UserPreferencesService.setDiscoveryAutoplayEnabled(enabled);
+    if (!mounted) return;
+    setState(() => _discoveryAutoplayEnabled = enabled);
+  }
+
+  Future<void> _setDiscoveryAutoplayDelay(int delaySec) async {
+    await UserPreferencesService.setDiscoveryAutoplayDelaySec(delaySec);
+    if (!mounted) return;
+    setState(() => _discoveryAutoplayDelaySec = delaySec);
+  }
+
+  Future<void> _setDiscoveryAutoplayVibrationEnabled(bool enabled) async {
+    await UserPreferencesService.setDiscoveryAutoplayVibrationEnabled(enabled);
+    if (!mounted) return;
+    setState(() => _discoveryAutoplayVibrationEnabled = enabled);
   }
 
   @override
@@ -113,6 +172,98 @@ class _SettingsScreenState extends State<SettingsScreen> {
           : ListView(
               padding: const EdgeInsets.all(16),
               children: [
+                Row(
+                  children: [
+                    Icon(Icons.language, color: AppTheme.primaryColor),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Langue de lecture',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Langue utilisée par défaut pour les scripts audio et le mode découverte.',
+                  style: TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+                ),
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: _languages.map((lang) {
+                    final code = lang['code'] as String;
+                    final label = lang['label'] as String;
+                    return ChoiceChip(
+                      label: Text(label),
+                      selected: _preferredLanguage == code,
+                      onSelected: (_) => _selectPreferredLanguage(code),
+                      selectedColor: AppTheme.primaryColor.withValues(
+                        alpha: 0.2,
+                      ),
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(height: 32),
+                Row(
+                  children: [
+                    Icon(Icons.explore, color: AppTheme.primaryColor),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Mode découverte',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Configure la lecture automatique quand un POI est détecté à proximité.',
+                  style: TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+                ),
+                const SizedBox(height: 12),
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: const Text('Lecture automatique des POIs'),
+                  subtitle: const Text(
+                    'Démarre automatiquement un script quand le mode découverte déclenche un POI.',
+                  ),
+                  value: _discoveryAutoplayEnabled,
+                  onChanged: _setDiscoveryAutoplayEnabled,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Délai avant lecture',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: UserPreferencesService.discoveryAutoplayDelayOptions
+                      .map((delaySec) {
+                        return ChoiceChip(
+                          label: Text('${delaySec}s'),
+                          selected: _discoveryAutoplayDelaySec == delaySec,
+                          onSelected: (_) =>
+                              _setDiscoveryAutoplayDelay(delaySec),
+                          selectedColor: AppTheme.primaryColor.withValues(
+                            alpha: 0.2,
+                          ),
+                        );
+                      })
+                      .toList(),
+                ),
+                const SizedBox(height: 8),
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: const Text('Vibration avant lecture'),
+                  subtitle: const Text(
+                    'Ajoute un retour haptique avant le lancement automatique du script.',
+                  ),
+                  value: _discoveryAutoplayVibrationEnabled,
+                  onChanged: _setDiscoveryAutoplayVibrationEnabled,
+                ),
+                const SizedBox(height: 32),
                 // Section vitesse de lecture
                 Row(
                   children: [
@@ -144,7 +295,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           setState(() => _selectedSpeed = entry.value);
                         }
                       },
-                      selectedColor: AppTheme.primaryColor.withValues(alpha: 0.2),
+                      selectedColor: AppTheme.primaryColor.withValues(
+                        alpha: 0.2,
+                      ),
                     );
                   }).toList(),
                 ),
@@ -169,12 +322,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const SizedBox(height: 24),
 
                 // Section par langue
-                ..._languages.map((lang) => _buildLanguageSection(
-                  langCode: lang['code'] as String,
-                  label: lang['label'] as String,
-                  flag: lang['flag'] as String,
-                  testText: lang['testText'] as String,
-                )),
+                ..._languages.map(
+                  (lang) => _buildLanguageSection(
+                    langCode: lang['code'] as String,
+                    label: lang['label'] as String,
+                    flag: lang['flag'] as String,
+                    testText: lang['testText'] as String,
+                  ),
+                ),
               ],
             ),
     );
@@ -297,9 +452,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 3, horizontal: 4),
-      color: isSelected
-          ? AppTheme.primaryColor.withValues(alpha: 0.08)
-          : null,
+      color: isSelected ? AppTheme.primaryColor.withValues(alpha: 0.08) : null,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
         side: isSelected
@@ -329,8 +482,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     color: AppTheme.primaryColor,
                   ),
                 )
-              : Icon(Icons.play_circle_fill,
-                  color: AppTheme.primaryColor, size: 28),
+              : Icon(
+                  Icons.play_circle_fill,
+                  color: AppTheme.primaryColor,
+                  size: 28,
+                ),
           onPressed: isTesting ? null : () => _testVoice(voice, testText),
         ),
         onTap: () => _selectVoice(langCode, voice.name),
@@ -354,8 +510,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               padding: const EdgeInsets.all(12),
               child: Row(
                 children: [
-                  const Text('🐛 Logs de debug',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  const Text(
+                    '🐛 Logs de debug',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
                   const Spacer(),
                   TextButton(
                     onPressed: () {
@@ -376,10 +534,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       itemCount: logs.length,
                       itemBuilder: (ctx, i) => Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 2),
-                        child: Text(logs[logs.length - 1 - i],
-                            style: const TextStyle(
-                                fontSize: 11, fontFamily: 'monospace')),
+                          horizontal: 12,
+                          vertical: 2,
+                        ),
+                        child: Text(
+                          logs[logs.length - 1 - i],
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontFamily: 'monospace',
+                          ),
+                        ),
                       ),
                     ),
             ),

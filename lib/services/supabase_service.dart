@@ -33,8 +33,11 @@ class SupabaseService {
 
   /// Récupérer une ville par slug.
   static Future<Map<String, dynamic>?> getCityBySlug(String slug) async {
-    final response =
-        await client.from('cities').select().eq('slug', slug).maybeSingle();
+    final response = await client
+        .from('cities')
+        .select()
+        .eq('slug', slug)
+        .maybeSingle();
     return response;
   }
 
@@ -68,8 +71,11 @@ class SupabaseService {
 
   /// Récupérer un script par ID.
   Future<Map<String, dynamic>?> getScript(String scriptId) async {
-    final response =
-        await client.from('scripts').select().eq('id', scriptId).maybeSingle();
+    final response = await client
+        .from('scripts')
+        .select()
+        .eq('id', scriptId)
+        .maybeSingle();
     return response;
   }
 
@@ -85,6 +91,19 @@ class SupabaseService {
         .eq('language', language)
         .maybeSingle();
     return response;
+  }
+
+  static Future<Map<String, dynamic>?> getScriptForPointWithFallback(
+    String pointId,
+    List<String> languages,
+  ) async {
+    for (final language in languages) {
+      final script = await getScriptForPoint(pointId, language);
+      if (script != null) {
+        return script;
+      }
+    }
+    return null;
   }
 
   /// Récupérer tous les scripts d'une ville dans une langue (pour offline sync).

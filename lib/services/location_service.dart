@@ -1,36 +1,28 @@
 import 'dart:async';
 import 'package:geolocator/geolocator.dart';
 import '../config/constants.dart';
+import 'permission_service.dart';
 
 /// Service de localisation
 /// Gestion du GPS et du geofencing
 
 class LocationService {
+  final PermissionService _permissionService = PermissionService();
   StreamSubscription<Position>? _positionSubscription;
   Position? _lastPosition;
-  
+
   /// Vérifier et demander les permissions
   Future<bool> checkPermissions() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return false;
+    final status = await _permissionService.checkDiscoveryPermission();
+    if (status.status == DiscoveryPermissionStatus.denied) {
+      final requested = await Geolocator.requestPermission();
+      return requested == LocationPermission.always ||
+          requested == LocationPermission.whileInUse;
     }
 
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return false;
-      }
-    }
-    
-    if (permission == LocationPermission.deniedForever) {
-      return false;
-    }
-    
-    return true;
+    return status.isGranted;
   }
-  
+
   /// Obtenir la position actuelle
   Future<Position?> getCurrentPosition() async {
     try {
@@ -44,7 +36,7 @@ class LocationService {
       return null;
     }
   }
-  
+
   /// Démarrer le tracking en temps réel
   void startTracking({
     required void Function(Position) onPositionUpdate,
@@ -54,24 +46,23 @@ class LocationService {
       accuracy: LocationAccuracy.high,
       distanceFilter: AppConstants.gpsDistanceFilterMeters,
     );
-    
-    _positionSubscription = Geolocator.getPositionStream(
-      locationSettings: locationSettings,
-    ).listen(
-      (Position position) {
-        _lastPosition = position;
-        onPositionUpdate(position);
-      },
-      onError: onError,
-    );
+
+    _positionSubscription =
+        Geolocator.getPositionStream(locationSettings: locationSettings).listen(
+          (Position position) {
+            _lastPosition = position;
+            onPositionUpdate(position);
+          },
+          onError: onError,
+        );
   }
-  
+
   /// Arrêter le tracking
   void stopTracking() {
     _positionSubscription?.cancel();
     _positionSubscription = null;
   }
-  
+
   /// Calculer la distance entre deux points (en mètres)
   double distanceBetween(
     double startLat,
@@ -81,7 +72,7 @@ class LocationService {
   ) {
     return Geolocator.distanceBetween(startLat, startLng, endLat, endLng);
   }
-  
+
   /// Vérifier si on est dans le rayon d'un POI
   bool isWithinRadius(
     Position position,
@@ -97,10 +88,10 @@ class LocationService {
     );
     return distance <= radiusMeters;
   }
-  
+
   /// Dernière position connue
   Position? get lastPosition => _lastPosition;
-  
+
   /// Dispose
   void dispose() {
     stopTracking();

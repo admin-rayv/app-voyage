@@ -16,6 +16,7 @@ import '../services/audio_service.dart' as audio_svc;
 import '../services/debug_log.dart';
 import '../services/discovery_playback_service.dart';
 import '../services/geofencing_service.dart';
+import '../services/permission_service.dart';
 import '../services/supabase_service.dart';
 import '../services/user_preferences_service.dart';
 import '../config/categories.dart';
@@ -40,6 +41,7 @@ class _MapScreenState extends State<MapScreen>
   final GeofencingService _geofencingService = GeofencingService();
   final DiscoveryPlaybackService _discoveryPlaybackService =
       DiscoveryPlaybackService();
+  final PermissionService _permissionService = PermissionService();
   final audio_svc.AudioService _audioService = audio_svc.AudioService();
   List<models.Point> _allPoints = [];
   final Set<String> _activeFilters = {};
@@ -244,10 +246,17 @@ class _MapScreenState extends State<MapScreen>
         return;
       }
 
-      final hasPermission = await _ensureDiscoveryPermissions();
-      if (!hasPermission || !mounted) {
+      final permissionResult = await _permissionService
+          .requestDiscoveryPermissions(
+            context,
+            requestBackground: !isRestoring,
+          );
+      if (!permissionResult.isGranted || !mounted) {
         await _persistDiscoveryPreference(false);
         _setDiscoveryModeState(enabled: false);
+        if (!isRestoring && permissionResult.message != null) {
+          _showSnackBar(permissionResult.message!);
+        }
         return;
       }
 
@@ -267,7 +276,7 @@ class _MapScreenState extends State<MapScreen>
       await _persistDiscoveryPreference(true);
 
       if (!isRestoring) {
-        _showSnackBar('Mode découverte activé.');
+        _showSnackBar(permissionResult.message ?? 'Mode découverte activé.');
       }
     } finally {
       if (mounted) {
@@ -394,107 +403,6 @@ class _MapScreenState extends State<MapScreen>
         ..stop()
         ..reset();
     }
-  }
-
-  Future<bool> _ensureDiscoveryPermissions() async {
-    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      if (!mounted) return false;
-      final openSettings = await _showDiscoveryDialog(
-        title: 'Activer la localisation',
-        message:
-            'Le mode découverte a besoin de la localisation du téléphone pour surveiller automatiquement les points autour de vous.',
-        confirmLabel: 'Réglages',
-      );
-      if (openSettings) {
-        await Geolocator.openLocationSettings();
-      }
-      return false;
-    }
-
-    var permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      if (!mounted) return false;
-      final shouldRequest = await _showDiscoveryDialog(
-        title: 'Autoriser la localisation',
-        message:
-            'Le mode découverte utilise votre position pour détecter les POIs proches. Autorisez la localisation pour continuer.',
-        confirmLabel: 'Continuer',
-      );
-      if (!shouldRequest) {
-        return false;
-      }
-
-      permission = await Geolocator.requestPermission();
-    }
-
-    if (permission == LocationPermission.denied) {
-      if (mounted) {
-        _showSnackBar('Autorisation GPS refusée. Mode découverte non activé.');
-      }
-      return false;
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      if (!mounted) return false;
-      final openSettings = await _showDiscoveryDialog(
-        title: 'Autorisation requise',
-        message:
-            'La localisation est bloquée de façon permanente. Ouvrez les réglages pour autoriser le mode découverte.',
-        confirmLabel: 'Ouvrir les réglages',
-      );
-      if (openSettings) {
-        await Geolocator.openAppSettings();
-      }
-      return false;
-    }
-
-    if (permission == LocationPermission.whileInUse) {
-      if (!mounted) return false;
-      final requestAlways = await _showDiscoveryDialog(
-        title: 'Accès en arrière-plan recommandé',
-        message:
-            'Pour garder la découverte active quand l’app passe en arrière-plan, autorisez "Toujours" si votre téléphone le propose.',
-        confirmLabel: 'Demander',
-      );
-      if (requestAlways) {
-        permission = await Geolocator.requestPermission();
-      }
-
-      if (!mounted) return false;
-      if (permission != LocationPermission.always) {
-        _showSnackBar('Découverte active avec accès limité au premier plan.');
-      }
-    }
-
-    return permission == LocationPermission.always ||
-        permission == LocationPermission.whileInUse;
-  }
-
-  Future<bool> _showDiscoveryDialog({
-    required String title,
-    required String message,
-    required String confirmLabel,
-  }) async {
-    final result = await showDialog<bool>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(title),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: const Text('Annuler'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: Text(confirmLabel),
-          ),
-        ],
-      ),
-    );
-
-    return result ?? false;
   }
 
   void _showSnackBar(String message) {

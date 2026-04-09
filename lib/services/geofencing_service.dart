@@ -25,9 +25,14 @@ class GeofencingService {
   final Set<String> _insideRadius = <String>{};
   final Queue<PositionSample> _positionHistory = ListQueue<PositionSample>();
   final Map<String, DateTime> _pendingTriggers = <String, DateTime>{};
+  final Map<String, QueuedPoiCandidate> _queuedCandidates =
+      <String, QueuedPoiCandidate>{};
 
   List<Point> _pois = const [];
   bool _isMonitoring = false;
+  DateTime? _cooldownUntil;
+  Timer? _cooldownTimer;
+  Position? _lastKnownPosition;
 
   bool get isMonitoring => _isMonitoring;
   Stream<Point> get triggeredPois => _triggeredPoisController.stream;
@@ -47,6 +52,11 @@ class GeofencingService {
     _insideRadius.clear();
     _pendingTriggers.clear();
     _positionHistory.clear();
+    _queuedCandidates.clear();
+    _cooldownUntil = null;
+    _cooldownTimer?.cancel();
+    _cooldownTimer = null;
+    _lastKnownPosition = null;
 
     _locationService.startTracking(
       onPositionUpdate: _handlePositionUpdate,
@@ -70,6 +80,11 @@ class GeofencingService {
     _insideRadius.clear();
     _pendingTriggers.clear();
     _positionHistory.clear();
+    _queuedCandidates.clear();
+    _cooldownUntil = null;
+    _cooldownTimer?.cancel();
+    _cooldownTimer = null;
+    _lastKnownPosition = null;
     _isMonitoring = false;
     _log('[GeofencingService] monitoring stopped');
   }
@@ -78,6 +93,10 @@ class GeofencingService {
     _alreadyTriggered.clear();
     _insideRadius.clear();
     _pendingTriggers.clear();
+    _queuedCandidates.clear();
+    _cooldownUntil = null;
+    _cooldownTimer?.cancel();
+    _cooldownTimer = null;
     _log('[GeofencingService] triggered POIs reset');
   }
 
@@ -87,17 +106,18 @@ class GeofencingService {
     }
 
     final now = DateTime.now();
+    _lastKnownPosition = position;
     _addPositionSample(position, now);
+    _purgeExpiredQueuedCandidates(now);
 
     _log(
       '[GeofencingService] position update '
       'lat=${position.latitude}, lng=${position.longitude}',
     );
 
-    Point? closestCandidate;
-    double? closestDistance;
     final accuracy = position.accuracy;
     final confidence = _calculateConfidence(accuracy);
+    final confirmedCandidates = <ConfirmedPoiCandidate>[];
 
     for (final poi in _pois) {
       final distance = Geolocator.distanceBetween(
@@ -128,6 +148,7 @@ class GeofencingService {
             reason: 'left_radius_before_confirm',
           );
         }
+        _removeQueuedCandidate(poi.id, reason: 'left_radius');
         _log(
           '[GeofencingService] POI exited radius '
           'id=${poi.id} distance=${distance.toStringAsFixed(1)}m',
@@ -157,10 +178,12 @@ class GeofencingService {
             reason: 'left_radius_before_confirm',
           );
         }
+        _removeQueuedCandidate(poi.id, reason: 'outside_radius');
         continue;
       }
 
       if (_alreadyTriggered.contains(poi.id)) {
+        _removeQueuedCandidate(poi.id, reason: 'already_triggered');
         _logGeoDecision(
           position: position,
           timestamp: now,
@@ -211,7 +234,9 @@ class GeofencingService {
           confidence: confidence,
           approaching: approaching,
           decision: pendingSince == null ? 'SKIP' : 'WAIT',
-          reason: pendingSince == null ? 'low_confidence' : 'low_confidence_pending',
+          reason: pendingSince == null
+              ? 'low_confidence'
+              : 'low_confidence_pending',
         );
         continue;
       }
@@ -239,10 +264,13 @@ class GeofencingService {
         confidence: confidence,
         approaching: approaching,
       )) {
-        if (closestDistance == null || distance < closestDistance) {
-          closestCandidate = poi;
-          closestDistance = distance;
-        }
+        confirmedCandidates.add(
+          ConfirmedPoiCandidate(
+            poi: poi,
+            distance: distance,
+            confidence: confidence,
+          ),
+        );
       } else if (_pendingTriggers.containsKey(poi.id)) {
         _logGeoDecision(
           position: position,
@@ -257,27 +285,46 @@ class GeofencingService {
       }
     }
 
-    if (closestCandidate == null) {
+    if (confirmedCandidates.isEmpty) {
       return;
     }
 
-    _pendingTriggers.remove(closestCandidate.id);
-    _alreadyTriggered.add(closestCandidate.id);
-    _triggeredPoisController.add(closestCandidate);
-    _log(
-      '[GeofencingService] POI triggered '
-      'id=${closestCandidate.id} distance=${closestDistance!.toStringAsFixed(1)}m',
+    confirmedCandidates.sort(
+      (left, right) => left.distance.compareTo(right.distance),
     );
-    _logGeoDecision(
-      position: position,
+
+    if (_isCooldownActive(now)) {
+      for (final candidate in confirmedCandidates) {
+        _queueCandidate(
+          poi: candidate.poi,
+          distance: candidate.distance,
+          timestamp: now,
+          confidence: candidate.confidence,
+          reason: 'cooldown_active',
+        );
+      }
+      return;
+    }
+
+    final nextCandidate = confirmedCandidates.first;
+    _triggerPoi(
+      poi: nextCandidate.poi,
+      distance: nextCandidate.distance,
       timestamp: now,
-      poi: closestCandidate,
-      distance: closestDistance,
-      confidence: confidence,
-      approaching: _isApproaching(closestCandidate),
-      decision: 'TRIGGER',
+      position: position,
+      confidence: nextCandidate.confidence,
       reason: 'confirmed_after_debounce',
     );
+
+    for (final candidate in confirmedCandidates.skip(1)) {
+      _queueCandidate(
+        poi: candidate.poi,
+        distance: candidate.distance,
+        timestamp: now,
+        confidence: candidate.confidence,
+        reason: 'overlap_waiting_turn',
+      );
+    }
   }
 
   void dispose() {
@@ -288,6 +335,208 @@ class GeofencingService {
   void _log(String message) {
     DebugLog().log(message);
     debugPrint(message);
+  }
+
+  bool _isCooldownActive(DateTime now) {
+    final cooldownUntil = _cooldownUntil;
+    return cooldownUntil != null && now.isBefore(cooldownUntil);
+  }
+
+  void _triggerPoi({
+    required Point poi,
+    required double distance,
+    required DateTime timestamp,
+    required Position position,
+    required double confidence,
+    required String reason,
+  }) {
+    _pendingTriggers.remove(poi.id);
+    _removeQueuedCandidate(poi.id, reason: 'triggered');
+    _alreadyTriggered.add(poi.id);
+    _triggeredPoisController.add(poi);
+    _log(
+      '[GeofencingService] POI triggered '
+      'id=${poi.id} distance=${distance.toStringAsFixed(1)}m',
+    );
+    _logGeoDecision(
+      position: position,
+      timestamp: timestamp,
+      poi: poi,
+      distance: distance,
+      confidence: confidence,
+      approaching: _isApproaching(poi),
+      decision: 'TRIGGER',
+      reason: reason,
+    );
+    _startGlobalCooldown(timestamp);
+  }
+
+  void _startGlobalCooldown(DateTime timestamp) {
+    _cooldownTimer?.cancel();
+
+    final cooldownUntil = timestamp.add(
+      const Duration(seconds: AppConstants.geofenceTriggerCooldownSec),
+    );
+    _cooldownUntil = cooldownUntil;
+    _log('[GeofencingService] cooldown started until $cooldownUntil');
+
+    _cooldownTimer = Timer(
+      const Duration(seconds: AppConstants.geofenceTriggerCooldownSec),
+      _handleCooldownExpired,
+    );
+  }
+
+  void _handleCooldownExpired() {
+    _cooldownTimer?.cancel();
+    _cooldownTimer = null;
+
+    final now = DateTime.now();
+    _cooldownUntil = null;
+    _purgeExpiredQueuedCandidates(now);
+
+    if (!_isMonitoring || _queuedCandidates.isEmpty) {
+      _log('[GeofencingService] cooldown ended with no queued candidates');
+      return;
+    }
+
+    final queuedCandidate = _selectNextQueuedCandidate(now);
+    if (queuedCandidate == null) {
+      _log(
+        '[GeofencingService] cooldown ended but no queued candidate remained valid',
+      );
+      return;
+    }
+
+    final position = _lastKnownPosition;
+    if (position == null) {
+      _removeQueuedCandidate(
+        queuedCandidate.poi.id,
+        reason: 'missing_last_position',
+      );
+      _log(
+        '[GeofencingService] cooldown ended but no last known position was available',
+      );
+      return;
+    }
+
+    _log(
+      '[GeofencingService] trigger released from queue '
+      'id=${queuedCandidate.poi.id} distance=${queuedCandidate.distanceMeters.toStringAsFixed(1)}m',
+    );
+    _triggerPoi(
+      poi: queuedCandidate.poi,
+      distance: queuedCandidate.distanceMeters,
+      timestamp: now,
+      position: position,
+      confidence: queuedCandidate.confidence,
+      reason: 'released_from_queue',
+    );
+  }
+
+  QueuedPoiCandidate? _selectNextQueuedCandidate(DateTime now) {
+    final candidates = _queuedCandidates.values.toList()
+      ..sort(
+        (left, right) => left.distanceMeters.compareTo(right.distanceMeters),
+      );
+
+    for (final candidate in candidates) {
+      if (_isQueuedCandidateStillValid(candidate, now)) {
+        return candidate;
+      }
+      _removeQueuedCandidate(
+        candidate.poi.id,
+        reason: 'invalid_after_cooldown',
+      );
+    }
+
+    return null;
+  }
+
+  bool _isQueuedCandidateStillValid(
+    QueuedPoiCandidate candidate,
+    DateTime now,
+  ) {
+    if (_alreadyTriggered.contains(candidate.poi.id)) {
+      return false;
+    }
+    if (!_insideRadius.contains(candidate.poi.id)) {
+      return false;
+    }
+
+    final age = now.difference(candidate.lastObservedAt);
+    return age.inSeconds <= AppConstants.geofenceQueuedCandidateTtlSec;
+  }
+
+  void _queueCandidate({
+    required Point poi,
+    required double distance,
+    required DateTime timestamp,
+    required double confidence,
+    required String reason,
+  }) {
+    if (_alreadyTriggered.contains(poi.id)) {
+      return;
+    }
+
+    final existingCandidate = _queuedCandidates[poi.id];
+    _queuedCandidates[poi.id] = QueuedPoiCandidate(
+      poi: poi,
+      distanceMeters: distance,
+      lastObservedAt: timestamp,
+      confidence: confidence,
+    );
+
+    final distanceLabel = distance.toStringAsFixed(1);
+    if (existingCandidate == null) {
+      _log(
+        '[GeofencingService] candidate queued '
+        'poi=${poi.id} distance=${distanceLabel}m reason=$reason',
+      );
+      return;
+    }
+
+    _log(
+      '[GeofencingService] queued candidate refreshed '
+      'poi=${poi.id} distance=${distanceLabel}m reason=$reason',
+    );
+  }
+
+  void _removeQueuedCandidate(String poiId, {required String reason}) {
+    final removed = _queuedCandidates.remove(poiId);
+    if (removed == null) {
+      return;
+    }
+
+    _log(
+      '[GeofencingService] queued candidate removed poi=$poiId reason=$reason',
+    );
+  }
+
+  void _purgeExpiredQueuedCandidates(DateTime now) {
+    final expiredPoiIds = <String>[];
+    for (final entry in _queuedCandidates.entries) {
+      if (!_isQueuedCandidateStillValid(entry.value, now)) {
+        expiredPoiIds.add(entry.key);
+      }
+    }
+
+    for (final poiId in expiredPoiIds) {
+      final candidate = _queuedCandidates.remove(poiId);
+      if (candidate == null) {
+        continue;
+      }
+
+      final age = now.difference(candidate.lastObservedAt).inSeconds;
+      final reason = _alreadyTriggered.contains(poiId)
+          ? 'already_triggered'
+          : _insideRadius.contains(poiId)
+          ? 'expired_ttl_${age}s'
+          : 'left_radius';
+      _log(
+        '[GeofencingService] queued candidate expired/removed '
+        'poi=$poiId reason=$reason',
+      );
+    }
   }
 
   void _addPositionSample(Position position, DateTime timestamp) {
@@ -356,8 +605,10 @@ class GeofencingService {
 
   double _calculateEffectiveRadius(Point poi, double confidence) {
     final multiplier = 1 + (1 - confidence) * 0.5;
-    final cappedMultiplier =
-        multiplier.clamp(1.0, AppConstants.geofenceMaxRadiusMultiplier);
+    final cappedMultiplier = multiplier.clamp(
+      1.0,
+      AppConstants.geofenceMaxRadiusMultiplier,
+    );
     return poi.triggerRadiusM * cappedMultiplier;
   }
 
@@ -461,4 +712,30 @@ class PositionSample {
   final Position position;
   final DateTime timestamp;
   final double accuracy;
+}
+
+class ConfirmedPoiCandidate {
+  const ConfirmedPoiCandidate({
+    required this.poi,
+    required this.distance,
+    required this.confidence,
+  });
+
+  final Point poi;
+  final double distance;
+  final double confidence;
+}
+
+class QueuedPoiCandidate {
+  const QueuedPoiCandidate({
+    required this.poi,
+    required this.distanceMeters,
+    required this.lastObservedAt,
+    required this.confidence,
+  });
+
+  final Point poi;
+  final double distanceMeters;
+  final DateTime lastObservedAt;
+  final double confidence;
 }

@@ -16,6 +16,7 @@ import '../services/audio_service.dart' as audio_svc;
 import '../services/debug_log.dart';
 import '../services/discovery_playback_service.dart';
 import '../services/geofencing_service.dart';
+import '../services/notification_service.dart';
 import '../services/permission_service.dart';
 import '../services/supabase_service.dart';
 import '../services/user_preferences_service.dart';
@@ -42,6 +43,7 @@ class _MapScreenState extends State<MapScreen>
   final GeofencingService _geofencingService = GeofencingService();
   final DiscoveryPlaybackService _discoveryPlaybackService =
       DiscoveryPlaybackService();
+  final NotificationService _notificationService = NotificationService();
   final PermissionService _permissionService = PermissionService();
   final audio_svc.AudioService _audioService = audio_svc.AudioService();
   final VisitedPoiService _visitedPoiService = VisitedPoiService();
@@ -60,6 +62,8 @@ class _MapScreenState extends State<MapScreen>
   LatLng? _userPosition;
   StreamSubscription<models.Point>? _discoverySubscription;
   StreamSubscription<AudioState>? _audioStateSubscription;
+  StreamSubscription<DiscoveryNotificationPayload>?
+  _notificationTapSubscription;
   late final AnimationController _discoveryPulseController;
   SharedPreferences? _prefs;
 
@@ -72,6 +76,11 @@ class _MapScreenState extends State<MapScreen>
       duration: const Duration(milliseconds: 1100),
     );
     _loadDiscoveryPreference();
+    _notificationTapSubscription = _notificationService.tapStream.listen((
+      payload,
+    ) {
+      _handleNotificationPayload(payload);
+    });
     unawaited(_visitedPoiService.init());
     _loadPoints();
     _getUserPosition();
@@ -104,6 +113,7 @@ class _MapScreenState extends State<MapScreen>
     WidgetsBinding.instance.removeObserver(this);
     _discoverySubscription?.cancel();
     _audioStateSubscription?.cancel();
+    _notificationTapSubscription?.cancel();
     _discoveryPulseController.dispose();
     super.dispose();
   }
@@ -112,6 +122,7 @@ class _MapScreenState extends State<MapScreen>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       _syncDiscoveryUiWithService();
+      _handleNotificationPayload(_notificationService.pendingPayload);
     }
   }
 
@@ -124,6 +135,7 @@ class _MapScreenState extends State<MapScreen>
         _allPoints = pointsJson.map((j) => models.Point.fromJson(j)).toList();
         _isLoading = false;
       });
+      _handleNotificationPayload(_notificationService.pendingPayload);
       _maybeRestoreDiscoveryMode();
     } catch (e) {
       if (!mounted) return;
@@ -276,6 +288,7 @@ class _MapScreenState extends State<MapScreen>
         return;
       }
 
+      await _notificationService.ensurePermissions();
       _geofencingService.resetTriggered();
       final started = await _geofencingService.start(points);
       if (!mounted) return;
@@ -310,6 +323,7 @@ class _MapScreenState extends State<MapScreen>
 
     try {
       _geofencingService.stop();
+      await _notificationService.cancelDiscoveryNotification();
       await _discoverySubscription?.cancel();
       _discoverySubscription = null;
       _setDiscoveryModeState(enabled: false);
@@ -395,6 +409,30 @@ class _MapScreenState extends State<MapScreen>
     if (_discoveryModeEnabled != shouldBeEnabled) {
       _setDiscoveryModeState(enabled: shouldBeEnabled);
     }
+  }
+
+  void _handleNotificationPayload(DiscoveryNotificationPayload? payload) {
+    if (!mounted || payload == null || _allPoints.isEmpty) {
+      return;
+    }
+
+    models.Point? matchedPoi;
+    for (final poi in _allPoints) {
+      if (poi.id == payload.poiId) {
+        matchedPoi = poi;
+        break;
+      }
+    }
+
+    if (matchedPoi == null) {
+      return;
+    }
+
+    _notificationService.markPendingPayloadHandled(payload);
+    context.pushNamed(
+      'poiDetail',
+      extra: PoiDetailRouteData(poi: matchedPoi, userPosition: _userPosition),
+    );
   }
 
   void _setDiscoveryModeState({required bool enabled}) {

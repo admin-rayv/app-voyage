@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'config/theme.dart';
 import 'config/routes.dart';
 import 'services/audio_service.dart';
+import 'services/notification_service.dart';
 import 'services/supabase_service.dart';
 
 /// App Voyage - Point d'entrée
@@ -22,11 +23,13 @@ void main() async {
     debugPrint('[main] AudioService.init() failed: $e');
   }
 
-  runApp(
-    const ProviderScope(
-      child: AppVoyage(),
-    ),
-  );
+  try {
+    await NotificationService().init();
+  } catch (e) {
+    debugPrint('[main] NotificationService.init() failed: $e');
+  }
+
+  runApp(const ProviderScope(child: AppVoyage()));
 }
 
 class AppVoyage extends StatelessWidget {

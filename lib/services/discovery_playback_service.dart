@@ -7,14 +7,17 @@ import '../models/discovery_playback_result.dart';
 import '../models/point.dart';
 import 'audio_service.dart';
 import 'debug_log.dart';
+import 'notification_service.dart';
 import 'supabase_service.dart';
 import 'user_preferences_service.dart';
 
 class DiscoveryPlaybackService {
   DiscoveryPlaybackService({AudioService? audioService})
-    : _audioService = audioService ?? AudioService();
+    : _audioService = audioService ?? AudioService(),
+      _notificationService = NotificationService();
 
   final AudioService _audioService;
+  final NotificationService _notificationService;
 
   Future<DiscoveryPlaybackResult> handleTriggeredPoi(Point poi) async {
     final autoplayEnabled =
@@ -33,6 +36,7 @@ class DiscoveryPlaybackService {
     }
 
     await _audioService.init();
+    await _notificationService.init();
     final audioState = _audioService.currentState;
 
     if (audioState.playState == AudioPlayState.paused) {
@@ -114,12 +118,20 @@ class DiscoveryPlaybackService {
 
     final vibrationEnabled =
         await UserPreferencesService.isDiscoveryAutoplayVibrationEnabled();
-    if (vibrationEnabled) {
-      await HapticFeedback.mediumImpact();
-    }
-
     final delaySec =
         await UserPreferencesService.getDiscoveryAutoplayDelaySec();
+
+    await _notificationService.showProximityNotification(
+      poi: poi,
+      language: language,
+      delaySeconds: delaySec,
+      vibrationEnabled: vibrationEnabled,
+    );
+
+    if (vibrationEnabled) {
+      await HapticFeedback.lightImpact();
+    }
+
     final delay = Duration(seconds: delaySec);
     if (delay > Duration.zero) {
       await Future<void>.delayed(delay);
@@ -129,6 +141,9 @@ class DiscoveryPlaybackService {
     if (refreshedState.playState == AudioPlayState.paused ||
         (refreshedState.playState == AudioPlayState.playing &&
             refreshedState.playbackSource == AudioPlaybackSource.manual)) {
+      await _notificationService.cancelDiscoveryNotification(
+        _notificationService.notificationIdForPoi(poi),
+      );
       _logSkip(poi, language, 'conflict_after_delay');
       return DiscoveryPlaybackResult.skipped(
         poi: poi,
@@ -144,6 +159,10 @@ class DiscoveryPlaybackService {
         refreshedState.playbackSource == AudioPlaybackSource.autoDiscovery) {
       await _audioService.stop();
     }
+
+    await _notificationService.cancelDiscoveryNotification(
+      _notificationService.notificationIdForPoi(poi),
+    );
 
     await _audioService.playText(
       content,

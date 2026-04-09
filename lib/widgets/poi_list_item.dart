@@ -9,12 +9,16 @@ import '../config/theme.dart';
 
 class PoiListItem extends StatelessWidget {
   final models.Point poi;
+  final bool isVisited;
+  final bool isPlaying;
   final LatLng? userPosition;
   final VoidCallback onTap;
 
   const PoiListItem({
     super.key,
     required this.poi,
+    this.isVisited = false,
+    this.isPlaying = false,
     this.userPosition,
     required this.onTap,
   });
@@ -36,6 +40,7 @@ class PoiListItem extends StatelessWidget {
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      color: isVisited ? Colors.grey.shade50 : null,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
@@ -48,16 +53,40 @@ class PoiListItem extends StatelessWidget {
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: (cat?.color ?? Colors.grey).withValues(alpha: 0.1),
+                  color: (isVisited ? Colors.grey : (cat?.color ?? Colors.grey))
+                      .withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: (cat?.color ?? Colors.grey).withValues(alpha: 0.3),
+                    color:
+                        (isVisited ? Colors.grey : (cat?.color ?? Colors.grey))
+                            .withValues(alpha: 0.3),
                   ),
                 ),
                 child: Center(
-                  child: Text(
-                    cat?.emoji ?? '📍',
-                    style: const TextStyle(fontSize: 22),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Text(
+                        isVisited ? '✓' : cat?.emoji ?? '📍',
+                        style: TextStyle(
+                          fontSize: isVisited ? 20 : 22,
+                          fontWeight: isVisited ? FontWeight.w800 : null,
+                          color: isVisited ? Colors.grey.shade700 : null,
+                        ),
+                      ),
+                      if (isPlaying)
+                        Positioned.fill(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.green.shade600,
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ),
@@ -77,6 +106,26 @@ class PoiListItem extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 4),
+                    if (isVisited || isPlaying)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 6),
+                        child: Wrap(
+                          spacing: 6,
+                          runSpacing: 6,
+                          children: [
+                            if (isVisited)
+                              _buildStatusPill(
+                                label: 'Écouté',
+                                color: Colors.grey.shade700,
+                              ),
+                            if (isPlaying)
+                              _buildStatusPill(
+                                label: 'Lecture en cours',
+                                color: Colors.green.shade700,
+                              ),
+                          ],
+                        ),
+                      ),
                     Wrap(
                       spacing: 4,
                       children: poi.categories.take(3).map((catKey) {
@@ -110,7 +159,11 @@ class PoiListItem extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Icon(Icons.near_me, size: 14, color: AppTheme.textSecondary),
+                    Icon(
+                      Icons.near_me,
+                      size: 14,
+                      color: AppTheme.textSecondary,
+                    ),
                     const SizedBox(height: 2),
                     Text(
                       distance < 1000
@@ -125,9 +178,31 @@ class PoiListItem extends StatelessWidget {
                   ],
                 ),
               const SizedBox(width: 4),
-              Icon(Icons.chevron_right, color: AppTheme.textSecondary, size: 20),
+              Icon(
+                Icons.chevron_right,
+                color: AppTheme.textSecondary,
+                size: 20,
+              ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStatusPill({required String label, required Color color}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 10,
+          fontWeight: FontWeight.w700,
+          color: color,
         ),
       ),
     );

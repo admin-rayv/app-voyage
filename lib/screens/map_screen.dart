@@ -19,6 +19,7 @@ import '../services/geofencing_service.dart';
 import '../services/permission_service.dart';
 import '../services/supabase_service.dart';
 import '../services/user_preferences_service.dart';
+import '../services/visited_poi_service.dart';
 import '../config/categories.dart';
 import '../config/theme.dart';
 import '../widgets/poi_list_item.dart';
@@ -43,9 +44,11 @@ class _MapScreenState extends State<MapScreen>
       DiscoveryPlaybackService();
   final PermissionService _permissionService = PermissionService();
   final audio_svc.AudioService _audioService = audio_svc.AudioService();
+  final VisitedPoiService _visitedPoiService = VisitedPoiService();
   List<models.Point> _allPoints = [];
   final Set<String> _activeFilters = {};
   bool _showList = false;
+  bool _showUnvisitedOnly = false;
   bool _isLoading = true;
   bool _discoveryModeEnabled = false;
   bool _discoveryBusy = false;
@@ -53,6 +56,7 @@ class _MapScreenState extends State<MapScreen>
   String? _error;
   String? _lastTriggeredPoiId;
   String? _lastAutoPlayedPoiId;
+  String? _currentPlayingPoiId;
   LatLng? _userPosition;
   StreamSubscription<models.Point>? _discoverySubscription;
   StreamSubscription<AudioState>? _audioStateSubscription;
@@ -68,24 +72,30 @@ class _MapScreenState extends State<MapScreen>
       duration: const Duration(milliseconds: 1100),
     );
     _loadDiscoveryPreference();
+    unawaited(_visitedPoiService.init());
     _loadPoints();
     _getUserPosition();
     _audioStateSubscription = _audioService.stateStream.listen((state) {
       if (!mounted) return;
-      if (state.playState == AudioPlayState.playing &&
-          state.playbackSource == AudioPlaybackSource.autoDiscovery &&
-          state.currentPoi != null) {
-        setState(() {
+      setState(() {
+        _currentPlayingPoiId =
+            state.playState == AudioPlayState.playing &&
+                state.currentPoi != null
+            ? state.currentPoi!.id
+            : null;
+
+        if (state.playState == AudioPlayState.playing &&
+            state.playbackSource == AudioPlaybackSource.autoDiscovery &&
+            state.currentPoi != null) {
           _lastAutoPlayedPoiId = state.currentPoi!.id;
-        });
-      }
-      if (state.playState == AudioPlayState.stopped &&
-          state.playbackSource == AudioPlaybackSource.autoDiscovery &&
-          _lastAutoPlayedPoiId != null) {
-        setState(() {
+        }
+
+        if (state.playState == AudioPlayState.stopped &&
+            state.playbackSource == AudioPlaybackSource.autoDiscovery &&
+            _lastAutoPlayedPoiId != null) {
           _lastAutoPlayedPoiId = null;
-        });
-      }
+        }
+      });
     });
   }
 
@@ -145,8 +155,14 @@ class _MapScreenState extends State<MapScreen>
   }
 
   List<models.Point> get _filteredPoints {
-    if (_activeFilters.isEmpty) return _allPoints;
-    return _allPoints
+    final basePoints = _showUnvisitedOnly
+        ? _allPoints
+              .where((poi) => !_visitedPoiService.isVisitedPoint(poi))
+              .toList()
+        : _allPoints;
+
+    if (_activeFilters.isEmpty) return basePoints;
+    return basePoints
         .where((p) => p.categories.any((c) => _activeFilters.contains(c)))
         .toList();
   }
@@ -427,7 +443,10 @@ class _MapScreenState extends State<MapScreen>
   }
 
   void _clearFilters() {
-    setState(() => _activeFilters.clear());
+    setState(() {
+      _activeFilters.clear();
+      _showUnvisitedOnly = false;
+    });
   }
 
   void _centerOnUser() {
@@ -661,17 +680,33 @@ class _MapScreenState extends State<MapScreen>
           : Column(
               children: [
                 _buildFilterBar(),
+                AnimatedBuilder(
+                  animation: _visitedPoiService.listenable,
+                  builder: (context, _) => _buildProgressSection(),
+                ),
                 _buildDiscoveryBanner(),
-                Expanded(child: _showList ? _buildList() : _buildMap()),
+                Expanded(
+                  child: AnimatedBuilder(
+                    animation: _visitedPoiService.listenable,
+                    builder: (context, _) =>
+                        _showList ? _buildList() : _buildMap(),
+                  ),
+                ),
               ],
             ),
     );
   }
 
   Widget _buildFilterBar() {
+    final basePoints = _showUnvisitedOnly
+        ? _allPoints
+              .where((poi) => !_visitedPoiService.isVisitedPoint(poi))
+              .toList()
+        : _allPoints;
+
     // Compter les POIs par catégorie
     final counts = <String, int>{};
-    for (final p in _allPoints) {
+    for (final p in basePoints) {
       for (final c in p.categories) {
         counts[c] = (counts[c] ?? 0) + 1;
       }
@@ -687,11 +722,26 @@ class _MapScreenState extends State<MapScreen>
           Padding(
             padding: const EdgeInsets.only(right: 6),
             child: FilterChip(
-              selected: _activeFilters.isEmpty,
+              selected: _activeFilters.isEmpty && !_showUnvisitedOnly,
               label: Text('Tous (${_allPoints.length})'),
               onSelected: (_) => _clearFilters(),
               selectedColor: AppTheme.primaryColor.withValues(alpha: 0.2),
               checkmarkColor: AppTheme.primaryColor,
+              visualDensity: VisualDensity.compact,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 6),
+            child: FilterChip(
+              selected: _showUnvisitedOnly,
+              label: Text('Non écoutés seulement (${basePoints.length})'),
+              onSelected: (_) {
+                setState(() {
+                  _showUnvisitedOnly = !_showUnvisitedOnly;
+                });
+              },
+              selectedColor: Colors.orange.withValues(alpha: 0.18),
+              checkmarkColor: Colors.orange.shade800,
               visualDensity: VisualDensity.compact,
             ),
           ),
@@ -712,6 +762,118 @@ class _MapScreenState extends State<MapScreen>
               ),
             );
           }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProgressSection() {
+    final totalCount = _allPoints.length;
+    final visitedCount = _visitedPoiService.visitedCountForCity(widget.city.id);
+    final progress = totalCount == 0 ? 0.0 : visitedCount / totalCount;
+
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.fromLTRB(12, 2, 12, 8),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: AppTheme.primaryColor.withValues(alpha: 0.12),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  '$visitedCount/$totalCount POIs ecoutés',
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              Text(
+                totalCount == 0 ? '0%' : '${(progress * 100).round()}%',
+                style: TextStyle(
+                  color: AppTheme.textSecondary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(999),
+            child: LinearProgressIndicator(
+              value: progress.clamp(0.0, 1.0),
+              minHeight: 8,
+              backgroundColor: AppTheme.primaryColor.withValues(alpha: 0.1),
+              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              _buildLegendChip(
+                icon: Icons.radio_button_checked,
+                label: 'A découvrir',
+                color: AppTheme.primaryColor,
+              ),
+              _buildLegendChip(
+                icon: Icons.check_circle,
+                label: 'Écouté',
+                color: Colors.grey.shade600,
+              ),
+              _buildLegendChip(
+                icon: Icons.graphic_eq,
+                label: 'En lecture',
+                color: Colors.green.shade700,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLegendChip({
+    required IconData icon,
+    required String label,
+    required Color color,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 14, color: color),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: color,
+            ),
+          ),
         ],
       ),
     );
@@ -759,6 +921,8 @@ class _MapScreenState extends State<MapScreen>
         final poi = points[index];
         return PoiListItem(
           poi: poi,
+          isVisited: _visitedPoiService.isVisitedPoint(poi),
+          isPlaying: _currentPlayingPoiId == poi.id,
           userPosition: _userPosition,
           onTap: () {
             context.pushNamed(
@@ -774,124 +938,173 @@ class _MapScreenState extends State<MapScreen>
   Widget _buildMap() {
     final points = _filteredPoints;
 
-    return FlutterMap(
-      mapController: _mapController,
-      options: MapOptions(
-        initialCenter: LatLng(widget.city.centerLat, widget.city.centerLng),
-        initialZoom: 14.5,
-      ),
-      children: [
-        // Tuiles OpenStreetMap
-        TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          userAgentPackageName: 'com.rayv.appvoyage',
+    return AnimatedBuilder(
+      animation: _discoveryPulseController,
+      builder: (context, _) => FlutterMap(
+        mapController: _mapController,
+        options: MapOptions(
+          initialCenter: LatLng(widget.city.centerLat, widget.city.centerLng),
+          initialZoom: 14.5,
         ),
-        // Marqueurs POIs
-        MarkerLayer(
-          markers: points.map((poi) {
-            final cat = Categories.byKey(poi.primaryCategory);
-            final color = cat?.color ?? Categories.defaultColor;
-            final isHighlighted = _lastTriggeredPoiId == poi.id;
-            final isAutoPlaying = _lastAutoPlayedPoiId == poi.id;
-            return Marker(
-              point: LatLng(poi.lat, poi.lng),
-              width: isAutoPlaying
-                  ? 50
-                  : isHighlighted
-                  ? 44
-                  : 36,
-              height: isAutoPlaying
-                  ? 50
-                  : isHighlighted
-                  ? 44
-                  : 36,
-              child: GestureDetector(
-                onTap: () => _showPoiPreview(poi),
-                child: AnimatedOpacity(
-                  opacity: 1.0,
-                  duration: const Duration(milliseconds: 300),
+        children: [
+          TileLayer(
+            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            userAgentPackageName: 'com.rayv.appvoyage',
+          ),
+          MarkerLayer(
+            markers: points.map((poi) {
+              final cat = Categories.byKey(poi.primaryCategory);
+              final color = cat?.color ?? Categories.defaultColor;
+              final isHighlighted = _lastTriggeredPoiId == poi.id;
+              final isPlaying = _currentPlayingPoiId == poi.id;
+              final isVisited = _visitedPoiService.isVisitedPoint(poi);
+              return Marker(
+                point: LatLng(poi.lat, poi.lng),
+                width: isPlaying
+                    ? 58
+                    : isHighlighted
+                    ? 46
+                    : 40,
+                height: isPlaying
+                    ? 58
+                    : isHighlighted
+                    ? 46
+                    : 40,
+                child: GestureDetector(
+                  onTap: () => _showPoiPreview(poi),
+                  child: _buildPoiMarker(
+                    emoji: cat?.emoji ?? '📍',
+                    color: color,
+                    isVisited: isVisited,
+                    isHighlighted: isHighlighted,
+                    isPlaying: isPlaying,
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+          if (_userPosition != null)
+            MarkerLayer(
+              markers: [
+                Marker(
+                  point: _userPosition!,
+                  width: 20,
+                  height: 20,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: isAutoPlaying ? Colors.green[700] : color,
+                      color: Colors.blue,
                       shape: BoxShape.circle,
-                      border: Border.all(
-                        color: isAutoPlaying
-                            ? Colors.white
-                            : isHighlighted
-                            ? Colors.lightGreenAccent
-                            : Colors.white,
-                        width: isAutoPlaying
-                            ? 4
-                            : isHighlighted
-                            ? 3
-                            : 2,
-                      ),
+                      border: Border.all(color: Colors.white, width: 3),
                       boxShadow: [
                         BoxShadow(
-                          color:
-                              (isAutoPlaying
-                                      ? Colors.greenAccent
-                                      : isHighlighted
-                                      ? Colors.green
-                                      : Colors.black)
-                                  .withValues(alpha: 0.3),
-                          blurRadius: isAutoPlaying
-                              ? 14
-                              : isHighlighted
-                              ? 10
-                              : 4,
-                          spreadRadius: isAutoPlaying
-                              ? 3
-                              : isHighlighted
-                              ? 2
-                              : 0,
-                          offset: const Offset(0, 2),
+                          color: Colors.blue.withValues(alpha: 0.3),
+                          blurRadius: 8,
+                          spreadRadius: 3,
                         ),
                       ],
                     ),
-                    child: Center(
-                      child: Text(
-                        cat?.emoji ?? '📍',
-                        style: TextStyle(
-                          fontSize: isAutoPlaying
-                              ? 20
-                              : isHighlighted
-                              ? 18
-                              : 16,
-                        ),
-                      ),
-                    ),
                   ),
                 ),
-              ),
-            );
-          }).toList(),
-        ),
-        // Position utilisateur
-        if (_userPosition != null)
-          MarkerLayer(
-            markers: [
-              Marker(
-                point: _userPosition!,
-                width: 20,
-                height: 20,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 3),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.blue.withValues(alpha: 0.3),
-                        blurRadius: 8,
-                        spreadRadius: 3,
-                      ),
-                    ],
-                  ),
+              ],
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPoiMarker({
+    required String emoji,
+    required Color color,
+    required bool isVisited,
+    required bool isHighlighted,
+    required bool isPlaying,
+  }) {
+    final pulse = isPlaying ? _discoveryPulseController.value : 0.0;
+    final ringScale = 1 + (pulse * 0.22);
+    final markerColor = isVisited ? Colors.grey.shade500 : color;
+    final borderColor = isPlaying
+        ? Colors.white
+        : isHighlighted
+        ? Colors.lightGreenAccent
+        : Colors.white;
+    final markerOpacity = isVisited && !isPlaying ? 0.72 : 1.0;
+    final size = isPlaying
+        ? 38.0
+        : isHighlighted
+        ? 34.0
+        : 30.0;
+
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        if (isPlaying)
+          Transform.scale(
+            scale: ringScale,
+            child: Container(
+              width: 52,
+              height: 52,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.green.withValues(alpha: 0.12),
+                border: Border.all(
+                  color: Colors.green.withValues(alpha: 0.28),
+                  width: 2,
                 ),
               ),
-            ],
+            ),
           ),
+        AnimatedOpacity(
+          opacity: markerOpacity,
+          duration: const Duration(milliseconds: 220),
+          child: Container(
+            width: size,
+            height: size,
+            decoration: BoxDecoration(
+              color: isPlaying ? Colors.green.shade700 : markerColor,
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: borderColor,
+                width: isPlaying
+                    ? 3
+                    : isHighlighted
+                    ? 2.5
+                    : 2,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color:
+                      (isPlaying
+                              ? Colors.green
+                              : isVisited
+                              ? Colors.grey
+                              : Colors.black)
+                          .withValues(alpha: 0.25),
+                  blurRadius: isPlaying
+                      ? 12
+                      : isHighlighted
+                      ? 8
+                      : 4,
+                  spreadRadius: isPlaying ? 2 : 0,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Center(
+              child: Text(
+                isVisited && !isPlaying ? '✓' : emoji,
+                style: TextStyle(
+                  fontSize: isPlaying
+                      ? 18
+                      : isHighlighted
+                      ? 16
+                      : 14,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

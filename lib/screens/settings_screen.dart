@@ -3,6 +3,7 @@ import '../services/audio_service.dart' as audio_svc;
 import '../services/tts_service.dart';
 import '../services/debug_log.dart';
 import '../services/user_preferences_service.dart';
+import '../services/visited_poi_service.dart';
 import '../config/theme.dart';
 
 /// Écran Paramètres — Configuration des voix TTS par langue.
@@ -20,7 +21,9 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   final TtsService _tts = TtsService();
   final audio_svc.AudioService _audio = audio_svc.AudioService();
+  final VisitedPoiService _visitedPoiService = VisitedPoiService();
   bool _isLoading = true;
+  bool _isResettingVisited = false;
   String _preferredLanguage = UserPreferencesService.defaultPreferredLanguage;
   bool _discoveryAutoplayEnabled =
       UserPreferencesService.defaultDiscoveryAutoplayEnabled;
@@ -76,6 +79,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _loadAllVoices() async {
     _preferredLanguage = await UserPreferencesService.getPreferredLanguage();
+    await _visitedPoiService.init();
     _discoveryAutoplayEnabled =
         await UserPreferencesService.isDiscoveryAutoplayEnabled();
     _discoveryAutoplayDelaySec =
@@ -146,6 +150,43 @@ class _SettingsScreenState extends State<SettingsScreen> {
     await UserPreferencesService.setDiscoveryAutoplayVibrationEnabled(enabled);
     if (!mounted) return;
     setState(() => _discoveryAutoplayVibrationEnabled = enabled);
+  }
+
+  Future<void> _confirmResetVisited() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Réinitialiser la progression ?'),
+        content: const Text(
+          'Tous les POIs marqués comme écoutés seront supprimés de cet appareil.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Annuler'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Reset'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !mounted) {
+      return;
+    }
+
+    setState(() => _isResettingVisited = true);
+    await _visitedPoiService.resetVisited();
+    if (!mounted) {
+      return;
+    }
+
+    setState(() => _isResettingVisited = false);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Progression des POIs réinitialisée.')),
+    );
   }
 
   @override
@@ -262,6 +303,60 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   value: _discoveryAutoplayVibrationEnabled,
                   onChanged: _setDiscoveryAutoplayVibrationEnabled,
+                ),
+                const SizedBox(height: 32),
+                Row(
+                  children: [
+                    Icon(Icons.checklist, color: AppTheme.primaryColor),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Progression des POIs',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Réinitialise les POIs marqués comme déjà écoutés sur cet appareil.',
+                  style: TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+                ),
+                const SizedBox(height: 12),
+                AnimatedBuilder(
+                  animation: _visitedPoiService.listenable,
+                  builder: (context, _) {
+                    final totalVisited = _visitedPoiService
+                        .listenable
+                        .value
+                        .values
+                        .fold<int>(0, (sum, ids) => sum + ids.length);
+                    return ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: Icon(
+                        Icons.check_circle_outline,
+                        color: Colors.grey.shade700,
+                      ),
+                      title: Text('$totalVisited POIs écoutés enregistrés'),
+                      subtitle: const Text(
+                        'Le reset efface la progression locale de toutes les villes.',
+                      ),
+                      trailing: TextButton.icon(
+                        onPressed: _isResettingVisited || totalVisited == 0
+                            ? null
+                            : _confirmResetVisited,
+                        icon: _isResettingVisited
+                            ? SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: AppTheme.primaryColor,
+                                ),
+                              )
+                            : const Icon(Icons.refresh),
+                        label: const Text('Reset'),
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(height: 32),
                 // Section vitesse de lecture

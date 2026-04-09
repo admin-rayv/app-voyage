@@ -12,6 +12,7 @@ import 'debug_log.dart';
 import 'edge_tts_service.dart';
 import 'supabase_service.dart';
 import 'tts_service.dart';
+import 'visited_poi_service.dart';
 
 /// Service audio simplifie.
 /// Le handler expose l'etat de lecture, ce service ne fait que le relayer.
@@ -32,6 +33,7 @@ class AudioService {
   final TtsService _fallbackTts = TtsService();
   final EdgeTtsService _edgeTts = EdgeTtsService();
   final SupabaseService _supabase = SupabaseService();
+  final VisitedPoiService _visitedPoiService = VisitedPoiService();
   final StreamController<AudioState> _stateController =
       StreamController<AudioState>.broadcast();
 
@@ -49,6 +51,16 @@ class AudioService {
   String? _currentScriptId;
   AudioPlaybackSource _currentPlaybackSource = AudioPlaybackSource.manual;
   audio_svc.PlaybackState _playbackState = audio_svc.PlaybackState();
+  AudioState _lastEmittedState = const AudioState(
+    playState: AudioPlayState.stopped,
+    position: Duration.zero,
+    duration: Duration.zero,
+    speed: 1.0,
+    playbackSource: AudioPlaybackSource.manual,
+  );
+  String? _sessionVisitedPoiId;
+  bool _userInitiatedStop = false;
+  bool _pauseInProgress = false;
   AudioState _state = const AudioState(
     playState: AudioPlayState.stopped,
     position: Duration.zero,
@@ -87,6 +99,7 @@ class AudioService {
 
   Future<void> _performInit() async {
     await _loadSavedSpeed();
+    await _visitedPoiService.init();
     await _configureAudioSession();
 
     try {
@@ -213,6 +226,9 @@ class AudioService {
     _currentPlaybackSource = source;
     _duration = _estimateDuration(text);
     _position = Duration.zero;
+    _sessionVisitedPoiId = null;
+    _userInitiatedStop = false;
+    _pauseInProgress = false;
 
     DebugLog().log(
       '[AudioService] playText poi=$_currentPoiName lang=$language source=$source fallback=$_usingFallbackTts',
@@ -251,6 +267,7 @@ class AudioService {
 
   Future<void> pause() async {
     await init();
+    _pauseInProgress = true;
     if (_audioHandler != null) {
       await _audioHandler!.pause();
       return;
@@ -262,6 +279,8 @@ class AudioService {
 
   Future<void> resume() async {
     await init();
+    _userInitiatedStop = false;
+    _pauseInProgress = false;
     if (_audioHandler != null) {
       // Ne PAS remettre _position à zéro — on reprend après pause.
       // Le handler gère la reprise via flutter_tts.pause()/speak().
@@ -291,6 +310,8 @@ class AudioService {
 
   Future<void> stop() async {
     await init();
+    _userInitiatedStop = true;
+    _pauseInProgress = false;
     if (_audioHandler != null) {
       await _audioHandler!.stop();
     } else {
@@ -304,6 +325,7 @@ class AudioService {
     _currentPoiName = null;
     _currentPoi = null;
     _currentScriptId = null;
+    _sessionVisitedPoiId = null;
     _currentPlaybackSource = AudioPlaybackSource.manual;
     _state = _state.copyWith(
       playState: AudioPlayState.stopped,
@@ -361,6 +383,7 @@ class AudioService {
   void _handleFallbackState(TtsState state) {
     switch (state) {
       case TtsState.playing:
+        _pauseInProgress = false;
         _state = _state.copyWith(playState: AudioPlayState.playing);
         break;
       case TtsState.paused:
@@ -374,6 +397,9 @@ class AudioService {
         break;
     }
     _emitState();
+    if (state == TtsState.stopped) {
+      _pauseInProgress = false;
+    }
   }
 
   AudioPlayState _mapPlayState(audio_svc.PlaybackState playbackState) {
@@ -389,6 +415,8 @@ class AudioService {
 
   void _emitState() {
     if (_stateController.isClosed) return;
+
+    final previousState = _lastEmittedState;
 
     if (_audioHandler != null) {
       final playState = _mapPlayState(_playbackState);
@@ -423,7 +451,37 @@ class AudioService {
     DebugLog().log(
       '[AudioService] state=${_state.playState} position=${_state.position.inMilliseconds} poi=${_state.currentPoiName}',
     );
+    _lastEmittedState = _state;
     _stateController.add(_state);
+    _trackVisitedPoi(previousState, _state);
+  }
+
+  void _trackVisitedPoi(AudioState previousState, AudioState currentState) {
+    final poi = currentState.currentPoi ?? previousState.currentPoi;
+    if (poi == null) {
+      return;
+    }
+    if (_sessionVisitedPoiId == poi.id) {
+      return;
+    }
+
+    final durationMs = currentState.duration.inMilliseconds;
+    final positionMs = currentState.position.inMilliseconds;
+    final hasReachedHalf =
+        durationMs > 0 && positionMs >= (durationMs / 2).round();
+    final completedNaturally =
+        !_userInitiatedStop &&
+        !_pauseInProgress &&
+        previousState.playState != AudioPlayState.stopped &&
+        currentState.playState == AudioPlayState.stopped &&
+        poi.id.isNotEmpty;
+
+    if (!hasReachedHalf && !completedNaturally) {
+      return;
+    }
+
+    _sessionVisitedPoiId = poi.id;
+    unawaited(_visitedPoiService.markVisitedForPoint(poi));
   }
 
   Future<void> _loadSavedSpeed() async {

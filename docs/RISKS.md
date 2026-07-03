@@ -111,6 +111,36 @@
 
 ---
 
+### T7. Dépendance à l'API non officielle Edge TTS
+| Aspect | Détail |
+|--------|--------|
+| **Description** | Depuis v0.5.0, la lecture privilégie `EdgeTtsService`: API WebSocket non documentée de Microsoft Edge avec un token client codé en dur. Microsoft peut la couper, la modifier ou la bloquer sans préavis. Question de conditions d'utilisation également. |
+| **Probabilité** | 🟡 Moyenne |
+| **Impact** | 🟡 Moyen — l'app retombe automatiquement sur les voix natives (fallback en place, timeout 12 s) |
+
+**Mitigation:**
+- [x] Branché avec fallback flutter_tts automatique (offline, API down, timeout)
+- [x] MP3 cachés localement — une coupure de l'API n'affecte pas les audios déjà téléchargés
+- [ ] Surveiller les logs `[AudioService] Edge TTS erreur` pour détecter une coupure
+- [ ] Si la coupure devient fréquente: migrer vers Azure Speech officiel (~5 $/ville, mêmes voix)
+
+---
+
+### T8. GPS/audio en arrière-plan non fonctionnel
+| Aspect | Détail |
+|--------|--------|
+| **Description** | Le mode découverte doit fonctionner téléphone en poche / écran verrouillé. La config actuelle (geolocator sans `AppleSettings`/`AndroidSettings` spécifiques, pas de foreground service Android) ne le permet pas — le tracking s'arrête en arrière-plan. |
+| **Probabilité** | 🔴 Haute (confirmé par revue de code) |
+| **Impact** | 🔴 Élevé — invaliderait le test terrain Sprint 4 |
+
+**Mitigation:**
+- [x] Corrigé en v0.4.8 (voir CODE-REVIEW.md, finding #1)
+- [x] iOS: `AppleSettings(allowBackgroundLocationUpdates: true, showBackgroundLocationIndicator: true)`
+- [x] Android: `AndroidSettings(foregroundNotificationConfig: ...)` — foreground service geolocator
+- [ ] Tester explicitement écran verrouillé pendant le test terrain (Sprint 4)
+
+---
+
 ## 🟠 Risques business / marché
 
 ### B1. BaladoDécouverte est gratuit
@@ -343,7 +373,9 @@
 
 | ID | Risque | Prob. | Impact | Priorité | Owner |
 |----|--------|-------|--------|----------|-------|
+| T8 | GPS arrière-plan non fonctionnel | 🔴 | 🔴 | 🚨 CRITIQUE | Camélia |
 | T1 | GPS imprécis sur POI | 🔴 | 🔴 | 🚨 CRITIQUE | Camélia |
+| T7 | API Edge TTS non officielle | 🟡 | 🟡 | 🟡 MOYENNE | Camélia |
 | T3 | Sync groupe désync | 🟡 | 🔴 | ⚠️ HAUTE | Camélia |
 | T6 | Trop de POIs submergent l'utilisateur | 🟡 | 🟡 | 🟡 MOYENNE | Camélia |
 | B1 | BaladoDécouverte gratuit | 🔴 | 🟡 | ⚠️ HAUTE | Pierre |
@@ -363,10 +395,10 @@
 
 ### Top 3 risques à adresser en priorité:
 
-1. **T1 - GPS imprécis sur POI** → Prototyper et tester le géofencing par POI à Saint-Lambert TRÈS TÔT
-2. **B1 - Compétition gratuite** → Différenciation: exploration libre + ton engageant + sync groupe
-3. **T6 - Surcharge de POIs** → Catégories, filtres, notifications intelligentes dès le MVP
+1. **T8 - GPS arrière-plan** → Corriger la config geolocator/foreground service AVANT le test terrain (Sprint 4)
+2. **T1 - GPS imprécis sur POI** → Tester le géofencing par POI à Saint-Lambert (Sprint 4)
+3. **T6 - Surcharge de POIs** → Catégories, filtres, notifications intelligentes (cooldown 30 s déjà en place)
 
 ---
 
-*Dernière mise à jour: 2026-02-23*
+*Dernière mise à jour: 2026-07-03*

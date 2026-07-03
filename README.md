@@ -38,8 +38,9 @@ Pour un nouvel environnement:
 // lib/config/constants.dart
 static const String supabaseUrl = 'https://VOTRE_PROJET.supabase.co';
 static const String supabaseAnonKey = 'VOTRE_ANON_KEY';
-static const String mapboxAccessToken = 'VOTRE_MAPBOX_TOKEN';
 ```
+
+**Cartes:** aucune clé requise — l'app utilise OpenStreetMap via `flutter_map` (gratuit, sans compte).
 
 ### Permissions requises
 
@@ -59,12 +60,19 @@ static const String mapboxAccessToken = 'VOTRE_MAPBOX_TOKEN';
 ```
 Supabase (cities, points, scripts)
         ↓ texte
-  AudioService → TtsService → flutter_tts → Voix native du téléphone
+  AudioService → AppAudioHandler (audio_service) → flutter_tts → Voix native
+        ↑                                            (contrôles lock screen,
+  GeofencingService → DiscoveryPlaybackService        audio en background)
+  (GPS auto-trigger)   (notifications + auto-play)
 ```
 
 **POI-first:** Les POIs sont autonomes (liés à une ville, pas à un tour). Chaque POI a un script auto-contenu par langue (FR, EN, ES).
 
-**Audio natif:** Pas de génération MP3, pas d'API TTS externe. `flutter_tts` utilise Apple Speech (iOS) ou Google TTS (Android) — gratuit, offline, instantané.
+**Audio:** la lecture privilégie les **voix neurales Edge TTS** (MP3 générés gratuitement via l'API du navigateur Microsoft Edge, cachés localement — voix `fr-CA-Thierry` pour Marco), avec **fallback automatique** sur `flutter_tts` (voix native du téléphone) sans réseau ni cache. Bouton « Télécharger les audios » sur la carte pour pré-générer toute une ville en Wi-Fi. ⚠️ API non officielle — voir RISKS.md (T7).
+
+**Cartes:** `flutter_map` avec tuiles **CARTO** (données OpenStreetMap) — gratuit, sans clé API, retina, clair/sombre, clustering des marqueurs, attribution intégrée.
+
+**Mode découverte:** `GeofencingService` surveille la position GPS (rayon dynamique selon la précision, direction d'approche, debounce 3 s, cooldown global 30 s avec file d'attente) et déclenche la lecture automatique via `DiscoveryPlaybackService`.
 
 → Détail complet: [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)
 
@@ -76,19 +84,36 @@ Supabase (cities, points, scripts)
 lib/
 ├── main.dart
 ├── config/
-│   ├── constants.dart          # URLs, clés, settings GPS/audio
-│   ├── routes.dart             # go_router navigation
-│   └── theme.dart              # Thème Material
-├── models/                     # Data models
+│   ├── constants.dart               # URLs, clés, settings GPS/audio
+│   ├── categories.dart              # 7 catégories (labels, emojis, couleurs)
+│   ├── routes.dart                  # go_router navigation
+│   └── theme.dart                   # Thème Material
+├── models/                          # Point, City, Script, AudioState...
 ├── screens/
-│   ├── home_screen.dart        # Liste des villes
-│   ├── tour_detail_screen.dart # Détail d'une ville/catégorie
-│   └── active_tour_screen.dart # Mode exploration GPS
-└── services/
-    ├── audio_service.dart      # Bridge scripts → TTS
-    ├── tts_service.dart        # Wrapper flutter_tts (voix natives)
-    ├── supabase_service.dart   # Requêtes Supabase
-    └── location_service.dart   # GPS + geofencing
+│   ├── home_screen.dart             # Liste des villes
+│   ├── map_screen.dart              # Carte + liste + mode découverte GPS
+│   ├── poi_detail_screen.dart       # Détail POI + lecteur audio
+│   ├── settings_screen.dart         # Langue, voix, vitesse, autoplay
+│   └── debug_voices_screen.dart     # Debug des voix TTS
+├── services/
+│   ├── audio_service.dart           # Orchestration lecture (état global)
+│   ├── audio_handler.dart           # Handler audio_service (background/lock screen)
+│   ├── tts_service.dart             # Wrapper flutter_tts + sélection de voix
+│   ├── edge_tts_service.dart        # ⚠️ Génération MP3 Edge TTS — non branché
+│   ├── geofencing_service.dart      # Détection de proximité GPS (cœur du produit)
+│   ├── discovery_playback_service.dart  # Auto-play sur trigger GPS
+│   ├── location_service.dart        # Stream de position GPS
+│   ├── permission_service.dart      # Flow permissions localisation
+│   ├── notification_service.dart    # Notifications de proximité
+│   ├── visited_poi_service.dart     # Progression POIs écoutés (persistée)
+│   ├── user_preferences_service.dart # Préférences (langue, autoplay...)
+│   ├── supabase_service.dart        # Requêtes Supabase
+│   └── debug_log.dart               # Logs in-app + journal des décisions géo
+└── widgets/
+    ├── app_shell.dart               # Shell avec mini-player global
+    ├── mini_player.dart             # Lecteur compact persistant
+    ├── poi_list_item.dart           # Item de liste POI
+    └── voice_setup_dialog.dart      # Guide d'installation des voix TTS
 ```
 
 ---
@@ -169,6 +194,7 @@ VALUES (
 | [docs/CONTENT-AUTOMATION.md](./docs/CONTENT-AUTOMATION.md) | Pipeline de création de contenu |
 | [docs/USER-STORIES.md](./docs/USER-STORIES.md) | User stories détaillées |
 | [docs/ROADMAP.md](./docs/ROADMAP.md) | Roadmap produit |
+| [docs/CODE-REVIEW.md](./docs/CODE-REVIEW.md) | Revue de code — bugs et incohérences à adresser |
 
 ---
 
@@ -179,7 +205,13 @@ VALUES (
 
 ---
 
-## 📊 Status
+## 📊 Status (v0.5.0)
 
 ✅ **Sprint 0** — Setup + contenu Saint-Lambert (81 POIs, 243 scripts)
-⏳ **Sprint 1** — UI de base + lecture audio + carte
+✅ **Sprint 1** — Carte OSM + POIs + filtres par catégorie + vue liste
+✅ **Sprint 2** — Lecture audio (tap), mini-player, background/lock screen
+✅ **Sprint 3** — Mode découverte: GPS auto-trigger, notifications, POIs visités, cooldown
+✅ **Revue de code** — 20 correctifs appliqués (GPS arrière-plan, position live, etc.) — voir [docs/CODE-REVIEW.md](./docs/CODE-REVIEW.md)
+✅ **Polish pré-terrain (v0.5.0)** — voix Edge TTS branchées + téléchargement par ville, tuiles CARTO retina + attribution, clustering, cercles de rayon en mode découverte, dark mode, police Nunito, splash screen, onboarding, animations Hero, photos de villes (migration 002)
+⏳ **Sprint 4** — Test terrain à Saint-Lambert (balade libre) ← **prochaine étape**
+🔜 **Sprint 5** — Mode offline complet (sqflite: POIs + scripts + tiles)

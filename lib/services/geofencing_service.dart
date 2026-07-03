@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import '../config/constants.dart';
 import '../models/point.dart';
 import 'debug_log.dart';
+import 'geofence_math.dart';
 import 'location_service.dart';
 
 /// Service de geofencing GPS pour detecter l'entree dans le rayon des POIs.
@@ -33,10 +34,24 @@ class GeofencingService {
   DateTime? _cooldownUntil;
   Timer? _cooldownTimer;
   Position? _lastKnownPosition;
+  int _sessionTriggerCount = 0;
 
   bool get isMonitoring => _isMonitoring;
   Stream<Point> get triggeredPois => _triggeredPoisController.stream;
   Set<String> get alreadyTriggered => UnmodifiableSetView(_alreadyTriggered);
+
+  /// Nombre de POIs réellement déclenchés depuis le dernier reset
+  /// (n'inclut pas les POIs pré-marqués via [seedTriggered]).
+  int get sessionTriggerCount => _sessionTriggerCount;
+
+  /// Pré-marquer des POIs comme déjà déclenchés (ex: POIs déjà écoutés,
+  /// persistés par VisitedPoiService) pour qu'ils ne rejouent pas.
+  void seedTriggered(Iterable<String> poiIds) {
+    _alreadyTriggered.addAll(poiIds);
+    _log(
+      '[GeofencingService] seeded ${poiIds.length} already-visited POIs',
+    );
+  }
 
   Future<bool> start(List<Point> pois) async {
     _log('[GeofencingService] start requested with ${pois.length} POIs');
@@ -97,6 +112,7 @@ class GeofencingService {
     _cooldownUntil = null;
     _cooldownTimer?.cancel();
     _cooldownTimer = null;
+    _sessionTriggerCount = 0;
     _log('[GeofencingService] triggered POIs reset');
   }
 
@@ -353,6 +369,7 @@ class GeofencingService {
     _pendingTriggers.remove(poi.id);
     _removeQueuedCandidate(poi.id, reason: 'triggered');
     _alreadyTriggered.add(poi.id);
+    _sessionTriggerCount++;
     _triggeredPoisController.add(poi);
     _log(
       '[GeofencingService] POI triggered '
@@ -558,11 +575,8 @@ class GeofencingService {
       return true;
     }
 
+    // Les 5 échantillons les plus récents, en ordre chronologique.
     final recentSamples = _positionHistory.toList().reversed.take(5).toList();
-    if (recentSamples.length < 2) {
-      return true;
-    }
-
     final distances = recentSamples.reversed
         .map(
           (sample) => Geolocator.distanceBetween(
@@ -574,42 +588,19 @@ class GeofencingService {
         )
         .toList();
 
-    final deltas = <double>[];
-    for (var index = 1; index < distances.length; index++) {
-      deltas.add(distances[index] - distances[index - 1]);
-    }
-
-    final averageDelta =
-        deltas.reduce((sum, value) => sum + value) / deltas.length;
-    final totalVariation = distances.last - distances.first;
-
-    if (totalVariation.abs() < 5.0) {
-      return true;
-    }
-
-    return averageDelta <= 0;
+    return GeofenceMath.isApproaching(distances);
   }
 
   double _calculateConfidence(double accuracy) {
-    if (accuracy < 10) {
-      return 1.0;
-    }
-    if (accuracy < 20) {
-      return 0.7;
-    }
-    if (accuracy <= 30) {
-      return 0.5;
-    }
-    return 0.3;
+    return GeofenceMath.confidenceForAccuracy(accuracy);
   }
 
   double _calculateEffectiveRadius(Point poi, double confidence) {
-    final multiplier = 1 + (1 - confidence) * 0.5;
-    final cappedMultiplier = multiplier.clamp(
-      1.0,
-      AppConstants.geofenceMaxRadiusMultiplier,
+    return GeofenceMath.effectiveRadius(
+      triggerRadiusM: poi.triggerRadiusM,
+      confidence: confidence,
+      maxMultiplier: AppConstants.geofenceMaxRadiusMultiplier,
     );
-    return poi.triggerRadiusM * cappedMultiplier;
   }
 
   bool _shouldConfirmPendingTrigger({

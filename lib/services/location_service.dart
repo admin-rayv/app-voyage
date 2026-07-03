@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import '../config/constants.dart';
 import 'permission_service.dart';
@@ -37,24 +38,58 @@ class LocationService {
     }
   }
 
-  /// Démarrer le tracking en temps réel
+  /// Démarrer le tracking en temps réel.
+  ///
+  /// Les settings sont spécifiques à la plateforme pour que le tracking
+  /// continue en arrière-plan (téléphone en poche / écran verrouillé):
+  /// - Android: foreground service géré par geolocator (notification persistante)
+  /// - iOS: allowBackgroundLocationUpdates + indicateur système
   void startTracking({
     required void Function(Position) onPositionUpdate,
     void Function(Object)? onError,
   }) {
-    final locationSettings = LocationSettings(
-      accuracy: LocationAccuracy.high,
-      distanceFilter: AppConstants.gpsDistanceFilterMeters,
+    _positionSubscription = Geolocator.getPositionStream(
+      locationSettings: _buildLocationSettings(),
+    ).listen(
+      (Position position) {
+        _lastPosition = position;
+        onPositionUpdate(position);
+      },
+      onError: onError,
     );
+  }
 
-    _positionSubscription =
-        Geolocator.getPositionStream(locationSettings: locationSettings).listen(
-          (Position position) {
-            _lastPosition = position;
-            onPositionUpdate(position);
-          },
-          onError: onError,
+  LocationSettings _buildLocationSettings() {
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return AndroidSettings(
+          accuracy: LocationAccuracy.high,
+          distanceFilter: AppConstants.gpsDistanceFilterMeters,
+          foregroundNotificationConfig: const ForegroundNotificationConfig(
+            notificationTitle: 'Mode découverte actif',
+            notificationText:
+                'App Voyage surveille les points d’intérêt autour de toi.',
+            notificationChannelName: 'Mode découverte',
+            enableWakeLock: true,
+            setOngoing: true,
+          ),
         );
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        return AppleSettings(
+          accuracy: LocationAccuracy.high,
+          distanceFilter: AppConstants.gpsDistanceFilterMeters,
+          activityType: ActivityType.fitness,
+          pauseLocationUpdatesAutomatically: false,
+          allowBackgroundLocationUpdates: true,
+          showBackgroundLocationIndicator: true,
+        );
+      default:
+        return LocationSettings(
+          accuracy: LocationAccuracy.high,
+          distanceFilter: AppConstants.gpsDistanceFilterMeters,
+        );
+    }
   }
 
   /// Arrêter le tracking

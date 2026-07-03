@@ -222,35 +222,40 @@ Tous les modes fonctionnent de la même façon — seul le **rayon de déclenche
 
 ---
 
-## Stack technique — Décidé ✅
+## Stack technique — Décidé ✅ (mis à jour 2026-07)
 
 | Composant | Choix | Justification |
 |-----------|-------|---------------|
 | **Mobile** | Flutter | Performance native, GPS/audio background |
-| **Backend** | Supabase | PostgreSQL + Auth + Realtime + Edge Functions |
-| **TTS** | ElevenLabs | Voix naturelles, génération à la demande |
-| **Maps** | Mapbox | Offline maps, customisable |
-| **Sync groupe** | Supabase Realtime | WebSockets intégrés |
+| **Backend** | Supabase | PostgreSQL + RLS + Realtime (Auth et Realtime = V2) |
+| **TTS** | **Voix natives (flutter_tts)** | Gratuit, offline, instantané — pivot depuis ElevenLabs |
+| **Maps** | **OpenStreetMap (flutter_map)** | Gratuit, sans clé API — pivot depuis Mapbox |
+| **Sync groupe** | Supabase Realtime | WebSockets intégrés (V2) |
 
 ### Architecture audio — Scripts, pas MP3 🆕
 
 **Principe:** On stocke les **scripts texte** dans la DB, pas les fichiers audio.
-L'audio est **généré à la demande** via ElevenLabs lors du téléchargement.
+L'audio est lu par les **voix natives du téléphone** (Apple Speech / Google TTS)
+via flutter_tts — aucune génération de MP3, aucune API externe.
 
 | Avantage | Explication |
 |----------|-------------|
 | Multi-langue facile | Ajouter une langue = traduire le texte |
-| Pas de stockage cloud | Plus besoin de Cloudinary/S3 |
-| Mises à jour instantanées | Modifier script → audio mis à jour |
-| Scalable | 100 langues = juste du texte dans la DB |
+| Pas de stockage cloud | Aucun fichier audio à héberger |
+| Mises à jour instantanées | Modifier script → prochaine lecture à jour |
+| 100 % offline | La voix native ne demande pas de réseau |
+| Coût zéro | Pas d'API TTS payante |
+
+**Piste à l'étude:** un service Edge TTS (voix Microsoft, meilleure qualité, MP3
+générés et cachés localement) existe dans le code mais n'est pas branché à la
+lecture. Décision à prendre — voir [docs/CODE-REVIEW.md](./docs/CODE-REVIEW.md).
+Attention: API non officielle, peut casser sans préavis.
 
 ### Notes techniques importantes
-- Calcul de distance = **local** (Dart) pour fonctionner offline
-- Audio généré via **Edge Function** puis mis en **cache local** sur l'appareil
-- Cache invalidé via **hash du script** (si texte change → re-génération)
+- Calcul de distance = **local** (Dart/geolocator) pour fonctionner offline
 - Sync groupe = à la **seconde** (pas milliseconde) — suffisant pour narration
-- Optimiser GPS polling pour économiser batterie
-- **Cache par ville** (pas par tour) — on télécharge tous les POIs d'une région
+- Optimiser GPS polling pour économiser batterie (filtre de distance 10 m actuellement)
+- **Cache par ville** (pas par tour) — on télécharge tous les POIs d'une région (Sprint 5)
 
 ---
 
@@ -307,4 +312,4 @@ L'audio est **généré à la demande** via ElevenLabs lors du téléchargement.
 
 ---
 
-*Dernière mise à jour: 2026-02-23*
+*Dernière mise à jour: 2026-07-03*

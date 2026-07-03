@@ -4,6 +4,20 @@
 
 ---
 
+## 📊 Statut actuel (2026-07-03, v0.4.7)
+
+| Sprint | Contenu | Statut |
+|--------|---------|--------|
+| Sprint 0 | Setup + collecte POIs Saint-Lambert | ✅ **Fait** — 81 POIs, 243 scripts (dépasse l'objectif de 15-20) |
+| Sprint 1 | Carte & POIs affichés | ✅ **Fait** — carte OSM, filtres, vue liste, détail POI |
+| Sprint 2 | Lecture audio (tap) | ✅ **Fait** — mini-player, background, lock screen (pas de seek: limitation flutter_tts) |
+| Sprint 3 | GPS auto-trigger | ✅ **Fait** — geofencing intelligent, notifications, POIs visités, cooldown |
+| Revue de code | 20 correctifs (GPS arrière-plan, position live, voix, etc.) | ✅ **Fait** (v0.4.8) — voir CODE-REVIEW.md |
+| Sprint 4 | Test terrain Saint-Lambert | ⏳ **Prochaine étape** — valider aussi la reprise pause/resume sur Android |
+| Sprint 5 | Offline & polish | 🔜 À venir — trancher la décision Edge TTS avant (CODE-REVIEW.md #3) |
+
+---
+
 ## Philosophie
 
 - **Sprints de 2 semaines** (ajustable selon disponibilité)
@@ -399,4 +413,4 @@ Phase 2: MVP Montréal + Features
 
 ---
 
-*Dernière mise à jour: 2026-03-15*
+*Dernière mise à jour: 2026-07-03*

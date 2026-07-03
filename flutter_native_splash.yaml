@@ -1,0 +1,11 @@
+# Splash screen natif — régénérer après modification:
+#   dart run flutter_native_splash:create
+flutter_native_splash:
+  color: "#2D5A5A"
+  color_dark: "#1A3535"
+  image: assets/images/splash_logo.png
+
+  android_12:
+    color: "#2D5A5A"
+    color_dark: "#1A3535"
+    image: assets/images/splash_logo.png

@@ -329,7 +329,7 @@ class NotificationService {
   }
 
   String _buildTitle(String language) {
-    return language == 'en' ? 'You are nearby' : 'Tu es a proximite !';
+    return language == 'en' ? 'You are nearby' : 'Tu es à proximité !';
   }
 
   String _buildBody({
@@ -345,8 +345,8 @@ class NotificationService {
     }
 
     if (delaySeconds <= 0) {
-      return '$poiName est pret. L audio demarre maintenant.';
+      return '$poiName est prêt. L’audio démarre maintenant.';
     }
-    return '$poiName est a proximite. L audio demarre dans $delaySeconds secondes.';
+    return '$poiName est à proximité. L’audio démarre dans $delaySeconds secondes.';
   }
 }

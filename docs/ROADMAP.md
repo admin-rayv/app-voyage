@@ -1,5 +1,11 @@
 # 🗺️ ROADMAP — App Voyage
 
+> **Statut (2026-07-03):** Phase 0 quasi complétée — le contenu (81 POIs, bien au-delà
+> des 15-20 visés) et l'app (carte, audio, GPS auto-trigger) sont livrés. Il reste le
+> **test terrain** (Sprint 4) pour valider le geofencing, puis l'**offline** (Sprint 5).
+> Voir [SPRINTS.md](./SPRINTS.md) pour le détail et [CODE-REVIEW.md](./CODE-REVIEW.md)
+> pour les correctifs à faire avant le test terrain.
+
 ## Philosophie
 
 **POI-first.** On collecte des points d'intérêt autonomes, on valide le GPS/geofencing, et l'utilisateur explore librement. Les tours curatés viennent après, quand on a assez de data et de contenu.

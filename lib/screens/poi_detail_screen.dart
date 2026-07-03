@@ -13,6 +13,7 @@ import '../services/audio_service.dart';
 import '../services/user_preferences_service.dart';
 import '../config/categories.dart';
 import '../config/theme.dart';
+import '../widgets/map_tiles.dart';
 
 /// Écran détail POI — Infos complètes + lecture audio TTS.
 
@@ -192,33 +193,37 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
                   ),
                 ),
                 children: [
-                  TileLayer(
-                    urlTemplate:
-                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    userAgentPackageName: 'com.rayv.appvoyage',
-                  ),
+                  MapTiles.tileLayer(context),
                   MarkerLayer(
                     markers: [
                       Marker(
                         point: LatLng(widget.poi.lat, widget.poi.lng),
                         width: 40,
                         height: 40,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: cat?.color ?? Colors.grey,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 3),
-                          ),
-                          child: Center(
-                            child: Text(
-                              cat?.emoji ?? '📍',
-                              style: const TextStyle(fontSize: 18),
+                        child: Hero(
+                          tag: 'poi-icon-${widget.poi.id}',
+                          child: Material(
+                            type: MaterialType.transparency,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: cat?.color ?? Colors.grey,
+                                shape: BoxShape.circle,
+                                border:
+                                    Border.all(color: Colors.white, width: 3),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  cat?.emoji ?? '📍',
+                                  style: const TextStyle(fontSize: 18),
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ],
                   ),
+                  MapTiles.attribution(),
                 ],
               ),
             ),
@@ -268,7 +273,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
                             Icon(
                               Icons.near_me,
                               size: 16,
-                              color: AppTheme.textSecondary,
+                              color: AppTheme.textSecondaryOf(context),
                             ),
                             const SizedBox(width: 4),
                             Text(
@@ -276,7 +281,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
                                   ? '${distance}m'
                                   : '${(distance / 1000).toStringAsFixed(1)}km',
                               style: TextStyle(
-                                color: AppTheme.textSecondary,
+                                color: AppTheme.textSecondaryOf(context),
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -300,9 +305,11 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.grey[50],
+                        color: AppTheme.softBackgroundOf(context),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.grey[200]!),
+                        border: Border.all(
+                          color: AppTheme.subtleBorderOf(context),
+                        ),
                       ),
                       child: Text(
                         _currentScript!.content,
@@ -314,7 +321,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
                       '~${_currentScript!.content.split(' ').length} mots · ${(_currentScript!.content.split(' ').length * 0.4).round()} sec',
                       style: TextStyle(
                         fontSize: 12,
-                        color: AppTheme.textSecondary,
+                        color: AppTheme.textSecondaryOf(context),
                       ),
                     ),
                   ],
@@ -447,7 +454,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
                         item.value,
                         style: TextStyle(
                           fontSize: 13,
-                          color: AppTheme.textSecondary,
+                          color: AppTheme.textSecondaryOf(context),
                           height: 1.4,
                         ),
                       ),
@@ -496,7 +503,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
           else if (_currentScript == null)
             Text(
               'Aucun script disponible',
-              style: TextStyle(color: AppTheme.textSecondary),
+              style: TextStyle(color: AppTheme.textSecondaryOf(context)),
             )
           else ...[
             // Boutons play/pause et stop (pas de seek — flutter_tts ne supporte pas)
@@ -606,13 +613,15 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
           color: isSelected ? AppTheme.primaryColor : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? AppTheme.primaryColor : Colors.grey[300]!,
+            color: isSelected
+                ? AppTheme.primaryColor
+                : AppTheme.subtleBorderOf(context),
           ),
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: isSelected ? Colors.white : AppTheme.textSecondary,
+            color: isSelected ? Colors.white : AppTheme.textSecondaryOf(context),
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
             fontSize: 13,
           ),

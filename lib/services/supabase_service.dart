@@ -53,6 +53,17 @@ class SupabaseService {
     return List<Map<String, dynamic>>.from(response);
   }
 
+  /// Récupérer un résumé léger (city_id + catégories) de tous les POIs
+  /// publiés, toutes villes confondues. Une seule requête pour l'écran
+  /// d'accueil au lieu d'un fetch complet des POIs par ville.
+  static Future<List<Map<String, dynamic>>> getPublishedPointSummaries() async {
+    final response = await client
+        .from('points')
+        .select('city_id, categories')
+        .eq('is_published', true);
+    return List<Map<String, dynamic>>.from(response);
+  }
+
   /// Récupérer les POIs d'une ville filtrés par catégorie.
   static Future<List<Map<String, dynamic>>> getPointsByCategory(
     String cityId,
@@ -70,7 +81,7 @@ class SupabaseService {
   // ── Scripts ──
 
   /// Récupérer un script par ID.
-  Future<Map<String, dynamic>?> getScript(String scriptId) async {
+  static Future<Map<String, dynamic>?> getScript(String scriptId) async {
     final response = await client
         .from('scripts')
         .select()

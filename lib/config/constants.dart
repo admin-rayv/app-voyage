@@ -2,7 +2,7 @@
 class AppConstants {
   // App Info
   static const String appName = 'App Voyage';
-  static const String appVersion = '0.5.0';
+  static const String appVersion = '0.5.1';
 
   // Supabase — surchargeables par environnement via --dart-define:
   //   flutter run --dart-define=SUPABASE_URL=... --dart-define=SUPABASE_ANON_KEY=...

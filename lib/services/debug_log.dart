@@ -1,6 +1,8 @@
 // Service de logs in-app — accessible depuis l'écran Settings.
 // Stocke les derniers messages de debug pour diagnostic sans USB.
 
+import 'package:flutter/foundation.dart';
+
 class DebugLog {
   DebugLog._();
   static final DebugLog _instance = DebugLog._();
@@ -20,6 +22,8 @@ class DebugLog {
     if (_entries.length > _maxEntries) {
       _entries.removeAt(0);
     }
+    // Miroir vers la console (logcat / console navigateur) pour le debug.
+    debugPrint('[AppVoyage] $message');
   }
 
   void logGeoDecision({

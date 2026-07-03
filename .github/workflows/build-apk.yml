@@ -4,6 +4,10 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
+    tags: ['v*']
+
+permissions:
+  contents: write # publication des Releases (tags v*)
 
 jobs:
   build:
@@ -33,3 +37,18 @@ jobs:
         with:
           name: app-voyage-apk
           path: build/app/outputs/flutter-apk/app-release.apk
+
+      # Sur un tag vX.Y.Z: publier une Release avec l'APK téléchargeable
+      # sans compte GitHub. Le nom d'asset stable "app-voyage.apk" rend
+      # l'URL .../releases/latest/download/app-voyage.apk permanente
+      # (→ QR code imprimable qui pointe toujours vers la dernière version).
+      - name: Préparer l'asset de release
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: cp build/app/outputs/flutter-apk/app-release.apk app-voyage.apk
+
+      - name: Publier la Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: app-voyage.apk
+          generate_release_notes: true

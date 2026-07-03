@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../models/city.dart';
 import '../services/supabase_service.dart';
 import '../config/categories.dart';
+import '../l10n/l10n.dart';
 import '../config/theme.dart';
 import '../widgets/voice_setup_dialog.dart';
 
@@ -87,13 +88,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 future: _citiesFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
+                    return Center(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          CircularProgressIndicator(),
-                          SizedBox(height: 16),
-                          Text('Chargement des villes...'),
+                          const CircularProgressIndicator(),
+                          const SizedBox(height: 16),
+                          Text(context.l10n.citiesLoading),
                         ],
                       ),
                     );
@@ -151,21 +152,21 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 4),
           Text(
-            'Un ami historien dans tes écouteurs 🎧',
+            context.l10n.tagline,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 16),
           Row(
             children: [
               Text(
-                'Explore une ville',
+                context.l10n.exploreCity,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const Spacer(),
               IconButton(
                 icon: const Icon(Icons.settings, size: 22),
                 onPressed: () => context.pushNamed('settings'),
-                tooltip: 'Paramètres',
+                tooltip: context.l10n.settingsTooltip,
               ),
             ],
           ),
@@ -212,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     bottom: 12,
                     left: 16,
                     child: Text(
-                      city.localizedName('fr'),
+                      city.localizedName(context.languageCode),
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 24,
@@ -236,7 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
-                        '${cityStats.poiCount} POIs',
+                        context.l10n.poiCountBadge(cityStats.poiCount),
                         style: TextStyle(
                           color: AppTheme.primaryColor,
                           fontWeight: FontWeight.bold,
@@ -277,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     visualDensity: VisualDensity.compact,
                     label: Text(
-                      '${cat.emoji} ${cat.labelFr}',
+                      '${cat.emoji} ${cat.label(context.languageCode)}',
                       style: const TextStyle(fontSize: 12),
                     ),
                     backgroundColor: cat.color.withValues(alpha: 0.1),
@@ -361,13 +362,13 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Icon(Icons.explore_off, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
-          const Text(
-            'Aucune ville disponible',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          Text(
+            context.l10n.noCities,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 8),
           Text(
-            'Reviens bientôt!',
+            context.l10n.comeBackSoon,
             style: TextStyle(color: Colors.grey[600]),
           ),
         ],
@@ -384,20 +385,20 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Icon(Icons.cloud_off, size: 64, color: Colors.grey[400]),
             const SizedBox(height: 16),
-            const Text(
-              'Impossible de charger les villes',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            Text(
+              context.l10n.citiesError,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 8),
             Text(
-              'Vérifie ta connexion internet',
+              context.l10n.checkConnection,
               style: TextStyle(color: Colors.grey[600]),
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
               onPressed: _refresh,
               icon: const Icon(Icons.refresh),
-              label: const Text('Réessayer'),
+              label: Text(context.l10n.retry),
             ),
           ],
         ),

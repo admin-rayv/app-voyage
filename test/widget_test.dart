@@ -18,25 +18,42 @@ void main() {
   testWidgets('App Voyage smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(AppVoyage(router: createAppRouter()));
+    await tester.pump();
 
     // Verify that the app title is displayed.
     expect(find.text('App Voyage'), findsWidgets);
   });
 
-  testWidgets('Onboarding s\'affiche au premier lancement', (tester) async {
+  testWidgets('Onboarding: 4 pages, choix de langue, jusqu\'au bout',
+      (tester) async {
+    // La locale des tests est en_US → chaînes anglaises.
     await tester.pumpWidget(
       AppVoyage(router: createAppRouter(initialLocation: '/onboarding')),
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Explore librement'), findsOneWidget);
-    expect(find.text('Passer'), findsOneWidget);
+    expect(find.text('Explore freely'), findsOneWidget);
+    expect(find.text('Skip'), findsOneWidget);
 
-    // Naviguer jusqu'au dernier écran
-    await tester.tap(find.text('Suivant'));
+    await tester.tap(find.text('Next'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Suivant'));
+    expect(find.text('Turn on discovery mode'), findsOneWidget);
+
+    await tester.tap(find.text('Next'));
     await tester.pumpAndSettle();
-    expect(find.text('C’est parti !'), findsOneWidget);
+    // Page de choix de langue (Sprint 8)
+    expect(find.text("Marco's language"), findsOneWidget);
+    expect(find.text('Français'), findsOneWidget);
+    expect(find.text('Español'), findsOneWidget);
+
+    // Choisir l'espagnol → persiste la préférence audio
+    await tester.tap(find.text('Español'));
+    await tester.pumpAndSettle();
+    final prefs = await SharedPreferences.getInstance();
+    expect(prefs.getString('preferred_language'), 'es');
+
+    await tester.tap(find.text('Next'));
+    await tester.pumpAndSettle();
+    expect(find.text("Let's go!"), findsOneWidget);
   });
 }

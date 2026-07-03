@@ -93,12 +93,14 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   await page.goto('http://127.0.0.1:8080/', { waitUntil: 'load' });
   await wait(16000); // init Flutter + fonts
 
-  // ── Onboarding (premier lancement) ──
+  // ── Onboarding (premier lancement, 4 pages) ──
   await shot('01-onboarding-1');
   await tap(195, 785); // Suivant
   await shot('02-onboarding-2');
   await tap(195, 785);
-  await shot('03-onboarding-3');
+  await shot('03-onboarding-langue');
+  await tap(195, 785);
+  await shot('03b-onboarding-marco');
   await tap(195, 785); // C'est parti
   await wait(2500);
 
@@ -134,11 +136,10 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   await tap(285, 797, 5000);
   await shot('09-poi-detail');
 
-  // ── Retour puis Paramètres ──
-  await tap(28, 56, 2000);  // back → carte
-  await tap(28, 56, 2500);  // back → home
-  await tap(345, 118, 3000); // engrenage
-  await shot('10-settings');
+  // ── Retour à la carte, ouvrir « Écouter ensemble » ──
+  await tap(28, 56, 2500);  // back → carte
+  await tap(222, 56, 2500); // icône groupe (appbar)
+  await shot('10-group-sheet');
 
   await browser.close();
   console.log('done', MODE);

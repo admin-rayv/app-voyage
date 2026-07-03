@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'config/theme.dart';
 import 'config/routes.dart';
+import 'l10n/l10n.dart';
 import 'screens/onboarding_screen.dart';
 import 'services/audio_service.dart';
 import 'services/notification_service.dart';
@@ -60,6 +61,10 @@ class AppVoyage extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
+      // UI localisée FR/EN/ES — suit la langue du téléphone (défaut: FR).
+      // La langue des audios est un réglage séparé (UserPreferencesService).
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       routerConfig: router,
       builder: (context, child) => child ?? const SizedBox.shrink(),
     );

@@ -7,6 +7,8 @@ import '../services/tts_service.dart';
 import '../services/debug_log.dart';
 import '../services/user_preferences_service.dart';
 import '../services/visited_poi_service.dart';
+import '../config/constants.dart';
+import '../l10n/l10n.dart';
 import '../config/theme.dart';
 
 /// Écran Paramètres — Configuration des voix TTS par langue.
@@ -160,18 +162,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Réinitialiser la progression ?'),
-        content: const Text(
-          'Tous les POIs marqués comme écoutés seront supprimés de cet appareil.',
-        ),
+        title: Text(context.l10n.resetConfirmTitle),
+        content: Text(context.l10n.resetConfirmBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Annuler'),
+            child: Text(context.l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Reset'),
+            child: Text(context.l10n.reset),
           ),
         ],
       ),
@@ -189,7 +189,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     setState(() => _isResettingVisited = false);
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Progression des POIs réinitialisée.')),
+      SnackBar(content: Text(context.l10n.resetDone)),
     );
   }
 
@@ -204,11 +204,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Paramètres'),
+        title: Text(context.l10n.settingsTitle),
         actions: [
           IconButton(
             icon: const Text('🐛', style: TextStyle(fontSize: 20)),
-            tooltip: 'Logs de debug',
+            tooltip: context.l10n.debugLogsTooltip,
             onPressed: () => showDebugLogs(context),
           ),
         ],
@@ -223,14 +223,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Icon(Icons.language, color: AppTheme.primaryColor),
                     const SizedBox(width: 8),
                     Text(
-                      'Langue de lecture',
+                      context.l10n.readingLanguage,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ],
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Langue utilisée par défaut pour les scripts audio et le mode découverte.',
+                  context.l10n.readingLanguageDesc,
                   style: TextStyle(color: AppTheme.textSecondaryOf(context), fontSize: 13),
                 ),
                 const SizedBox(height: 12),
@@ -256,29 +256,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Icon(Icons.explore, color: AppTheme.primaryColor),
                     const SizedBox(width: 8),
                     Text(
-                      'Mode découverte',
+                      context.l10n.discoveryModeSection,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ],
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Configure la lecture automatique quand un POI est détecté à proximité.',
+                  context.l10n.discoveryModeDesc,
                   style: TextStyle(color: AppTheme.textSecondaryOf(context), fontSize: 13),
                 ),
                 const SizedBox(height: 12),
                 SwitchListTile(
                   contentPadding: EdgeInsets.zero,
-                  title: const Text('Lecture automatique des POIs'),
-                  subtitle: const Text(
-                    'Démarre automatiquement un script quand le mode découverte déclenche un POI.',
-                  ),
+                  title: Text(context.l10n.autoplayTitle),
+                  subtitle: Text(context.l10n.autoplayDesc),
                   value: _discoveryAutoplayEnabled,
                   onChanged: _setDiscoveryAutoplayEnabled,
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Délai avant lecture',
+                  context.l10n.delayBeforePlay,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 const SizedBox(height: 8),
@@ -288,7 +286,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: UserPreferencesService.discoveryAutoplayDelayOptions
                       .map((delaySec) {
                         return ChoiceChip(
-                          label: Text('${delaySec}s'),
+                          label: Text(context.l10n.delaySeconds(delaySec)),
                           selected: _discoveryAutoplayDelaySec == delaySec,
                           onSelected: (_) =>
                               _setDiscoveryAutoplayDelay(delaySec),
@@ -302,20 +300,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const SizedBox(height: 8),
                 SwitchListTile(
                   contentPadding: EdgeInsets.zero,
-                  title: const Text('Vibration avant lecture'),
-                  subtitle: const Text(
-                    'Ajoute un retour haptique avant le lancement automatique du script.',
-                  ),
+                  title: Text(context.l10n.vibrationTitle),
+                  subtitle: Text(context.l10n.vibrationDesc),
                   value: _discoveryAutoplayVibrationEnabled,
                   onChanged: _setDiscoveryAutoplayVibrationEnabled,
                 ),
                 SwitchListTile(
                   contentPadding: EdgeInsets.zero,
-                  title: const Text('Rejouer les POIs déjà écoutés'),
-                  subtitle: const Text(
-                    'Si activé, le mode découverte redéclenche aussi les POIs '
-                    'déjà marqués comme écoutés (utile pour les tests terrain).',
-                  ),
+                  title: Text(context.l10n.replayVisitedTitle),
+                  subtitle: Text(context.l10n.replayVisitedDesc),
                   value: _discoveryReplayVisitedEnabled,
                   onChanged: _setDiscoveryReplayVisitedEnabled,
                 ),
@@ -325,14 +318,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Icon(Icons.checklist, color: AppTheme.primaryColor),
                     const SizedBox(width: 8),
                     Text(
-                      'Progression des POIs',
+                      context.l10n.progressSection,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ],
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Réinitialise les POIs marqués comme déjà écoutés sur cet appareil.',
+                  context.l10n.progressSectionDesc,
                   style: TextStyle(color: AppTheme.textSecondaryOf(context), fontSize: 13),
                 ),
                 const SizedBox(height: 12),
@@ -350,10 +343,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         Icons.check_circle_outline,
                         color: Colors.grey.shade700,
                       ),
-                      title: Text('$totalVisited POIs écoutés enregistrés'),
-                      subtitle: const Text(
-                        'Le reset efface la progression locale de toutes les villes.',
-                      ),
+                      title: Text(context.l10n.visitedSaved(totalVisited)),
+                      subtitle: Text(context.l10n.resetHint),
                       trailing: TextButton.icon(
                         onPressed: _isResettingVisited || totalVisited == 0
                             ? null
@@ -368,7 +359,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 ),
                               )
                             : const Icon(Icons.refresh),
-                        label: const Text('Reset'),
+                        label: Text(context.l10n.reset),
                       ),
                     );
                   },
@@ -380,14 +371,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Icon(Icons.speed, color: AppTheme.primaryColor),
                     const SizedBox(width: 8),
                     Text(
-                      'Vitesse de lecture',
+                      context.l10n.speedSection,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ],
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'La vitesse s\'applique à toutes les lectures.',
+                  context.l10n.speedSectionDesc,
                   style: TextStyle(color: AppTheme.textSecondaryOf(context), fontSize: 13),
                 ),
                 const SizedBox(height: 12),
@@ -419,14 +410,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Icon(Icons.record_voice_over, color: AppTheme.primaryColor),
                     const SizedBox(width: 8),
                     Text(
-                      'Voix de Marco',
+                      context.l10n.voiceSection,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ],
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Choisis la voix pour chaque langue. Appuie sur ▶️ pour tester.',
+                  context.l10n.voiceSectionDesc,
                   style: TextStyle(color: AppTheme.textSecondaryOf(context), fontSize: 13),
                 ),
                 const SizedBox(height: 24),
@@ -440,6 +431,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     testText: lang['testText'] as String,
                   ),
                 ),
+
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Icon(Icons.info_outline, color: AppTheme.primaryColor),
+                    const SizedBox(width: 8),
+                    Text(
+                      context.l10n.aboutSection,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  context.l10n.aboutVersion(AppConstants.appVersion),
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  context.l10n.aboutDesc,
+                  style: TextStyle(
+                    color: AppTheme.textSecondaryOf(context),
+                    fontSize: 13,
+                  ),
+                ),
+                const SizedBox(height: 24),
               ],
             ),
     );
@@ -481,7 +498,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               const Spacer(),
               Text(
-                '${localVoices.length} locale${localVoices.length > 1 ? 's' : ''}',
+                context.l10n.localVoicesCount(localVoices.length),
                 style: TextStyle(fontSize: 12, color: AppTheme.textSecondaryOf(context)),
               ),
             ],
@@ -498,8 +515,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             final isTesting = _testingVoice == voice.name;
 
             return _buildVoiceTile(
-              title: 'Voix $index',
-              subtitle: voice.isLocal ? '📱 Locale (offline)' : '☁️ Réseau',
+              title: context.l10n.voiceN(index),
+              subtitle: context.l10n.voiceLocalLabel,
               voice: voice,
               testText: testText,
               langCode: langCode,
@@ -515,7 +532,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ExpansionTile(
             tilePadding: const EdgeInsets.symmetric(horizontal: 8),
             title: Text(
-              '☁️ Voix réseau (${networkVoices.length}) — nécessite internet',
+              context.l10n.networkVoicesHeader(networkVoices.length),
               style: TextStyle(fontSize: 13, color: AppTheme.textSecondaryOf(context)),
             ),
             children: networkVoices.asMap().entries.map((entry) {
@@ -525,8 +542,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               final isTesting = _testingVoice == voice.name;
 
               return _buildVoiceTile(
-                title: 'Voix réseau $index',
-                subtitle: '☁️ Meilleure qualité, besoin de wifi/data',
+                title: context.l10n.voiceNetworkN(index),
+                subtitle: context.l10n.voiceNetworkDesc,
                 voice: voice,
                 testText: testText,
                 langCode: langCode,
@@ -541,7 +558,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Padding(
             padding: const EdgeInsets.all(12),
             child: Text(
-              'Aucune voix installée pour cette langue.\nVa dans Paramètres → TTS pour en télécharger.',
+              context.l10n.noVoicesInstalled,
               style: TextStyle(color: AppTheme.textSecondaryOf(context), fontSize: 13),
             ),
           ),
@@ -643,21 +660,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       );
                       if (ctx.mounted) {
                         ScaffoldMessenger.of(ctx).showSnackBar(
-                          const SnackBar(
-                            content: Text('Logs copiés dans le presse-papier.'),
+                          SnackBar(
+                            content: Text(ctx.l10n.logsCopied),
                           ),
                         );
                       }
                     },
                     icon: const Icon(Icons.copy, size: 16),
-                    label: const Text('Copier'),
+                    label: Text(ctx.l10n.copyAction),
                   ),
                   TextButton(
                     onPressed: () {
                       DebugLog().clear();
                       Navigator.pop(ctx);
                     },
-                    child: const Text('Effacer'),
+                    child: Text(ctx.l10n.clearAction),
                   ),
                 ],
               ),
@@ -665,7 +682,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const Divider(height: 1),
             Expanded(
               child: logs.isEmpty
-                  ? const Center(child: Text('Aucun log'))
+                  ? Center(child: Text(ctx.l10n.noLogs))
                   : ListView.builder(
                       controller: scrollController,
                       itemCount: logs.length,

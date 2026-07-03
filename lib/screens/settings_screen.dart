@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../services/audio_service.dart' as audio_svc;
 import '../services/tts_service.dart';
 import '../services/debug_log.dart';
@@ -22,6 +25,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final TtsService _tts = TtsService();
   final audio_svc.AudioService _audio = audio_svc.AudioService();
   final VisitedPoiService _visitedPoiService = VisitedPoiService();
+  StreamSubscription<TtsState>? _ttsStateSubscription;
   bool _isLoading = true;
   bool _isResettingVisited = false;
   String _preferredLanguage = UserPreferencesService.defaultPreferredLanguage;
@@ -31,6 +35,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       UserPreferencesService.defaultDiscoveryAutoplayDelaySec;
   bool _discoveryAutoplayVibrationEnabled =
       UserPreferencesService.defaultDiscoveryAutoplayVibrationEnabled;
+  bool _discoveryReplayVisitedEnabled =
+      UserPreferencesService.defaultDiscoveryReplayVisitedEnabled;
 
   // Vitesse de lecture
   double _selectedSpeed = 1.0;
@@ -71,6 +77,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void initState() {
     super.initState();
     _tts.init();
+    // Un seul abonnement pour suivre la fin des tests de voix
+    // (avant: un listener était ajouté — et jamais annulé — à chaque test).
+    _ttsStateSubscription = _tts.stateStream.listen((state) {
+      if (state == TtsState.stopped && mounted && _testingVoice != null) {
+        setState(() => _testingVoice = null);
+      }
+    });
     _audio.init().then((_) {
       if (mounted) setState(() => _selectedSpeed = _audio.speed);
     });
@@ -86,6 +99,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
         await UserPreferencesService.getDiscoveryAutoplayDelaySec();
     _discoveryAutoplayVibrationEnabled =
         await UserPreferencesService.isDiscoveryAutoplayVibrationEnabled();
+    _discoveryReplayVisitedEnabled =
+        await UserPreferencesService.isDiscoveryReplayVisitedEnabled();
 
     for (final lang in _languages) {
       final code = lang['code'] as String;
@@ -100,26 +115,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _testVoice(VoiceInfo voice, String testText) async {
     setState(() => _testingVoice = voice.name);
     await _tts.stop();
-    // Appliquer temporairement cette voix
-    final locale = voice.locale;
-    await _tts.setLanguage(locale.substring(0, 2));
-    // Force cette voix spécifique
-    await _tts.setUserVoice(
-      locale.startsWith('fr')
-          ? 'fr'
-          : locale.startsWith('en')
-          ? 'en'
-          : 'es',
-      voice.name,
-    );
-    await _tts.speak(testText);
-
-    // Attendre la fin
-    _tts.stateStream.listen((state) {
-      if (state == TtsState.stopped && mounted) {
-        setState(() => _testingVoice = null);
-      }
-    });
+    // Écoute temporaire seulement — la voix choisie n'est PAS modifiée.
+    // (Avant: le test appelait setUserVoice et persistait la voix testée.)
+    await _tts.previewVoice(voice, testText);
   }
 
   Future<void> _selectVoice(String langCode, String voiceName) async {
@@ -150,6 +148,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     await UserPreferencesService.setDiscoveryAutoplayVibrationEnabled(enabled);
     if (!mounted) return;
     setState(() => _discoveryAutoplayVibrationEnabled = enabled);
+  }
+
+  Future<void> _setDiscoveryReplayVisitedEnabled(bool enabled) async {
+    await UserPreferencesService.setDiscoveryReplayVisitedEnabled(enabled);
+    if (!mounted) return;
+    setState(() => _discoveryReplayVisitedEnabled = enabled);
   }
 
   Future<void> _confirmResetVisited() async {
@@ -191,6 +195,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   void dispose() {
+    _ttsStateSubscription?.cancel();
     _tts.dispose();
     super.dispose();
   }
@@ -303,6 +308,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   value: _discoveryAutoplayVibrationEnabled,
                   onChanged: _setDiscoveryAutoplayVibrationEnabled,
+                ),
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: const Text('Rejouer les POIs déjà écoutés'),
+                  subtitle: const Text(
+                    'Si activé, le mode découverte redéclenche aussi les POIs '
+                    'déjà marqués comme écoutés (utile pour les tests terrain).',
+                  ),
+                  value: _discoveryReplayVisitedEnabled,
+                  onChanged: _setDiscoveryReplayVisitedEnabled,
                 ),
                 const SizedBox(height: 32),
                 Row(
@@ -610,6 +625,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   const Spacer(),
+                  // Export pour analyse post-balade (les logs sont perdus
+                  // quand l'app est tuée).
+                  TextButton.icon(
+                    onPressed: () async {
+                      final buffer = StringBuffer()
+                        ..writeln('=== App Voyage — logs de debug ===')
+                        ..writeln(DebugLog().entries.join('\n'))
+                        ..writeln()
+                        ..writeln('=== Décisions géofencing ===')
+                        ..writeln(
+                          'timestamp|lat|lng|accuracy|poi|distance|confidence|approaching|decision|reason',
+                        )
+                        ..writeln(DebugLog().geoDecisions.join('\n'));
+                      await Clipboard.setData(
+                        ClipboardData(text: buffer.toString()),
+                      );
+                      if (ctx.mounted) {
+                        ScaffoldMessenger.of(ctx).showSnackBar(
+                          const SnackBar(
+                            content: Text('Logs copiés dans le presse-papier.'),
+                          ),
+                        );
+                      }
+                    },
+                    icon: const Icon(Icons.copy, size: 16),
+                    label: const Text('Copier'),
+                  ),
                   TextButton(
                     onPressed: () {
                       DebugLog().clear();

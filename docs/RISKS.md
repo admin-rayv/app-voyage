@@ -133,10 +133,10 @@
 | **Impact** | 🔴 Élevé — invaliderait le test terrain Sprint 4 |
 
 **Mitigation:**
-- [ ] Corriger avant le Sprint 4 (voir CODE-REVIEW.md, finding #1)
-- [ ] iOS: `AppleSettings(allowBackgroundLocationUpdates: true, showBackgroundLocationIndicator: true)`
-- [ ] Android: `AndroidSettings(foregroundNotificationConfig: ...)` pour un foreground service
-- [ ] Tester explicitement écran verrouillé pendant le test terrain
+- [x] Corrigé en v0.4.8 (voir CODE-REVIEW.md, finding #1)
+- [x] iOS: `AppleSettings(allowBackgroundLocationUpdates: true, showBackgroundLocationIndicator: true)`
+- [x] Android: `AndroidSettings(foregroundNotificationConfig: ...)` — foreground service geolocator
+- [ ] Tester explicitement écran verrouillé pendant le test terrain (Sprint 4)
 
 ---
 

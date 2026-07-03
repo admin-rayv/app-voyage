@@ -12,8 +12,9 @@
 | Sprint 1 | Carte & POIs affichés | ✅ **Fait** — carte OSM, filtres, vue liste, détail POI |
 | Sprint 2 | Lecture audio (tap) | ✅ **Fait** — mini-player, background, lock screen (pas de seek: limitation flutter_tts) |
 | Sprint 3 | GPS auto-trigger | ✅ **Fait** — geofencing intelligent, notifications, POIs visités, cooldown |
-| Sprint 4 | Test terrain Saint-Lambert | ⏳ **Prochaine étape** — ⚠️ corriger d'abord le GPS arrière-plan (voir CODE-REVIEW.md) |
-| Sprint 5 | Offline & polish | 🔜 À venir — sqflite déclaré mais rien d'implémenté |
+| Revue de code | 20 correctifs (GPS arrière-plan, position live, voix, etc.) | ✅ **Fait** (v0.4.8) — voir CODE-REVIEW.md |
+| Sprint 4 | Test terrain Saint-Lambert | ⏳ **Prochaine étape** — valider aussi la reprise pause/resume sur Android |
+| Sprint 5 | Offline & polish | 🔜 À venir — trancher la décision Edge TTS avant (CODE-REVIEW.md #3) |
 
 ---
 

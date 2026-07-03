@@ -21,7 +21,7 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     
     <application
-        android:label="app_voyage"
+        android:label="App Voyage"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -52,11 +52,9 @@
             android:name="flutterEmbedding"
             android:value="2" />
         
-        <!-- Foreground service for background location tracking -->
-        <service
-            android:name="com.pravera.flutter_foreground_task.service.ForegroundService"
-            android:foregroundServiceType="location|mediaPlayback"
-            android:exported="false"/>
+        <!-- Le foreground service de localisation est fourni par geolocator
+             (activé via AndroidSettings.foregroundNotificationConfig dans
+             LocationService). Pas besoin de le déclarer ici. -->
 
         <service
             android:name="com.ryanheise.audioservice.AudioService"

@@ -34,8 +34,9 @@ class EdgeTtsService {
     required String text,
     required String language,
   }) async {
-    // 1. Vérifier le cache
-    final cachePath = await _getCachePath(scriptId, language);
+    // 1. Vérifier le cache (la clé inclut un hash du texte: si le script
+    //    change dans Supabase, l'audio est régénéré automatiquement)
+    final cachePath = await _getCachePath(scriptId, language, text);
     final cacheFile = File(cachePath);
     if (await cacheFile.exists() && await cacheFile.length() > 0) {
       return cachePath;
@@ -81,8 +82,8 @@ class EdgeTtsService {
   }
 
   /// Vérifier si un script est déjà en cache.
-  Future<bool> isCached(String scriptId, String language) async {
-    final path = await _getCachePath(scriptId, language);
+  Future<bool> isCached(String scriptId, String language, String text) async {
+    final path = await _getCachePath(scriptId, language, text);
     final file = File(path);
     return await file.exists() && await file.length() > 0;
   }
@@ -211,9 +212,19 @@ class EdgeTtsService {
   }
 
   /// Chemin du cache pour un script.
-  Future<String> _getCachePath(String scriptId, String language) async {
+  ///
+  /// La clé inclut un hash du contenu: si le texte du script est corrigé
+  /// dans Supabase, l'ancien MP3 devient orphelin et un nouveau est généré.
+  Future<String> _getCachePath(
+    String scriptId,
+    String language,
+    String text,
+  ) async {
     final dir = await _getCacheDir();
-    final hash = md5.convert(utf8.encode('$scriptId-$language')).toString();
+    final contentHash = md5.convert(utf8.encode(text)).toString();
+    final hash = md5
+        .convert(utf8.encode('$scriptId-$language-$contentHash'))
+        .toString();
     return '${dir.path}/$hash.mp3';
   }
 

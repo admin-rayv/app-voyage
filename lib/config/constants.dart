@@ -2,20 +2,25 @@
 class AppConstants {
   // App Info
   static const String appName = 'App Voyage';
-  static const String appVersion = '0.4.7';
+  static const String appVersion = '0.4.8';
 
-  // Supabase
-  static const String supabaseUrl = 'https://lfwnpyttyoefqvhfqajb.supabase.co';
-  static const String supabaseAnonKey =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmd25weXR0eW9lZnF2aGZxYWpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMDc2NTAsImV4cCI6MjA4Njg4MzY1MH0.J2kmSaIvxhkqGucy9C4ZwbokDS2hU7uBXlb4kE8Ryao';
-
-  // Audio settings
-  static const int defaultTriggerRadiusMeters = 30;
-  static const int bikeTriggerRadiusMeters = 60;
-  static const int carTriggerRadiusMeters = 150;
+  // Supabase — surchargeables par environnement via --dart-define:
+  //   flutter run --dart-define=SUPABASE_URL=... --dart-define=SUPABASE_ANON_KEY=...
+  // (la clé anon est publique par design — la sécurité vient du RLS)
+  static const String supabaseUrl = String.fromEnvironment(
+    'SUPABASE_URL',
+    defaultValue: 'https://lfwnpyttyoefqvhfqajb.supabase.co',
+  );
+  static const String supabaseAnonKey = String.fromEnvironment(
+    'SUPABASE_ANON_KEY',
+    defaultValue:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmd25weXR0eW9lZnF2aGZxYWpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMDc2NTAsImV4cCI6MjA4Njg4MzY1MH0.J2kmSaIvxhkqGucy9C4ZwbokDS2hU7uBXlb4kE8Ryao',
+  );
 
   // GPS settings
-  static const int gpsUpdateIntervalMs = 5000; // 5 seconds
+  // Note: le rayon de déclenchement par POI vient de la DB
+  // (points.trigger_radius_m, défaut 40 m). Les rayons vélo/auto seront
+  // réintroduits avec les modes de transport (V2).
   static const int gpsDistanceFilterMeters = 10;
   static const int geofenceDebounceSec = 3;
   static const int geofenceTriggerCooldownSec = 30;
@@ -24,7 +29,7 @@ class AppConstants {
   static const double geofenceMaxRadiusMultiplier = 2.0;
   static const int positionHistorySize = 10;
 
-  // Cache settings
+  // Cache settings (Sprint 5 — offline)
   static const String mapCacheDir = 'map_cache';
   static const String offlineDbName = 'app_voyage.db';
 

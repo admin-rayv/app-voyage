@@ -80,11 +80,6 @@
 	<array>
 		<string>audio</string>
 		<string>location</string>
-		<string>fetch</string>
 	</array>
-	
-	<!-- Microphone (pour future feature voix) -->
-	<key>NSMicrophoneUsageDescription</key>
-	<string>App Voyage peut utiliser le microphone pour les commandes vocales (fonctionnalité future).</string>
 </dict>
 </plist>

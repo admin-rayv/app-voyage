@@ -205,13 +205,12 @@ VALUES (
 
 ---
 
-## 📊 Status (v0.4.7)
+## 📊 Status (v0.4.8)
 
 ✅ **Sprint 0** — Setup + contenu Saint-Lambert (81 POIs, 243 scripts)
 ✅ **Sprint 1** — Carte OSM + POIs + filtres par catégorie + vue liste
 ✅ **Sprint 2** — Lecture audio (tap), mini-player, background/lock screen
 ✅ **Sprint 3** — Mode découverte: GPS auto-trigger, notifications, POIs visités, cooldown
+✅ **Revue de code** — 20 correctifs appliqués (GPS arrière-plan, position live, etc.) — voir [docs/CODE-REVIEW.md](./docs/CODE-REVIEW.md)
 ⏳ **Sprint 4** — Test terrain à Saint-Lambert (balade libre) ← **prochaine étape**
-🔜 **Sprint 5** — Mode offline (sqflite) + polish
-
-⚠️ Avant le Sprint 4, voir [docs/CODE-REVIEW.md](./docs/CODE-REVIEW.md) — notamment le GPS en arrière-plan qui n'est pas fonctionnel en l'état.
+🔜 **Sprint 5** — Mode offline (sqflite) + polish — décision Edge TTS à trancher avant

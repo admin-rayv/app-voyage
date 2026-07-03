@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 0.4.7+1
+version: 0.4.8+1
 
 environment:
   sdk: ^3.11.0
@@ -37,43 +37,38 @@ dependencies:
   
   # Backend & API
   supabase_flutter: ^2.8.0
-  dio: ^5.4.0
-  
+
   # Maps (OpenStreetMap — 100% gratuit, pas de clé API)
   flutter_map: ^7.0.2
   latlong2: ^0.9.1
-  
+
   # Audio
   audio_service: ^0.18.16
-  just_audio: ^0.9.36
   audio_session: ^0.1.18
   flutter_tts: ^4.2.0
-  
-  # Location & GPS
+
+  # Location & GPS (permissions gérées par geolocator directement)
   geolocator: ^13.0.0
-  permission_handler: ^11.3.0
-  
+
   # State Management
   flutter_riverpod: ^2.4.10
-  riverpod_annotation: ^2.3.4
-  
+
   # Navigation
   go_router: ^14.6.0
-  
-  # Local Storage
+
+  # Local Storage (sqflite = cache offline, Sprint 5)
   sqflite: ^2.3.2
   path_provider: ^2.1.2
   shared_preferences: ^2.2.2
-  
-  # Connectivity
+
+  # Connectivity (utilisé par EdgeTtsService)
   connectivity_plus: ^6.0.2
-  
+
   # URL launcher
   url_launcher: ^6.2.5
-  
+
   # Utils
   crypto: ^3.0.3
-  intl: ^0.19.0
   flutter_local_notifications: ^21.0.0
 
 dev_dependencies:
@@ -86,10 +81,6 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
-  
-  # Code generation
-  build_runner: ^2.4.8
-  riverpod_generator: ^2.3.11
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

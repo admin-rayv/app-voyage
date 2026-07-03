@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../config/constants.dart';
 import '../config/route_data.dart';
 import '../models/city.dart';
 import '../models/discovery_playback_result.dart';
@@ -60,6 +61,7 @@ class _MapScreenState extends State<MapScreen>
   String? _lastAutoPlayedPoiId;
   String? _currentPlayingPoiId;
   LatLng? _userPosition;
+  StreamSubscription<Position>? _positionSubscription;
   StreamSubscription<models.Point>? _discoverySubscription;
   StreamSubscription<AudioState>? _audioStateSubscription;
   StreamSubscription<DiscoveryNotificationPayload>?
@@ -111,6 +113,7 @@ class _MapScreenState extends State<MapScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _positionSubscription?.cancel();
     _discoverySubscription?.cancel();
     _audioStateSubscription?.cancel();
     _notificationTapSubscription?.cancel();
@@ -161,18 +164,42 @@ class _MapScreenState extends State<MapScreen>
       setState(() {
         _userPosition = LatLng(pos.latitude, pos.longitude);
       });
+      _startPositionUpdates();
     } catch (_) {
       // GPS non disponible, pas grave
     }
   }
 
-  List<models.Point> get _filteredPoints {
-    final basePoints = _showUnvisitedOnly
-        ? _allPoints
-              .where((poi) => !_visitedPoiService.isVisitedPoint(poi))
-              .toList()
-        : _allPoints;
+  /// Suivre la position en continu pendant que l'écran est visible, pour que
+  /// le point bleu et les distances restent à jour pendant la balade.
+  void _startPositionUpdates() {
+    if (_positionSubscription != null) return;
+    _positionSubscription = Geolocator.getPositionStream(
+      locationSettings: LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: AppConstants.gpsDistanceFilterMeters,
+      ),
+    ).listen(
+      (position) {
+        if (!mounted) return;
+        setState(() {
+          _userPosition = LatLng(position.latitude, position.longitude);
+        });
+      },
+      onError: (Object error) {
+        DebugLog().log('[MapScreen] position stream error: $error');
+      },
+    );
+  }
 
+  List<models.Point> get _basePoints => _showUnvisitedOnly
+      ? _allPoints
+            .where((poi) => !_visitedPoiService.isVisitedPoint(poi))
+            .toList()
+      : _allPoints;
+
+  List<models.Point> get _filteredPoints {
+    final basePoints = _basePoints;
     if (_activeFilters.isEmpty) return basePoints;
     return basePoints
         .where((p) => p.categories.any((c) => _activeFilters.contains(c)))
@@ -290,6 +317,18 @@ class _MapScreenState extends State<MapScreen>
 
       await _notificationService.ensurePermissions();
       _geofencingService.resetTriggered();
+
+      // Ne pas re-déclencher les POIs déjà écoutés (persistés), sauf si
+      // l'utilisateur a activé le réglage "rejouer les POIs écoutés".
+      final replayVisited =
+          await UserPreferencesService.isDiscoveryReplayVisitedEnabled();
+      if (!replayVisited) {
+        await _visitedPoiService.init();
+        _geofencingService.seedTriggered(
+          _visitedPoiService.visitedPoiIdsForCity(widget.city.id),
+        );
+      }
+
       final started = await _geofencingService.start(points);
       if (!mounted) return;
 
@@ -736,11 +775,7 @@ class _MapScreenState extends State<MapScreen>
   }
 
   Widget _buildFilterBar() {
-    final basePoints = _showUnvisitedOnly
-        ? _allPoints
-              .where((poi) => !_visitedPoiService.isVisitedPoint(poi))
-              .toList()
-        : _allPoints;
+    final basePoints = _basePoints;
 
     // Compter les POIs par catégorie
     final counts = <String, int>{};
@@ -1152,7 +1187,7 @@ class _MapScreenState extends State<MapScreen>
       return const SizedBox.shrink();
     }
 
-    final triggeredCount = _geofencingService.alreadyTriggered.length;
+    final triggeredCount = _geofencingService.sessionTriggerCount;
     final lastTriggeredPoi = _lastTriggeredPoi;
     final isActive = _discoveryModeEnabled;
     final autoPlayedPoi = _lastAutoPlayedPoi;

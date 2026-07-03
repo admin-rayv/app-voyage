@@ -33,29 +33,39 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<List<_CityWithStats>> _loadCities() async {
-    final citiesJson = await SupabaseService.getCities();
-    final cities = citiesJson.map((j) => City.fromJson(j)).toList();
+    // 2 requêtes au total (villes + résumé des POIs), peu importe le
+    // nombre de villes — avant: 1 fetch complet des POIs par ville.
+    final results = await Future.wait([
+      SupabaseService.getCities(),
+      SupabaseService.getPublishedPointSummaries(),
+    ]);
+    final cities = results[0].map((j) => City.fromJson(j)).toList();
+    final summaries = results[1];
 
-    final result = <_CityWithStats>[];
-    for (final city in cities) {
-      final pointsJson = await SupabaseService.getPoints(city.id);
-      // Collecter les catégories uniques
-      final categorySet = <String>{};
-      for (final p in pointsJson) {
-        final cats = p['categories'];
-        if (cats is List) {
-          for (final c in cats) {
-            categorySet.add(c.toString());
-          }
-        }
+    final countByCity = <String, int>{};
+    final categoriesByCity = <String, Set<String>>{};
+    for (final summary in summaries) {
+      final cityId = summary['city_id']?.toString() ?? '';
+      countByCity[cityId] = (countByCity[cityId] ?? 0) + 1;
+      final cats = summary['categories'];
+      if (cats is List) {
+        categoriesByCity
+            .putIfAbsent(cityId, () => <String>{})
+            .addAll(cats.map((c) => c.toString()));
       }
-      result.add(_CityWithStats(
-        city: city,
-        poiCount: pointsJson.length,
-        categories: categorySet.toList()..sort(),
-      ));
     }
-    return result;
+
+    return cities
+        .map(
+          (city) => _CityWithStats(
+            city: city,
+            poiCount: countByCity[city.id] ?? 0,
+            categories: (categoriesByCity[city.id] ?? const <String>{})
+                .toList()
+              ..sort(),
+          ),
+        )
+        .toList();
   }
 
   Future<void> _refresh() async {

@@ -32,7 +32,6 @@ class AudioService {
 
   final TtsService _fallbackTts = TtsService();
   final EdgeTtsService _edgeTts = EdgeTtsService();
-  final SupabaseService _supabase = SupabaseService();
   final VisitedPoiService _visitedPoiService = VisitedPoiService();
   final StreamController<AudioState> _stateController =
       StreamController<AudioState>.broadcast();
@@ -194,7 +193,7 @@ class AudioService {
 
   Future<void> playScript(String scriptId, {String? poiName}) async {
     await init();
-    final script = await _supabase.getScript(scriptId);
+    final script = await SupabaseService.getScript(scriptId);
     if (script == null) return;
 
     await playText(
@@ -504,14 +503,19 @@ class AudioService {
     return _speedToSpeechRate[_normalizeSpeed(speed)] ?? 0.52;
   }
 
+  /// Télécharger les audios Edge TTS d'une ville pour la langue donnée
+  /// (par défaut: seulement la langue demandée — pas les 3).
+  /// La progression est agrégée sur l'ensemble des scripts.
   Future<void> downloadCityAudios({
     required String cityId,
     required void Function(int current, int total) onProgress,
+    List<String> languages = const ['fr'],
   }) async {
-    for (final lang in ['fr', 'en', 'es']) {
-      final scripts = await SupabaseService.getScriptsForCity(cityId, lang);
-      await _edgeTts.downloadAll(scripts: scripts, onProgress: onProgress);
+    final allScripts = <Map<String, dynamic>>[];
+    for (final lang in languages) {
+      allScripts.addAll(await SupabaseService.getScriptsForCity(cityId, lang));
     }
+    await _edgeTts.downloadAll(scripts: allScripts, onProgress: onProgress);
   }
 
   Future<double> getCacheSizeMB() async {

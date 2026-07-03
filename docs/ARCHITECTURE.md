@@ -209,12 +209,12 @@ DiscoveryPlaybackService
 | Notifications | flutter_local_notifications | Alertes de proximité | ✅ Utilisé |
 | Navigation | go_router | Routing | ✅ Utilisé |
 | Prefs | shared_preferences | Settings, progression POIs | ✅ Utilisé |
-| Connectivity | connectivity_plus | Détection réseau (Edge TTS) | ⚠️ Utilisé par du code non branché |
-| Audio MP3 | just_audio | Lecture des MP3 Edge TTS | ❌ Déclaré, jamais utilisé |
-| State | flutter_riverpod | State management | ⚠️ Déclaré, à peine utilisé (ProviderScope seulement) |
-| DB locale | sqflite | Cache offline | ❌ Déclaré, pas encore utilisé (Sprint 5) |
-| HTTP | dio | Requêtes API | ❌ Déclaré, jamais utilisé |
-| Permissions | permission_handler | GPS, micro, notifs | ❌ Déclaré, jamais utilisé (géré par geolocator) |
+| Connectivity | connectivity_plus | Détection réseau (Edge TTS) | ⚠️ Utilisé par du code non branché (décision en attente) |
+| State | flutter_riverpod | State management | ⚠️ À peine utilisé (ProviderScope seulement) |
+| DB locale | sqflite | Cache offline | 🔜 Pas encore utilisé (Sprint 5) |
+
+*(Nettoyage v0.4.8: dio, permission_handler, just_audio, intl et l'outillage
+riverpod codegen ont été retirés du pubspec — jamais utilisés.)*
 
 ### Backend (Supabase)
 

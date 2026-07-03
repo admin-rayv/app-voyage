@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../config/constants.dart';
 import 'debug_log.dart';
 
 /// Service TTS — Lecture audio des scripts via voix natives du téléphone.
@@ -38,9 +39,9 @@ class TtsService {
 
   /// Initialiser le service TTS.
   Future<void> init() async {
-    await _tts.setSpeechRate(0.52);
+    await _tts.setSpeechRate(AppConstants.defaultSpeechRate);
     await _tts.setVolume(1.0);
-    await _tts.setPitch(1.05);
+    await _tts.setPitch(AppConstants.defaultPitch);
 
     // Callbacks
     _tts.setStartHandler(() {
@@ -158,6 +159,18 @@ class TtsService {
     return results;
   }
 
+  /// Écouter une voix SANS la sélectionner (la préférence n'est pas modifiée).
+  ///
+  /// La voix est appliquée temporairement sur cette instance uniquement —
+  /// les vraies lectures reconfigurent la voix via configureVoiceForTts()
+  /// avant chaque lecture, donc rien ne fuit.
+  Future<void> previewVoice(VoiceInfo voice, String text) async {
+    await _tts.setLanguage(voice.locale);
+    await applyVoiceToTts(_tts, voice.name, voice.locale);
+    _currentText = text;
+    await _tts.speak(text);
+  }
+
   /// Sauvegarder la voix choisie par l'utilisateur pour une langue.
   Future<void> setUserVoice(String language, String voiceName) async {
     final prefs = await SharedPreferences.getInstance();
@@ -171,11 +184,6 @@ class TtsService {
   Future<String?> getUserVoice(String language) async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_prefKeyForLanguage(language));
-  }
-
-  /// Sélectionner la voix : user pref → default → premier local dispo.
-  Future<void> _selectVoice(String language) async {
-    await selectVoiceForTts(_tts, language);
   }
 
   /// Appliquer une voix spécifique. Retourne true si trouvée.
@@ -315,7 +323,7 @@ class VoiceInfo {
     if (parts.length >= 5) {
       final voiceId = parts[4];
       final type = isLocal ? 'local' : 'network';
-      return '${locale} — $voiceId ($type)';
+      return '$locale — $voiceId ($type)';
     }
     return name;
   }

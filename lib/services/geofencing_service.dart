@@ -33,6 +33,7 @@ class GeofencingService {
   bool _isMonitoring = false;
   DateTime? _cooldownUntil;
   Timer? _cooldownTimer;
+  Timer? _reevaluationTimer;
   Position? _lastKnownPosition;
   int _sessionTriggerCount = 0;
 
@@ -80,6 +81,21 @@ class GeofencingService {
       },
     );
 
+    // Le GPS n'émet plus quand l'utilisateur s'immobilise (distanceFilter).
+    // Si un POI est en attente de confirmation (debounce) ou en file, on
+    // réévalue périodiquement la dernière position connue — sinon un
+    // utilisateur arrêté pile devant un POI ne déclencherait jamais.
+    _reevaluationTimer = Timer.periodic(const Duration(seconds: 2), (_) {
+      final position = _lastKnownPosition;
+      if (!_isMonitoring || position == null) {
+        return;
+      }
+      if (_pendingTriggers.isEmpty && _queuedCandidates.isEmpty) {
+        return;
+      }
+      _handlePositionUpdate(position);
+    });
+
     _isMonitoring = true;
     _log('[GeofencingService] monitoring started');
     return true;
@@ -99,6 +115,8 @@ class GeofencingService {
     _cooldownUntil = null;
     _cooldownTimer?.cancel();
     _cooldownTimer = null;
+    _reevaluationTimer?.cancel();
+    _reevaluationTimer = null;
     _lastKnownPosition = null;
     _isMonitoring = false;
     _log('[GeofencingService] monitoring stopped');

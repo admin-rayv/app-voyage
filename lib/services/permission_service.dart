@@ -1,5 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+
+import 'debug_log.dart';
 
 enum DiscoveryPermissionStatus {
   grantedAlways,
@@ -60,7 +63,9 @@ class PermissionService {
   Future<DiscoveryPermissionResult> checkDiscoveryPermission({
     bool requireBackground = false,
   }) async {
+    DebugLog().log('[PermissionService] check: isLocationServiceEnabled?');
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    DebugLog().log('[PermissionService] serviceEnabled=$serviceEnabled');
     if (!serviceEnabled) {
       return DiscoveryPermissionResult.serviceDisabled(
         _PermissionMessages.locationServiceDisabledSnack,
@@ -68,6 +73,7 @@ class PermissionService {
     }
 
     final permission = await Geolocator.checkPermission();
+    DebugLog().log('[PermissionService] checkPermission=$permission');
     if (permission == LocationPermission.denied) {
       return DiscoveryPermissionResult.denied(
         _PermissionMessages.locationDeniedSnack,
@@ -103,6 +109,10 @@ class PermissionService {
     BuildContext context, {
     bool requestBackground = true,
   }) async {
+    // La permission « arrière-plan » n'existe pas sur le web — et
+    // requestPermission() peut y rester suspendu indéfiniment.
+    requestBackground = requestBackground && !kIsWeb;
+
     final initialStatus = await checkDiscoveryPermission();
     if (initialStatus.status == DiscoveryPermissionStatus.serviceDisabled) {
       if (!context.mounted) {
@@ -178,7 +188,9 @@ class PermissionService {
       );
 
       if (requestAlways) {
+        DebugLog().log('[PermissionService] requesting background permission');
         permission = await Geolocator.requestPermission();
+        DebugLog().log('[PermissionService] request result=$permission');
       }
 
       if (permission == LocationPermission.deniedForever) {

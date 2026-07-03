@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -14,6 +15,10 @@ class VoiceSetupDialog {
 
   /// Vérifier et afficher le dialog si nécessaire.
   static Future<void> checkAndShow(BuildContext context) async {
+    // Les instructions (moteur Google, données vocales) ne concernent
+    // qu'Android — ne pas afficher sur iOS/web.
+    if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return;
+
     final prefs = await SharedPreferences.getInstance();
     if (prefs.getBool(_prefKey) == true) return;
 

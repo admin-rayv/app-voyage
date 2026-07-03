@@ -42,6 +42,29 @@ principal est le MP3 Edge TTS, dont la pause/reprise est native via just_audio).
 
 ---
 
+## ✅ Mise à jour 2026-07-03 (bis) — test visuel de bout en bout (v0.5.1)
+
+Un harnais de test visuel a été ajouté (`tool/visual_test/`): build web de l'app
+piloté par Playwright/Chromium headless, données Supabase mockées, **simulation
+de marche GPS** vers l'Église Saint-Lambert. Le parcours complet a été validé en
+captures d'écran (clair + sombre): onboarding → home → carte (clusters, cercles
+de rayon) → activation découverte → **trigger GPS réel → notification → lecture
+auto → 1/16 écouté** → preview → détail (Hero, script, lecteur).
+
+Trois bugs réels découverts et corrigés par ce test:
+
+| # | Constat | Résolution |
+|---|---------|------------|
+| 21 | Le dialog « Voix de Marco » (instructions Android: moteur Google, données vocales) s'affichait sur toutes les plateformes | ✅ Limité à Android (`kIsWeb`/`defaultTargetPlatform`) |
+| 22 | Sur web, `Geolocator.requestPermission()` pour l'accès « arrière-plan » ne résout jamais → activation du mode découverte suspendue indéfiniment | ✅ La demande background est sautée sur web (le concept n'y existe pas) |
+| 23 | **Un utilisateur immobile devant un POI ne déclenche jamais**: la confirmation du debounce n'était réévaluée qu'à l'arrivée d'une nouvelle position GPS, or le `distanceFilter` de 10 m coupe les updates à l'arrêt | ✅ Timer de réévaluation (2 s) dans GeofencingService quand des POIs sont en attente — important pour le test terrain |
+
+Améliorations connexes: polices Nunito embarquées en assets (offline, plus de
+fetch réseau au démarrage), stub web d'EdgeTtsService (dart:io indisponible sur
+web), logs de diagnostic dans PermissionService, DebugLog reflété en console.
+
+---
+
 ## 🚨 Bloquants avant le test terrain
 
 ### 1. Le GPS en arrière-plan ne peut pas fonctionner tel que configuré

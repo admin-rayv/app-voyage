@@ -3,9 +3,11 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config/theme.dart';
+import '../l10n/l10n.dart';
+import '../services/user_preferences_service.dart';
 
-/// Onboarding — 3 écrans au premier lancement pour expliquer le concept
-/// (exploration libre, mode découverte, écoute).
+/// Onboarding — 4 écrans au premier lancement: exploration libre, mode
+/// découverte, choix de la langue des audios, et Marco.
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -18,34 +20,16 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
+  String _selectedLanguage = UserPreferencesService.defaultPreferredLanguage;
 
-  static const _pages = [
-    _OnboardingPage(
-      emoji: '🗺️',
-      title: 'Explore librement',
-      body:
-          'Pas de parcours imposé. Tous les points d’intérêt de la ville '
-          'sont sur la carte — promène-toi où tu veux, à ton rythme.',
-    ),
-    _OnboardingPage(
-      emoji: '📍',
-      title: 'Active le mode découverte',
-      body:
-          'Quand tu t’approches d’un lieu, l’audio se déclenche tout seul. '
-          'Autorise la localisation « Toujours » pour que ça fonctionne '
-          'même téléphone en poche, écran verrouillé.',
-    ),
-    _OnboardingPage(
-      emoji: '🎧',
-      title: 'Marco te raconte',
-      body:
-          'Ton ami guide te partage l’histoire, les anecdotes et les bons '
-          'plans de chaque endroit. Mets tes écouteurs et laisse-toi '
-          'surprendre !',
-    ),
+  static const int _pageCount = 4;
+  static const _languages = [
+    ('fr', 'Français'),
+    ('en', 'English'),
+    ('es', 'Español'),
   ];
 
-  bool get _isLastPage => _currentPage == _pages.length - 1;
+  bool get _isLastPage => _currentPage == _pageCount - 1;
 
   Future<void> _finish() async {
     final prefs = await SharedPreferences.getInstance();
@@ -65,6 +49,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
+  Future<void> _selectLanguage(String code) async {
+    await UserPreferencesService.setPreferredLanguage(code);
+    if (!mounted) return;
+    setState(() => _selectedLanguage = code);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    UserPreferencesService.getPreferredLanguage().then((language) {
+      if (mounted) setState(() => _selectedLanguage = language);
+    });
+  }
+
   @override
   void dispose() {
     _pageController.dispose();
@@ -73,6 +71,50 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final pages = <Widget>[
+      _OnboardingPage(emoji: '🗺️', title: l10n.onb1Title, body: l10n.onb1Body),
+      _OnboardingPage(emoji: '📍', title: l10n.onb2Title, body: l10n.onb2Body),
+      _OnboardingPage(
+        emoji: '🌍',
+        title: l10n.onbLangTitle,
+        body: l10n.onbLangBody,
+        extra: Padding(
+          padding: const EdgeInsets.only(top: 24),
+          child: Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            alignment: WrapAlignment.center,
+            children: _languages.map((lang) {
+              final (code, label) = lang;
+              final isSelected = _selectedLanguage == code;
+              return ChoiceChip(
+                label: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight:
+                        isSelected ? FontWeight.w700 : FontWeight.normal,
+                  ),
+                ),
+                selected: isSelected,
+                onSelected: (_) => _selectLanguage(code),
+                selectedColor: Theme.of(context)
+                    .colorScheme
+                    .primary
+                    .withValues(alpha: 0.2),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ),
+      _OnboardingPage(emoji: '🎧', title: l10n.onb3Title, body: l10n.onb3Body),
+    ];
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -84,7 +126,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 child: TextButton(
                   onPressed: _finish,
                   child: Text(
-                    'Passer',
+                    l10n.skip,
                     style: TextStyle(color: AppTheme.textSecondaryOf(context)),
                   ),
                 ),
@@ -93,16 +135,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Expanded(
               child: PageView.builder(
                 controller: _pageController,
-                itemCount: _pages.length,
+                itemCount: pages.length,
                 onPageChanged: (index) =>
                     setState(() => _currentPage = index),
-                itemBuilder: (context, index) => _pages[index],
+                itemBuilder: (context, index) => pages[index],
               ),
             ),
             // Indicateur de pages
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(_pages.length, (index) {
+              children: List.generate(pages.length, (index) {
                 final isActive = index == _currentPage;
                 return AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
@@ -128,7 +170,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
                   child: Text(
-                    _isLastPage ? 'C’est parti !' : 'Suivant',
+                    _isLastPage ? l10n.letsGo : l10n.next,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -149,11 +191,13 @@ class _OnboardingPage extends StatelessWidget {
     required this.emoji,
     required this.title,
     required this.body,
+    this.extra,
   });
 
   final String emoji;
   final String title;
   final String body;
+  final Widget? extra;
 
   @override
   Widget build(BuildContext context) {
@@ -191,6 +235,7 @@ class _OnboardingPage extends StatelessWidget {
                   height: 1.5,
                 ),
           ),
+          ?extra,
         ],
       ),
     );

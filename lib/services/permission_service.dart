@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
+import '../l10n/l10n.dart';
 import 'debug_log.dart';
 
 enum DiscoveryPermissionStatus {
@@ -120,9 +121,9 @@ class PermissionService {
       }
       final openSettings = await _showDialog(
         context,
-        title: 'Activer la localisation',
-        message: _PermissionMessages.locationServiceDisabledDialog,
-        confirmLabel: 'Réglages',
+        title: context.l10n.permDialogServiceTitle,
+        message: context.l10n.permDialogServiceBody,
+        confirmLabel: context.l10n.settingsButton,
       );
       if (openSettings) {
         await openLocationSettings();
@@ -137,9 +138,9 @@ class PermissionService {
       }
       final shouldRequest = await _showDialog(
         context,
-        title: 'Autoriser la localisation',
-        message: _PermissionMessages.locationRequestDialog,
-        confirmLabel: 'Continuer',
+        title: context.l10n.permDialogRequestTitle,
+        message: context.l10n.permDialogRequestBody,
+        confirmLabel: context.l10n.continueButton,
       );
       if (!shouldRequest) {
         return DiscoveryPermissionResult.denied(
@@ -162,9 +163,9 @@ class PermissionService {
       }
       final openSettings = await _showDialog(
         context,
-        title: 'Autorisation requise',
-        message: _PermissionMessages.locationDeniedForeverDialog,
-        confirmLabel: 'Ouvrir les réglages',
+        title: context.l10n.permDialogBlockedTitle,
+        message: context.l10n.permDialogBlockedBody,
+        confirmLabel: context.l10n.openSettings,
       );
       if (openSettings) {
         await openAppSettings();
@@ -182,9 +183,9 @@ class PermissionService {
       }
       final requestAlways = await _showDialog(
         context,
-        title: 'Accès en arrière-plan recommandé',
-        message: _PermissionMessages.locationBackgroundDialog,
-        confirmLabel: 'Demander',
+        title: context.l10n.permDialogBackgroundTitle,
+        message: context.l10n.permDialogBackgroundBody,
+        confirmLabel: context.l10n.requestButton,
       );
 
       if (requestAlways) {
@@ -199,9 +200,9 @@ class PermissionService {
         }
         final openSettings = await _showDialog(
           context,
-          title: 'Autorisation en arrière-plan bloquée',
-          message: _PermissionMessages.locationDeniedForeverDialog,
-          confirmLabel: 'Ouvrir les réglages',
+          title: context.l10n.permDialogBackgroundBlockedTitle,
+          message: context.l10n.permDialogBlockedBody,
+          confirmLabel: context.l10n.openSettings,
         );
         if (openSettings) {
           await openAppSettings();
@@ -249,7 +250,7 @@ class PermissionService {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: const Text('Annuler'),
+            child: Text(dialogContext.l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.of(dialogContext).pop(true),
@@ -263,25 +264,10 @@ class PermissionService {
   }
 }
 
+/// Messages de secours portés par DiscoveryPermissionResult (FR).
+/// L'UI affiche des messages localisés à partir du statut — voir
+/// _permissionMessage() dans map_screen.
 abstract final class _PermissionMessages {
-  static const String locationServiceDisabledDialog =
-      'Le mode découverte a besoin de la localisation du téléphone pour '
-      'surveiller automatiquement les points autour de vous, y compris '
-      'quand l’écran est verrouillé.';
-
-  static const String locationRequestDialog =
-      'Le mode découverte utilise votre position pour détecter les POIs '
-      'proches et lancer les guides audio au bon moment.';
-
-  static const String locationBackgroundDialog =
-      'Le mode découverte fonctionne déjà au premier plan. Pour continuer '
-      'quand l’app passe en arrière-plan ou écran verrouillé, autorisez '
-      '"Toujours" si votre téléphone le propose.';
-
-  static const String locationDeniedForeverDialog =
-      'La localisation est bloquée de façon permanente. Ouvrez les '
-      'réglages de l’app pour autoriser le mode découverte.';
-
   static const String locationServiceDisabledSnack =
       'La localisation est désactivée. Activez-la pour utiliser le mode découverte.';
 

@@ -8,6 +8,7 @@ class CategoryConfig {
   final String key;
   final String labelFr;
   final String labelEn;
+  final String labelEs;
   final String emoji;
   final Color color;
 
@@ -15,11 +16,21 @@ class CategoryConfig {
     required this.key,
     required this.labelFr,
     required this.labelEn,
+    required this.labelEs,
     required this.emoji,
     required this.color,
   });
 
-  String label(String lang) => lang == 'en' ? labelEn : labelFr;
+  String label(String lang) {
+    switch (lang) {
+      case 'en':
+        return labelEn;
+      case 'es':
+        return labelEs;
+      default:
+        return labelFr;
+    }
+  }
 }
 
 class Categories {
@@ -28,6 +39,7 @@ class Categories {
       key: 'histoire',
       labelFr: 'Histoire',
       labelEn: 'History',
+      labelEs: 'Historia',
       emoji: '🏛️',
       color: Color(0xFF1565C0), // bleu foncé
     ),
@@ -35,6 +47,7 @@ class Categories {
       key: 'architecture',
       labelFr: 'Architecture',
       labelEn: 'Architecture',
+      labelEs: 'Arquitectura',
       emoji: '🏗️',
       color: Color(0xFF546E7A), // gris bleuté
     ),
@@ -42,6 +55,7 @@ class Categories {
       key: 'nature',
       labelFr: 'Nature',
       labelEn: 'Nature',
+      labelEs: 'Naturaleza',
       emoji: '🌿',
       color: Color(0xFF2E7D32), // vert
     ),
@@ -49,6 +63,7 @@ class Categories {
       key: 'food',
       labelFr: 'Food',
       labelEn: 'Food',
+      labelEs: 'Comida',
       emoji: '🍴',
       color: Color(0xFFEF6C00), // orange
     ),
@@ -56,6 +71,7 @@ class Categories {
       key: 'art',
       labelFr: 'Art',
       labelEn: 'Art',
+      labelEs: 'Arte',
       emoji: '🎨',
       color: Color(0xFF7B1FA2), // violet
     ),
@@ -63,6 +79,7 @@ class Categories {
       key: 'insolite',
       labelFr: 'Insolite',
       labelEn: 'Unusual',
+      labelEs: 'Insólito',
       emoji: '👻',
       color: Color(0xFFC62828), // rouge
     ),
@@ -70,6 +87,7 @@ class Categories {
       key: 'vie-locale',
       labelFr: 'Vie locale',
       labelEn: 'Local life',
+      labelEs: 'Vida local',
       emoji: '🏘️',
       color: Color(0xFF00838F), // turquoise
     ),

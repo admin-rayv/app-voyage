@@ -12,6 +12,7 @@ import '../services/supabase_service.dart';
 import '../services/audio_service.dart';
 import '../services/user_preferences_service.dart';
 import '../config/categories.dart';
+import '../l10n/l10n.dart';
 import '../config/theme.dart';
 import '../widgets/map_tiles.dart';
 
@@ -178,7 +179,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                widget.poi.localizedName('fr'),
+                widget.poi.localizedName(context.languageCode),
                 style: const TextStyle(
                   fontSize: 16,
                   shadows: [Shadow(blurRadius: 4, color: Colors.black54)],
@@ -256,7 +257,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
                               ),
                             ),
                             child: Text(
-                              '${c.emoji} ${c.labelFr}',
+                              '${c.emoji} ${c.label(context.languageCode)}',
                               style: TextStyle(
                                 fontSize: 12,
                                 color: c.color,
@@ -298,7 +299,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
                   // Script texte
                   if (_currentScript != null) ...[
                     Text(
-                      'Script audio',
+                      context.l10n.audioScript,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 8),
@@ -318,7 +319,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '~${_currentScript!.content.split(' ').length} mots · ${(_currentScript!.content.split(' ').length * 0.4).round()} sec',
+                      context.l10n.wordsDuration(_currentScript!.content.split(' ').length, (_currentScript!.content.split(' ').length * 0.4).round()),
                       style: TextStyle(
                         fontSize: 12,
                         color: AppTheme.textSecondaryOf(context),
@@ -338,7 +339,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
                     child: OutlinedButton.icon(
                       onPressed: _openNavigation,
                       icon: const Icon(Icons.directions_walk),
-                      label: const Text('Itinéraire'),
+                      label: Text(context.l10n.directions),
                     ),
                   ),
                   const SizedBox(height: 32),
@@ -358,7 +359,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
     if (logistics['toilets'] != null &&
         logistics['toilets'].toString().isNotEmpty) {
       items.add(
-        _LogisticsItem(Icons.wc, 'Toilettes', logistics['toilets'].toString()),
+        _LogisticsItem(Icons.wc, context.l10n.toilets, logistics['toilets'].toString()),
       );
     }
     if (logistics['parking'] != null &&
@@ -366,7 +367,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
       items.add(
         _LogisticsItem(
           Icons.local_parking,
-          'Stationnement',
+          context.l10n.parkingLabel,
           logistics['parking'].toString(),
         ),
       );
@@ -376,7 +377,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
       items.add(
         _LogisticsItem(
           Icons.camera_alt,
-          'Photo',
+          context.l10n.photoSpot,
           logistics['photo_spot'].toString(),
         ),
       );
@@ -385,7 +386,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
       items.add(
         _LogisticsItem(
           Icons.lightbulb_outline,
-          'Bon à savoir',
+          context.l10n.goodToKnow,
           logistics['tips'].toString(),
         ),
       );
@@ -395,7 +396,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
       items.add(
         _LogisticsItem(
           Icons.accessible,
-          'Accessibilité',
+          context.l10n.accessibilityLabel,
           logistics['accessibility'].toString(),
         ),
       );
@@ -405,7 +406,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
       items.add(
         _LogisticsItem(
           Icons.schedule,
-          'Horaires',
+          context.l10n.hoursLabel,
           logistics['hours'].toString(),
         ),
       );
@@ -416,7 +417,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Infos pratiques', style: Theme.of(context).textTheme.titleLarge),
+        Text(context.l10n.practicalInfo, style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 12),
         ...items.map(
           (item) => Padding(
@@ -502,7 +503,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
             const CircularProgressIndicator()
           else if (_currentScript == null)
             Text(
-              'Aucun script disponible',
+              context.l10n.noScript,
               style: TextStyle(color: AppTheme.textSecondaryOf(context)),
             )
           else ...[
@@ -551,7 +552,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
                           ? _audio.stop
                           : null,
                       icon: const Icon(Icons.stop, size: 16),
-                      label: const Text('Stop'),
+                      label: Text(context.l10n.stopLabel),
                       style: TextButton.styleFrom(
                         foregroundColor: AppTheme.primaryColor,
                       ),
@@ -580,8 +581,8 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
                             const SizedBox(width: 6),
                             Text(
                               _isSpeaking
-                                  ? 'En cours de lecture...'
-                                  : 'Lecture en pause',
+                                  ? context.l10n.playingNow
+                                  : context.l10n.pausedLabel,
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 color: AppTheme.primaryColor,
                                 fontWeight: FontWeight.w600,

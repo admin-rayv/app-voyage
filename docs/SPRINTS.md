@@ -4,7 +4,7 @@
 
 ---
 
-## 📊 Statut actuel (2026-07-03, v0.4.7)
+## 📊 Statut actuel (2026-07-03, v0.6.0)
 
 | Sprint | Contenu | Statut |
 |--------|---------|--------|
@@ -13,8 +13,12 @@
 | Sprint 2 | Lecture audio (tap) | ✅ **Fait** — mini-player, background, lock screen (pas de seek: limitation flutter_tts) |
 | Sprint 3 | GPS auto-trigger | ✅ **Fait** — geofencing intelligent, notifications, POIs visités, cooldown |
 | Revue de code | 20 correctifs (GPS arrière-plan, position live, voix, etc.) | ✅ **Fait** (v0.4.8) — voir CODE-REVIEW.md |
-| Sprint 4 | Test terrain Saint-Lambert | ⏳ **Prochaine étape** — valider aussi la reprise pause/resume sur Android |
-| Sprint 5 | Offline & polish | 🔜 À venir — trancher la décision Edge TTS avant (CODE-REVIEW.md #3) |
+| Polish pré-terrain | Edge TTS branché, CARTO, clustering, dark mode, onboarding, splash | ✅ **Fait** (v0.5.x) |
+| Sprint 4 | Test terrain Saint-Lambert | ⏳ **Prochaine étape** (humains requis 🚶) |
+| Sprint 5 | Offline complet (sqflite) | 🔜 À venir |
+| Sprint 7 | Multi-langue | ✅ **Fait en avance** (v0.6.0) — UI FR/EN/ES (gen-l10n), noms/catégories localisés, notifications localisées |
+| Sprint 8 | Onboarding & permissions | ✅ **Fait en avance** (v0.5-0.6) — onboarding 4 écrans avec choix de langue, flow permissions localisé, section À propos |
+| Sprint 9 | Sync groupe (mode Host) | ✅ **Développé** (v0.6.0) — sessions par code + QR, participants en direct (Presence), host contrôle la lecture (Broadcast). ⚠️ À tester à 2-3 appareils |
 
 ---
 

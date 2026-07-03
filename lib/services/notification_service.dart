@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+import '../l10n/gen/app_localizations.dart';
 
 import '../models/point.dart';
 import 'debug_log.dart';
@@ -328,8 +331,18 @@ class NotificationService {
     );
   }
 
+  /// Localisations pour la langue du script détecté (fr/en/es), avec
+  /// fallback FR — les notifications sont construites hors du widget tree.
+  AppLocalizations _l10nFor(String language) {
+    final locale = Locale(language);
+    if (AppLocalizations.supportedLocales.contains(locale)) {
+      return lookupAppLocalizations(locale);
+    }
+    return lookupAppLocalizations(const Locale('fr'));
+  }
+
   String _buildTitle(String language) {
-    return language == 'en' ? 'You are nearby' : 'Tu es à proximité !';
+    return _l10nFor(language).notifNearbyTitle;
   }
 
   String _buildBody({
@@ -337,16 +350,9 @@ class NotificationService {
     required String poiName,
     required int delaySeconds,
   }) {
-    if (language == 'en') {
-      if (delaySeconds <= 0) {
-        return '$poiName is ready. Audio starts now.';
-      }
-      return '$poiName is nearby. Audio starts in $delaySeconds seconds.';
-    }
-
-    if (delaySeconds <= 0) {
-      return '$poiName est prêt. L’audio démarre maintenant.';
-    }
-    return '$poiName est à proximité. L’audio démarre dans $delaySeconds secondes.';
+    final l10n = _l10nFor(language);
+    return delaySeconds <= 0
+        ? l10n.notifBodyNow(poiName)
+        : l10n.notifBodyIn(poiName, delaySeconds);
   }
 }

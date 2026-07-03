@@ -64,6 +64,11 @@ class SupabaseService {
     return List<Map<String, dynamic>>.from(response);
   }
 
+  /// Récupérer un POI par ID (utilisé par la sync de groupe).
+  static Future<Map<String, dynamic>?> getPoint(String pointId) async {
+    return client.from('points').select().eq('id', pointId).maybeSingle();
+  }
+
   /// Récupérer les POIs d'une ville filtrés par catégorie.
   static Future<List<Map<String, dynamic>>> getPointsByCategory(
     String cityId,

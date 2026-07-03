@@ -165,6 +165,33 @@ DiscoveryPlaybackService
 
 ---
 
+## Multi-langue (Sprint 7)
+
+- **UI**: flutter gen-l10n (ARB `lib/l10n/app_{fr,en,es}.arb`) — l'interface suit
+  la langue du téléphone (fr/en/es, défaut fr).
+- **Audio**: réglage séparé (`UserPreferencesService.preferredLanguage`), choisi
+  à l'onboarding et modifiable dans les Paramètres — un touriste peut avoir
+  l'UI en anglais et écouter Marco en français.
+- Les noms de villes/POIs (JSONB) et les catégories s'affichent dans la langue
+  de l'UI; les notifications dans la langue du script joué.
+
+## Sync groupe « Écouter ensemble » (Sprint 9)
+
+```
+Host ──(AudioService.stateStream)──> Broadcast 'sync' ──> Membres
+                    canal Realtime `group:CODE`
+Presence: liste des participants en direct (pas de table, pas de compte)
+```
+
+- **Sans table ni auth**: un canal Supabase Realtime par session
+  (`group:CODE`, code 6 caractères non ambigus, partagé par QR).
+- **Presence** = liste des participants (étiquettes anonymes amicales).
+- **Broadcast** = commandes du Host (play/pause/resume/stop + poiId). Chaque
+  membre joue le script du POI **dans sa propre langue** — groupe multilingue.
+- Sync à la seconde, sans seek (narration — suffisant). Si la connexion
+  tombe, chaque appareil continue en solo (fallback naturel).
+- Fichiers: `services/group_session_service.dart`, `widgets/group_session_sheet.dart`.
+
 ## Flux utilisateur
 
 ### Découverte des POIs

@@ -99,7 +99,7 @@ lib/
 │   ├── audio_service.dart           # Orchestration lecture (état global)
 │   ├── audio_handler.dart           # Handler audio_service (background/lock screen)
 │   ├── tts_service.dart             # Wrapper flutter_tts + sélection de voix
-│   ├── edge_tts_service.dart        # ⚠️ Génération MP3 Edge TTS — non branché
+│   ├── edge_tts_service*.dart       # Génération MP3 Edge TTS (io + stub web)
 │   ├── geofencing_service.dart      # Détection de proximité GPS (cœur du produit)
 │   ├── discovery_playback_service.dart  # Auto-play sur trigger GPS
 │   ├── location_service.dart        # Stream de position GPS
@@ -205,7 +205,7 @@ VALUES (
 
 ---
 
-## 📊 Status (v0.5.0)
+## 📊 Status (v0.6.0)
 
 ✅ **Sprint 0** — Setup + contenu Saint-Lambert (81 POIs, 243 scripts)
 ✅ **Sprint 1** — Carte OSM + POIs + filtres par catégorie + vue liste
@@ -213,5 +213,8 @@ VALUES (
 ✅ **Sprint 3** — Mode découverte: GPS auto-trigger, notifications, POIs visités, cooldown
 ✅ **Revue de code** — 20 correctifs appliqués (GPS arrière-plan, position live, etc.) — voir [docs/CODE-REVIEW.md](./docs/CODE-REVIEW.md)
 ✅ **Polish pré-terrain (v0.5.0)** — voix Edge TTS branchées + téléchargement par ville, tuiles CARTO retina + attribution, clustering, cercles de rayon en mode découverte, dark mode, police Nunito, splash screen, onboarding, animations Hero, photos de villes (migration 002)
-⏳ **Sprint 4** — Test terrain à Saint-Lambert (balade libre) ← **prochaine étape**
+✅ **Sprint 7** — UI multilingue FR/EN/ES (flutter gen-l10n), noms et catégories localisés
+✅ **Sprint 8** — Onboarding 4 écrans (avec choix de langue), permissions localisées, À propos
+✅ **Sprint 9** — « Écouter ensemble »: sessions de groupe par code + QR via Supabase Realtime (host contrôle la lecture) — à valider à plusieurs appareils
+⏳ **Sprint 4** — Test terrain à Saint-Lambert (balade libre) ← **prochaine étape humaine**
 🔜 **Sprint 5** — Mode offline complet (sqflite: POIs + scripts + tiles)

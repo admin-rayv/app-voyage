@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../config/route_data.dart';
+import '../l10n/l10n.dart';
 import '../config/theme.dart';
 import '../models/audio_state.dart';
 import '../models/point.dart' as models;
@@ -88,7 +89,7 @@ class MiniPlayer extends StatelessWidget {
                                   const SizedBox(width: 10),
                                   Expanded(
                                     child: Text(
-                                      state.currentPoiName ?? 'Lecture audio',
+                                      state.currentPoiName ?? context.l10n.audioPlayback,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: Theme.of(context)
@@ -117,15 +118,15 @@ class MiniPlayer extends StatelessWidget {
                             isPlaying ? Icons.pause : Icons.play_arrow,
                           ),
                           tooltip: isPlaying
-                              ? 'Pause'
+                              ? context.l10n.pauseTooltip
                               : isPaused
-                                  ? 'Reprendre'
-                                  : 'Lire',
+                                  ? context.l10n.resumeTooltip
+                                  : context.l10n.playTooltip,
                         ),
                         IconButton(
                           onPressed: () => audioService.stop(),
                           icon: const Icon(Icons.close),
-                          tooltip: 'Arrêter',
+                          tooltip: context.l10n.stopTooltip,
                         ),
                       ],
                     ),

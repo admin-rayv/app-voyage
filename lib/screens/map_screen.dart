@@ -18,13 +18,16 @@ import '../services/audio_service.dart' as audio_svc;
 import '../services/debug_log.dart';
 import '../services/discovery_playback_service.dart';
 import '../services/geofencing_service.dart';
+import '../services/group_session_service.dart';
 import '../services/notification_service.dart';
 import '../services/permission_service.dart';
 import '../services/supabase_service.dart';
 import '../services/user_preferences_service.dart';
 import '../services/visited_poi_service.dart';
 import '../config/categories.dart';
+import '../l10n/l10n.dart';
 import '../config/theme.dart';
+import '../widgets/group_session_sheet.dart';
 import '../widgets/map_tiles.dart';
 import '../widgets/poi_list_item.dart';
 
@@ -289,7 +292,8 @@ class _MapScreenState extends State<MapScreen>
     final points = _discoveryPoints;
     if (points.isEmpty) {
       await _persistDiscoveryPreference(false);
-      _showSnackBar('Aucun point disponible pour activer la découverte.');
+      if (!mounted) return;
+      _showSnackBar(context.l10n.noPointsAvailable);
       return;
     }
 
@@ -311,8 +315,9 @@ class _MapScreenState extends State<MapScreen>
       if (!permissionResult.isGranted || !mounted) {
         await _persistDiscoveryPreference(false);
         _setDiscoveryModeState(enabled: false);
-        if (!isRestoring && permissionResult.message != null) {
-          _showSnackBar(permissionResult.message!);
+        final message = _permissionMessage(permissionResult);
+        if (!isRestoring && message != null) {
+          _showSnackBar(message);
         }
         return;
       }
@@ -337,7 +342,8 @@ class _MapScreenState extends State<MapScreen>
       if (!started) {
         await _persistDiscoveryPreference(false);
         _setDiscoveryModeState(enabled: false);
-        _showSnackBar('Impossible de démarrer le mode découverte.');
+        if (!mounted) return;
+        _showSnackBar(context.l10n.discoveryStartFailed);
         return;
       }
 
@@ -345,8 +351,10 @@ class _MapScreenState extends State<MapScreen>
       _setDiscoveryModeState(enabled: true);
       await _persistDiscoveryPreference(true);
 
-      if (!isRestoring) {
-        _showSnackBar(permissionResult.message ?? 'Mode découverte activé.');
+      if (!isRestoring && mounted) {
+        _showSnackBar(
+          _permissionMessage(permissionResult) ?? context.l10n.discoveryEnabled,
+        );
       }
     } finally {
       if (mounted) {
@@ -369,7 +377,8 @@ class _MapScreenState extends State<MapScreen>
       _discoverySubscription = null;
       _setDiscoveryModeState(enabled: false);
       await _persistDiscoveryPreference(false);
-      _showSnackBar('Mode découverte désactivé.');
+      if (!mounted) return;
+      _showSnackBar(context.l10n.discoveryDisabled);
     } finally {
       if (mounted) {
         setState(() => _discoveryBusy = false);
@@ -408,29 +417,48 @@ class _MapScreenState extends State<MapScreen>
   }
 
   String _buildDiscoveryMessage(DiscoveryPlaybackResult result) {
+    final l10n = context.l10n;
     final poiName = result.poi.localizedName(result.language);
     if (result.played) {
       final delaySec = result.delayApplied.inSeconds;
-      final delayMessage = delaySec > 0 ? ' dans ${delaySec}s' : '';
-      return 'POI détecté: $poiName. Lecture automatique$delayMessage.';
+      return delaySec > 0
+          ? l10n.msgAutoplayIn(poiName, delaySec)
+          : l10n.msgAutoplayNow(poiName);
     }
 
     switch (result.skipReason) {
       case DiscoveryPlaybackSkipReason.autoplayDisabled:
-        return 'POI détecté: $poiName. Lecture automatique désactivée.';
+        return l10n.msgAutoplayDisabled(poiName);
       case DiscoveryPlaybackSkipReason.pausedByUser:
-        return 'POI détecté: $poiName. Lecture ignorée car l’audio est en pause.';
+        return l10n.msgPausedSkip(poiName);
       case DiscoveryPlaybackSkipReason.manualAudioInProgress:
-        return 'POI détecté: $poiName. Lecture manuelle en cours, auto-play ignoré.';
+        return l10n.msgManualSkip(poiName);
       case DiscoveryPlaybackSkipReason.autoAudioAlreadyPlayingPoi:
-        return 'POI détecté: $poiName déjà en lecture.';
+        return l10n.msgAlreadyPlaying(poiName);
       case DiscoveryPlaybackSkipReason.scriptNotFound:
       case DiscoveryPlaybackSkipReason.missingScriptContent:
-        return 'POI détecté: $poiName. Aucun script disponible.';
+        return l10n.msgNoScript(poiName);
       case DiscoveryPlaybackSkipReason.missingPoiName:
-        return 'POI détecté. Lecture automatique ignorée.';
       case null:
-        return 'POI détecté: $poiName.';
+        return l10n.msgDetectedOnly(poiName);
+    }
+  }
+
+  /// Message localisé selon le statut de permission (les messages portés
+  /// par DiscoveryPermissionResult sont en dur — on localise ici).
+  String? _permissionMessage(DiscoveryPermissionResult result) {
+    final l10n = context.l10n;
+    switch (result.status) {
+      case DiscoveryPermissionStatus.serviceDisabled:
+        return l10n.permServiceDisabled;
+      case DiscoveryPermissionStatus.denied:
+        return l10n.permDenied;
+      case DiscoveryPermissionStatus.deniedForever:
+        return l10n.permDeniedForever;
+      case DiscoveryPermissionStatus.grantedForegroundOnly:
+        return result.message != null ? l10n.permForegroundOnly : null;
+      case DiscoveryPermissionStatus.grantedAlways:
+        return null;
     }
   }
 
@@ -544,21 +572,21 @@ class _MapScreenState extends State<MapScreen>
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Télécharger les audios ?'),
+        title: Text(context.l10n.downloadDialogTitle),
         content: Text(
-          'Génère et met en cache les audios de qualité (voix Marco) pour '
-          'tous les POIs de ${widget.city.localizedName('fr')} en '
-          '${language.toUpperCase()}. À faire en Wi-Fi — ensuite tout '
-          'fonctionne sans réseau.',
+          context.l10n.downloadDialogBody(
+            widget.city.localizedName(context.languageCode),
+            language.toUpperCase(),
+          ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: const Text('Annuler'),
+            child: Text(context.l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: const Text('Télécharger'),
+            child: Text(context.l10n.download),
           ),
         ],
       ),
@@ -573,7 +601,7 @@ class _MapScreenState extends State<MapScreen>
         context: context,
         barrierDismissible: false,
         builder: (dialogContext) => AlertDialog(
-          title: const Text('Téléchargement des audios'),
+          title: Text(context.l10n.downloadProgressTitle),
           content: ValueListenableBuilder<(int, int)>(
             valueListenable: progressNotifier,
             builder: (context, progress, _) {
@@ -585,7 +613,7 @@ class _MapScreenState extends State<MapScreen>
                     value: total == 0 ? null : current / total,
                   ),
                   const SizedBox(height: 12),
-                  Text('$current / $total scripts'),
+                  Text(context.l10n.downloadProgressCount(current, total)),
                 ],
               );
             },
@@ -596,7 +624,7 @@ class _MapScreenState extends State<MapScreen>
                 cancelled = true;
                 Navigator.of(dialogContext).pop();
               },
-              child: const Text('Arrêter'),
+              child: Text(context.l10n.stopAction),
             ),
           ],
         ),
@@ -621,8 +649,8 @@ class _MapScreenState extends State<MapScreen>
       final (done, total) = progressNotifier.value;
       _showSnackBar(
         done >= total && total > 0
-            ? 'Audios téléchargés ($done scripts). Prêt pour la balade !'
-            : 'Téléchargement interrompu ($done/$total).',
+            ? context.l10n.downloadDone(done)
+            : context.l10n.downloadInterrupted(done, total),
       );
     }
   }
@@ -666,7 +694,7 @@ class _MapScreenState extends State<MapScreen>
               children: [
                 Expanded(
                   child: Text(
-                    poi.localizedName('fr'),
+                    poi.localizedName(context.languageCode),
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -687,7 +715,7 @@ class _MapScreenState extends State<MapScreen>
                       ),
                     ),
                     child: Text(
-                      '${cat.emoji} ${cat.labelFr}',
+                      '${cat.emoji} ${cat.label(context.languageCode)}',
                       style: TextStyle(
                         fontSize: 12,
                         color: cat.color,
@@ -763,13 +791,13 @@ class _MapScreenState extends State<MapScreen>
                         DebugLog().log(
                           '[MapScreen] no script found for manual preview poi=${poi.id}',
                         );
-                        if (mounted) {
-                          _showSnackBar('Aucun script disponible pour ce POI.');
+                        if (this.context.mounted) {
+                          _showSnackBar(this.context.l10n.noScriptForPoi);
                         }
                       }
                     },
                     icon: const Icon(Icons.play_arrow),
-                    label: const Text('Écouter'),
+                    label: Text(context.l10n.listen),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppTheme.primaryColor,
                       foregroundColor: Colors.white,
@@ -791,7 +819,7 @@ class _MapScreenState extends State<MapScreen>
                       );
                     },
                     icon: const Icon(Icons.info_outline),
-                    label: const Text('Détail'),
+                    label: Text(context.l10n.detail),
                   ),
                 ),
               ],
@@ -806,24 +834,40 @@ class _MapScreenState extends State<MapScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.city.localizedName('fr')),
+        title: Text(widget.city.localizedName(context.languageCode)),
         actions: [
+          // Écouter ensemble (sync groupe) — point vert quand session active
+          ValueListenableBuilder<String?>(
+            valueListenable: GroupSessionService().activeCode,
+            builder: (context, sessionCode, _) => IconButton(
+              icon: Badge(
+                isLabelVisible: sessionCode != null,
+                smallSize: 10,
+                backgroundColor: Colors.greenAccent,
+                child: const Icon(Icons.group_outlined),
+              ),
+              onPressed: () => GroupSessionSheet.show(context),
+              tooltip: sessionCode != null
+                  ? context.l10n.groupActiveBadge(sessionCode)
+                  : context.l10n.groupListenTooltip,
+            ),
+          ),
           IconButton(
             icon: const Icon(Icons.download_for_offline_outlined),
             onPressed: _isLoading ? null : _downloadCityAudios,
-            tooltip: 'Télécharger les audios',
+            tooltip: context.l10n.downloadAudiosTooltip,
           ),
           // Toggle carte/liste
           IconButton(
             icon: Icon(_showList ? Icons.map : Icons.list),
             onPressed: () => setState(() => _showList = !_showList),
-            tooltip: _showList ? 'Voir la carte' : 'Voir la liste',
+            tooltip: _showList ? context.l10n.viewMapTooltip : context.l10n.viewListTooltip,
           ),
           if (_userPosition != null && !_showList)
             IconButton(
               icon: const Icon(Icons.my_location),
               onPressed: _centerOnUser,
-              tooltip: 'Ma position',
+              tooltip: context.l10n.myPositionTooltip,
             ),
         ],
       ),
@@ -839,7 +883,7 @@ class _MapScreenState extends State<MapScreen>
                 children: [
                   Icon(Icons.error_outline, size: 48, color: Colors.grey[400]),
                   const SizedBox(height: 12),
-                  Text('Erreur: $_error'),
+                  Text(context.l10n.errorWith(_error ?? '')),
                   const SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: () {
@@ -849,7 +893,7 @@ class _MapScreenState extends State<MapScreen>
                       });
                       _loadPoints();
                     },
-                    child: const Text('Réessayer'),
+                    child: Text(context.l10n.retry),
                   ),
                 ],
               ),
@@ -896,7 +940,7 @@ class _MapScreenState extends State<MapScreen>
             padding: const EdgeInsets.only(right: 6),
             child: FilterChip(
               selected: _activeFilters.isEmpty && !_showUnvisitedOnly,
-              label: Text('Tous (${_allPoints.length})'),
+              label: Text(context.l10n.allFilter(_allPoints.length)),
               onSelected: (_) => _clearFilters(),
               selectedColor: AppTheme.primaryColor.withValues(alpha: 0.2),
               checkmarkColor: AppTheme.primaryColor,
@@ -907,7 +951,7 @@ class _MapScreenState extends State<MapScreen>
             padding: const EdgeInsets.only(right: 6),
             child: FilterChip(
               selected: _showUnvisitedOnly,
-              label: Text('Non écoutés seulement (${basePoints.length})'),
+              label: Text(context.l10n.unvisitedOnlyFilter(basePoints.length)),
               onSelected: (_) {
                 setState(() {
                   _showUnvisitedOnly = !_showUnvisitedOnly;
@@ -927,7 +971,7 @@ class _MapScreenState extends State<MapScreen>
               padding: const EdgeInsets.only(right: 6),
               child: FilterChip(
                 selected: isActive,
-                label: Text('${cat.emoji} ${cat.labelFr} ($count)'),
+                label: Text('${cat.emoji} ${cat.label(context.languageCode)} ($count)'),
                 onSelected: (_) => _toggleFilter(cat.key),
                 selectedColor: cat.color.withValues(alpha: 0.2),
                 checkmarkColor: cat.color,
@@ -970,7 +1014,7 @@ class _MapScreenState extends State<MapScreen>
             children: [
               Expanded(
                 child: Text(
-                  '$visitedCount/$totalCount POIs ecoutés',
+                  context.l10n.progressListened(visitedCount, totalCount),
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
@@ -1003,17 +1047,17 @@ class _MapScreenState extends State<MapScreen>
             children: [
               _buildLegendChip(
                 icon: Icons.radio_button_checked,
-                label: 'A découvrir',
+                label: context.l10n.legendToDiscover,
                 color: AppTheme.primaryColor,
               ),
               _buildLegendChip(
                 icon: Icons.check_circle,
-                label: 'Écouté',
+                label: context.l10n.legendListened,
                 color: Colors.grey.shade600,
               ),
               _buildLegendChip(
                 icon: Icons.graphic_eq,
-                label: 'En lecture',
+                label: context.l10n.legendPlaying,
                 color: Colors.green.shade700,
               ),
             ],
@@ -1081,7 +1125,7 @@ class _MapScreenState extends State<MapScreen>
           children: [
             Icon(Icons.search_off, size: 48, color: Colors.grey[400]),
             const SizedBox(height: 12),
-            const Text('Aucun POI trouvé avec ces filtres'),
+            Text(context.l10n.noPoisWithFilters),
           ],
         ),
       );
@@ -1369,8 +1413,8 @@ class _MapScreenState extends State<MapScreen>
               children: [
                 Text(
                   isActive
-                      ? 'Mode découverte actif'
-                      : 'Activation du mode découverte...',
+                      ? context.l10n.discoveryActiveTitle
+                      : context.l10n.discoveryActivating,
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     color: isActive ? Colors.green[800] : Colors.grey[800],
@@ -1379,8 +1423,8 @@ class _MapScreenState extends State<MapScreen>
                 if (lastTriggeredPoi != null)
                   Text(
                     autoPlayedPoi != null
-                        ? 'Lecture en cours: ${autoPlayedPoi.localizedName('fr')}'
-                        : 'Dernier POI détecté: ${lastTriggeredPoi.localizedName('fr')}',
+                        ? context.l10n.nowPlayingPoi(autoPlayedPoi.localizedName(context.languageCode))
+                        : context.l10n.lastDetected(lastTriggeredPoi.localizedName(context.languageCode)),
                     style: TextStyle(
                       fontSize: 12,
                       color: AppTheme.textSecondaryOf(context),
@@ -1389,8 +1433,8 @@ class _MapScreenState extends State<MapScreen>
                 else
                   Text(
                     isActive
-                        ? 'Surveillance de ${_discoveryPoints.length} POIs'
-                        : 'Vérification des permissions et du GPS',
+                        ? context.l10n.watchingPois(_discoveryPoints.length)
+                        : context.l10n.checkingPermissions,
                     style: TextStyle(
                       fontSize: 12,
                       color: AppTheme.textSecondaryOf(context),
@@ -1407,7 +1451,7 @@ class _MapScreenState extends State<MapScreen>
                 borderRadius: BorderRadius.circular(999),
               ),
               child: Text(
-                '$triggeredCount déclenché${triggeredCount > 1 ? 's' : ''}',
+                context.l10n.triggeredCount(triggeredCount),
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
@@ -1423,10 +1467,10 @@ class _MapScreenState extends State<MapScreen>
   Widget _buildDiscoveryFab() {
     final color = _discoveryModeEnabled ? Colors.green : Colors.grey.shade700;
     final label = _discoveryBusy
-        ? 'Activation...'
+        ? context.l10n.fabActivating
         : _discoveryModeEnabled
-        ? 'Découverte active'
-        : 'Activer la découverte';
+        ? context.l10n.fabDiscoveryOn
+        : context.l10n.fabEnableDiscovery;
 
     return AnimatedBuilder(
       animation: _discoveryPulseController,

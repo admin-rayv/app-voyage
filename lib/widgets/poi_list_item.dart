@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import '../models/point.dart' as models;
 import '../config/categories.dart';
+import '../l10n/l10n.dart';
 import '../config/theme.dart';
 
 /// Widget d'un POI dans la vue liste.
@@ -105,7 +106,7 @@ class PoiListItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      poi.localizedName('fr'),
+                      poi.localizedName(context.languageCode),
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
@@ -123,12 +124,12 @@ class PoiListItem extends StatelessWidget {
                           children: [
                             if (isVisited)
                               _buildStatusPill(
-                                label: 'Écouté',
+                                label: context.l10n.legendListened,
                                 color: Colors.grey.shade700,
                               ),
                             if (isPlaying)
                               _buildStatusPill(
-                                label: 'Lecture en cours',
+                                label: context.l10n.legendPlaying,
                                 color: Colors.green.shade700,
                               ),
                           ],
@@ -149,7 +150,7 @@ class PoiListItem extends StatelessWidget {
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
-                            '${c.emoji} ${c.labelFr}',
+                            '${c.emoji} ${c.label(context.languageCode)}',
                             style: TextStyle(
                               fontSize: 10,
                               color: c.color,

@@ -7,10 +7,59 @@ import 'package:crypto/crypto.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
+import 'debug_log.dart';
+
 /// Service Edge TTS — Génère de l'audio via Microsoft Edge TTS + cache local.
 ///
 /// Priorité: cache local → Edge TTS (si internet) → null (fallback au TTS natif)
 /// Les MP3 sont cachés dans le dossier app pour réutilisation offline.
+
+/// Jeton anti-abus exigé par l'API Edge depuis fin 2024 (paramètre
+/// `Sec-MS-GEC`): SHA-256 de l'heure courante en "Windows file time"
+/// arrondie aux 5 minutes, concaténée au TrustedClientToken. Sans lui,
+/// le serveur répond 403. Algorithme répliqué de la librairie de
+/// référence edge-tts (Python), incluant la correction de décalage
+/// d'horloge si celle du téléphone est trop désynchronisée.
+class EdgeTtsDrm {
+  static const String trustedClientToken = '6A5AA1D4EAFF4E9FB37E23D68491D6F4';
+
+  /// Décalage appliqué à l'horloge locale (corrigé après un refus serveur).
+  static int clockSkewSeconds = 0;
+
+  static String secMsGec({int? unixSeconds}) {
+    var seconds = (unixSeconds ??
+            DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000) +
+        clockSkewSeconds;
+    // Epoch Windows (1601-01-01), arrondi aux 5 min, en intervalles de 100 ns.
+    seconds += 11644473600;
+    seconds -= seconds % 300;
+    final ticks = seconds * 10000000;
+    final digest = sha256.convert(ascii.encode('$ticks$trustedClientToken'));
+    return digest.toString().toUpperCase();
+  }
+
+  /// Recale [clockSkewSeconds] sur l'heure du serveur (header Date de
+  /// l'endpoint public de la liste des voix).
+  static Future<void> syncClockSkew() async {
+    final client = HttpClient();
+    try {
+      final request = await client.getUrl(Uri.parse(EdgeTtsService._voiceListUrl));
+      EdgeTtsService._baseHeaders.forEach(request.headers.set);
+      final response = await request.close();
+      await response.drain<void>();
+      final serverDate = response.headers.date;
+      if (serverDate != null) {
+        clockSkewSeconds = serverDate
+            .toUtc()
+            .difference(DateTime.now().toUtc())
+            .inSeconds;
+        DebugLog().log('[EdgeTTS] horloge recalée: ${clockSkewSeconds}s');
+      }
+    } finally {
+      client.close(force: true);
+    }
+  }
+}
 
 class EdgeTtsService {
   // Voix par langue — voix masculines pour Marco
@@ -20,10 +69,25 @@ class EdgeTtsService {
     'es': 'es-MX-JorgeNeural',
   };
 
-  // Edge TTS WebSocket config
-  static const String _trustedClientToken = '6A5AA1D4EAFF4E9FB37E23D68491D6F4';
+  // Edge TTS WebSocket config — doit suivre la librairie de référence
+  // edge-tts (version Chromium, en-têtes, jeton Sec-MS-GEC), sinon 403.
+  static const String _chromiumFullVersion = '143.0.3650.75';
+  static const String _chromiumMajor = '143';
+  static const String _secMsGecVersion = '1-$_chromiumFullVersion';
+  static const String _baseUrl =
+      'speech.platform.bing.com/consumer/speech/synthesize/readaloud';
   static const String _wsUrl =
-      'wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=$_trustedClientToken';
+      'wss://$_baseUrl/edge/v1?TrustedClientToken=${EdgeTtsDrm.trustedClientToken}';
+  static const String _voiceListUrl =
+      'https://$_baseUrl/voices/list?trustedclienttoken=${EdgeTtsDrm.trustedClientToken}';
+
+  static const Map<String, String> _baseHeaders = {
+    'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+            '(KHTML, like Gecko) Chrome/$_chromiumMajor.0.0.0 Safari/537.36 '
+            'Edg/$_chromiumMajor.0.0.0',
+    'Accept-Language': 'en-US,en;q=0.9',
+  };
 
   /// Obtenir le chemin du fichier audio caché pour un script donné.
   ///
@@ -56,7 +120,9 @@ class EdgeTtsService {
         return cachePath;
       }
     } catch (e) {
-      // Silencieux — on retourne null pour fallback
+      // Fallback TTS natif, mais on trace la cause réelle (diagnostic
+      // terrain via l'écran de debug — un échec silencieux est invisible).
+      DebugLog().log('[EdgeTTS] génération échouée: $e');
     }
 
     return null;
@@ -109,19 +175,40 @@ class EdgeTtsService {
     }
   }
 
+  /// Ouvrir la connexion WebSocket Edge TTS (jeton Sec-MS-GEC recalculé
+  /// à chaque tentative — il dépend de l'horloge).
+  Future<WebSocket> _connect(String requestId) {
+    final url = '$_wsUrl'
+        '&Sec-MS-GEC=${EdgeTtsDrm.secMsGec()}'
+        '&Sec-MS-GEC-Version=$_secMsGecVersion'
+        '&ConnectionId=$requestId';
+    return WebSocket.connect(
+      url,
+      headers: {
+        ..._baseHeaders,
+        'Origin': 'chrome-extension://jdiccldimpdaibmpdkjnbmckianbfold',
+        'Pragma': 'no-cache',
+        'Cache-Control': 'no-cache',
+        'Cookie': 'muid=${_generateRequestId().toUpperCase()};',
+      },
+    );
+  }
+
   /// Synthétiser du texte en audio MP3 via Edge TTS WebSocket.
   Future<Uint8List?> _synthesize(String text, String language) async {
     final voice = _voices[language] ?? _voices['fr']!;
     final requestId = _generateRequestId();
 
-    final ws = await WebSocket.connect(
-      '$_wsUrl&ConnectionId=$requestId',
-      headers: {
-        'Origin': 'chrome-extension://jdiccldimpdaibmpdmdez',
-        'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-      },
-    );
+    WebSocket ws;
+    try {
+      ws = await _connect(requestId);
+    } on WebSocketException catch (e) {
+      // Refus probable du jeton (horloge du téléphone décalée) —
+      // on se recale sur l'heure du serveur et on retente une fois.
+      DebugLog().log('[EdgeTTS] connexion refusée ($e), recalage horloge');
+      await EdgeTtsDrm.syncClockSkew();
+      ws = await _connect(requestId);
+    }
 
     final audioChunks = <int>[];
     final completer = Completer<Uint8List?>();

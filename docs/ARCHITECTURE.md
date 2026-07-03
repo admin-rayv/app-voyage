@@ -113,27 +113,37 @@ vie-locale     → 🏘️ Marchés, events, traditions
 
 La sélection de voix suit l'ordre: **choix utilisateur (Settings) → voix par défaut → première voix locale → première voix de la langue**. L'utilisateur peut tester et choisir sa voix par langue dans les Paramètres.
 
-### Architecture audio (réelle, v0.4.x)
+### Architecture audio (réelle, v0.5.x)
 
 ```
-┌──────────────┐   ┌──────────────┐   ┌──────────────────┐   ┌─────────────┐
-│   Supabase   │──>│ AudioService │──>│ AppAudioHandler  │──>│ flutter_tts │
-│  (scripts)   │   │ (état global,│   │ (audio_service:  │   │ voix native │
-└──────────────┘   │  singleton)  │   │  lock screen,    │   └─────────────┘
-     texte         └──────────────┘   │  background)     │
-                          │           └──────────────────┘
-                          └── fallback: TtsService direct si audio_service échoue
+┌──────────────┐   ┌──────────────┐   ┌───────────────────────────────┐
+│   Supabase   │──>│ AudioService │──>│ AppAudioHandler (audio_service│
+│  (scripts)   │   │ (état global,│   │  lock screen, background)     │
+└──────────────┘   │  singleton)  │   │                               │
+     texte         └──────┬───────┘   │  1. MP3 Edge TTS (just_audio) │
+                          │           │  2. Fallback: flutter_tts     │
+                   EdgeTtsService     └───────────────────────────────┘
+                   (génération MP3
+                    + cache local)
 ```
 
 1. L'UI (détail POI, carte, mode découverte) appelle `AudioService.playText(...)`
-2. `AudioService` délègue à `AppAudioHandler` (package `audio_service`) qui gère la notification média, les contrôles lock screen et la lecture en background
-3. Le handler configure la voix via `TtsService.configureVoiceForTts()` puis lit avec `flutter_tts`
-4. La progression est **estimée** (~0.4 s/mot ÷ vitesse) — flutter_tts ne fournit pas de position réelle, donc pas de seek
-5. Un POI est marqué "écouté" (`VisitedPoiService`, persisté) quand la lecture atteint 50 % ou se termine naturellement
+2. `AudioService` demande d'abord le **MP3 Edge TTS** (`EdgeTtsService.getAudioPath`):
+   cache local → sinon génération via l'API non officielle Microsoft Edge
+   (voix neurale `fr-CA-ThierryNeural` pour Marco), bornée à 12 s
+3. MP3 disponible → `AppAudioHandler.playFile()` via **just_audio**
+   (durée/position réelles, pause/reprise natives, vitesse variable)
+4. Sinon (offline sans cache, API down, timeout) → **fallback flutter_tts**
+   (voix native du téléphone) — progression estimée recalée par le
+   progressHandler, reprise Android depuis le dernier offset lu
+5. Un POI est marqué "écouté" (`VisitedPoiService`, persisté) quand la lecture
+   atteint 50 % ou se termine naturellement
+6. Bouton « Télécharger les audios » (écran carte): pré-génère les MP3 de
+   toute la ville dans la langue choisie — à faire en Wi-Fi avant une balade
 
-### ⚠️ EdgeTtsService — présent mais non branché
-
-`lib/services/edge_tts_service.dart` implémente la génération de MP3 via l'API **non officielle** de Microsoft Edge TTS (WebSocket + cache local, voix `fr-CA-ThierryNeural`). Ce code n'est **jamais utilisé pour la lecture** — `playText` va toujours vers flutter_tts — et les méthodes `downloadCityAudios`/`getAudioPath` ne sont appelées par aucun écran. Décision à prendre (voir CODE-REVIEW.md): le brancher (lecture MP3 via `just_audio` + fallback natif) ou le retirer.
+⚠️ **Edge TTS = API non officielle** (risque T7 dans RISKS.md): Microsoft peut
+la couper sans préavis. Le fallback natif doit toujours rester fonctionnel.
+Le cache est invalidé par hash du contenu (script corrigé → audio régénéré).
 
 ### Mode découverte (GPS auto-trigger)
 
@@ -202,19 +212,24 @@ DiscoveryPlaybackService
 | Composant | Package | Rôle | Statut |
 |-----------|---------|------|--------|
 | Framework | Flutter | UI + logique native | ✅ Utilisé |
-| Maps | **flutter_map + OSM** | Cartes (gratuit, sans clé API) | ✅ Utilisé — pivot depuis Mapbox |
-| Audio TTS | flutter_tts | Lecture voix native | ✅ Utilisé (chemin principal) |
+| Maps | **flutter_map + tuiles CARTO** (données OSM) | Cartes retina, clair/sombre, sans clé API | ✅ Utilisé |
+| Clustering | flutter_map_marker_cluster | Regroupement des marqueurs POIs | ✅ Utilisé |
+| Audio MP3 | just_audio | Lecture des MP3 Edge TTS (chemin principal) | ✅ Utilisé |
+| Audio TTS | flutter_tts | Voix native (fallback) | ✅ Utilisé |
 | Audio background | audio_service + audio_session | Lock screen, notification média | ✅ Utilisé |
-| GPS | geolocator | Position + geofencing | ✅ Utilisé |
+| GPS | geolocator | Position + geofencing + foreground service | ✅ Utilisé |
 | Notifications | flutter_local_notifications | Alertes de proximité | ✅ Utilisé |
 | Navigation | go_router | Routing | ✅ Utilisé |
+| Typographie | google_fonts | Police Nunito | ✅ Utilisé |
+| Splash | flutter_native_splash | Écran de démarrage natif | ✅ Utilisé (dev) |
 | Prefs | shared_preferences | Settings, progression POIs | ✅ Utilisé |
-| Connectivity | connectivity_plus | Détection réseau (Edge TTS) | ⚠️ Utilisé par du code non branché (décision en attente) |
+| Connectivity | connectivity_plus | Détection réseau (Edge TTS) | ✅ Utilisé |
 | State | flutter_riverpod | State management | ⚠️ À peine utilisé (ProviderScope seulement) |
 | DB locale | sqflite | Cache offline | 🔜 Pas encore utilisé (Sprint 5) |
 
-*(Nettoyage v0.4.8: dio, permission_handler, just_audio, intl et l'outillage
-riverpod codegen ont été retirés du pubspec — jamais utilisés.)*
+*(Nettoyage v0.4.8: dio, permission_handler, intl et l'outillage riverpod
+codegen retirés — jamais utilisés. just_audio réintroduit en v0.5.0 pour la
+lecture des MP3 Edge TTS.)*
 
 ### Backend (Supabase)
 

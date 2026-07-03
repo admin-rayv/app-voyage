@@ -68,9 +68,9 @@ Supabase (cities, points, scripts)
 
 **POI-first:** Les POIs sont autonomes (liés à une ville, pas à un tour). Chaque POI a un script auto-contenu par langue (FR, EN, ES).
 
-**Audio natif:** La lecture passe par `flutter_tts` (Apple Speech sur iOS, Google TTS sur Android) — gratuit, offline, instantané. Un service Edge TTS (génération MP3 Microsoft + cache local) existe dans le code mais n'est **pas branché** à la lecture — décision à prendre (voir [docs/CODE-REVIEW.md](./docs/CODE-REVIEW.md)).
+**Audio:** la lecture privilégie les **voix neurales Edge TTS** (MP3 générés gratuitement via l'API du navigateur Microsoft Edge, cachés localement — voix `fr-CA-Thierry` pour Marco), avec **fallback automatique** sur `flutter_tts` (voix native du téléphone) sans réseau ni cache. Bouton « Télécharger les audios » sur la carte pour pré-générer toute une ville en Wi-Fi. ⚠️ API non officielle — voir RISKS.md (T7).
 
-**Cartes:** OpenStreetMap via `flutter_map` — gratuit, sans clé API (pivot depuis Mapbox).
+**Cartes:** `flutter_map` avec tuiles **CARTO** (données OpenStreetMap) — gratuit, sans clé API, retina, clair/sombre, clustering des marqueurs, attribution intégrée.
 
 **Mode découverte:** `GeofencingService` surveille la position GPS (rayon dynamique selon la précision, direction d'approche, debounce 3 s, cooldown global 30 s avec file d'attente) et déclenche la lecture automatique via `DiscoveryPlaybackService`.
 
@@ -205,12 +205,13 @@ VALUES (
 
 ---
 
-## 📊 Status (v0.4.8)
+## 📊 Status (v0.5.0)
 
 ✅ **Sprint 0** — Setup + contenu Saint-Lambert (81 POIs, 243 scripts)
 ✅ **Sprint 1** — Carte OSM + POIs + filtres par catégorie + vue liste
 ✅ **Sprint 2** — Lecture audio (tap), mini-player, background/lock screen
 ✅ **Sprint 3** — Mode découverte: GPS auto-trigger, notifications, POIs visités, cooldown
 ✅ **Revue de code** — 20 correctifs appliqués (GPS arrière-plan, position live, etc.) — voir [docs/CODE-REVIEW.md](./docs/CODE-REVIEW.md)
+✅ **Polish pré-terrain (v0.5.0)** — voix Edge TTS branchées + téléchargement par ville, tuiles CARTO retina + attribution, clustering, cercles de rayon en mode découverte, dark mode, police Nunito, splash screen, onboarding, animations Hero, photos de villes (migration 002)
 ⏳ **Sprint 4** — Test terrain à Saint-Lambert (balade libre) ← **prochaine étape**
-🔜 **Sprint 5** — Mode offline (sqflite) + polish — décision Edge TTS à trancher avant
+🔜 **Sprint 5** — Mode offline complet (sqflite: POIs + scripts + tiles)

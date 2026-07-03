@@ -114,14 +114,15 @@
 ### T7. Dépendance à l'API non officielle Edge TTS
 | Aspect | Détail |
 |--------|--------|
-| **Description** | Le service `EdgeTtsService` (actuellement non branché à la lecture) utilise l'API WebSocket non documentée de Microsoft Edge avec un token client codé en dur. Microsoft peut la couper, la modifier ou la bloquer sans préavis. Question de conditions d'utilisation également. |
-| **Probabilité** | 🟡 Moyenne (si on décide de l'utiliser) |
-| **Impact** | 🟡 Moyen — l'app retomberait sur les voix natives (fallback déjà prévu) |
+| **Description** | Depuis v0.5.0, la lecture privilégie `EdgeTtsService`: API WebSocket non documentée de Microsoft Edge avec un token client codé en dur. Microsoft peut la couper, la modifier ou la bloquer sans préavis. Question de conditions d'utilisation également. |
+| **Probabilité** | 🟡 Moyenne |
+| **Impact** | 🟡 Moyen — l'app retombe automatiquement sur les voix natives (fallback en place, timeout 12 s) |
 
 **Mitigation:**
-- [ ] Décider si on branche Edge TTS ou si on le retire (voir CODE-REVIEW.md)
-- [ ] Si branché: toujours garder le fallback flutter_tts fonctionnel
-- [ ] Si la qualité de voix devient critique: budgéter une vraie API (Azure TTS officiel, ElevenLabs)
+- [x] Branché avec fallback flutter_tts automatique (offline, API down, timeout)
+- [x] MP3 cachés localement — une coupure de l'API n'affecte pas les audios déjà téléchargés
+- [ ] Surveiller les logs `[AudioService] Edge TTS erreur` pour détecter une coupure
+- [ ] Si la coupure devient fréquente: migrer vers Azure Speech officiel (~5 $/ville, mêmes voix)
 
 ---
 

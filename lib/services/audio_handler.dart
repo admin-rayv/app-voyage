@@ -4,24 +4,32 @@ import 'package:audio_service/audio_service.dart' as audio_svc;
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:just_audio/just_audio.dart';
 
 import '../config/constants.dart';
 import '../models/point.dart' as models;
 import 'debug_log.dart';
 import 'tts_service.dart';
 
-/// Handler audio TTS — basé sur l'exemple officiel TextPlayerHandler.
+/// Mode de lecture en cours.
+enum PlaybackEngine { none, file, tts }
+
+/// Handler audio — deux moteurs:
 ///
-/// Pause/resume utilise flutter_tts.pause() natif qui sauvegarde la position
-/// dans le texte via onRangeStart(). Au prochain speak(), flutter_tts reprend
-/// automatiquement avec text.substring(pauseRangeStart).
-///
-/// Pattern clé: _run() reste bloqué pendant la pause (le Completer n'est PAS
-/// complété). Sur resume, on appelle _flutterTts.speak() directement sans
-/// passer par le wrapper — le completionHandler du wrapper complète le
-/// Completer original quand la lecture finit.
+/// 1. **file** (préféré): lecture d'un MP3 Edge TTS via just_audio —
+///    durée/position réelles, pause/reprise natives, vitesse variable.
+/// 2. **tts** (fallback): flutter_tts (voix native du téléphone), basé sur
+///    l'exemple officiel TextPlayerHandler. Pause/resume: le Completer de
+///    _run() reste bloqué pendant la pause; sur resume, speak() reprend
+///    (nativement sur iOS, depuis le dernier offset connu sur Android).
 class AppAudioHandler extends audio_svc.BaseAudioHandler {
   final FlutterTts _flutterTts = FlutterTts();
+  final AudioPlayer _player = AudioPlayer();
+
+  PlaybackEngine _engine = PlaybackEngine.none;
+  double _uiSpeed = 1.0;
+
+  PlaybackEngine get engine => _engine;
 
   /// Completer pour attendre la fin de la lecture en cours.
   Completer<void>? _speechCompleter;
@@ -98,6 +106,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
     // (la barre avançait uniquement au timer, elle dérivait si la voix
     // parlait plus vite/lentement que l'estimation de 0.4 s/mot).
     _flutterTts.setProgressHandler((text, start, end, word) {
+      if (_engine != PlaybackEngine.tts) return;
       final fullText = _currentText;
       if (fullText == null || fullText.isEmpty) return;
 
@@ -111,9 +120,82 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
         );
       }
     });
+
+    // ── Moteur MP3 (just_audio) ──
+    _player.positionStream.listen((position) {
+      if (_engine != PlaybackEngine.file) return;
+      _position = position;
+      playbackState.add(playbackState.value.copyWith(updatePosition: position));
+    });
+
+    _player.playerStateStream.listen((state) {
+      if (_engine != PlaybackEngine.file) return;
+      if (state.processingState == ProcessingState.completed) {
+        DebugLog().log('[Handler] MP3 terminé');
+        _position = _estimatedDuration;
+        playbackState.add(
+          playbackState.value.copyWith(
+            controls: [audio_svc.MediaControl.play],
+            androidCompactActionIndices: const [0],
+            processingState: audio_svc.AudioProcessingState.completed,
+            playing: false,
+            updatePosition: _estimatedDuration,
+          ),
+        );
+      }
+    });
   }
 
-  /// Charger un texte à lire.
+  /// Lire un fichier MP3 (audio Edge TTS caché localement).
+  Future<void> playFile(
+    String filePath,
+    String language,
+    String poiName,
+    models.Point? poi,
+    Duration estimatedDuration,
+  ) async {
+    DebugLog().log('[Handler] playFile poi=$poiName lang=$language');
+
+    // Arrêter toute lecture en cours (TTS ou MP3)
+    if (_playing || _speechCompleter != null) {
+      await stop();
+    }
+    await _player.stop();
+
+    _engine = PlaybackEngine.file;
+    _currentText = null;
+    _currentLanguage = language;
+    _currentPoiName = poiName.trim().isEmpty ? 'Lecture audio' : poiName.trim();
+    _currentPoi = poi;
+    _paused = false;
+    _stopped = false;
+    _position = Duration.zero;
+
+    Duration? realDuration;
+    try {
+      realDuration = await _player.setFilePath(filePath);
+    } catch (error) {
+      DebugLog().log('[Handler] setFilePath erreur: $error');
+      _engine = PlaybackEngine.none;
+      rethrow;
+    }
+    _estimatedDuration = realDuration ?? estimatedDuration;
+
+    mediaItem.add(
+      audio_svc.MediaItem(
+        id: filePath,
+        album: 'App Voyage',
+        title: _currentPoiName,
+        artist: 'Marco',
+        duration: _estimatedDuration,
+      ),
+    );
+
+    await _player.setSpeed(_uiSpeed);
+    await play();
+  }
+
+  /// Charger un texte à lire via TTS natif (fallback quand pas de MP3).
   Future<void> speakText(
     String text,
     String language,
@@ -123,11 +205,13 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
   ) async {
     DebugLog().log('[Handler] speakText poi=$poiName lang=$language');
 
-    // Arrêter la lecture en cours
+    // Arrêter la lecture en cours (TTS ou MP3)
     if (_playing || _speechCompleter != null) {
       await stop();
     }
+    await _player.stop();
 
+    _engine = PlaybackEngine.tts;
     _currentText = text;
     _currentLanguage = language;
     _currentPoiName = poiName.trim().isEmpty ? 'Lecture audio' : poiName.trim();
@@ -154,9 +238,10 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
   @override
   Future<void> play() async {
     if (_playing) return;
-    if ((_currentText ?? '').isEmpty) return;
+    if (_engine == PlaybackEngine.tts && (_currentText ?? '').isEmpty) return;
+    if (_engine == PlaybackEngine.none) return;
 
-    DebugLog().log('[Handler] play paused=$_paused');
+    DebugLog().log('[Handler] play engine=$_engine paused=$_paused');
 
     // Activer la session audio manuellement.
     final session = await AudioSession.instance;
@@ -180,7 +265,14 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
     // Forcer l'activation des boutons media sur Android
     audio_svc.AudioService.androidForceEnableMediaButtons();
 
-    // Démarrer le timer de position
+    if (_engine == PlaybackEngine.file) {
+      // MP3: position réelle via positionStream, pause/reprise natives.
+      _paused = false;
+      unawaited(_player.play());
+      return;
+    }
+
+    // TTS: position estimée par timer + recalage progressHandler.
     _startPositionUpdates();
 
     if (_paused) {
@@ -277,7 +369,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
 
   @override
   Future<void> pause() async {
-    DebugLog().log('[Handler] pause');
+    DebugLog().log('[Handler] pause engine=$_engine');
 
     _paused = true;
     _stopPositionUpdates();
@@ -293,6 +385,11 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
       updatePosition: _position,
     ));
 
+    if (_engine == PlaybackEngine.file) {
+      await _player.pause();
+      return;
+    }
+
     // Pause natif flutter_tts — sauvegarde la position dans le texte.
     // Le pauseHandler va fire mais ne complète PAS le Completer.
     await _flutterTts.pause();
@@ -300,7 +397,7 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
 
   @override
   Future<void> stop() async {
-    DebugLog().log('[Handler] stop');
+    DebugLog().log('[Handler] stop engine=$_engine');
 
     _stopped = true;
     _paused = false;
@@ -315,19 +412,25 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
       updatePosition: Duration.zero,
     ));
 
-    // Stop flutter_tts — le cancelHandler va compléter le Completer
-    // car _stopped = true.
+    // Arrêter les deux moteurs. Pour le TTS, le cancelHandler va
+    // compléter le Completer car _stopped = true.
+    await _player.stop();
     await _flutterTts.stop();
+    _engine = PlaybackEngine.none;
 
     // Désactiver la notification
     await super.stop();
   }
 
-  /// Changer la vitesse de lecture.
+  /// Changer la vitesse de lecture (vitesse UI: 0.75, 1.0, 1.25, 1.5).
   @override
   Future<void> setSpeed(double speed) async {
-    DebugLog().log('[Handler] setSpeed=$speed');
-    await _flutterTts.setSpeechRate(speed);
+    _uiSpeed = AppConstants.speedToSpeechRate.containsKey(speed) ? speed : 1.0;
+    final speechRate =
+        AppConstants.speedToSpeechRate[_uiSpeed] ?? AppConstants.defaultSpeechRate;
+    DebugLog().log('[Handler] setSpeed ui=$_uiSpeed rate=$speechRate');
+    await _player.setSpeed(_uiSpeed);
+    await _flutterTts.setSpeechRate(speechRate);
   }
 
   /// Timer de position pour la barre de progression UI.

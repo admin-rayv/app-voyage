@@ -5,6 +5,7 @@ import 'package:audio_session/audio_session.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../config/constants.dart';
 import '../models/audio_state.dart';
 import '../models/point.dart' as models;
 import 'audio_handler.dart';
@@ -23,12 +24,12 @@ class AudioService {
   factory AudioService() => _instance;
 
   static const String _speedPrefKey = 'tts_speed';
-  static final Map<double, double> _speedToSpeechRate = {
-    0.75: 0.39,
-    1.0: 0.52,
-    1.25: 0.65,
-    1.5: 0.78,
-  };
+  static final Map<double, double> _speedToSpeechRate =
+      AppConstants.speedToSpeechRate;
+
+  /// Délai max pour la génération Edge TTS avant de retomber sur le TTS
+  /// natif (la génération continue en arrière-plan et alimente le cache).
+  static const Duration _edgeTtsTimeout = Duration(seconds: 12);
 
   final TtsService _fallbackTts = TtsService();
   final EdgeTtsService _edgeTts = EdgeTtsService();
@@ -113,7 +114,7 @@ class AudioService {
       );
       _audioHandler = handler;
       _usingFallbackTts = false;
-      await _audioHandler!.setSpeed(_speechRateForSpeed(_speed));
+      await _audioHandler!.setSpeed(_speed);
       _bindHandlerStreams();
       DebugLog().log('[AudioService] audio_service initialise');
     } catch (error, stackTrace) {
@@ -234,7 +235,35 @@ class AudioService {
     );
 
     if (_audioHandler != null) {
-      DebugLog().log('[AudioService] playText -> handler');
+      // 1. Essayer l'audio Edge TTS (MP3 caché ou généré si réseau) —
+      //    voix neurale de bien meilleure qualité que le TTS natif.
+      final mp3Path = await _resolveEdgeAudio(
+        scriptId: scriptId,
+        text: text,
+        language: language,
+      );
+
+      if (mp3Path != null) {
+        DebugLog().log('[AudioService] playText -> handler (MP3 Edge TTS)');
+        try {
+          await _audioHandler!.playFile(
+            mp3Path,
+            language,
+            _currentPoiName ?? 'Lecture audio',
+            poi,
+            _duration,
+          );
+          _emitState();
+          return;
+        } catch (error) {
+          DebugLog().log(
+            '[AudioService] lecture MP3 échouée, fallback TTS: $error',
+          );
+        }
+      }
+
+      // 2. Fallback: TTS natif du téléphone.
+      DebugLog().log('[AudioService] playText -> handler (TTS natif)');
       await _audioHandler!.speakText(
         text,
         language,
@@ -344,11 +373,12 @@ class AudioService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setDouble(_speedPrefKey, _speed);
 
-    final speechRate = _speechRateForSpeed(_speed);
     if (_audioHandler != null) {
-      await _audioHandler!.setSpeed(speechRate);
+      // Le handler reçoit la vitesse UI et l'applique aux deux moteurs
+      // (MP3: setSpeed direct, TTS: conversion en speech rate).
+      await _audioHandler!.setSpeed(_speed);
     } else {
-      await _fallbackTts.setSpeechRate(speechRate);
+      await _fallbackTts.setSpeechRate(_speechRateForSpeed(_speed));
     }
 
     if (_currentText != null) {
@@ -367,6 +397,32 @@ class AudioService {
       orElse: () => const MapEntry(1.0, 0.52),
     );
     await setSpeed(entry.key);
+  }
+
+  /// Obtenir le MP3 Edge TTS (cache local, sinon génération si réseau).
+  /// Retourne null → fallback TTS natif. Borné à [_edgeTtsTimeout] pour ne
+  /// pas faire attendre l'utilisateur sur un réseau lent (la génération
+  /// continue et remplira le cache pour la prochaine lecture).
+  Future<String?> _resolveEdgeAudio({
+    required String? scriptId,
+    required String text,
+    required String language,
+  }) async {
+    if (scriptId == null || scriptId.isEmpty) {
+      return null;
+    }
+
+    try {
+      return await _edgeTts
+          .getAudioPath(scriptId: scriptId, text: text, language: language)
+          .timeout(_edgeTtsTimeout, onTimeout: () {
+        DebugLog().log('[AudioService] Edge TTS timeout, fallback TTS natif');
+        return null;
+      });
+    } catch (error) {
+      DebugLog().log('[AudioService] Edge TTS erreur: $error');
+      return null;
+    }
   }
 
   Duration _estimateDuration(String text) {

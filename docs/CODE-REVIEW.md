@@ -17,7 +17,7 @@ Vérifié par `flutter analyze` (0 issue) et `flutter test` (14 tests verts).
 |---|---------|------------|
 | 1 | GPS arrière-plan | ✅ `AppleSettings`/`AndroidSettings` + foreground service geolocator; service flutter_foreground_task retiré du manifest |
 | 2 | Position figée sur la carte | ✅ Stream de position pendant que l'écran carte est visible |
-| 3 | Edge TTS non branché | ⏳ **Décision produit toujours ouverte** (brancher vs retirer). Bugs corrigés en attendant: cache invalidé par hash du contenu, téléchargement limité à la langue demandée, progression agrégée |
+| 3 | Edge TTS non branché | ✅ **Branché en v0.5.0** (option A): lecture MP3 via just_audio avec fallback flutter_tts automatique, timeout 12 s, bouton « Télécharger les audios » par ville sur la carte. Cache invalidé par hash du contenu |
 | 4 | POIs écoutés qui rejouent | ✅ Le geofencing est pré-alimenté avec les POIs visités (persistés); nouveau réglage « Rejouer les POIs déjà écoutés » pour les tests terrain; le compteur du bandeau ne compte que les vrais triggers de session |
 | 5 | Test de voix = sélection | ✅ `previewVoice()` non persistant |
 | 6 | Fuite de listeners (test voix) | ✅ Un seul abonnement, annulé dans dispose |
@@ -36,8 +36,9 @@ Vérifié par `flutter analyze` (0 issue) et `flutter test` (14 tests verts).
 | 19 | Logs perdus après kill | ✅ Bouton « Copier » (logs + décisions géo) dans le panneau debug |
 | 20 | Duplication `_basePoints` | ✅ Getter partagé |
 
-**Restent ouverts:** la décision Edge TTS (#3 — brancher ou supprimer, à trancher avant
-le Sprint 5) et la validation sur device de la reprise Android (#7, pendant le Sprint 4).
+**Reste ouvert:** la validation sur device de la reprise pause/resume en mode TTS
+natif sur Android (#7, pendant le Sprint 4 — moins critique depuis que le chemin
+principal est le MP3 Edge TTS, dont la pause/reprise est native via just_audio).
 
 ---
 

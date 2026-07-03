@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
@@ -24,6 +25,7 @@ import '../services/user_preferences_service.dart';
 import '../services/visited_poi_service.dart';
 import '../config/categories.dart';
 import '../config/theme.dart';
+import '../widgets/map_tiles.dart';
 import '../widgets/poi_list_item.dart';
 
 /// Écran carte — Affiche tous les POIs d'une ville sur OpenStreetMap.
@@ -532,6 +534,99 @@ class _MapScreenState extends State<MapScreen>
     }
   }
 
+  /// Pré-générer les MP3 Edge TTS de tous les POIs de la ville (langue
+  /// préférée) — à faire en Wi-Fi avant une balade pour que l'audio de
+  /// qualité fonctionne ensuite sans réseau.
+  Future<void> _downloadCityAudios() async {
+    final language = await UserPreferencesService.getPreferredLanguage();
+    if (!mounted) return;
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Télécharger les audios ?'),
+        content: Text(
+          'Génère et met en cache les audios de qualité (voix Marco) pour '
+          'tous les POIs de ${widget.city.localizedName('fr')} en '
+          '${language.toUpperCase()}. À faire en Wi-Fi — ensuite tout '
+          'fonctionne sans réseau.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('Annuler'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: const Text('Télécharger'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+
+    final progressNotifier = ValueNotifier<(int, int)>((0, 1));
+    var cancelled = false;
+
+    unawaited(
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (dialogContext) => AlertDialog(
+          title: const Text('Téléchargement des audios'),
+          content: ValueListenableBuilder<(int, int)>(
+            valueListenable: progressNotifier,
+            builder: (context, progress, _) {
+              final (current, total) = progress;
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  LinearProgressIndicator(
+                    value: total == 0 ? null : current / total,
+                  ),
+                  const SizedBox(height: 12),
+                  Text('$current / $total scripts'),
+                ],
+              );
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                cancelled = true;
+                Navigator.of(dialogContext).pop();
+              },
+              child: const Text('Arrêter'),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    try {
+      await _audioService.downloadCityAudios(
+        cityId: widget.city.id,
+        languages: [language],
+        onProgress: (current, total) {
+          progressNotifier.value = (current, total);
+        },
+      );
+    } catch (error) {
+      DebugLog().log('[MapScreen] download audios error: $error');
+    }
+
+    if (!mounted) return;
+    if (!cancelled) {
+      Navigator.of(context, rootNavigator: true).pop();
+      final (done, total) = progressNotifier.value;
+      _showSnackBar(
+        done >= total && total > 0
+            ? 'Audios téléchargés ($done scripts). Prêt pour la balade !'
+            : 'Téléchargement interrompu ($done/$total).',
+      );
+    }
+  }
+
   void _showPoiPreview(models.Point poi) {
     final cat = Categories.byKey(poi.primaryCategory);
     final distance = _userPosition != null
@@ -560,7 +655,7 @@ class _MapScreenState extends State<MapScreen>
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: AppTheme.subtleBorderOf(context),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -607,13 +702,13 @@ class _MapScreenState extends State<MapScreen>
             if (distance != null)
               Row(
                 children: [
-                  Icon(Icons.near_me, size: 16, color: AppTheme.textSecondary),
+                  Icon(Icons.near_me, size: 16, color: AppTheme.textSecondaryOf(context)),
                   const SizedBox(width: 4),
                   Text(
                     distance < 1000
                         ? '${distance}m'
                         : '${(distance / 1000).toStringAsFixed(1)}km',
-                    style: TextStyle(color: AppTheme.textSecondary),
+                    style: TextStyle(color: AppTheme.textSecondaryOf(context)),
                   ),
                 ],
               ),
@@ -713,6 +808,11 @@ class _MapScreenState extends State<MapScreen>
       appBar: AppBar(
         title: Text(widget.city.localizedName('fr')),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.download_for_offline_outlined),
+            onPressed: _isLoading ? null : _downloadCityAudios,
+            tooltip: 'Télécharger les audios',
+          ),
           // Toggle carte/liste
           IconButton(
             icon: Icon(_showList ? Icons.map : Icons.list),
@@ -850,7 +950,7 @@ class _MapScreenState extends State<MapScreen>
       margin: const EdgeInsets.fromLTRB(12, 2, 12, 8),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.surfaceOf(context),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: AppTheme.primaryColor.withValues(alpha: 0.12),
@@ -880,7 +980,7 @@ class _MapScreenState extends State<MapScreen>
               Text(
                 totalCount == 0 ? '0%' : '${(progress * 100).round()}%',
                 style: TextStyle(
-                  color: AppTheme.textSecondary,
+                  color: AppTheme.textSecondaryOf(context),
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -1020,41 +1120,33 @@ class _MapScreenState extends State<MapScreen>
           initialZoom: 14.5,
         ),
         children: [
-          TileLayer(
-            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            userAgentPackageName: 'com.rayv.appvoyage',
-          ),
-          MarkerLayer(
-            markers: points.map((poi) {
-              final cat = Categories.byKey(poi.primaryCategory);
-              final color = cat?.color ?? Categories.defaultColor;
-              final isHighlighted = _lastTriggeredPoiId == poi.id;
-              final isPlaying = _currentPlayingPoiId == poi.id;
-              final isVisited = _visitedPoiService.isVisitedPoint(poi);
-              return Marker(
-                point: LatLng(poi.lat, poi.lng),
-                width: isPlaying
-                    ? 58
-                    : isHighlighted
-                    ? 46
-                    : 40,
-                height: isPlaying
-                    ? 58
-                    : isHighlighted
-                    ? 46
-                    : 40,
-                child: GestureDetector(
-                  onTap: () => _showPoiPreview(poi),
-                  child: _buildPoiMarker(
-                    emoji: cat?.emoji ?? '📍',
-                    color: color,
-                    isVisited: isVisited,
-                    isHighlighted: isHighlighted,
-                    isPlaying: isPlaying,
-                  ),
-                ),
-              );
-            }).toList(),
+          MapTiles.tileLayer(context),
+          // Rayons de déclenchement — visibles en mode découverte pour
+          // calibrer le geofencing pendant les tests terrain.
+          if (_discoveryModeEnabled)
+            CircleLayer(
+              circles: points
+                  .map(
+                    (poi) => CircleMarker(
+                      point: LatLng(poi.lat, poi.lng),
+                      radius: poi.triggerRadiusM.toDouble(),
+                      useRadiusInMeter: true,
+                      color: Colors.green.withValues(alpha: 0.08),
+                      borderColor: Colors.green.withValues(alpha: 0.35),
+                      borderStrokeWidth: 1.5,
+                    ),
+                  )
+                  .toList(),
+            ),
+          MarkerClusterLayerWidget(
+            options: MarkerClusterLayerOptions(
+              maxClusterRadius: 46,
+              size: const Size(44, 44),
+              padding: const EdgeInsets.all(50),
+              maxZoom: 17,
+              markers: points.map(_buildMarkerFor).toList(),
+              builder: (context, markers) => _buildClusterBubble(markers),
+            ),
           ),
           if (_userPosition != null)
             MarkerLayer(
@@ -1080,7 +1172,64 @@ class _MapScreenState extends State<MapScreen>
                 ),
               ],
             ),
+          MapTiles.attribution(),
         ],
+      ),
+    );
+  }
+
+  Marker _buildMarkerFor(models.Point poi) {
+    final cat = Categories.byKey(poi.primaryCategory);
+    final color = cat?.color ?? Categories.defaultColor;
+    final isHighlighted = _lastTriggeredPoiId == poi.id;
+    final isPlaying = _currentPlayingPoiId == poi.id;
+    final isVisited = _visitedPoiService.isVisitedPoint(poi);
+    final size = isPlaying
+        ? 58.0
+        : isHighlighted
+        ? 46.0
+        : 40.0;
+
+    return Marker(
+      point: LatLng(poi.lat, poi.lng),
+      width: size,
+      height: size,
+      child: GestureDetector(
+        onTap: () => _showPoiPreview(poi),
+        child: _buildPoiMarker(
+          emoji: cat?.emoji ?? '📍',
+          color: color,
+          isVisited: isVisited,
+          isHighlighted: isHighlighted,
+          isPlaying: isPlaying,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildClusterBubble(List<Marker> markers) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppTheme.primaryColor,
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white, width: 2.5),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.25),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Center(
+        child: Text(
+          '${markers.length}',
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w800,
+            fontSize: 15,
+          ),
+        ),
       ),
     );
   }
@@ -1234,7 +1383,7 @@ class _MapScreenState extends State<MapScreen>
                         : 'Dernier POI détecté: ${lastTriggeredPoi.localizedName('fr')}',
                     style: TextStyle(
                       fontSize: 12,
-                      color: AppTheme.textSecondary,
+                      color: AppTheme.textSecondaryOf(context),
                     ),
                   )
                 else
@@ -1244,7 +1393,7 @@ class _MapScreenState extends State<MapScreen>
                         : 'Vérification des permissions et du GPS',
                     style: TextStyle(
                       fontSize: 12,
-                      color: AppTheme.textSecondary,
+                      color: AppTheme.textSecondaryOf(context),
                     ),
                   ),
               ],
@@ -1254,7 +1403,7 @@ class _MapScreenState extends State<MapScreen>
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppTheme.surfaceOf(context),
                 borderRadius: BorderRadius.circular(999),
               ),
               child: Text(

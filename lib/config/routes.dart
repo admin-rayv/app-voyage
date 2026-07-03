@@ -4,17 +4,24 @@ import 'package:go_router/go_router.dart';
 import '../models/city.dart';
 import '../screens/home_screen.dart';
 import '../screens/map_screen.dart';
+import '../screens/onboarding_screen.dart';
 import '../screens/poi_detail_screen.dart';
 import '../screens/settings_screen.dart';
 import '../widgets/app_shell.dart';
 import 'route_data.dart';
 
 /// App Voyage - Routes
-/// Configuration de la navigation
-
-final GoRouter appRouter = GoRouter(
-  initialLocation: '/',
+/// Configuration de la navigation.
+/// [initialLocation] = '/onboarding' au premier lancement (voir main.dart).
+GoRouter createAppRouter({String initialLocation = '/'}) => GoRouter(
+  initialLocation: initialLocation,
   routes: [
+    // Onboarding hors du shell (pas de mini-player par-dessus)
+    GoRoute(
+      path: '/onboarding',
+      name: 'onboarding',
+      builder: (context, state) => const OnboardingScreen(),
+    ),
     ShellRoute(
       builder: (context, state, child) => AppShell(child: child),
       routes: [

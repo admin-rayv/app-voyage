@@ -9,6 +9,8 @@ class City {
   final double centerLng;
   final String timezone;
   final List<String> availableLanguages;
+  final String? imageUrl;
+  final String? imageCredit;
   final DateTime? createdAt;
 
   const City({
@@ -21,6 +23,8 @@ class City {
     required this.centerLng,
     this.timezone = 'America/Toronto',
     this.availableLanguages = const ['fr', 'en'],
+    this.imageUrl,
+    this.imageCredit,
     this.createdAt,
   });
 
@@ -47,6 +51,8 @@ class City {
               ?.map((e) => e.toString())
               .toList() ??
           ['fr', 'en'],
+      imageUrl: json['image_url'] as String?,
+      imageCredit: json['image_credit'] as String?,
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'] as String)
           : null,

@@ -40,7 +40,7 @@ class PoiListItem extends StatelessWidget {
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-      color: isVisited ? Colors.grey.shade50 : null,
+      color: isVisited ? AppTheme.softBackgroundOf(context) : null,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
@@ -48,45 +48,53 @@ class PoiListItem extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           child: Row(
             children: [
-              // Icône catégorie
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: (isVisited ? Colors.grey : (cat?.color ?? Colors.grey))
-                      .withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color:
-                        (isVisited ? Colors.grey : (cat?.color ?? Colors.grey))
+              // Icône catégorie (Hero → marqueur de la mini-carte du détail)
+              Hero(
+                tag: 'poi-icon-${poi.id}',
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color:
+                          (isVisited ? Colors.grey : (cat?.color ?? Colors.grey))
+                              .withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: (isVisited
+                                ? Colors.grey
+                                : (cat?.color ?? Colors.grey))
                             .withValues(alpha: 0.3),
-                  ),
-                ),
-                child: Center(
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Text(
-                        isVisited ? '✓' : cat?.emoji ?? '📍',
-                        style: TextStyle(
-                          fontSize: isVisited ? 20 : 22,
-                          fontWeight: isVisited ? FontWeight.w800 : null,
-                          color: isVisited ? Colors.grey.shade700 : null,
-                        ),
                       ),
-                      if (isPlaying)
-                        Positioned.fill(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.green.shade600,
-                                width: 2,
-                              ),
-                              borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Text(
+                            isVisited ? '✓' : cat?.emoji ?? '📍',
+                            style: TextStyle(
+                              fontSize: isVisited ? 20 : 22,
+                              fontWeight: isVisited ? FontWeight.w800 : null,
+                              color: isVisited ? Colors.grey.shade700 : null,
                             ),
                           ),
-                        ),
-                    ],
+                          if (isPlaying)
+                            Positioned.fill(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.green.shade600,
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -162,7 +170,7 @@ class PoiListItem extends StatelessWidget {
                     Icon(
                       Icons.near_me,
                       size: 14,
-                      color: AppTheme.textSecondary,
+                      color: AppTheme.textSecondaryOf(context),
                     ),
                     const SizedBox(height: 2),
                     Text(
@@ -171,7 +179,7 @@ class PoiListItem extends StatelessWidget {
                           : '${(distance / 1000).toStringAsFixed(1)}km',
                       style: TextStyle(
                         fontSize: 12,
-                        color: AppTheme.textSecondary,
+                        color: AppTheme.textSecondaryOf(context),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -180,7 +188,7 @@ class PoiListItem extends StatelessWidget {
               const SizedBox(width: 4),
               Icon(
                 Icons.chevron_right,
-                color: AppTheme.textSecondary,
+                color: AppTheme.textSecondaryOf(context),
                 size: 20,
               ),
             ],

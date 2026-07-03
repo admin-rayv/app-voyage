@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 0.4.8+1
+version: 0.5.0+1
 
 environment:
   sdk: ^3.11.0
@@ -38,14 +38,16 @@ dependencies:
   # Backend & API
   supabase_flutter: ^2.8.0
 
-  # Maps (OpenStreetMap — 100% gratuit, pas de clé API)
+  # Maps (tuiles CARTO sur données OpenStreetMap — gratuit, pas de clé API)
   flutter_map: ^7.0.2
+  flutter_map_marker_cluster: ^1.4.0
   latlong2: ^0.9.1
 
-  # Audio
+  # Audio (just_audio = lecture des MP3 Edge TTS, fallback flutter_tts)
   audio_service: ^0.18.16
   audio_session: ^0.1.18
   flutter_tts: ^4.2.0
+  just_audio: ^0.9.36
 
   # Location & GPS (permissions gérées par geolocator directement)
   geolocator: ^13.0.0
@@ -67,6 +69,9 @@ dependencies:
   # URL launcher
   url_launcher: ^6.2.5
 
+  # UI
+  google_fonts: ^6.2.1
+
   # Utils
   crypto: ^3.0.3
   flutter_local_notifications: ^21.0.0
@@ -74,6 +79,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  # Splash screen natif (dart run flutter_native_splash:create)
+  flutter_native_splash: ^2.4.4
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -93,10 +101,8 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -187,27 +187,25 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image placeholder
-            Container(
+            // Photo de la ville (image_url en DB) avec fallback dégradé
+            SizedBox(
               height: 160,
               width: double.infinity,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppTheme.primaryColor,
-                    AppTheme.primaryColor.withValues(alpha: 0.7),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
               child: Stack(
+                fit: StackFit.expand,
                 children: [
-                  Center(
-                    child: Icon(
-                      Icons.location_city,
-                      size: 64,
-                      color: Colors.white.withValues(alpha: 0.3),
+                  _buildCityImage(city),
+                  // Voile pour la lisibilité du texte
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.transparent,
+                          Colors.black.withValues(alpha: 0.45),
+                        ],
+                        begin: Alignment.center,
+                        end: Alignment.bottomCenter,
+                      ),
                     ),
                   ),
                   Positioned(
@@ -247,6 +245,22 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
+                  if (city.imageCredit != null &&
+                      city.imageCredit!.trim().isNotEmpty)
+                    Positioned(
+                      top: 8,
+                      right: 10,
+                      child: Text(
+                        city.imageCredit!,
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.75),
+                          fontSize: 9,
+                          shadows: const [
+                            Shadow(blurRadius: 3, color: Colors.black54),
+                          ],
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -278,7 +292,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
               child: Row(
                 children: [
-                  Icon(Icons.translate, size: 16, color: AppTheme.textSecondary),
+                  Icon(Icons.translate, size: 16, color: AppTheme.textSecondaryOf(context)),
                   const SizedBox(width: 4),
                   Text(
                     city.availableLanguages
@@ -286,14 +300,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         .join(' · '),
                     style: TextStyle(
                       fontSize: 12,
-                      color: AppTheme.textSecondary,
+                      color: AppTheme.textSecondaryOf(context),
                     ),
                   ),
                   const Spacer(),
                   Icon(
                     Icons.arrow_forward_ios,
                     size: 14,
-                    color: AppTheme.textSecondary,
+                    color: AppTheme.textSecondaryOf(context),
                   ),
                 ],
               ),
@@ -301,6 +315,42 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  /// Photo réseau si image_url est renseignée en DB, sinon dégradé de marque.
+  Widget _buildCityImage(City city) {
+    final imageUrl = city.imageUrl;
+    final fallback = DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            AppTheme.primaryColor,
+            AppTheme.primaryColor.withValues(alpha: 0.7),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Center(
+        child: Icon(
+          Icons.location_city,
+          size: 64,
+          color: Colors.white.withValues(alpha: 0.3),
+        ),
+      ),
+    );
+
+    if (imageUrl == null || imageUrl.trim().isEmpty) {
+      return fallback;
+    }
+
+    return Image.network(
+      imageUrl,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) => fallback,
+      loadingBuilder: (context, child, progress) =>
+          progress == null ? child : fallback,
     );
   }
 

@@ -2,7 +2,7 @@
 class AppConstants {
   // App Info
   static const String appName = 'App Voyage';
-  static const String appVersion = '0.4.8';
+  static const String appVersion = '0.5.0';
 
   // Supabase — surchargeables par environnement via --dart-define:
   //   flutter run --dart-define=SUPABASE_URL=... --dart-define=SUPABASE_ANON_KEY=...
@@ -37,4 +37,14 @@ class AppConstants {
   static const double defaultSpeechRate = 0.52;
   static const double defaultPitch = 1.05;
   static const String defaultLanguage = 'fr-CA';
+
+  // Vitesse UI (0.75x-1.5x) → speech rate flutter_tts.
+  // Pour les MP3 (Edge TTS via just_audio), la vitesse UI s'applique
+  // directement (1.0 = vitesse normale).
+  static final Map<double, double> speedToSpeechRate = {
+    0.75: 0.39,
+    1.0: 0.52,
+    1.25: 0.65,
+    1.5: 0.78,
+  };
 }

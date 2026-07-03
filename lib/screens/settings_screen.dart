@@ -231,7 +231,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const SizedBox(height: 4),
                 Text(
                   'Langue utilisée par défaut pour les scripts audio et le mode découverte.',
-                  style: TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+                  style: TextStyle(color: AppTheme.textSecondaryOf(context), fontSize: 13),
                 ),
                 const SizedBox(height: 12),
                 Wrap(
@@ -264,7 +264,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const SizedBox(height: 4),
                 Text(
                   'Configure la lecture automatique quand un POI est détecté à proximité.',
-                  style: TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+                  style: TextStyle(color: AppTheme.textSecondaryOf(context), fontSize: 13),
                 ),
                 const SizedBox(height: 12),
                 SwitchListTile(
@@ -333,7 +333,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const SizedBox(height: 4),
                 Text(
                   'Réinitialise les POIs marqués comme déjà écoutés sur cet appareil.',
-                  style: TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+                  style: TextStyle(color: AppTheme.textSecondaryOf(context), fontSize: 13),
                 ),
                 const SizedBox(height: 12),
                 AnimatedBuilder(
@@ -388,7 +388,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const SizedBox(height: 4),
                 Text(
                   'La vitesse s\'applique à toutes les lectures.',
-                  style: TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+                  style: TextStyle(color: AppTheme.textSecondaryOf(context), fontSize: 13),
                 ),
                 const SizedBox(height: 12),
                 Wrap(
@@ -427,7 +427,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const SizedBox(height: 4),
                 Text(
                   'Choisis la voix pour chaque langue. Appuie sur ▶️ pour tester.',
-                  style: TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+                  style: TextStyle(color: AppTheme.textSecondaryOf(context), fontSize: 13),
                 ),
                 const SizedBox(height: 24),
 
@@ -482,7 +482,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               const Spacer(),
               Text(
                 '${localVoices.length} locale${localVoices.length > 1 ? 's' : ''}',
-                style: TextStyle(fontSize: 12, color: AppTheme.textSecondary),
+                style: TextStyle(fontSize: 12, color: AppTheme.textSecondaryOf(context)),
               ),
             ],
           ),
@@ -516,7 +516,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             tilePadding: const EdgeInsets.symmetric(horizontal: 8),
             title: Text(
               '☁️ Voix réseau (${networkVoices.length}) — nécessite internet',
-              style: TextStyle(fontSize: 13, color: AppTheme.textSecondary),
+              style: TextStyle(fontSize: 13, color: AppTheme.textSecondaryOf(context)),
             ),
             children: networkVoices.asMap().entries.map((entry) {
               final index = entry.key + 1;
@@ -542,7 +542,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             padding: const EdgeInsets.all(12),
             child: Text(
               'Aucune voix installée pour cette langue.\nVa dans Paramètres → TTS pour en télécharger.',
-              style: TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+              style: TextStyle(color: AppTheme.textSecondaryOf(context), fontSize: 13),
             ),
           ),
 

@@ -141,14 +141,14 @@ EXCLURE:
 - Lieux trop génériques sans histoire locale
 - Sites qui nécessitent un billet d'entrée pour être appréciés
 
-CATÉGORIES À UTILISER:
+CATÉGORIES À UTILISER (les 7 officielles):
 - histoire (patrimoine, personnages, événements passés)
-- nature (parcs, vues, espaces verts)
+- architecture (style notable, bâtiments uniques, infrastructure, écluses, ponts)
+- nature (parcs, vues, espaces verts, fleuve)
 - food (restos iconiques, marchés, culture food)
 - art (street art, galeries, murales)
 - insolite (histoires bizarres, légendes, hantés)
-- architecture (style architectural notable)
-- architecture (fleuve, écluses, ports)
+- vie-locale (marchés hebdo, events récurrents, traditions)
 
 OUTPUT:
 Pour chaque POI candidat:
@@ -300,32 +300,32 @@ UPDATE points SET categories = ARRAY['vie-locale', 'food']
 
 ---
 
-## Application: Saint-Lambert
+## Application: Saint-Lambert — ✅ COMPLÉTÉ
 
 ### Analyse rapide
 
 - **Population:** ~23,500
 - **Superficie:** ~7.5 km²
 - **Hook unique:** Musée vivant d'architecture québécoise, née de "Mouillepied"
-- **Verdict:** **PETITE VILLE** — 15-20 POIs possibles
+- **Verdict:** **PETITE VILLE** — 15-20 POIs estimés au départ
 
-### POIs collectés
+### Résultat final (2026-07)
 
-| # | POI | Catégories | Status |
-|---|-----|-----------|--------|
-| 1 | Église Saint-Lambert | histoire, architecture | ✅ Script rédigé |
-| 2 | Église anglicane St-Barnabas | histoire | ✅ Script rédigé |
-| 3 | Parc du Village | histoire, nature | ✅ Script rédigé |
-| 4 | Maison Marsil | histoire, insolite | ✅ Script rédigé |
-| 5 | Vue sur le Pont Victoria | histoire, architecture | ✅ Script rédigé |
-| 6 | Écluse de Saint-Lambert | architecture, insolite | ✅ Script rédigé |
-| 7 | Avenue Victoria | histoire | ✅ Script rédigé |
-| 8 | King Cottages | architecture | 📝 À faire |
-| 9 | Maison Sharpe | histoire | 📝 À faire |
-| 10 | Maison Whimbey | histoire | 📝 À faire |
-| 11 | Académie Saint-Michel | histoire | 📝 À faire |
-| 12 | Piste cyclable / fleuve | nature, architecture | 📝 À faire |
-| ... | (à compléter) | | |
+**81 POIs publiés, 243 scripts (FR/EN/ES)** — bien au-delà de l'estimation initiale.
+Le pipeline complet (poi-scout → poi-writer → poi-checker → poi-pusher) a été rodé
+sur cette ville. Fichiers sources dans `content/saint-lambert-quebec-canada/`.
+
+| Catégorie | POIs |
+|-----------|------|
+| histoire 🏛️ | 29 |
+| architecture 🏗️ | 20 |
+| art 🎨 | 15 |
+| nature 🌿 | 14 |
+| insolite 👻 | 14 |
+| food 🍴 | 13 |
+| vie-locale 🏘️ | 12 |
+
+*(Un POI peut avoir plusieurs catégories.)*
 
 ---
 

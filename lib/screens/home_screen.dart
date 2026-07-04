@@ -7,6 +7,7 @@ import '../config/categories.dart';
 import '../l10n/l10n.dart';
 import '../config/theme.dart';
 import '../services/group_session_service.dart';
+import '../services/visited_poi_service.dart';
 import '../widgets/group_session_sheet.dart';
 import '../widgets/voice_setup_dialog.dart';
 
@@ -29,6 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _citiesFuture = _loadCities();
+    // Progression « X/Y écoutés » sur les cartes de villes.
+    VisitedPoiService().init();
     // Vérifier les voix TTS au premier lancement
     WidgetsBinding.instance.addPostFrameCallback((_) {
       VoiceSetupDialog.checkAndShow(context);
@@ -302,6 +305,58 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }).toList(),
               ),
+            ),
+            // Progression d'écoute (rétention: « ta collection avance »)
+            ValueListenableBuilder<Map<String, Set<String>>>(
+              valueListenable: VisitedPoiService().listenable,
+              builder: (context, _, _) {
+                final total = cityStats.poiCount;
+                final visited = VisitedPoiService()
+                    .visitedCountForCity(city.id)
+                    .clamp(0, total);
+                if (total == 0 || visited == 0) {
+                  return const SizedBox.shrink();
+                }
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Text('🎧', style: TextStyle(fontSize: 12)),
+                          const SizedBox(width: 6),
+                          Text(
+                            context.l10n.progressListened(visited, total),
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: AppTheme.textSecondaryOf(context),
+                            ),
+                          ),
+                          const Spacer(),
+                          Text(
+                            '${(visited / total * 100).round()} %',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: AppTheme.primaryColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(3),
+                        child: LinearProgressIndicator(
+                          value: visited / total,
+                          minHeight: 5,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
             // Langues disponibles
             Padding(

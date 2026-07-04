@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import '../models/point.dart' as models;
 import '../config/categories.dart';
+import '../services/favorite_poi_service.dart';
 import '../l10n/l10n.dart';
 import '../config/theme.dart';
 
@@ -105,14 +106,37 @@ class PoiListItem extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      poi.localizedName(context.languageCode),
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            poi.localizedName(context.languageCode),
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        // Cœur en direct si le POI est en favori
+                        ValueListenableBuilder<Set<String>>(
+                          valueListenable: FavoritePoiService().listenable,
+                          builder: (context, favorites, _) {
+                            if (!favorites.contains(poi.id)) {
+                              return const SizedBox.shrink();
+                            }
+                            return const Padding(
+                              padding: EdgeInsets.only(left: 5),
+                              child: Icon(
+                                Icons.favorite,
+                                size: 14,
+                                color: Colors.redAccent,
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 4),
                     if (isVisited || isPlaying)

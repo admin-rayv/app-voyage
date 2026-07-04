@@ -185,6 +185,10 @@
   "groupHostControlsNote": "El anfitrión controla la reproducción para todo el grupo.",
   "groupGuestAccessNote": "No necesitas la ciudad — escuchas lo que comparte el anfitrión, en directo.",
   "groupOpenLiveTour": "Abrir la visita en curso",
+  "favoriteTooltip": "Favorito",
+  "favoriteAdded": "Añadido a favoritos ❤️",
+  "favoriteRemoved": "Quitado de favoritos.",
+  "favoritesFilter": "❤️ Favoritos ({count})",
 
   "vsdTitle": "La voz de Marco",
   "vsdIntro": "Para que Marco te guíe con una buena voz, instala las voces de calidad en tu teléfono.",

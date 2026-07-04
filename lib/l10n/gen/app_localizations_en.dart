@@ -639,6 +639,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get groupOpenLiveTour => 'Open the live tour';
 
   @override
+  String get favoriteTooltip => 'Favorite';
+
+  @override
+  String get favoriteAdded => 'Added to favorites ❤️';
+
+  @override
+  String get favoriteRemoved => 'Removed from favorites.';
+
+  @override
+  String favoritesFilter(int count) {
+    return '❤️ Favorites ($count)';
+  }
+
+  @override
   String get vsdTitle => 'Marco\'s voice';
 
   @override

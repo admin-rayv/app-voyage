@@ -219,6 +219,11 @@
   "groupHostControlsNote": "C'est l'hôte qui contrôle la lecture pour tout le groupe.",
   "groupGuestAccessNote": "Pas besoin d'avoir la ville — tu écoutes ce que l'hôte partage, en direct.",
   "groupOpenLiveTour": "Ouvrir la visite en cours",
+  "favoriteTooltip": "Favori",
+  "favoriteAdded": "Ajouté aux favoris ❤️",
+  "favoriteRemoved": "Retiré des favoris.",
+  "favoritesFilter": "❤️ Favoris ({count})",
+  "@favoritesFilter": { "placeholders": { "count": { "type": "int" } } },
 
   "vsdTitle": "Voix de Marco",
   "vsdIntro": "Pour que Marco te guide avec une belle voix, installe les voix de qualité sur ton téléphone.",

@@ -189,6 +189,11 @@
   "favoriteAdded": "Añadido a favoritos ❤️",
   "favoriteRemoved": "Quitado de favoritos.",
   "favoritesFilter": "❤️ Favoritos ({count})",
+  "rewind10Tooltip": "Retroceder 10 segundos",
+  "forward10Tooltip": "Avanzar 10 segundos",
+  "batteryTitle": "¿Paseo largo? Protege el modo descubrimiento",
+  "batteryBody": "Algunos teléfonos Android cortan el GPS en segundo plano para ahorrar batería — Marco se callaría en pleno paseo. Excluye App Voyage de la optimización de batería («Sin restricciones»).",
+  "batteryOpenSettings": "Abrir los ajustes de batería",
 
   "vsdTitle": "La voz de Marco",
   "vsdIntro": "Para que Marco te guíe con una buena voz, instala las voces de calidad en tu teléfono.",

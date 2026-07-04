@@ -653,6 +653,22 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get rewind10Tooltip => 'Back 10 seconds';
+
+  @override
+  String get forward10Tooltip => 'Forward 10 seconds';
+
+  @override
+  String get batteryTitle => 'Long walk? Protect discovery mode';
+
+  @override
+  String get batteryBody =>
+      'Some Android phones kill background GPS to save battery — Marco would go quiet mid-walk. Exclude App Voyage from battery optimization (\"Unrestricted\").';
+
+  @override
+  String get batteryOpenSettings => 'Open battery settings';
+
+  @override
   String get vsdTitle => 'Marco\'s voice';
 
   @override

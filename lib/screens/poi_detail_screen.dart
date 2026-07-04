@@ -542,10 +542,21 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
               style: TextStyle(color: AppTheme.textSecondaryOf(context)),
             )
           else ...[
-            // Boutons play/pause et stop (pas de seek — flutter_tts ne supporte pas)
+            // Play/pause central, flanqué de ±10 s quand le MP3 (voix
+            // neurale) joue — le TTS natif ne sait pas se déplacer.
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                if ((_isSpeaking || _isPaused) && _audio.canSeek) ...[
+                  IconButton(
+                    onPressed: _audio.skipBackward,
+                    tooltip: context.l10n.rewind10Tooltip,
+                    iconSize: 34,
+                    color: AppTheme.primaryColor,
+                    icon: const Icon(Icons.replay_10),
+                  ),
+                  const SizedBox(width: 14),
+                ],
                 Column(
                   children: [
                     GestureDetector(
@@ -594,6 +605,16 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
                     ),
                   ],
                 ),
+                if ((_isSpeaking || _isPaused) && _audio.canSeek) ...[
+                  const SizedBox(width: 14),
+                  IconButton(
+                    onPressed: _audio.skipForward,
+                    tooltip: context.l10n.forward10Tooltip,
+                    iconSize: 34,
+                    color: AppTheme.primaryColor,
+                    icon: const Icon(Icons.forward_10),
+                  ),
+                ],
               ],
             ),
             const SizedBox(height: 12),

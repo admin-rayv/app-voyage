@@ -74,12 +74,31 @@ class AudioService {
   StreamSubscription<Duration>? _positionSubscription;
   StreamSubscription<TtsState>? _fallbackStateSubscription;
   StreamSubscription<AudioInterruptionEvent>? _interruptionSubscription;
+  StreamSubscription<void>? _becomingNoisySubscription;
+
+  /// Reprendre automatiquement quand une interruption transitoire
+  /// (appel, annonce) se termine — seulement si c'est NOUS qui avons pausé.
+  bool _resumeAfterInterruption = false;
 
   EdgeTtsService get edgeTts => _edgeTts;
   TtsService get tts => _fallbackTts;
   double get speed => _speed;
   AudioState get currentState => _state;
   Stream<AudioState> get stateStream => _stateController.stream;
+
+  /// Le seek (±10 s) n'existe qu'en lecture MP3 (voix neurale) — le TTS
+  /// natif ne sait pas se déplacer dans le texte.
+  bool get canSeek => _audioHandler?.canSeek ?? false;
+
+  /// Reculer de 10 secondes (MP3 seulement).
+  Future<void> skipBackward() async {
+    await _audioHandler?.skipBy(const Duration(seconds: -10));
+  }
+
+  /// Avancer de 10 secondes (MP3 seulement).
+  Future<void> skipForward() async {
+    await _audioHandler?.skipBy(const Duration(seconds: 10));
+  }
 
   Future<void> init() async {
     if (_isInitialized) return;
@@ -152,7 +171,48 @@ class AudioService {
       _interruptionSubscription = session.interruptionEventStream.listen((
         event,
       ) async {
-        if (!event.begin) return;
+        if (event.begin) {
+          switch (event.type) {
+            case AudioInterruptionType.duck:
+              // Annonce brève (GPS, notification): baisser le volume
+              // plutôt que de couper Marco.
+              await _audioHandler?.setVolume(0.3);
+              break;
+            case AudioInterruptionType.pause:
+            case AudioInterruptionType.unknown:
+              if (_state.playState == AudioPlayState.playing) {
+                _resumeAfterInterruption = true;
+                await pause();
+              }
+              break;
+          }
+          return;
+        }
+        // Fin d'interruption.
+        switch (event.type) {
+          case AudioInterruptionType.duck:
+            await _audioHandler?.setVolume(1.0);
+            break;
+          case AudioInterruptionType.pause:
+            // L'OS indique qu'on peut reprendre (ex: fin d'appel).
+            if (_resumeAfterInterruption &&
+                _state.playState == AudioPlayState.paused) {
+              _resumeAfterInterruption = false;
+              await resume();
+            }
+            break;
+          case AudioInterruptionType.unknown:
+            _resumeAfterInterruption = false;
+            break;
+        }
+      });
+
+      // Écouteurs débranchés / Bluetooth coupé: pause (ne pas faire
+      // parler Marco sur le haut-parleur en pleine rue).
+      await _becomingNoisySubscription?.cancel();
+      _becomingNoisySubscription = session.becomingNoisyEventStream.listen((
+        _,
+      ) async {
         if (_state.playState == AudioPlayState.playing) {
           await pause();
         }
@@ -589,6 +649,7 @@ class AudioService {
     _positionSubscription?.cancel();
     _fallbackStateSubscription?.cancel();
     _interruptionSubscription?.cancel();
+    _becomingNoisySubscription?.cancel();
     _stateController.close();
     _isInitialized = false;
     _audioHandler = null;

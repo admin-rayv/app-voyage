@@ -194,6 +194,10 @@
   "batteryTitle": "¿Paseo largo? Protege el modo descubrimiento",
   "batteryBody": "Algunos teléfonos Android cortan el GPS en segundo plano para ahorrar batería — Marco se callaría en pleno paseo. Excluye App Voyage de la optimización de batería («Sin restricciones»).",
   "batteryOpenSettings": "Abrir los ajustes de batería",
+  "reportProblemTooltip": "Informar de un problema",
+  "reportProblemBodyIntro": "Describe el problema (error en el texto, posición GPS, audio, otro):",
+  "reportNoEmailApp": "No hay app de correo — escríbenos a admin@rayv.ca",
+  "shareAction": "Compartir",
 
   "vsdTitle": "La voz de Marco",
   "vsdIntro": "Para que Marco te guíe con una buena voz, instala las voces de calidad en tu teléfono.",

@@ -1186,6 +1186,30 @@ abstract class AppLocalizations {
   /// **'Ouvrir les paramètres de batterie'**
   String get batteryOpenSettings;
 
+  /// No description provided for @reportProblemTooltip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Signaler un problème'**
+  String get reportProblemTooltip;
+
+  /// No description provided for @reportProblemBodyIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Décris le problème (erreur dans le texte, position GPS, audio, autre) :'**
+  String get reportProblemBodyIntro;
+
+  /// No description provided for @reportNoEmailApp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucune app de courriel trouvée — écris-nous à admin@rayv.ca'**
+  String get reportNoEmailApp;
+
+  /// No description provided for @shareAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager'**
+  String get shareAction;
+
   /// No description provided for @vsdTitle.
   ///
   /// In fr, this message translates to:

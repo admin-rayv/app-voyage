@@ -229,6 +229,10 @@
   "batteryTitle": "Balade longue ? Protège le mode découverte",
   "batteryBody": "Certains téléphones Android coupent le GPS des apps en arrière-plan pour économiser la batterie — Marco se tairait en pleine balade. Exclus App Voyage de l'optimisation de batterie (« Non restreinte »).",
   "batteryOpenSettings": "Ouvrir les paramètres de batterie",
+  "reportProblemTooltip": "Signaler un problème",
+  "reportProblemBodyIntro": "Décris le problème (erreur dans le texte, position GPS, audio, autre) :",
+  "reportNoEmailApp": "Aucune app de courriel trouvée — écris-nous à admin@rayv.ca",
+  "shareAction": "Partager",
 
   "vsdTitle": "Voix de Marco",
   "vsdIntro": "Pour que Marco te guide avec une belle voix, installe les voix de qualité sur ton téléphone.",

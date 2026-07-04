@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 0.7.2+6
+version: 0.7.3+7
 
 environment:
   sdk: ^3.11.0
@@ -77,6 +77,9 @@ dependencies:
   url_launcher: ^6.2.5
   app_settings: ^5.1.1
 
+  # Partage du journal terrain (feuille de partage native)
+  share_plus: ^10.1.2
+
   # UI
   google_fonts: ^6.2.1
   qr_flutter: ^4.1.0
@@ -91,6 +94,9 @@ dev_dependencies:
 
   # Splash screen natif (dart run flutter_native_splash:create)
   flutter_native_splash: ^2.4.4
+
+  # Icône d'app (dart run flutter_launcher_icons)
+  flutter_launcher_icons: ^0.14.1
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -142,3 +148,12 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+# Icône d'app — régénérer avec: dart run flutter_launcher_icons
+flutter_launcher_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true # les icônes iOS n'acceptent pas la transparence
+  image_path: "assets/icon/icon_full.png"
+  adaptive_icon_background: "#2D5A5A"
+  adaptive_icon_foreground: "assets/icon/icon_foreground.png"

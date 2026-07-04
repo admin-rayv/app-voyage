@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:app_settings/app_settings.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../services/audio_service.dart' as audio_svc;
@@ -158,6 +160,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() => _discoveryReplayVisitedEnabled = enabled);
   }
 
+  /// Ouvrir les paramètres d'optimisation de batterie (Android) pour que
+  /// l'utilisateur exclue l'app — sinon certains fabricants (Samsung,
+  /// Xiaomi…) tuent le GPS en arrière-plan après quelques minutes.
+  Future<void> _openBatterySettings() async {
+    try {
+      await AppSettings.openAppSettings(
+        type: AppSettingsType.batteryOptimization,
+      );
+    } catch (error) {
+      DebugLog().log('[Settings] batterie: $error');
+      // Écran spécifique indisponible sur ce fabricant → réglages de l'app.
+      try {
+        await AppSettings.openAppSettings();
+      } catch (_) {}
+    }
+  }
+
   Future<void> _confirmResetVisited() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -312,6 +331,56 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   value: _discoveryReplayVisitedEnabled,
                   onChanged: _setDiscoveryReplayVisitedEnabled,
                 ),
+                // Android tue les apps en arrière-plan (optimisation de
+                // batterie) — le tueur silencieux du mode découverte.
+                if (!kIsWeb &&
+                    defaultTargetPlatform == TargetPlatform.android) ...[
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: Colors.amber.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: Colors.amber.withValues(alpha: 0.35),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Text('🔋', style: TextStyle(fontSize: 18)),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                context.l10n.batteryTitle,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          context.l10n.batteryBody,
+                          style: TextStyle(
+                            fontSize: 13,
+                            height: 1.4,
+                            color: AppTheme.textSecondaryOf(context),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        OutlinedButton.icon(
+                          onPressed: _openBatterySettings,
+                          icon: const Icon(Icons.settings_suggest, size: 18),
+                          label: Text(context.l10n.batteryOpenSettings),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 32),
                 Row(
                   children: [

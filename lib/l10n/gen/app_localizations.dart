@@ -1156,6 +1156,36 @@ abstract class AppLocalizations {
   /// **'❤️ Favoris ({count})'**
   String favoritesFilter(int count);
 
+  /// No description provided for @rewind10Tooltip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Reculer de 10 secondes'**
+  String get rewind10Tooltip;
+
+  /// No description provided for @forward10Tooltip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Avancer de 10 secondes'**
+  String get forward10Tooltip;
+
+  /// No description provided for @batteryTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Balade longue ? Protège le mode découverte'**
+  String get batteryTitle;
+
+  /// No description provided for @batteryBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Certains téléphones Android coupent le GPS des apps en arrière-plan pour économiser la batterie — Marco se tairait en pleine balade. Exclus App Voyage de l\'optimisation de batterie (« Non restreinte »).'**
+  String get batteryBody;
+
+  /// No description provided for @batteryOpenSettings.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir les paramètres de batterie'**
+  String get batteryOpenSettings;
+
   /// No description provided for @vsdTitle.
   ///
   /// In fr, this message translates to:

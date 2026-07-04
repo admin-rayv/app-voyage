@@ -252,11 +252,8 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
 
     // Broadcaster l'état playing
     playbackState.add(playbackState.value.copyWith(
-      controls: [
-        audio_svc.MediaControl.pause,
-        audio_svc.MediaControl.stop,
-      ],
-      androidCompactActionIndices: const [0, 1],
+      controls: _controlsFor(playing: true),
+      androidCompactActionIndices: _compactIndicesFor(),
       processingState: audio_svc.AudioProcessingState.ready,
       playing: true,
       updatePosition: _position,
@@ -375,11 +372,8 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
     _stopPositionUpdates();
 
     playbackState.add(playbackState.value.copyWith(
-      controls: [
-        audio_svc.MediaControl.play,
-        audio_svc.MediaControl.stop,
-      ],
-      androidCompactActionIndices: const [0, 1],
+      controls: _controlsFor(playing: false),
+      androidCompactActionIndices: _compactIndicesFor(),
       processingState: audio_svc.AudioProcessingState.ready,
       playing: false,
       updatePosition: _position,
@@ -421,6 +415,56 @@ class AppAudioHandler extends audio_svc.BaseAudioHandler {
     // Désactiver la notification
     await super.stop();
   }
+
+  /// Volume (0.0-1.0) — utilisé pour le « duck » pendant une annonce
+  /// brève (GPS, notification). N'affecte que le moteur MP3; le TTS natif
+  /// est de toute façon coupé par l'OS pendant l'annonce.
+  Future<void> setVolume(double volume) async {
+    await _player.setVolume(volume.clamp(0.0, 1.0));
+  }
+
+  /// Seek — seulement en lecture MP3 (le TTS natif ne sait pas se
+  /// déplacer dans le texte; sa position est estimée).
+  bool get canSeek => _engine == PlaybackEngine.file;
+
+  @override
+  Future<void> seek(Duration position) async {
+    if (!canSeek) return;
+    var target = position;
+    if (target < Duration.zero) target = Duration.zero;
+    if (target > _estimatedDuration) target = _estimatedDuration;
+    DebugLog().log('[Handler] seek ${target.inSeconds}s');
+    _position = target;
+    await _player.seek(target);
+    playbackState.add(playbackState.value.copyWith(updatePosition: target));
+  }
+
+  /// Reculer/avancer de [delta] (ex: ±10 s) — lock screen et UI.
+  Future<void> skipBy(Duration delta) => seek(_position + delta);
+
+  @override
+  Future<void> rewind() => skipBy(const Duration(seconds: -10));
+
+  @override
+  Future<void> fastForward() => skipBy(const Duration(seconds: 10));
+
+  /// Contrôles média selon le moteur (le seek n'existe qu'en MP3).
+  List<audio_svc.MediaControl> _controlsFor({required bool playing}) {
+    final toggle =
+        playing ? audio_svc.MediaControl.pause : audio_svc.MediaControl.play;
+    if (_engine == PlaybackEngine.file) {
+      return [
+        audio_svc.MediaControl.rewind,
+        toggle,
+        audio_svc.MediaControl.fastForward,
+        audio_svc.MediaControl.stop,
+      ];
+    }
+    return [toggle, audio_svc.MediaControl.stop];
+  }
+
+  List<int> _compactIndicesFor() =>
+      _engine == PlaybackEngine.file ? const [0, 1, 2] : const [0, 1];
 
   /// Changer la vitesse de lecture (vitesse UI: 0.75, 1.0, 1.25, 1.5).
   @override

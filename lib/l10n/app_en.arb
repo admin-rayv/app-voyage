@@ -189,6 +189,11 @@
   "favoriteAdded": "Added to favorites ❤️",
   "favoriteRemoved": "Removed from favorites.",
   "favoritesFilter": "❤️ Favorites ({count})",
+  "rewind10Tooltip": "Back 10 seconds",
+  "forward10Tooltip": "Forward 10 seconds",
+  "batteryTitle": "Long walk? Protect discovery mode",
+  "batteryBody": "Some Android phones kill background GPS to save battery — Marco would go quiet mid-walk. Exclude App Voyage from battery optimization (\"Unrestricted\").",
+  "batteryOpenSettings": "Open battery settings",
 
   "vsdTitle": "Marco's voice",
   "vsdIntro": "For Marco to guide you with a great voice, install the high-quality voices on your phone.",

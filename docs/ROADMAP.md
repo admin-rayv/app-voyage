@@ -82,6 +82,11 @@ On ne build pas tout. On build juste assez pour valider avec de vrais utilisateu
 - [ ] Freemium: X POIs gratuits par ville, pack ville payant
 - [ ] Acheter un tour curaté (7.99$ CAD) ou un pack ville (14.99$ CAD)
 - [ ] Intégration paiement (in-app purchase)
+- [ ] Verrouillage serveur du contenu: comptes + table d'achats + RLS sur
+      `points`/`scripts` (aujourd'hui la base est en lecture publique).
+      Note: les sessions « Écouter ensemble » sont déjà prêtes — le contenu
+      est relayé par l'hôte via Realtime, les invités n'ont pas besoin
+      d'accès à la ville (voir ARCHITECTURE.md, sync groupe).
 - [ ] Anglais disponible
 - [ ] Analytics (comprendre l'usage: quels POIs populaires, quels ignorés)
 

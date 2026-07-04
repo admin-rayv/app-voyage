@@ -34,4 +34,60 @@ void main() {
       expect(codes.length, greaterThan(95));
     });
   });
+
+  group('GroupSessionService — script relayé par l\'hôte (mode invité)', () {
+    const scripts = {
+      'fr': {'id': 'sc-fr', 'content': 'Tu vois ce bâtiment?'},
+      'en': {'id': 'sc-en', 'content': 'See this building?'},
+      'es': {'id': 'sc-es', 'content': '¿Ves este edificio?'},
+    };
+
+    test('choisit la langue préférée du membre', () {
+      final script = GroupSessionService.pickRelayedScript(
+        Map<String, dynamic>.from(scripts),
+        'es',
+      );
+      expect(script?.id, 'sc-es');
+      expect(script?.language, 'es');
+      expect(script?.content, '¿Ves este edificio?');
+    });
+
+    test('fallback fr → en si la langue préférée manque', () {
+      final sansEs = Map<String, dynamic>.from(scripts)..remove('es');
+      expect(
+        GroupSessionService.pickRelayedScript(sansEs, 'es')?.language,
+        'fr',
+      );
+
+      final enSeulement = <String, dynamic>{'en': scripts['en']};
+      expect(
+        GroupSessionService.pickRelayedScript(enSeulement, 'es')?.language,
+        'en',
+      );
+    });
+
+    test('dernier recours: n\'importe quelle langue disponible', () {
+      final autre = <String, dynamic>{
+        'de': {'id': 'sc-de', 'content': 'Siehst du dieses Gebäude?'},
+      };
+      expect(
+        GroupSessionService.pickRelayedScript(autre, 'fr')?.language,
+        'de',
+      );
+    });
+
+    test('ignore les contenus vides et les entrées malformées', () {
+      final douteux = <String, dynamic>{
+        'fr': {'id': 'sc-fr', 'content': '   '},
+        'en': 'pas-une-map',
+        'es': {'id': 'sc-es', 'content': '¿Ves este edificio?'},
+      };
+      expect(
+        GroupSessionService.pickRelayedScript(douteux, 'fr')?.language,
+        'es',
+      );
+
+      expect(GroupSessionService.pickRelayedScript({}, 'fr'), isNull);
+    });
+  });
 }

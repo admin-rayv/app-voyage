@@ -625,6 +625,24 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get groupListenScreenTitle => 'Visite en cours';
+
+  @override
+  String get groupWaitingForHost =>
+      'La visite va commencer dès que l\'hôte lancera un point d\'intérêt.';
+
+  @override
+  String get groupHostControlsNote =>
+      'C\'est l\'hôte qui contrôle la lecture pour tout le groupe.';
+
+  @override
+  String get groupGuestAccessNote =>
+      'Pas besoin d\'avoir la ville — tu écoutes ce que l\'hôte partage, en direct.';
+
+  @override
+  String get groupOpenLiveTour => 'Ouvrir la visite en cours';
+
+  @override
   String get vsdTitle => 'Voix de Marco';
 
   @override

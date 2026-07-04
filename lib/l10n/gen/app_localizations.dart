@@ -1102,6 +1102,36 @@ abstract class AppLocalizations {
   /// **'Session {code}'**
   String groupActiveBadge(String code);
 
+  /// No description provided for @groupListenScreenTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Visite en cours'**
+  String get groupListenScreenTitle;
+
+  /// No description provided for @groupWaitingForHost.
+  ///
+  /// In fr, this message translates to:
+  /// **'La visite va commencer dès que l\'hôte lancera un point d\'intérêt.'**
+  String get groupWaitingForHost;
+
+  /// No description provided for @groupHostControlsNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est l\'hôte qui contrôle la lecture pour tout le groupe.'**
+  String get groupHostControlsNote;
+
+  /// No description provided for @groupGuestAccessNote.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas besoin d\'avoir la ville — tu écoutes ce que l\'hôte partage, en direct.'**
+  String get groupGuestAccessNote;
+
+  /// No description provided for @groupOpenLiveTour.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ouvrir la visite en cours'**
+  String get groupOpenLiveTour;
+
   /// No description provided for @vsdTitle.
   ///
   /// In fr, this message translates to:

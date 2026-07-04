@@ -6,6 +6,8 @@ import '../services/supabase_service.dart';
 import '../config/categories.dart';
 import '../l10n/l10n.dart';
 import '../config/theme.dart';
+import '../services/group_session_service.dart';
+import '../widgets/group_session_sheet.dart';
 import '../widgets/voice_setup_dialog.dart';
 
 /// Écran d'accueil — Liste des villes disponibles.
@@ -163,6 +165,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const Spacer(),
+              // « Écouter ensemble » dès l'accueil: un invité rejoint une
+              // visite par code sans avoir à entrer dans une ville.
+              ValueListenableBuilder<String?>(
+                valueListenable: GroupSessionService().activeCode,
+                builder: (context, code, _) => IconButton(
+                  icon: Badge(
+                    isLabelVisible: code != null,
+                    child: const Icon(Icons.groups_outlined, size: 22),
+                  ),
+                  onPressed: () => GroupSessionSheet.show(context),
+                  tooltip: context.l10n.groupListenTooltip,
+                ),
+              ),
               IconButton(
                 icon: const Icon(Icons.settings, size: 22),
                 onPressed: () => context.pushNamed('settings'),

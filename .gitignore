@@ -43,3 +43,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Test visuel (artefacts locaux: dépendances, polices, tuiles, captures)
+tool/visual_test/node_modules/
+tool/visual_test/*.ttf
+tool/visual_test/tile_*.png
+tool/visual_test/shots/

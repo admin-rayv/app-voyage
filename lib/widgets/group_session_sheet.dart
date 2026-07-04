@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../config/theme.dart';
@@ -77,10 +78,16 @@ class _GroupSessionSheetState extends State<GroupSessionSheet> {
       }
     });
     if (joined && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.joinedSession(code))),
-      );
+      _openGuestScreen();
     }
+  }
+
+  /// L'invité vit la visite dans son écran dédié — fermer le sheet puis
+  /// naviguer (le router survit au pop du sheet).
+  void _openGuestScreen() {
+    final router = GoRouter.of(context);
+    Navigator.of(context).pop();
+    router.push('/group');
   }
 
   Future<void> _leave() async {
@@ -270,6 +277,17 @@ class _GroupSessionSheetState extends State<GroupSessionSheet> {
             color: Theme.of(context).colorScheme.primary,
           ),
         ),
+        if (!isHost) ...[
+          const SizedBox(height: 12),
+          FilledButton.icon(
+            onPressed: _openGuestScreen,
+            icon: const Icon(Icons.headphones, size: 18),
+            label: Text(context.l10n.groupOpenLiveTour),
+            style: FilledButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+            ),
+          ),
+        ],
         const SizedBox(height: 12),
         // Participants (Presence, en direct)
         ValueListenableBuilder<List<GroupParticipant>>(

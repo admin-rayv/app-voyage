@@ -122,6 +122,19 @@ class SupabaseService {
     return null;
   }
 
+  /// Récupérer les scripts d'un POI dans toutes les langues (léger:
+  /// id/language/content). Utilisé par l'hôte d'une session de groupe pour
+  /// relayer le contenu aux invités — qui n'ont pas accès à la ville.
+  static Future<List<Map<String, dynamic>>> getScriptsForPoint(
+    String pointId,
+  ) async {
+    final response = await client
+        .from('scripts')
+        .select('id, language, content')
+        .eq('point_id', pointId);
+    return List<Map<String, dynamic>>.from(response);
+  }
+
   /// Récupérer tous les scripts d'une ville dans une langue (pour offline sync).
   static Future<List<Map<String, dynamic>>> getScriptsForCity(
     String cityId,

@@ -214,6 +214,11 @@
   "groupConnectionError": "Erreur de connexion. Réessaie.",
   "groupActiveBadge": "Session {code}",
   "@groupActiveBadge": { "placeholders": { "code": { "type": "String" } } },
+  "groupListenScreenTitle": "Visite en cours",
+  "groupWaitingForHost": "La visite va commencer dès que l'hôte lancera un point d'intérêt.",
+  "groupHostControlsNote": "C'est l'hôte qui contrôle la lecture pour tout le groupe.",
+  "groupGuestAccessNote": "Pas besoin d'avoir la ville — tu écoutes ce que l'hôte partage, en direct.",
+  "groupOpenLiveTour": "Ouvrir la visite en cours",
 
   "vsdTitle": "Voix de Marco",
   "vsdIntro": "Pour que Marco te guide avec une belle voix, installe les voix de qualité sur ton téléphone.",

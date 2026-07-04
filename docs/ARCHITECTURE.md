@@ -188,9 +188,22 @@ Presence: liste des participants en direct (pas de table, pas de compte)
 - **Presence** = liste des participants (étiquettes anonymes amicales).
 - **Broadcast** = commandes du Host (play/pause/resume/stop + poiId). Chaque
   membre joue le script du POI **dans sa propre langue** — groupe multilingue.
+- **Le contenu transite par la session (mode invité)**: sur `play`, le Host
+  joint au message le POI et ses scripts dans toutes les langues. Les
+  invités jouent ce qui est relayé **sans requête DB** — ils suivent la
+  visite sans « recevoir » la ville. C'est la plomberie du futur modèle
+  payant: quand l'accès aux villes sera verrouillé côté serveur (comptes +
+  RLS, sprint monétisation), les sessions continueront de fonctionner pour
+  les invités non-acheteurs. Un fallback DB subsiste (hôte sur une
+  ancienne version) tant que la base est en lecture publique.
+- **Écran invité** (`/group`, `screens/group_listen_screen.dart`): l'invité
+  vit la visite dans un écran épuré (POI en cours, progression,
+  participants) — pas de carte ni de liste de POIs. Entrées: bouton
+  « Écouter ensemble » sur l'accueil, ou le sheet de la carte.
 - Sync à la seconde, sans seek (narration — suffisant). Si la connexion
   tombe, chaque appareil continue en solo (fallback naturel).
-- Fichiers: `services/group_session_service.dart`, `widgets/group_session_sheet.dart`.
+- Fichiers: `services/group_session_service.dart`, `widgets/group_session_sheet.dart`,
+  `screens/group_listen_screen.dart`.
 
 ## Flux utilisateur
 

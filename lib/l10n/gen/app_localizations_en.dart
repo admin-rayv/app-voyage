@@ -621,6 +621,24 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get groupListenScreenTitle => 'Live tour';
+
+  @override
+  String get groupWaitingForHost =>
+      'The tour will begin as soon as the host starts a point of interest.';
+
+  @override
+  String get groupHostControlsNote =>
+      'The host controls playback for the whole group.';
+
+  @override
+  String get groupGuestAccessNote =>
+      'No need to own the city — you hear what the host shares, live.';
+
+  @override
+  String get groupOpenLiveTour => 'Open the live tour';
+
+  @override
   String get vsdTitle => 'Marco\'s voice';
 
   @override

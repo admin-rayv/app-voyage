@@ -180,6 +180,11 @@
   "invalidCode": "Invalid code — 6 characters expected.",
   "groupConnectionError": "Connection error. Try again.",
   "groupActiveBadge": "Session {code}",
+  "groupListenScreenTitle": "Live tour",
+  "groupWaitingForHost": "The tour will begin as soon as the host starts a point of interest.",
+  "groupHostControlsNote": "The host controls playback for the whole group.",
+  "groupGuestAccessNote": "No need to own the city — you hear what the host shares, live.",
+  "groupOpenLiveTour": "Open the live tour",
 
   "vsdTitle": "Marco's voice",
   "vsdIntro": "For Marco to guide you with a great voice, install the high-quality voices on your phone.",

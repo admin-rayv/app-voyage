@@ -53,6 +53,24 @@ class Point {
     );
   }
 
+  /// Sérialisation miroir de [Point.fromJson] — utilisée pour relayer un
+  /// POI aux invités d'une session de groupe via Realtime (sans accès DB).
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'city_id': cityId,
+      'name': name,
+      'lat': lat,
+      'lng': lng,
+      'trigger_radius_m': triggerRadiusM,
+      'type': type,
+      'categories': categories,
+      'image_url': imageUrl,
+      'logistics': logistics,
+      'is_published': isPublished,
+    };
+  }
+
   String localizedName(String lang) {
     return name[lang] ?? name['fr'] ?? name['en'] ?? name.values.first;
   }

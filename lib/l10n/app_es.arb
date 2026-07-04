@@ -180,6 +180,11 @@
   "invalidCode": "Código inválido — se esperan 6 caracteres.",
   "groupConnectionError": "Error de conexión. Inténtalo de nuevo.",
   "groupActiveBadge": "Sesión {code}",
+  "groupListenScreenTitle": "Visita en curso",
+  "groupWaitingForHost": "La visita comenzará en cuanto el anfitrión inicie un punto de interés.",
+  "groupHostControlsNote": "El anfitrión controla la reproducción para todo el grupo.",
+  "groupGuestAccessNote": "No necesitas la ciudad — escuchas lo que comparte el anfitrión, en directo.",
+  "groupOpenLiveTour": "Abrir la visita en curso",
 
   "vsdTitle": "La voz de Marco",
   "vsdIntro": "Para que Marco te guíe con una buena voz, instala las voces de calidad en tu teléfono.",

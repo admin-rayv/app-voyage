@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../models/city.dart';
+import '../screens/group_listen_screen.dart';
 import '../screens/home_screen.dart';
 import '../screens/map_screen.dart';
 import '../screens/onboarding_screen.dart';
@@ -21,6 +22,13 @@ GoRouter createAppRouter({String initialLocation = '/'}) => GoRouter(
       path: '/onboarding',
       name: 'onboarding',
       builder: (context, state) => const OnboardingScreen(),
+    ),
+    // Écran invité « Visite en cours » — hors du shell: il a sa propre
+    // représentation du lecteur, pas besoin du mini-player par-dessus.
+    GoRoute(
+      path: '/group',
+      name: 'groupListen',
+      builder: (context, state) => const GroupListenScreen(),
     ),
     ShellRoute(
       builder: (context, state, child) => AppShell(child: child),

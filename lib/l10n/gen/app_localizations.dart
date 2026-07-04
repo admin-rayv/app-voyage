@@ -1132,6 +1132,30 @@ abstract class AppLocalizations {
   /// **'Ouvrir la visite en cours'**
   String get groupOpenLiveTour;
 
+  /// No description provided for @favoriteTooltip.
+  ///
+  /// In fr, this message translates to:
+  /// **'Favori'**
+  String get favoriteTooltip;
+
+  /// No description provided for @favoriteAdded.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ajouté aux favoris ❤️'**
+  String get favoriteAdded;
+
+  /// No description provided for @favoriteRemoved.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retiré des favoris.'**
+  String get favoriteRemoved;
+
+  /// No description provided for @favoritesFilter.
+  ///
+  /// In fr, this message translates to:
+  /// **'❤️ Favoris ({count})'**
+  String favoritesFilter(int count);
+
   /// No description provided for @vsdTitle.
   ///
   /// In fr, this message translates to:

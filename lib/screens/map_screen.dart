@@ -18,6 +18,7 @@ import '../services/audio_service.dart' as audio_svc;
 import '../services/debug_log.dart';
 import '../services/city_download_service.dart';
 import '../services/discovery_playback_service.dart';
+import '../services/favorite_poi_service.dart';
 import '../services/geofencing_service.dart';
 import '../services/group_session_service.dart';
 import '../services/notification_service.dart';
@@ -54,10 +55,12 @@ class _MapScreenState extends State<MapScreen>
   final PermissionService _permissionService = PermissionService();
   final audio_svc.AudioService _audioService = audio_svc.AudioService();
   final VisitedPoiService _visitedPoiService = VisitedPoiService();
+  final FavoritePoiService _favoritePoiService = FavoritePoiService();
   List<models.Point> _allPoints = [];
   final Set<String> _activeFilters = {};
   bool _showList = false;
   bool _showUnvisitedOnly = false;
+  bool _showFavoritesOnly = false;
   bool _isLoading = true;
   bool _discoveryModeEnabled = false;
   bool _discoveryBusy = false;
@@ -90,6 +93,8 @@ class _MapScreenState extends State<MapScreen>
       _handleNotificationPayload(payload);
     });
     unawaited(_visitedPoiService.init());
+    unawaited(_favoritePoiService.init());
+    _favoritePoiService.listenable.addListener(_onFavoritesChanged);
     _loadPoints();
     _getUserPosition();
     _audioStateSubscription = _audioService.stateStream.listen((state) {
@@ -116,9 +121,14 @@ class _MapScreenState extends State<MapScreen>
     });
   }
 
+  void _onFavoritesChanged() {
+    if (mounted) setState(() {});
+  }
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _favoritePoiService.listenable.removeListener(_onFavoritesChanged);
     _positionSubscription?.cancel();
     _discoverySubscription?.cancel();
     _audioStateSubscription?.cancel();
@@ -198,11 +208,16 @@ class _MapScreenState extends State<MapScreen>
     );
   }
 
-  List<models.Point> get _basePoints => _showUnvisitedOnly
-      ? _allPoints
-            .where((poi) => !_visitedPoiService.isVisitedPoint(poi))
-            .toList()
-      : _allPoints;
+  List<models.Point> get _basePoints {
+    Iterable<models.Point> points = _allPoints;
+    if (_showUnvisitedOnly) {
+      points = points.where((poi) => !_visitedPoiService.isVisitedPoint(poi));
+    }
+    if (_showFavoritesOnly) {
+      points = points.where(_favoritePoiService.isFavoritePoint);
+    }
+    return points.toList();
+  }
 
   List<models.Point> get _filteredPoints {
     final basePoints = _basePoints;
@@ -554,6 +569,7 @@ class _MapScreenState extends State<MapScreen>
     setState(() {
       _activeFilters.clear();
       _showUnvisitedOnly = false;
+      _showFavoritesOnly = false;
     });
   }
 
@@ -943,7 +959,9 @@ class _MapScreenState extends State<MapScreen>
           Padding(
             padding: const EdgeInsets.only(right: 6),
             child: FilterChip(
-              selected: _activeFilters.isEmpty && !_showUnvisitedOnly,
+              selected: _activeFilters.isEmpty &&
+                  !_showUnvisitedOnly &&
+                  !_showFavoritesOnly,
               label: Text(context.l10n.allFilter(_allPoints.length)),
               onSelected: (_) => _clearFilters(),
               selectedColor: AppTheme.primaryColor.withValues(alpha: 0.2),
@@ -963,6 +981,25 @@ class _MapScreenState extends State<MapScreen>
               },
               selectedColor: Colors.orange.withValues(alpha: 0.18),
               checkmarkColor: Colors.orange.shade800,
+              visualDensity: VisualDensity.compact,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 6),
+            child: FilterChip(
+              selected: _showFavoritesOnly,
+              label: Text(
+                context.l10n.favoritesFilter(
+                  _allPoints.where(_favoritePoiService.isFavoritePoint).length,
+                ),
+              ),
+              onSelected: (_) {
+                setState(() {
+                  _showFavoritesOnly = !_showFavoritesOnly;
+                });
+              },
+              selectedColor: Colors.redAccent.withValues(alpha: 0.15),
+              checkmarkColor: Colors.redAccent,
               visualDensity: VisualDensity.compact,
             ),
           ),

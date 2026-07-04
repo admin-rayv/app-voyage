@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../models/audio_state.dart';
 import '../models/point.dart' as models;
 import '../models/script.dart';
+import '../services/favorite_poi_service.dart';
 import '../services/supabase_service.dart';
 import '../services/audio_service.dart';
 import '../services/user_preferences_service.dart';
@@ -52,6 +53,7 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
       vsync: this,
       duration: const Duration(milliseconds: 900),
     );
+    unawaited(FavoritePoiService().init());
     unawaited(_initializeAudio());
     _stateSubscription = _audio.stateStream.listen((state) {
       // Vérifier si l'audio en cours concerne CE POI
@@ -177,6 +179,39 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
           SliverAppBar(
             expandedHeight: 200,
             pinned: true,
+            actions: [
+              // Favori (rétention: retrouver ses coups de cœur)
+              ValueListenableBuilder<Set<String>>(
+                valueListenable: FavoritePoiService().listenable,
+                builder: (context, favorites, _) {
+                  final isFavorite = favorites.contains(widget.poi.id);
+                  return IconButton(
+                    tooltip: context.l10n.favoriteTooltip,
+                    icon: Icon(
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: isFavorite ? Colors.redAccent : null,
+                    ),
+                    onPressed: () async {
+                      final nowFavorite =
+                          await FavoritePoiService().toggle(widget.poi.id);
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context)
+                        ..hideCurrentSnackBar()
+                        ..showSnackBar(
+                          SnackBar(
+                            duration: const Duration(seconds: 1),
+                            content: Text(
+                              nowFavorite
+                                  ? context.l10n.favoriteAdded
+                                  : context.l10n.favoriteRemoved,
+                            ),
+                          ),
+                        );
+                    },
+                  );
+                },
+              ),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
                 widget.poi.localizedName(context.languageCode),

@@ -185,6 +185,10 @@
   "groupHostControlsNote": "The host controls playback for the whole group.",
   "groupGuestAccessNote": "No need to own the city — you hear what the host shares, live.",
   "groupOpenLiveTour": "Open the live tour",
+  "favoriteTooltip": "Favorite",
+  "favoriteAdded": "Added to favorites ❤️",
+  "favoriteRemoved": "Removed from favorites.",
+  "favoritesFilter": "❤️ Favorites ({count})",
 
   "vsdTitle": "Marco's voice",
   "vsdIntro": "For Marco to guide you with a great voice, install the high-quality voices on your phone.",

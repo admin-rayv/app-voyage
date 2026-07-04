@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Politique de confidentialité — App Voyage</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site">
+    <span class="logo">🎧</span>
+    <span class="name"><a href="index.html">App Voyage</a></span>
+  </header>
+  <main>
+    <h1>Politique de confidentialité</h1>
+    <p class="updated">Dernière mise à jour : 4 juillet 2026 · <a href="#english">English summary below</a></p>
+
+    <p class="lead">
+      En bref : App Voyage n'a pas de comptes, pas de publicité, pas de
+      pistage. Ta position GPS est traitée <strong>sur ton téléphone
+      uniquement</strong> et n'est jamais envoyée à nos serveurs. Ce que tu
+      écoutes, ta progression et tes favoris restent sur ton appareil.
+    </p>
+
+    <h2>Qui sommes-nous</h2>
+    <p>
+      App Voyage est un guide audio géolocalisé développé par Rayv
+      (Québec, Canada). Pour toute question relative à la vie privée :
+      <a href="mailto:admin@rayv.ca">admin@rayv.ca</a>.
+    </p>
+
+    <h2>Ta position GPS</h2>
+    <ul>
+      <li>La position sert à une seule chose : détecter que tu approches
+        d'un point d'intérêt pour déclencher le guide audio.</li>
+      <li>Elle est traitée <strong>localement, sur ton appareil</strong>.
+        Elle n'est <strong>jamais transmise</strong> à nos serveurs ni à des
+        tiers, jamais enregistrée ailleurs que temporairement en mémoire.</li>
+      <li>La localisation <em>en arrière-plan</em> (option « Toujours ») est
+        facultative : elle permet au mode découverte de fonctionner
+        téléphone en poche, écran verrouillé. Tu peux la refuser — l'app
+        fonctionne alors au premier plan — et la retirer à tout moment dans
+        les réglages du téléphone.</li>
+    </ul>
+
+    <h2>Ce qui transite par le réseau</h2>
+    <table>
+      <tr><th>Quoi</th><th>Vers qui</th><th>Pourquoi</th></tr>
+      <tr>
+        <td>Requêtes de contenu (villes, points d'intérêt, textes des guides)</td>
+        <td>Supabase (notre hébergeur de contenu)</td>
+        <td>Télécharger le contenu. Requêtes anonymes, sans compte ni
+          identifiant. Comme pour tout service web, l'adresse IP est
+          techniquement visible du serveur.</td>
+      </tr>
+      <tr>
+        <td>Texte des guides audio</td>
+        <td>Service de synthèse vocale de Microsoft</td>
+        <td>Générer les voix neurales (MP3). Seul le <em>texte du guide</em>
+          — un contenu que nous avons écrit — est envoyé. Aucune donnée te
+          concernant, ni ta position.</td>
+      </tr>
+      <tr>
+        <td>Tuiles de carte</td>
+        <td>CARTO (données OpenStreetMap)</td>
+        <td>Afficher la carte. Les serveurs de tuiles voient les zones de
+          carte demandées et l'adresse IP, comme n'importe quel site de
+          cartographie.</td>
+      </tr>
+      <tr>
+        <td>Sessions « Écouter ensemble »</td>
+        <td>Supabase Realtime</td>
+        <td>Synchroniser la lecture d'un groupe : code de session, un
+          pseudonyme aléatoire (ex. « Exploratrice-42 ») et les commandes
+          lecture/pause transitent en temps réel. Rien n'est conservé après
+          la session, et jamais ta position.</td>
+      </tr>
+    </table>
+
+    <h2>Ce qui reste sur ton appareil</h2>
+    <p>
+      Préférences (langue, vitesse, voix), progression des points écoutés,
+      favoris, audio téléchargé et cache de cartes sont stockés localement.
+      Nous n'y avons pas accès. Pour tout effacer : désinstalle l'app, ou
+      utilise les boutons de réinitialisation dans les réglages.
+    </p>
+
+    <h2>Ce que nous ne faisons pas</h2>
+    <ul>
+      <li>Pas de compte, pas de profil, pas d'identifiant publicitaire.</li>
+      <li>Pas de publicité, pas d'outil d'analyse tiers, pas de pistage.</li>
+      <li>Aucune vente ni partage de données — nous n'en collectons pas.</li>
+    </ul>
+
+    <h2>Enfants</h2>
+    <p>
+      App Voyage ne s'adresse pas spécifiquement aux enfants et ne collecte
+      pas sciemment de renseignements personnels, d'enfants ou de quiconque.
+    </p>
+
+    <h2>Tes droits</h2>
+    <p>
+      Nous ne détenons aucun renseignement personnel te concernant sur nos
+      serveurs — il n'y a donc rien à consulter, corriger ou supprimer de
+      notre côté. Conformément aux lois applicables au Québec et au Canada
+      (Loi 25, LPRPDE), tu peux néanmoins nous écrire pour toute question :
+      <a href="mailto:admin@rayv.ca">admin@rayv.ca</a>. Responsable de la
+      protection des renseignements personnels : Pierre Raymond.
+    </p>
+
+    <h2>Modifications</h2>
+    <p>
+      Si l'app évolue (par exemple l'ajout de statistiques d'usage
+      anonymes), cette politique sera mise à jour ici avant le changement,
+      avec la date en tête de page.
+    </p>
+
+    <h2 id="english">English summary</h2>
+    <p>
+      App Voyage is a location-based audio guide. No accounts, no ads, no
+      tracking, no third-party analytics. Your GPS location is processed
+      <strong>on your device only</strong> and is never sent to our servers.
+      Content requests go to our content host (Supabase); guide texts (our
+      own content, nothing about you) are sent to Microsoft's speech service
+      to generate audio; map tiles are served by CARTO/OpenStreetMap. Group
+      sessions relay a session code, a random nickname and play/pause
+      commands in real time — nothing is stored. Preferences, progress and
+      favorites stay on your device; uninstalling removes everything.
+      Questions: <a href="mailto:admin@rayv.ca">admin@rayv.ca</a>.
+    </p>
+
+    <p class="nav">
+      <a href="conditions.html">Conditions d'utilisation</a> ·
+      <a href="index.html">Accueil</a>
+    </p>
+  </main>
+  <footer>© Rayv — App Voyage. Cartes : © OpenStreetMap contributors, © CARTO.</footer>
+</body>
+</html>

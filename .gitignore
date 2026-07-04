@@ -49,3 +49,8 @@ tool/visual_test/node_modules/
 tool/visual_test/*.ttf
 tool/visual_test/tile_*.png
 tool/visual_test/shots/
+
+# Signature release Android — ne JAMAIS commiter la clé ni ses mots de passe
+android/key.properties
+android/*.jks
+android/*.keystore

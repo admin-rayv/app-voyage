@@ -1,0 +1,32 @@
+name: Build iOS
+
+# Vérifie que l'app compile pour iPhone (--no-codesign: pas de compte
+# Apple requis). La distribution réelle (TestFlight/App Store) exigera un
+# compte Apple Developer + certificats — voir docs/DISTRIBUTION.md.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'lib/**'
+      - 'ios/**'
+      - 'pubspec.yaml'
+      - '.github/workflows/build-ios.yml'
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.1'
+          channel: 'stable'
+          cache: true
+
+      - run: flutter pub get
+      - run: flutter build ios --release --no-codesign
+
+      - name: Taille du build
+        run: du -sh build/ios/iphoneos/Runner.app

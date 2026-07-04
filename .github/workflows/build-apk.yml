@@ -17,8 +17,31 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # Le contexte `secrets` n'est pas disponible dans les `if` de steps —
+      # on projette sa présence dans une variable d'environnement.
+      HAS_SIGNING: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
     steps:
       - uses: actions/checkout@v4
+
+      # Signature release (voir docs/DISTRIBUTION.md). Tant que les secrets
+      # n'existent pas, l'APK reste signé en debug — rien ne casse.
+      - name: Configurer la signature release
+        if: env.HAS_SIGNING == 'true'
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > android/upload-keystore.jks
+          cat > android/key.properties <<EOF
+          storeFile=../upload-keystore.jks
+          storePassword=$ANDROID_KEYSTORE_PASSWORD
+          keyAlias=$ANDROID_KEY_ALIAS
+          keyPassword=$ANDROID_KEY_PASSWORD
+          EOF
+          echo "Signature release configurée."
 
       - uses: subosito/flutter-action@v2
         with:

@@ -1,0 +1,43 @@
+name: Pages légales
+
+# Publie le dossier legal/ sur GitHub Pages:
+#   https://admin-rayv.github.io/app-voyage/
+# (politique de confidentialité + conditions — URLs exigées par le
+# Play Store et l'App Store).
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'legal/**'
+      - '.github/workflows/deploy-pages.yml'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # enablement: true — active GitHub Pages sur le repo au premier run.
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: legal
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

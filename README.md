@@ -40,6 +40,8 @@ static const String supabaseUrl = 'https://VOTRE_PROJET.supabase.co';
 static const String supabaseAnonKey = 'VOTRE_ANON_KEY';
 ```
 
+**Pages légales** (exigées par les stores): https://admin-rayv.github.io/app-voyage/ — publiées automatiquement depuis `legal/`.
+
 **Cartes:** aucune clé requise — l'app utilise OpenStreetMap via `flutter_map` (gratuit, sans compte).
 
 ### Permissions requises
@@ -195,6 +197,8 @@ VALUES (
 | [docs/USER-STORIES.md](./docs/USER-STORIES.md) | User stories détaillées |
 | [docs/ROADMAP.md](./docs/ROADMAP.md) | Roadmap produit |
 | [docs/CODE-REVIEW.md](./docs/CODE-REVIEW.md) | Revue de code — bugs et incohérences à adresser |
+| [docs/DISTRIBUTION.md](./docs/DISTRIBUTION.md) | Signature release, Play Store, iOS/TestFlight — le chemin vers les stores |
+| [docs/STORE-LISTING.md](./docs/STORE-LISTING.md) | Textes des fiches store (FR/EN) + déclarations |
 
 ---
 

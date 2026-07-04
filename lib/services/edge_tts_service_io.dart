@@ -135,8 +135,10 @@ class EdgeTtsService {
   Future<void> downloadAll({
     required List<Map<String, dynamic>> scripts,
     required void Function(int current, int total) onProgress,
+    bool Function()? isCancelled,
   }) async {
     for (var i = 0; i < scripts.length; i++) {
+      if (isCancelled?.call() ?? false) return;
       final s = scripts[i];
       await getAudioPath(
         scriptId: s['id'] as String,

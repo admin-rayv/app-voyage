@@ -81,7 +81,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get letsGo => 'Let\'s go!';
 
   @override
-  String get downloadAudiosTooltip => 'Download audio';
+  String get downloadAudiosTooltip => 'Download the city';
 
   @override
   String get viewMapTooltip => 'Show map';
@@ -96,11 +96,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get groupListenTooltip => 'Listen together';
 
   @override
-  String get downloadDialogTitle => 'Download audio?';
+  String get downloadDialogTitle => 'Download the city?';
 
   @override
   String downloadDialogBody(String city, String language) {
-    return 'Generates and caches the high-quality audio (Marco\'s voice) for every POI in $city in $language. Do this on Wi-Fi — everything then works offline.';
+    return 'Puts all of $city on your phone: the POIs and their texts, Marco\'s audio ($language) and the map. Do it on Wi-Fi — afterwards the whole city works with no network.';
   }
 
   @override
@@ -110,11 +110,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get download => 'Download';
 
   @override
-  String get downloadProgressTitle => 'Downloading audio';
+  String get downloadProgressTitle => 'Downloading the city';
 
   @override
   String downloadProgressCount(int current, int total) {
-    return '$current / $total scripts';
+    return '$current / $total items';
   }
 
   @override
@@ -122,7 +122,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String downloadDone(int count) {
-    return 'Audio downloaded ($count scripts). Ready for the walk!';
+    return 'City downloaded ($count items). Ready to explore, even offline!';
   }
 
   @override

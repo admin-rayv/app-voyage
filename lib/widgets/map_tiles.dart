@@ -1,6 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../services/map_tile_cache.dart';
 
 /// Couche de tuiles partagée par toutes les cartes de l'app.
 ///
@@ -22,7 +25,9 @@ class MapTiles {
   static const List<String> _subdomains = ['a', 'b', 'c', 'd'];
 
   /// Couche de tuiles adaptée au thème (claire/sombre) et à la densité
-  /// d'écran (retina).
+  /// d'écran (retina). Sur mobile, les tuiles passent par le cache disque
+  /// ([MapTileCache]) — zones déjà vues et villes téléchargées dispo
+  /// hors ligne.
   static TileLayer tileLayer(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return TileLayer(
@@ -30,7 +35,28 @@ class MapTiles {
       subdomains: _subdomains,
       userAgentPackageName: 'com.rayv.appvoyage',
       retinaMode: RetinaMode.isHighDensity(context),
+      tileProvider: !kIsWeb && MapTileCache.isReady
+          ? CachedTileProvider()
+          : NetworkTileProvider(),
     );
+  }
+
+  /// Résolveur d'URL de tuile identique à la couche affichée (même thème,
+  /// même retina) — pour que « Télécharger la ville » remplisse exactement
+  /// le cache que la carte lira ensuite. Capture le thème immédiatement:
+  /// le closure retourné est utilisable après des await.
+  static String Function(int z, int x, int y) tileUrlBuilder(
+    BuildContext context,
+  ) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final retina = RetinaMode.isHighDensity(context);
+    final template = isDark ? _darkUrl : _lightUrl;
+    return (z, x, y) => template
+        .replaceFirst('{s}', _subdomains[(x + y) % _subdomains.length])
+        .replaceFirst('{z}', '$z')
+        .replaceFirst('{x}', '$x')
+        .replaceFirst('{y}', '$y')
+        .replaceFirst('{r}', retina ? '@2x' : '');
   }
 
   /// Attribution obligatoire — à placer en dernier child de FlutterMap.

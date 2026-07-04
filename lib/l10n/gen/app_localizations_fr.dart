@@ -673,6 +673,20 @@ class AppLocalizationsFr extends AppLocalizations {
   String get batteryOpenSettings => 'Ouvrir les paramètres de batterie';
 
   @override
+  String get reportProblemTooltip => 'Signaler un problème';
+
+  @override
+  String get reportProblemBodyIntro =>
+      'Décris le problème (erreur dans le texte, position GPS, audio, autre) :';
+
+  @override
+  String get reportNoEmailApp =>
+      'Aucune app de courriel trouvée — écris-nous à admin@rayv.ca';
+
+  @override
+  String get shareAction => 'Partager';
+
+  @override
   String get vsdTitle => 'Voix de Marco';
 
   @override

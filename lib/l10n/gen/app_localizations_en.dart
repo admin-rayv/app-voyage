@@ -669,6 +669,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get batteryOpenSettings => 'Open battery settings';
 
   @override
+  String get reportProblemTooltip => 'Report a problem';
+
+  @override
+  String get reportProblemBodyIntro =>
+      'Describe the problem (text error, GPS position, audio, other):';
+
+  @override
+  String get reportNoEmailApp =>
+      'No email app found — write to us at admin@rayv.ca';
+
+  @override
+  String get shareAction => 'Share';
+
+  @override
   String get vsdTitle => 'Marco\'s voice';
 
   @override

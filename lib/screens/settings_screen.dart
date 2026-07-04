@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:share_plus/share_plus.dart';
 import '../services/audio_service.dart' as audio_svc;
 import '../services/tts_service.dart';
 import '../services/debug_log.dart';
@@ -690,6 +692,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
+  /// Contenu exporté du journal (logs + décisions géofencing) — même
+  /// format pour le presse-papier et le partage en fichier.
+  static String _exportBuffer() {
+    return (StringBuffer()
+          ..writeln('=== App Voyage — logs de debug ===')
+          ..writeln(DebugLog().entries.join('\n'))
+          ..writeln()
+          ..writeln('=== Décisions géofencing ===')
+          ..writeln(
+            'timestamp|lat|lng|accuracy|poi|distance|confidence|approaching|decision|reason',
+          )
+          ..writeln(DebugLog().geoDecisions.join('\n')))
+        .toString();
+  }
+
   static void showDebugLogs(BuildContext context) {
     final logs = DebugLog().entries;
     showModalBottomSheet(
@@ -715,17 +732,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   // quand l'app est tuée).
                   TextButton.icon(
                     onPressed: () async {
-                      final buffer = StringBuffer()
-                        ..writeln('=== App Voyage — logs de debug ===')
-                        ..writeln(DebugLog().entries.join('\n'))
-                        ..writeln()
-                        ..writeln('=== Décisions géofencing ===')
-                        ..writeln(
-                          'timestamp|lat|lng|accuracy|poi|distance|confidence|approaching|decision|reason',
-                        )
-                        ..writeln(DebugLog().geoDecisions.join('\n'));
                       await Clipboard.setData(
-                        ClipboardData(text: buffer.toString()),
+                        ClipboardData(text: _exportBuffer()),
                       );
                       if (ctx.mounted) {
                         ScaffoldMessenger.of(ctx).showSnackBar(
@@ -737,6 +745,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     },
                     icon: const Icon(Icons.copy, size: 16),
                     label: Text(ctx.l10n.copyAction),
+                  ),
+                  // Partage en fichier (courriel, Messages, Drive…) — plus
+                  // fiable que le presse-papier pour un long journal.
+                  // XFile.fromData: pas d'accès disque → compatible web.
+                  TextButton.icon(
+                    onPressed: () async {
+                      try {
+                        await Share.shareXFiles(
+                          [
+                            XFile.fromData(
+                              utf8.encode(_exportBuffer()),
+                              mimeType: 'text/plain',
+                            ),
+                          ],
+                          fileNameOverrides: ['app-voyage-journal.txt'],
+                          subject: 'App Voyage — journal terrain',
+                        );
+                      } catch (error) {
+                        DebugLog().log('[Settings] partage journal: $error');
+                      }
+                    },
+                    icon: const Icon(Icons.ios_share, size: 16),
+                    label: Text(ctx.l10n.shareAction),
                   ),
                   TextButton(
                     onPressed: () {

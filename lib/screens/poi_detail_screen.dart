@@ -7,6 +7,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/audio_state.dart';
 import '../models/point.dart' as models;
+import '../config/constants.dart';
 import '../models/script.dart';
 import '../services/favorite_poi_service.dart';
 import '../services/supabase_service.dart';
@@ -79,6 +80,35 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
         });
       }
     });
+  }
+
+  /// Signalement d'un problème sur ce POI (erreur factuelle, position,
+  /// audio…) — courriel pré-rempli avec le contexte technique.
+  Future<void> _reportProblem() async {
+    final poi = widget.poi;
+    final mailto = Uri(
+      scheme: 'mailto',
+      path: 'admin@rayv.ca',
+      query: Uri(queryParameters: {
+        'subject':
+            '[App Voyage] ${poi.localizedName(context.languageCode)}',
+        'body': '${context.l10n.reportProblemBodyIntro}\n\n\n'
+            '---\n'
+            'POI: ${poi.localizedName('fr')} (${poi.id})\n'
+            'GPS: ${poi.lat}, ${poi.lng}\n'
+            'App: ${AppConstants.appVersion}',
+      }).query,
+    );
+
+    var launched = false;
+    try {
+      launched = await launchUrl(mailto);
+    } catch (_) {}
+    if (!launched && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.reportNoEmailApp)),
+      );
+    }
   }
 
   Future<void> _initializeAudio() async {
@@ -180,6 +210,13 @@ class _PoiDetailScreenState extends State<PoiDetailScreen>
             expandedHeight: 200,
             pinned: true,
             actions: [
+              // Boucle qualité du contenu: courriel pré-rempli (POI, GPS,
+              // version) — zéro backend.
+              IconButton(
+                tooltip: context.l10n.reportProblemTooltip,
+                icon: const Icon(Icons.flag_outlined),
+                onPressed: _reportProblem,
+              ),
               // Favori (rétention: retrouver ses coups de cœur)
               ValueListenableBuilder<Set<String>>(
                 valueListenable: FavoritePoiService().listenable,

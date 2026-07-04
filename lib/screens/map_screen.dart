@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config/constants.dart';
 import '../config/route_data.dart';
+import '../config/text_normalizer.dart';
 import '../models/city.dart';
 import '../models/discovery_playback_result.dart';
 import '../models/point.dart' as models;
@@ -58,6 +59,8 @@ class _MapScreenState extends State<MapScreen>
   final FavoritePoiService _favoritePoiService = FavoritePoiService();
   List<models.Point> _allPoints = [];
   final Set<String> _activeFilters = {};
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
   bool _showList = false;
   bool _showUnvisitedOnly = false;
   bool _showFavoritesOnly = false;
@@ -129,6 +132,7 @@ class _MapScreenState extends State<MapScreen>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _favoritePoiService.listenable.removeListener(_onFavoritesChanged);
+    _searchController.dispose();
     _positionSubscription?.cancel();
     _discoverySubscription?.cancel();
     _audioStateSubscription?.cancel();
@@ -1140,6 +1144,16 @@ class _MapScreenState extends State<MapScreen>
   Widget _buildList() {
     var points = _filteredPoints.toList();
 
+    // Recherche par nom, insensible aux accents, dans toutes les langues.
+    if (_searchQuery.trim().isNotEmpty) {
+      points = points
+          .where(
+            (poi) => poi.name.values
+                .any((name) => TextNormalizer.matches(name, _searchQuery)),
+          )
+          .toList();
+    }
+
     // Trier par distance si position dispo
     if (_userPosition != null) {
       points.sort((a, b) {
@@ -1159,8 +1173,9 @@ class _MapScreenState extends State<MapScreen>
       });
     }
 
+    final Widget body;
     if (points.isEmpty) {
-      return Center(
+      body = Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -1170,8 +1185,47 @@ class _MapScreenState extends State<MapScreen>
           ],
         ),
       );
+    } else {
+      body = _buildPoiListView(points);
     }
 
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+          child: TextField(
+            controller: _searchController,
+            onChanged: (value) => setState(() => _searchQuery = value),
+            textInputAction: TextInputAction.search,
+            decoration: InputDecoration(
+              hintText: context.l10n.searchHint,
+              prefixIcon: const Icon(Icons.search, size: 20),
+              suffixIcon: _searchQuery.isEmpty
+                  ? null
+                  : IconButton(
+                      icon: const Icon(Icons.close, size: 18),
+                      onPressed: () {
+                        _searchController.clear();
+                        setState(() => _searchQuery = '');
+                      },
+                    ),
+              isDense: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 10,
+              ),
+            ),
+          ),
+        ),
+        Expanded(child: body),
+      ],
+    );
+  }
+
+  Widget _buildPoiListView(List<models.Point> points) {
     return ListView.builder(
       padding: const EdgeInsets.symmetric(vertical: 8),
       itemCount: points.length,

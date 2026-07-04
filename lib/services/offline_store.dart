@@ -203,6 +203,39 @@ class OfflineStore {
     }
   }
 
+  /// Taille de la base sur disque (octets) — via PRAGMA, sans dart:io
+  /// (le fichier reste compatible compilation web).
+  Future<int> databaseSize() async {
+    final db = await _database;
+    if (db == null) return 0;
+    try {
+      final pages = await db.rawQuery('PRAGMA page_count');
+      final pageSize = await db.rawQuery('PRAGMA page_size');
+      final count = pages.first.values.first as int? ?? 0;
+      final size = pageSize.first.values.first as int? ?? 0;
+      return count * size;
+    } catch (error) {
+      DebugLog().log('[OfflineStore] size failed: $error');
+      return 0;
+    }
+  }
+
+  /// Vider toutes les données hors ligne (réglages → stockage). Le cache
+  /// se reconstruira automatiquement à la prochaine navigation en ligne.
+  Future<void> clearAll() async {
+    final db = await _database;
+    if (db == null) return;
+    try {
+      await db.delete('scripts');
+      await db.delete('points');
+      await db.delete('cities');
+      await db.delete('meta');
+      await db.execute('VACUUM');
+    } catch (error) {
+      DebugLog().log('[OfflineStore] clear failed: $error');
+    }
+  }
+
   // ── Méta (date de téléchargement d'une ville, etc.) ──
 
   Future<void> setMeta(String key, String value) async {

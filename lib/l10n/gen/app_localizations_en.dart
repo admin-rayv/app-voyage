@@ -683,6 +683,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get shareAction => 'Share';
 
   @override
+  String get searchHint => 'Search for a place…';
+
+  @override
+  String get storageSection => 'Offline storage';
+
+  @override
+  String get storageSectionDesc =>
+      'What\'s kept on your phone to work without a network. Clearing a cache breaks nothing — it rebuilds as you go.';
+
+  @override
+  String get storageAudio => 'Marco\'s audio';
+
+  @override
+  String get storageMaps => 'Maps';
+
+  @override
+  String get storageData => 'City data (POIs and texts)';
+
+  @override
+  String storageSize(String size) {
+    return '$size MB';
+  }
+
+  @override
+  String get storageClearAction => 'Clear';
+
+  @override
+  String get storageCleared => 'Cache cleared.';
+
+  @override
   String get vsdTitle => 'Marco\'s voice';
 
   @override

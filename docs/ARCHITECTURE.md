@@ -205,6 +205,30 @@ Presence: liste des participants en direct (pas de table, pas de compte)
 - Fichiers: `services/group_session_service.dart`, `widgets/group_session_sheet.dart`,
   `screens/group_listen_screen.dart`.
 
+## Offline (Sprint 5)
+
+```
+SupabaseService (offline-first)          MapTileCache
+  réseau OK → réponse + write-through      tuile affichée → écrite sur disque
+  réseau KO → lecture OfflineStore         hors ligne → lue du disque
+       (sqflite: cities/points/scripts)
+```
+
+- **OfflineStore** (`services/offline_store.dart`): sqflite, lignes Supabase
+  stockées en JSON brut. Alimenté en *write-through*: chaque lecture réseau
+  réussie met le cache à jour — tout ce qui a été visité fonctionne ensuite
+  hors ligne. No-op sur le web.
+- **SupabaseService**: timeout réseau 8 s puis fallback cache; les méthodes
+  gardent la même signature — aucun appelant modifié.
+- **MapTileCache** (`services/map_tile_cache.dart`): cache disque des tuiles
+  CARTO (clé sans sous-domaine `{s}`), alimenté passivement à l'affichage et
+  activement par le téléchargement de ville. `TileMath` (pure, testée) fait
+  la conversion lat/lng → tuiles.
+- **« Télécharger la ville »** (`services/city_download_service.dart`):
+  pack complet en un bouton — POIs + scripts des 3 langues (OfflineStore),
+  MP3 Edge TTS de la langue préférée (cache audio) et tuiles zooms 13-17
+  autour des POIs. Annulable, progression agrégée.
+
 ## Flux utilisateur
 
 ### Découverte des POIs

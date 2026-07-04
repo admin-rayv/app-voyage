@@ -16,6 +16,7 @@ import '../models/point.dart' as models;
 import '../models/audio_state.dart';
 import '../services/audio_service.dart' as audio_svc;
 import '../services/debug_log.dart';
+import '../services/city_download_service.dart';
 import '../services/discovery_playback_service.dart';
 import '../services/geofencing_service.dart';
 import '../services/group_session_service.dart';
@@ -562,9 +563,9 @@ class _MapScreenState extends State<MapScreen>
     }
   }
 
-  /// Pré-générer les MP3 Edge TTS de tous les POIs de la ville (langue
-  /// préférée) — à faire en Wi-Fi avant une balade pour que l'audio de
-  /// qualité fonctionne ensuite sans réseau.
+  /// Télécharger le pack offline de la ville: données des POIs + scripts,
+  /// MP3 Edge TTS (langue préférée) et tuiles de carte — à faire en Wi-Fi;
+  /// ensuite toute la ville fonctionne sans réseau.
   Future<void> _downloadCityAudios() async {
     final language = await UserPreferencesService.getPreferredLanguage();
     if (!mounted) return;
@@ -632,15 +633,18 @@ class _MapScreenState extends State<MapScreen>
     );
 
     try {
-      await _audioService.downloadCityAudios(
+      await CityDownloadService.downloadCity(
         cityId: widget.city.id,
-        languages: [language],
+        points: _allPoints,
+        audioLanguage: language,
+        tileUrlFor: MapTiles.tileUrlBuilder(context),
+        isCancelled: () => cancelled,
         onProgress: (current, total) {
           progressNotifier.value = (current, total);
         },
       );
     } catch (error) {
-      DebugLog().log('[MapScreen] download audios error: $error');
+      DebugLog().log('[MapScreen] download pack error: $error');
     }
 
     if (!mounted) return;

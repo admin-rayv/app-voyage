@@ -81,7 +81,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get letsGo => 'C\'est parti !';
 
   @override
-  String get downloadAudiosTooltip => 'Télécharger les audios';
+  String get downloadAudiosTooltip => 'Télécharger la ville';
 
   @override
   String get viewMapTooltip => 'Voir la carte';
@@ -96,11 +96,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get groupListenTooltip => 'Écouter ensemble';
 
   @override
-  String get downloadDialogTitle => 'Télécharger les audios ?';
+  String get downloadDialogTitle => 'Télécharger la ville ?';
 
   @override
   String downloadDialogBody(String city, String language) {
-    return 'Génère et met en cache les audios de qualité (voix Marco) pour tous les POIs de $city en $language. À faire en Wi-Fi — ensuite tout fonctionne sans réseau.';
+    return 'Met $city au complet sur ton téléphone : les POIs et leurs textes, les audios de Marco ($language) et la carte. À faire en Wi-Fi — ensuite toute la ville fonctionne sans réseau.';
   }
 
   @override
@@ -110,11 +110,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get download => 'Télécharger';
 
   @override
-  String get downloadProgressTitle => 'Téléchargement des audios';
+  String get downloadProgressTitle => 'Téléchargement de la ville';
 
   @override
   String downloadProgressCount(int current, int total) {
-    return '$current / $total scripts';
+    return '$current / $total éléments';
   }
 
   @override
@@ -122,7 +122,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String downloadDone(int count) {
-    return 'Audios téléchargés ($count scripts). Prêt pour la balade !';
+    return 'Ville téléchargée ($count éléments). Prête pour la balade, même sans réseau !';
   }
 
   @override

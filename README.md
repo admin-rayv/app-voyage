@@ -217,4 +217,4 @@ VALUES (
 ✅ **Sprint 8** — Onboarding 4 écrans (avec choix de langue), permissions localisées, À propos
 ✅ **Sprint 9** — « Écouter ensemble »: sessions de groupe par code + QR via Supabase Realtime (host contrôle la lecture) — à valider à plusieurs appareils
 ⏳ **Sprint 4** — Test terrain à Saint-Lambert (balade libre) ← **prochaine étape humaine**
-🔜 **Sprint 5** — Mode offline complet (sqflite: POIs + scripts + tiles)
+✅ **Sprint 5** — Mode offline complet : cache write-through (sqflite) + tuiles de carte sur disque + « Télécharger la ville » (données + audios + carte)

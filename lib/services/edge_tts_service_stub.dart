@@ -13,6 +13,7 @@ class EdgeTtsService {
   Future<void> downloadAll({
     required List<Map<String, dynamic>> scripts,
     required void Function(int current, int total) onProgress,
+    bool Function()? isCancelled,
   }) async {
     onProgress(scripts.length, scripts.length);
   }

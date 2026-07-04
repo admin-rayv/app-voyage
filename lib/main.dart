@@ -8,6 +8,7 @@ import 'config/routes.dart';
 import 'l10n/l10n.dart';
 import 'screens/onboarding_screen.dart';
 import 'services/audio_service.dart';
+import 'services/map_tile_cache.dart';
 import 'services/notification_service.dart';
 import 'services/supabase_service.dart';
 
@@ -19,6 +20,9 @@ void main() async {
 
   // Initialiser Supabase
   await SupabaseService.initialize();
+
+  // Cache disque des tuiles de carte (offline) — no-op sur le web.
+  await MapTileCache.init();
 
   // Initialiser l'audio avant de construire l'UI.
   try {

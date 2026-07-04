@@ -235,7 +235,7 @@ abstract class AppLocalizations {
   /// No description provided for @downloadAudiosTooltip.
   ///
   /// In fr, this message translates to:
-  /// **'Télécharger les audios'**
+  /// **'Télécharger la ville'**
   String get downloadAudiosTooltip;
 
   /// No description provided for @viewMapTooltip.
@@ -265,13 +265,13 @@ abstract class AppLocalizations {
   /// No description provided for @downloadDialogTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Télécharger les audios ?'**
+  /// **'Télécharger la ville ?'**
   String get downloadDialogTitle;
 
   /// No description provided for @downloadDialogBody.
   ///
   /// In fr, this message translates to:
-  /// **'Génère et met en cache les audios de qualité (voix Marco) pour tous les POIs de {city} en {language}. À faire en Wi-Fi — ensuite tout fonctionne sans réseau.'**
+  /// **'Met {city} au complet sur ton téléphone : les POIs et leurs textes, les audios de Marco ({language}) et la carte. À faire en Wi-Fi — ensuite toute la ville fonctionne sans réseau.'**
   String downloadDialogBody(String city, String language);
 
   /// No description provided for @cancel.
@@ -289,13 +289,13 @@ abstract class AppLocalizations {
   /// No description provided for @downloadProgressTitle.
   ///
   /// In fr, this message translates to:
-  /// **'Téléchargement des audios'**
+  /// **'Téléchargement de la ville'**
   String get downloadProgressTitle;
 
   /// No description provided for @downloadProgressCount.
   ///
   /// In fr, this message translates to:
-  /// **'{current} / {total} scripts'**
+  /// **'{current} / {total} éléments'**
   String downloadProgressCount(int current, int total);
 
   /// No description provided for @stopAction.
@@ -307,7 +307,7 @@ abstract class AppLocalizations {
   /// No description provided for @downloadDone.
   ///
   /// In fr, this message translates to:
-  /// **'Audios téléchargés ({count} scripts). Prêt pour la balade !'**
+  /// **'Ville téléchargée ({count} éléments). Prête pour la balade, même sans réseau !'**
   String downloadDone(int count);
 
   /// No description provided for @downloadInterrupted.

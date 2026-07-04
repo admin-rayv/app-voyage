@@ -1210,6 +1210,60 @@ abstract class AppLocalizations {
   /// **'Partager'**
   String get shareAction;
 
+  /// No description provided for @searchHint.
+  ///
+  /// In fr, this message translates to:
+  /// **'Rechercher un lieu…'**
+  String get searchHint;
+
+  /// No description provided for @storageSection.
+  ///
+  /// In fr, this message translates to:
+  /// **'Stockage hors ligne'**
+  String get storageSection;
+
+  /// No description provided for @storageSectionDesc.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce qui est gardé sur le téléphone pour fonctionner sans réseau. Vider un cache ne casse rien — il se reconstruit à l\'usage.'**
+  String get storageSectionDesc;
+
+  /// No description provided for @storageAudio.
+  ///
+  /// In fr, this message translates to:
+  /// **'Audios de Marco'**
+  String get storageAudio;
+
+  /// No description provided for @storageMaps.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cartes'**
+  String get storageMaps;
+
+  /// No description provided for @storageData.
+  ///
+  /// In fr, this message translates to:
+  /// **'Données des villes (POIs et textes)'**
+  String get storageData;
+
+  /// No description provided for @storageSize.
+  ///
+  /// In fr, this message translates to:
+  /// **'{size} Mo'**
+  String storageSize(String size);
+
+  /// No description provided for @storageClearAction.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vider'**
+  String get storageClearAction;
+
+  /// No description provided for @storageCleared.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cache vidé.'**
+  String get storageCleared;
+
   /// No description provided for @vsdTitle.
   ///
   /// In fr, this message translates to:

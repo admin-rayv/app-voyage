@@ -154,6 +154,19 @@ class MapTileCache {
     } catch (_) {}
     return total;
   }
+
+  /// Vider le cache tuiles (réglages → stockage).
+  static Future<void> clearCache() async {
+    final dir = _cacheDir;
+    if (dir == null) return;
+    try {
+      await for (final entity in dir.list()) {
+        if (entity is File) await entity.delete();
+      }
+    } catch (error) {
+      DebugLog().log('[TileCache] clear failed: $error');
+    }
+  }
 }
 
 /// TileProvider flutter_map qui lit/écrit le cache disque.

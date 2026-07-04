@@ -9,6 +9,8 @@ import 'package:share_plus/share_plus.dart';
 import '../services/audio_service.dart' as audio_svc;
 import '../services/tts_service.dart';
 import '../services/debug_log.dart';
+import '../services/map_tile_cache.dart';
+import '../services/offline_store.dart';
 import '../services/user_preferences_service.dart';
 import '../services/visited_poi_service.dart';
 import '../config/constants.dart';
@@ -503,6 +505,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
 
+                const SizedBox(height: 20),
+                const _StorageSection(),
+
                 const SizedBox(height: 12),
                 Row(
                   children: [
@@ -803,6 +808,130 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Section « Stockage hors ligne » — tailles des trois caches (audios,
+/// cartes, données) avec bouton vider pour chacun. Les caches se
+/// reconstruisent automatiquement à l'usage; vider ne casse rien.
+class _StorageSection extends StatefulWidget {
+  const _StorageSection();
+
+  @override
+  State<_StorageSection> createState() => _StorageSectionState();
+}
+
+class _StorageSectionState extends State<_StorageSection> {
+  late Future<(double, double, double)> _sizesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _sizesFuture = _loadSizes();
+  }
+
+  Future<(double, double, double)> _loadSizes() async {
+    final audioMb = await audio_svc.AudioService().getCacheSizeMB();
+    final tilesMb = await MapTileCache.cacheSize() / (1024 * 1024);
+    final dataMb = await OfflineStore().databaseSize() / (1024 * 1024);
+    return (audioMb, tilesMb, dataMb);
+  }
+
+  void _refresh() {
+    setState(() => _sizesFuture = _loadSizes());
+  }
+
+  Future<void> _clear(Future<void> Function() action) async {
+    await action();
+    if (!mounted) return;
+    _refresh();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(context.l10n.storageCleared)),
+    );
+  }
+
+  String _format(double mb) {
+    if (mb < 0.05) return '—';
+    return context.l10n.storageSize(
+      mb >= 100 ? mb.round().toString() : mb.toStringAsFixed(1),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(Icons.sd_storage_outlined, color: AppTheme.primaryColor),
+            const SizedBox(width: 8),
+            Text(
+              context.l10n.storageSection,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Text(
+          context.l10n.storageSectionDesc,
+          style: TextStyle(
+            color: AppTheme.textSecondaryOf(context),
+            fontSize: 13,
+          ),
+        ),
+        const SizedBox(height: 4),
+        FutureBuilder<(double, double, double)>(
+          future: _sizesFuture,
+          builder: (context, snapshot) {
+            final (audioMb, tilesMb, dataMb) =
+                snapshot.data ?? (0.0, 0.0, 0.0);
+            return Column(
+              children: [
+                _row(
+                  icon: Icons.graphic_eq,
+                  label: context.l10n.storageAudio,
+                  size: _format(audioMb),
+                  onClear: () =>
+                      _clear(() => audio_svc.AudioService().clearCache()),
+                ),
+                _row(
+                  icon: Icons.map_outlined,
+                  label: context.l10n.storageMaps,
+                  size: _format(tilesMb),
+                  onClear: () => _clear(MapTileCache.clearCache),
+                ),
+                _row(
+                  icon: Icons.storage_outlined,
+                  label: context.l10n.storageData,
+                  size: _format(dataMb),
+                  onClear: () => _clear(() => OfflineStore().clearAll()),
+                ),
+              ],
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _row({
+    required IconData icon,
+    required String label,
+    required String size,
+    required VoidCallback onClear,
+  }) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      dense: true,
+      leading: Icon(icon, size: 20),
+      title: Text(label),
+      subtitle: Text(size),
+      trailing: TextButton(
+        onPressed: onClear,
+        child: Text(context.l10n.storageClearAction),
       ),
     );
   }

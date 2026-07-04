@@ -689,6 +689,36 @@ class AppLocalizationsEs extends AppLocalizations {
   String get shareAction => 'Compartir';
 
   @override
+  String get searchHint => 'Buscar un lugar…';
+
+  @override
+  String get storageSection => 'Almacenamiento sin conexión';
+
+  @override
+  String get storageSectionDesc =>
+      'Lo que se guarda en el teléfono para funcionar sin red. Vaciar un caché no rompe nada — se reconstruye con el uso.';
+
+  @override
+  String get storageAudio => 'Audios de Marco';
+
+  @override
+  String get storageMaps => 'Mapas';
+
+  @override
+  String get storageData => 'Datos de las ciudades (POIs y textos)';
+
+  @override
+  String storageSize(String size) {
+    return '$size MB';
+  }
+
+  @override
+  String get storageClearAction => 'Vaciar';
+
+  @override
+  String get storageCleared => 'Caché vaciado.';
+
+  @override
   String get vsdTitle => 'La voz de Marco';
 
   @override

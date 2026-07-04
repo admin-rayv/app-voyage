@@ -687,6 +687,36 @@ class AppLocalizationsFr extends AppLocalizations {
   String get shareAction => 'Partager';
 
   @override
+  String get searchHint => 'Rechercher un lieu…';
+
+  @override
+  String get storageSection => 'Stockage hors ligne';
+
+  @override
+  String get storageSectionDesc =>
+      'Ce qui est gardé sur le téléphone pour fonctionner sans réseau. Vider un cache ne casse rien — il se reconstruit à l\'usage.';
+
+  @override
+  String get storageAudio => 'Audios de Marco';
+
+  @override
+  String get storageMaps => 'Cartes';
+
+  @override
+  String get storageData => 'Données des villes (POIs et textes)';
+
+  @override
+  String storageSize(String size) {
+    return '$size Mo';
+  }
+
+  @override
+  String get storageClearAction => 'Vider';
+
+  @override
+  String get storageCleared => 'Cache vidé.';
+
+  @override
   String get vsdTitle => 'Voix de Marco';
 
   @override

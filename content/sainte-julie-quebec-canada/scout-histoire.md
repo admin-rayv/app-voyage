@@ -1,6 +1,8 @@
+> ✅ **PUSHED TO DB:** 2026-11-20 — 16 POIs, 48 scripts (publiés)
+
 # 🔍 POIs trouvés: Sainte-Julie — histoire
 > Date: 2026-11-20
-> City ID: À CRÉER
+> City ID: 9ed9f927-ed8e-4d9c-bcab-55c489de1555
 > City: Sainte-Julie / Sainte-Julie
 > Coordonnées centre: 45.5930624, -73.3395943
 > Pays: CA | Région: Montérégie

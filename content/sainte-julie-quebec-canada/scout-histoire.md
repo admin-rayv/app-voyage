@@ -4,7 +4,7 @@
 > City: Sainte-Julie / Sainte-Julie
 > Coordonnées centre: 45.5930624, -73.3395943
 > Pays: CA | Région: Montérégie
-> Status: EN ATTENTE DE VALIDATION
+> Status: VÉRIFIÉ (16/16 approuvés) — 2026-11-20
 
 **Méthode :** sources officielles en priorité : Répertoire du patrimoine culturel du Québec (RPCQ, fiches de l'inventaire MRC de Marguerite-D'Youville 2014, qui citent Odette Lemerise, *Sainte-Julie et ses demeures d'antan*) et site de la Ville de Sainte-Julie (histoire, portail des archives). GPS tiré des fiches RPCQ quand elles existent, sinon Nominatim (geocode.py).
 
@@ -21,8 +21,9 @@
 - 💡 **Hook:** Toute la ville est née ici. En 1848, une veuve, Julie Gauthier dite Saint-Germain, donne le terrain de la chapelle à condition que la paroisse porte le nom de sa sainte patronne. C'est pour ça que la ville s'appelle Sainte-Julie.
 - 📖 **Anecdote:** L'église actuelle (1901-1902, architecte Georges-Alphonse Monette) a été bâtie en partie sur l'ancien cimetière, ce qui a obligé à déplacer des sépultures. Les plans d'origine prévoyaient un transept, des rosaces et un chevet arrondi, mais ils ont été simplifiés parce que trop chers. Inaugurée le 30 novembre 1902, elle abrite un tableau d'Ozias Leduc, *Le martyre de sainte Julie*. Citée immeuble patrimonial par la Ville le 15 mai 2024 ; le presbytère voisin (1893, architecte Alfred Préfontaine) a reçu le même statut en novembre 2026.
 - 📚 **Source:** https://www.patrimoine-culturel.gouv.qc.ca/rpcq/detail.do?methode=consulter&id=124811&type=bien ; https://saintejulie.ca/profil-et-histoire/histoire-de-la-ville ; https://saintejulie.ca/la-ville/decouvrir-la-ville/portail-de-la-ville/religion ; http://lareleve.qc.ca/2026/11/03/presbytere-cite-immeuble-patrimonial-eglise-sainte-julie-classee-a/
-- ⚠️ **À vérifier (checker):** La Relève dit l'église « classée A par Québec », ce que la fiche RPCQ ne montre pas. Dates de la chapelle : 1848 (Ville) ou 1849 selon d'autres sources. Ne pas confondre avec « 1686 », qui est l'adresse.
-- ✅ **Verdict:** EN ATTENTE
+- 🔎 **Point vérifié (voir verdict):** La Relève dit l'église « classée A par Québec », ce que la fiche RPCQ ne montre pas. Dates de la chapelle : 1848 (Ville) ou 1849 selon d'autres sources. Ne pas confondre avec « 1686 », qui est l'adresse.
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS ✅ (Nominatim inverse : paroisse Sainte-Julie) ; faits ✅ donation du 10 nov. 1848, chapelle de bois, inauguration et bénédiction le 30 nov. 1902, plans de Monette simplifiés, construction sur une partie du cimetière (exhumations, 7 mai 1899), tableau d'Ozias Leduc, citation 15 mai 2024, presbytère cité (La Relève, 3 nov. 2026) ; « classée A » non utilisé dans le script
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -98,7 +99,7 @@ Para la foto, cruza la rue Principale: desde allí se ve mejor el campanario.
 ```
 
 ## POI 2: Ancienne école du village (Couvent Saint-Joseph)
-- 📍 **GPS:** 45.593611, -73.338889 (exacte, fiche RPCQ)
+- 📍 **GPS:** 45.5934661, -73.3380631 (OpenStreetMap, bâtiment du 611 ; le point RPCQ tombe sur le 570, à 66 m)
 - 🏠 **Adresse:** 611, boulevard Saint-Joseph, Sainte-Julie, QC
 - 🏷️ **Catégories:** histoire, architecture
 - 🏛️ **Type:** building
@@ -106,14 +107,15 @@ Para la foto, cruza la rue Principale: desde allí se ve mejor el campanario.
 - 💡 **Hook:** L'école du village de 1920, où les classes étaient au rez-de-chaussée et les institutrices logeaient à l'étage. De 1944 à 1958, elle devient le Couvent Saint-Joseph, tenu par les religieuses de Saint-Joseph de Saint-Hyacinthe.
 - 📖 **Anecdote:** Le petit clocheton sur le toit est plus vieux que l'école : il date de 1884 et vient de l'école précédente. Et la cloche du village a voyagé : elle a sonné sur la chapelle de 1852 à 1902, a été prêtée à l'école en 1904 et y est restée jusqu'en 1964, avant d'être installée au clocher de l'église en 1971. En 1985, les marguilliers ont refusé de la rendre à l'ancien propriétaire de l'école.
 - 📚 **Source:** https://www.patrimoine-culturel.gouv.qc.ca/rpcq/detail.do?methode=consulter&id=201258&type=bien ; https://saintejulie.ca/la-ville/decouvrir-la-ville/portail-de-la-ville/religion
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS ⚠️→✅ corrigé (point RPCQ sur le 570 ; OSM 611) ; faits ✅ fiche RPCQ (1920, 1944-1958, clocheton 1884) ; cloche-souvenir ✅ texte « Religion » de la Ville (1852-1902, prêt 1904, école jusqu'en 1964, clocher 8 juillet 1971, refus du 16 sept. 1985)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
 {
   "name": {"fr": "Ancienne école du village", "en": "Former Village School"},
-  "lat": 45.593611,
-  "lng": -73.338889,
+  "lat": 45.5934661,
+  "lng": -73.3380631,
   "trigger_radius_m": 40,
   "type": "building",
   "categories": ["histoire", "architecture"],
@@ -184,7 +186,8 @@ Para la foto, ponte frente a la fachada en el boulevard Saint-Joseph y encuadra 
 - 💡 **Hook:** La maison du premier curé de Sainte-Julie, construite en 1850. Elle ne se trouvait pas ici : elle se dressait à l'emplacement de l'église actuelle.
 - 📖 **Anecdote:** Quand un presbytère plus prestigieux est construit en 1893, l'ancien est vendu aux enchères le 22 avril 1894 et déplacé « section par section » jusqu'ici. Son premier occupant, l'abbé Joseph-Narcisse Théoret, arrivé en 1852, est mort en 1876 et a été inhumé dans le caveau de la première église.
 - 📚 **Source:** https://www.patrimoine-culturel.gouv.qc.ca/rpcq/detail.do?methode=consulter&id=202061&type=bien ; https://saintejulie.ca/la-ville/decouvrir-la-ville/portail-de-la-ville/religion ; https://saintejulie.ca/la-ville/decouvrir-la-ville/portail-de-la-ville
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS ✅ (1724, rue Principale) ; faits ✅ RPCQ + Ville (encan du 22 avril 1894, « section par section » ; abbé Théoret, sept. 1852, mort le 14 janv. 1876, caveau de la première église)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -268,7 +271,8 @@ Es una residencia privada, así que se admira desde la acera.
 - 💡 **Hook:** Construite en 1866 par la Fabrique pour loger le sacristain et sa famille. Depuis 1977, elle abrite la Maison de l'Entraide : la maison de l'Église est devenue celle de l'entraide.
 - 📖 **Anecdote:** La donation de Julie Gauthier, en 1848, prévoyait déjà une maison pour le bedeau. Le premier bedeau, François Bessette, entre en fonction le 1er février 1852. La maison a été agrandie en 1904, puis encore en 1977 avec un entrepôt à l'arrière.
 - 📚 **Source:** https://www.patrimoine-culturel.gouv.qc.ca/rpcq/detail.do?methode=consulter&id=124822&type=bien ; https://saintejulie.ca/profil-et-histoire/histoire-de-la-ville
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS ✅ (1718, rue Principale) ; faits ✅ RPCQ (1866, agrandissements 1904 et 1977, Maison de l'Entraide) + Ville (donation de 1848 avec maison du bedeau ; François Bessette, 1er févr. 1852)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -356,10 +360,11 @@ Un recordatorio: es una organización en actividad, así que seamos discretos.
 - 🏛️ **Type:** building
 - 📏 **Rayon déclenchement:** 30m
 - 💡 **Hook:** En face de l'église, le premier magasin général « de grande envergure » du village, construit en 1894. L'édifice d'origine est toujours debout.
-- 📖 **Anecdote:** À l'époque, le village vivait autour de l'église : magasins généraux, forges, beurrerie, hôtel. Le magasin Morin était le gros joueur, à quelques pas de la messe du dimanche.
+- 📖 **Anecdote:** En 1913, le magasin Morin est vendu et change de vocation ; une vingtaine d'années plus tard, la bâtisse devient le magasin Borduas. L'édifice d'origine est toujours en place au 1693, en face de l'église.
 - 📚 **Source:** https://saintejulie.ca/la-ville/decouvrir-la-ville/portail-de-la-ville/patrimoine-immobilier
-- ⚠️ **À vérifier (checker):** la page de la Ville dit que la bâtisse « change d'enseigne et devient le magasin Borduas », mais décrit ensuite le magasin Borduas au 1668, rue Saint-Louis. Confirmer que le bâtiment existe encore.
-- ✅ **Verdict:** EN ATTENTE
+- 🔎 **Point vérifié (voir verdict):** la page de la Ville dit que la bâtisse « change d'enseigne et devient le magasin Borduas », mais décrit ensuite le magasin Borduas au 1668, rue Saint-Louis. Confirmer que le bâtiment existe encore.
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS ✅ (1693, rue Principale) ; faits ✅ Ville (1894, toujours en place) ; ⚠️→✅ script corrigé : « plus d'un siècle de commerce » était faux (vendu et changement de vocation en 1913)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -382,8 +387,8 @@ Un recordatorio: es una organización en actividad, así que seamos discretos.
 
 ### 🎙️ Script audio (fr)
 > Persona: Marco
-> Mots: 166
-> Durée estimée: 66s
+> Mots: 180
+> Durée estimée: 72s
 
 Recule de cent trente ans. Dimanche matin, la messe se termine, et tout le village sort de l'église. Où va-t-on ensuite? Juste en face, au magasin Morin.
 
@@ -391,14 +396,14 @@ Construit en 1894, c'était le premier magasin général de grande envergure à 
 
 Et l'emplacement n'a rien d'un hasard. Au dix-neuvième siècle, la vie du village tournait autour de l'église. Les magasins, l'hôtel, les forges, la beurrerie: tout se trouvait à quelques pas du clocher. Un commerçant installé face au parvis savait que tout le village passerait devant sa porte, au moins une fois par semaine.
 
-Ce qui est remarquable, c'est que l'édifice d'origine est toujours debout. Plus d'un siècle de commerce et de vie de village entre ces murs.
+Le commerce, lui, n'a pas duré éternellement: en 1913, le magasin Morin est vendu et change de vocation. Mais ce qui est remarquable, c'est que l'édifice d'origine est toujours debout, en face de l'église, comme au premier jour.
 
 Pour la meilleure vue, place-toi sur le parvis de l'église et regarde de l'autre côté de la rue.
 
 ### 🎙️ Script audio (en)
 > Persona: Marco
-> Mots: 172
-> Durée estimée: 69s
+> Mots: 187
+> Durée estimée: 75s
 
 Go back a hundred and thirty years. It's Sunday morning, mass is over, and the whole village pours out of the church. Where does everyone head next? Right across the street, to the Morin store.
 
@@ -406,14 +411,14 @@ Built in 1894, it was the first large-scale general store in Sainte-Julie. Back 
 
 And the location was no accident. In the nineteenth century, village life revolved around the church. The stores, the hotel, the forges, the butter factory: everything was just steps from the bell tower. A merchant set up facing the church steps knew the whole village would walk past his door at least once a week.
 
-What's remarkable is that the original building is still standing. More than a century of trade and village life within these walls.
+The store itself didn't last forever: in 1913, the Morin store was sold and changed purpose. But what's remarkable is that the original building is still standing, right across from the church, just like on day one.
 
 For the best view, stand on the church steps and look across the street.
 
 ### 🎙️ Script audio (es)
 > Persona: Marco
-> Mots: 170
-> Durée estimée: 68s
+> Mots: 183
+> Durée estimée: 73s
 
 Retrocede ciento treinta años. Domingo por la mañana, termina la misa y todo el pueblo sale de la iglesia. ¿Adónde van después? Justo enfrente, a la tienda Morin.
 
@@ -421,16 +426,16 @@ Construida en 1894, fue el primer gran almacén general de Sainte-Julie. En esa 
 
 Y la ubicación no era casualidad. En el siglo diecinueve, la vida del pueblo giraba alrededor de la iglesia. Las tiendas, el hotel, las herrerías, la mantequería: todo estaba a pocos pasos del campanario. Un comerciante instalado frente al atrio sabía que todo el pueblo pasaría por su puerta al menos una vez por semana.
 
-Lo notable es que el edificio original sigue en pie. Más de un siglo de comercio y vida de pueblo entre estas paredes.
+El comercio no duró para siempre: en 1913 la tienda Morin se vende y cambia de uso. Pero lo notable es que el edificio original sigue en pie, frente a la iglesia, como el primer día.
 
 Para la mejor vista, ponte en el atrio de la iglesia y mira al otro lado de la calle.
 
 ### 🗄️ Scripts BD
 ```json
 [
-  {"language": "fr", "content": "Recule de cent trente ans. Dimanche matin, la messe se termine, et tout le village sort de l'église. Où va-t-on ensuite? Juste en face, au magasin Morin.\n\nConstruit en 1894, c'était le premier magasin général de grande envergure à Sainte-Julie. À l'époque, un magasin général, c'était l'épicerie, la quincaillerie et la mercerie sous un même toit. Tu venais chercher ta farine et tu repartais avec les nouvelles de toute la paroisse.\n\nEt l'emplacement n'a rien d'un hasard. Au dix-neuvième siècle, la vie du village tournait autour de l'église. Les magasins, l'hôtel, les forges, la beurrerie: tout se trouvait à quelques pas du clocher. Un commerçant installé face au parvis savait que tout le village passerait devant sa porte, au moins une fois par semaine.\n\nCe qui est remarquable, c'est que l'édifice d'origine est toujours debout. Plus d'un siècle de commerce et de vie de village entre ces murs.\n\nPour la meilleure vue, place-toi sur le parvis de l'église et regarde de l'autre côté de la rue.", "persona": "marco"},
-  {"language": "en", "content": "Go back a hundred and thirty years. It's Sunday morning, mass is over, and the whole village pours out of the church. Where does everyone head next? Right across the street, to the Morin store.\n\nBuilt in 1894, it was the first large-scale general store in Sainte-Julie. Back then, a general store was the grocery, the hardware store and the dry goods shop all under one roof. You came in for flour and left with all the news of the parish.\n\nAnd the location was no accident. In the nineteenth century, village life revolved around the church. The stores, the hotel, the forges, the butter factory: everything was just steps from the bell tower. A merchant set up facing the church steps knew the whole village would walk past his door at least once a week.\n\nWhat's remarkable is that the original building is still standing. More than a century of trade and village life within these walls.\n\nFor the best view, stand on the church steps and look across the street.", "persona": "marco"},
-  {"language": "es", "content": "Retrocede ciento treinta años. Domingo por la mañana, termina la misa y todo el pueblo sale de la iglesia. ¿Adónde van después? Justo enfrente, a la tienda Morin.\n\nConstruida en 1894, fue el primer gran almacén general de Sainte-Julie. En esa época, un almacén general era la tienda de comestibles, la ferretería y la mercería bajo un mismo techo. Venías a buscar harina y te ibas con todas las noticias de la parroquia.\n\nY la ubicación no era casualidad. En el siglo diecinueve, la vida del pueblo giraba alrededor de la iglesia. Las tiendas, el hotel, las herrerías, la mantequería: todo estaba a pocos pasos del campanario. Un comerciante instalado frente al atrio sabía que todo el pueblo pasaría por su puerta al menos una vez por semana.\n\nLo notable es que el edificio original sigue en pie. Más de un siglo de comercio y vida de pueblo entre estas paredes.\n\nPara la mejor vista, ponte en el atrio de la iglesia y mira al otro lado de la calle.", "persona": "marco"}
+  {"language": "fr", "content": "Recule de cent trente ans. Dimanche matin, la messe se termine, et tout le village sort de l'église. Où va-t-on ensuite? Juste en face, au magasin Morin.\n\nConstruit en 1894, c'était le premier magasin général de grande envergure à Sainte-Julie. À l'époque, un magasin général, c'était l'épicerie, la quincaillerie et la mercerie sous un même toit. Tu venais chercher ta farine et tu repartais avec les nouvelles de toute la paroisse.\n\nEt l'emplacement n'a rien d'un hasard. Au dix-neuvième siècle, la vie du village tournait autour de l'église. Les magasins, l'hôtel, les forges, la beurrerie: tout se trouvait à quelques pas du clocher. Un commerçant installé face au parvis savait que tout le village passerait devant sa porte, au moins une fois par semaine.\n\nLe commerce, lui, n'a pas duré éternellement: en 1913, le magasin Morin est vendu et change de vocation. Mais ce qui est remarquable, c'est que l'édifice d'origine est toujours debout, en face de l'église, comme au premier jour.\n\nPour la meilleure vue, place-toi sur le parvis de l'église et regarde de l'autre côté de la rue.", "persona": "marco"},
+  {"language": "en", "content": "Go back a hundred and thirty years. It's Sunday morning, mass is over, and the whole village pours out of the church. Where does everyone head next? Right across the street, to the Morin store.\n\nBuilt in 1894, it was the first large-scale general store in Sainte-Julie. Back then, a general store was the grocery, the hardware store and the dry goods shop all under one roof. You came in for flour and left with all the news of the parish.\n\nAnd the location was no accident. In the nineteenth century, village life revolved around the church. The stores, the hotel, the forges, the butter factory: everything was just steps from the bell tower. A merchant set up facing the church steps knew the whole village would walk past his door at least once a week.\n\nThe store itself didn't last forever: in 1913, the Morin store was sold and changed purpose. But what's remarkable is that the original building is still standing, right across from the church, just like on day one.\n\nFor the best view, stand on the church steps and look across the street.", "persona": "marco"},
+  {"language": "es", "content": "Retrocede ciento treinta años. Domingo por la mañana, termina la misa y todo el pueblo sale de la iglesia. ¿Adónde van después? Justo enfrente, a la tienda Morin.\n\nConstruida en 1894, fue el primer gran almacén general de Sainte-Julie. En esa época, un almacén general era la tienda de comestibles, la ferretería y la mercería bajo un mismo techo. Venías a buscar harina y te ibas con todas las noticias de la parroquia.\n\nY la ubicación no era casualidad. En el siglo diecinueve, la vida del pueblo giraba alrededor de la iglesia. Las tiendas, el hotel, las herrerías, la mantequería: todo estaba a pocos pasos del campanario. Un comerciante instalado frente al atrio sabía que todo el pueblo pasaría por su puerta al menos una vez por semana.\n\nEl comercio no duró para siempre: en 1913 la tienda Morin se vende y cambia de uso. Pero lo notable es que el edificio original sigue en pie, frente a la iglesia, como el primer día.\n\nPara la mejor vista, ponte en el atrio de la iglesia y mira al otro lado de la calle.", "persona": "marco"}
 ]
 ```
 
@@ -440,11 +445,12 @@ Para la mejor vista, ponte en el atrio de la iglesia y mira al otro lado de la c
 - 🏷️ **Catégories:** histoire
 - 🏛️ **Type:** building
 - 📏 **Rayon déclenchement:** 40m
-- 💡 **Hook:** L'hôtel du village, apparu vers 1890 après des demandes de licence en 1880 et 1885. Incendié en 1927, reconstruit, puis transformé en complexe commercial en 1984.
-- 📖 **Anecdote:** Dans les années 1950, l'hôtel avait une réputation agitée : désordres signalés en 1952, 1954 et 1956, au point qu'en 1954 on fait appel à la Sûreté provinciale pour maintenir l'ordre.
+- 💡 **Hook:** L'hôtel du village, apparu vers 1890 après des requêtes en 1880 (Onésime Véronneau) et 1885 (François-Xavier Blain). Premier restaurant de Sainte-Julie en 1901. Incendié en 1927, reconstruit et agrandi, puis transformé en complexe commercial en 1984.
+- 📖 **Anecdote:** En 1952, le curé se plaint que des paroissiens insistent pour entrer à l'hôtel après la fermeture, même la nuit et le dimanche. En 1954, la police provinciale est appelée pour maintenir l'ordre dans le village les vendredis et samedis soir. Le 24 septembre 1956, après un désordre à l'hôtel, le conseil avertit le propriétaire qu'il portera plainte à la Commission des liqueurs en cas de récidive.
 - 📚 **Source:** https://saintejulie.ca/la-ville/decouvrir-la-ville/portail-de-la-ville/patrimoine-immobilier ; https://saintejulie.ca/profil-et-histoire/circuit-patrimonial
-- ⚠️ **À vérifier (checker):** l'adresse 1600 vient du titre de la photo du circuit patrimonial, pas du texte.
-- ✅ **Verdict:** EN ATTENTE
+- 🔎 **Point vérifié (voir verdict):** l'adresse 1600 vient du titre de la photo du circuit patrimonial, pas du texte.
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS ✅ (1600, rue Principale) ; ⚠️→✅ script réécrit : 1952 = plainte du curé (pas un désordre), 1954 = police provinciale pour tout le village (pas l'hôtel) ; seul l'avertissement du 24 sept. 1956 vise l'hôtel. Ajout vérifié : premier restaurant en 1901
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -467,55 +473,55 @@ Para la mejor vista, ponte en el atrio de la iglesia y mira al otro lado de la c
 
 ### 🎙️ Script audio (fr)
 > Persona: Marco
-> Mots: 172
-> Durée estimée: 69s
+> Mots: 180
+> Durée estimée: 72s
 
 Si les murs de cet endroit pouvaient parler, je pense qu'ils parleraient fort!
 
-C'est ici que se trouvait l'hôtel du village. Dès 1880, des citoyens demandent une licence pour tenir un hôtel, puis encore en 1885. L'hôtel apparaît vers 1890. Dans un village de l'époque, l'hôtel, c'était à la fois l'auberge et la taverne du coin.
+C'est ici que se trouvait l'hôtel du village. Dès 1880, des paroissiens réclament un hôtel à Sainte-Julie, et une autre demande suit en 1885. L'hôtel voit le jour vers 1890. En 1901, le nouveau propriétaire y ouvre même le premier restaurant de Sainte-Julie.
 
-En 1927, un incendie le ravage. On le reconstruit. Et dans les années 1950, l'hôtel se fait une réputation… disons animée. Des désordres sont signalés en 1952, en 1954, puis en 1956. En 1954, ça brasse tellement qu'on doit faire appel à la Sûreté provinciale pour maintenir l'ordre. Dans un village tranquille comme Sainte-Julie, ça devait faire jaser sur le parvis de l'église le dimanche suivant!
+En 1927, un incendie cause de lourds dommages. On reconstruit, on agrandit, et l'endroit devient à la fois hôtel de campagne, magasin, restaurant et épicerie.
 
-En 1984, changement complet de vocation: le bâtiment est vendu et transformé en complexe commercial. Aujourd'hui, les gens viennent ici pour des raisons beaucoup plus sages.
+Mais dans les années 1950, l'ambiance se corse. En 1952, le curé se plaint publiquement: des paroissiens insistent pour entrer à l'hôtel après la fermeture, même la nuit et le dimanche! En 1954, on fait appel à la police provinciale pour maintenir l'ordre dans le village les vendredis et samedis soir. Et en 1956, après un nouveau désordre, le conseil municipal avertit le propriétaire: encore un incident, et il portera plainte à la Commission des liqueurs.
 
-Prends quand même une seconde pour imaginer l'ambiance d'un samedi soir de 1954. Disons que la police savait exactement où trouver l'action à Sainte-Julie.
+En 1984, changement complet de vocation: le bâtiment devient un complexe commercial. Aujourd'hui, les gens viennent ici pour des raisons beaucoup plus sages!
 
 ### 🎙️ Script audio (en)
 > Persona: Marco
-> Mots: 179
-> Durée estimée: 72s
+> Mots: 186
+> Durée estimée: 74s
 
 If the walls of this place could talk, I think they'd be pretty loud!
 
-This is where the village hotel stood. As early as 1880, residents applied for a licence to run a hotel, and again in 1885. The hotel appeared around 1890. In a village back then, the hotel was both the inn and the local tavern.
+This is where the village hotel stood. As early as 1880, parishioners were asking for a hotel in Sainte-Julie, and another request followed in 1885. The hotel opened around 1890. In 1901, its new owner even opened the very first restaurant in Sainte-Julie here.
 
-In 1927, a fire ravaged it. It was rebuilt. And in the 1950s, the hotel earned itself a reputation that was… let's say lively. Disturbances were reported in 1952, in 1954, then in 1956. In 1954, things got so rowdy that the provincial police had to be called in to keep order. In a quiet village like Sainte-Julie, that must have been the talk of the church steps the following Sunday!
+In 1927, a fire caused heavy damage. It was rebuilt and enlarged, and the place became a country hotel, a store, a restaurant and a grocery all at once.
 
-In 1984, a complete change of purpose: the building was sold and turned into a commercial complex. Today, people come here for much better-behaved reasons.
+But in the 1950s, things got rowdier. In 1952, the parish priest complained publicly: some parishioners kept insisting on getting into the hotel after closing time, even at night and on Sundays! In 1954, the provincial police were called in to keep order in the village on Friday and Saturday nights. And in 1956, after yet another disturbance, the town council warned the owner: one more incident, and it would file a complaint with the Quebec Liquor Commission.
 
-Still, take a second to imagine a Saturday night in 1954. Let's just say the police knew exactly where to find the action in Sainte-Julie.
+In 1984, a complete change of purpose: the building became a commercial complex. Today, people come here for much better-behaved reasons!
 
 ### 🎙️ Script audio (es)
 > Persona: Marco
-> Mots: 183
-> Durée estimée: 73s
+> Mots: 181
+> Durée estimée: 72s
 
 Si las paredes de este lugar pudieran hablar, ¡creo que hablarían bien alto!
 
-Aquí estaba el hotel del pueblo. Ya en 1880, unos vecinos piden una licencia para abrir un hotel, y otra vez en 1885. El hotel aparece hacia 1890. En un pueblo de aquella época, el hotel era a la vez la posada y la taberna del barrio.
+Aquí estaba el hotel del pueblo. Ya en 1880, unos feligreses piden un hotel para Sainte-Julie, y en 1885 llega otra solicitud. El hotel abre hacia 1890. En 1901, su nuevo dueño incluso abre aquí el primer restaurante de Sainte-Julie.
 
-En 1927, un incendio lo destruye. Lo reconstruyen. Y en los años cincuenta, el hotel se gana una reputación… digamos animada. Se registran disturbios en 1952, en 1954 y luego en 1956. En 1954 el ambiente se calienta tanto que hay que llamar a la policía provincial para mantener el orden. En un pueblo tranquilo como Sainte-Julie, ¡seguro que dio de qué hablar en el atrio de la iglesia el domingo siguiente!
+En 1927, un incendio causa graves daños. Lo reconstruyen, lo amplían, y el lugar se convierte a la vez en hotel de campo, tienda, restaurante y tienda de comestibles.
 
-En 1984, cambio total: el edificio se vende y se transforma en un complejo comercial. Hoy la gente viene aquí por motivos mucho más formales.
+Pero en los años cincuenta el ambiente se calienta. En 1952, el cura se queja públicamente: ¡algunos feligreses insisten en entrar al hotel después del cierre, incluso de noche y en domingo! En 1954 llaman a la policía provincial para mantener el orden en el pueblo los viernes y sábados por la noche. Y en 1956, tras un nuevo altercado, el ayuntamiento advierte al dueño: un incidente más y presentará una queja ante la Comisión de licores.
 
-Aun así, tómate un segundo para imaginar un sábado por la noche de 1954. Digamos que la policía sabía exactamente dónde estaba la acción en Sainte-Julie.
+En 1984, cambio total: el edificio se convierte en un complejo comercial. ¡Hoy la gente viene aquí por motivos mucho más formales!
 
 ### 🗄️ Scripts BD
 ```json
 [
-  {"language": "fr", "content": "Si les murs de cet endroit pouvaient parler, je pense qu'ils parleraient fort!\n\nC'est ici que se trouvait l'hôtel du village. Dès 1880, des citoyens demandent une licence pour tenir un hôtel, puis encore en 1885. L'hôtel apparaît vers 1890. Dans un village de l'époque, l'hôtel, c'était à la fois l'auberge et la taverne du coin.\n\nEn 1927, un incendie le ravage. On le reconstruit. Et dans les années 1950, l'hôtel se fait une réputation… disons animée. Des désordres sont signalés en 1952, en 1954, puis en 1956. En 1954, ça brasse tellement qu'on doit faire appel à la Sûreté provinciale pour maintenir l'ordre. Dans un village tranquille comme Sainte-Julie, ça devait faire jaser sur le parvis de l'église le dimanche suivant!\n\nEn 1984, changement complet de vocation: le bâtiment est vendu et transformé en complexe commercial. Aujourd'hui, les gens viennent ici pour des raisons beaucoup plus sages.\n\nPrends quand même une seconde pour imaginer l'ambiance d'un samedi soir de 1954. Disons que la police savait exactement où trouver l'action à Sainte-Julie.", "persona": "marco"},
-  {"language": "en", "content": "If the walls of this place could talk, I think they'd be pretty loud!\n\nThis is where the village hotel stood. As early as 1880, residents applied for a licence to run a hotel, and again in 1885. The hotel appeared around 1890. In a village back then, the hotel was both the inn and the local tavern.\n\nIn 1927, a fire ravaged it. It was rebuilt. And in the 1950s, the hotel earned itself a reputation that was… let's say lively. Disturbances were reported in 1952, in 1954, then in 1956. In 1954, things got so rowdy that the provincial police had to be called in to keep order. In a quiet village like Sainte-Julie, that must have been the talk of the church steps the following Sunday!\n\nIn 1984, a complete change of purpose: the building was sold and turned into a commercial complex. Today, people come here for much better-behaved reasons.\n\nStill, take a second to imagine a Saturday night in 1954. Let's just say the police knew exactly where to find the action in Sainte-Julie.", "persona": "marco"},
-  {"language": "es", "content": "Si las paredes de este lugar pudieran hablar, ¡creo que hablarían bien alto!\n\nAquí estaba el hotel del pueblo. Ya en 1880, unos vecinos piden una licencia para abrir un hotel, y otra vez en 1885. El hotel aparece hacia 1890. En un pueblo de aquella época, el hotel era a la vez la posada y la taberna del barrio.\n\nEn 1927, un incendio lo destruye. Lo reconstruyen. Y en los años cincuenta, el hotel se gana una reputación… digamos animada. Se registran disturbios en 1952, en 1954 y luego en 1956. En 1954 el ambiente se calienta tanto que hay que llamar a la policía provincial para mantener el orden. En un pueblo tranquilo como Sainte-Julie, ¡seguro que dio de qué hablar en el atrio de la iglesia el domingo siguiente!\n\nEn 1984, cambio total: el edificio se vende y se transforma en un complejo comercial. Hoy la gente viene aquí por motivos mucho más formales.\n\nAun así, tómate un segundo para imaginar un sábado por la noche de 1954. Digamos que la policía sabía exactamente dónde estaba la acción en Sainte-Julie.", "persona": "marco"}
+  {"language": "fr", "content": "Si les murs de cet endroit pouvaient parler, je pense qu'ils parleraient fort!\n\nC'est ici que se trouvait l'hôtel du village. Dès 1880, des paroissiens réclament un hôtel à Sainte-Julie, et une autre demande suit en 1885. L'hôtel voit le jour vers 1890. En 1901, le nouveau propriétaire y ouvre même le premier restaurant de Sainte-Julie.\n\nEn 1927, un incendie cause de lourds dommages. On reconstruit, on agrandit, et l'endroit devient à la fois hôtel de campagne, magasin, restaurant et épicerie.\n\nMais dans les années 1950, l'ambiance se corse. En 1952, le curé se plaint publiquement: des paroissiens insistent pour entrer à l'hôtel après la fermeture, même la nuit et le dimanche! En 1954, on fait appel à la police provinciale pour maintenir l'ordre dans le village les vendredis et samedis soir. Et en 1956, après un nouveau désordre, le conseil municipal avertit le propriétaire: encore un incident, et il portera plainte à la Commission des liqueurs.\n\nEn 1984, changement complet de vocation: le bâtiment devient un complexe commercial. Aujourd'hui, les gens viennent ici pour des raisons beaucoup plus sages!", "persona": "marco"},
+  {"language": "en", "content": "If the walls of this place could talk, I think they'd be pretty loud!\n\nThis is where the village hotel stood. As early as 1880, parishioners were asking for a hotel in Sainte-Julie, and another request followed in 1885. The hotel opened around 1890. In 1901, its new owner even opened the very first restaurant in Sainte-Julie here.\n\nIn 1927, a fire caused heavy damage. It was rebuilt and enlarged, and the place became a country hotel, a store, a restaurant and a grocery all at once.\n\nBut in the 1950s, things got rowdier. In 1952, the parish priest complained publicly: some parishioners kept insisting on getting into the hotel after closing time, even at night and on Sundays! In 1954, the provincial police were called in to keep order in the village on Friday and Saturday nights. And in 1956, after yet another disturbance, the town council warned the owner: one more incident, and it would file a complaint with the Quebec Liquor Commission.\n\nIn 1984, a complete change of purpose: the building became a commercial complex. Today, people come here for much better-behaved reasons!", "persona": "marco"},
+  {"language": "es", "content": "Si las paredes de este lugar pudieran hablar, ¡creo que hablarían bien alto!\n\nAquí estaba el hotel del pueblo. Ya en 1880, unos feligreses piden un hotel para Sainte-Julie, y en 1885 llega otra solicitud. El hotel abre hacia 1890. En 1901, su nuevo dueño incluso abre aquí el primer restaurante de Sainte-Julie.\n\nEn 1927, un incendio causa graves daños. Lo reconstruyen, lo amplían, y el lugar se convierte a la vez en hotel de campo, tienda, restaurante y tienda de comestibles.\n\nPero en los años cincuenta el ambiente se calienta. En 1952, el cura se queja públicamente: ¡algunos feligreses insisten en entrar al hotel después del cierre, incluso de noche y en domingo! En 1954 llaman a la policía provincial para mantener el orden en el pueblo los viernes y sábados por la noche. Y en 1956, tras un nuevo altercado, el ayuntamiento advierte al dueño: un incidente más y presentará una queja ante la Comisión de licores.\n\nEn 1984, cambio total: el edificio se convierte en un complejo comercial. ¡Hoy la gente viene aquí por motivos mucho más formales!", "persona": "marco"}
 ]
 ```
 
@@ -525,11 +531,12 @@ Aun así, tómate un segundo para imaginar un sábado por la noche de 1954. Diga
 - 🏷️ **Catégories:** histoire
 - 🏛️ **Type:** building
 - 📏 **Rayon déclenchement:** 30m
-- 💡 **Hook:** Avant d'être la maison du docteur, c'était la première beurrerie-fromagerie du village, ouverte à l'été 1881 par 13 citoyens actionnaires.
-- 📖 **Anecdote:** Le terrain a été donné aux actionnaires par Louis Blain père le 6 octobre 1880. En 1903, la beurrerie est vendue 1 800 $ au docteur Jodoin ; sa veuve garde la maison jusqu'en 1949.
+- 💡 **Hook:** Sur ce lot (285, 1715-1717 rue Principale) s'élevait la première beurrerie-fromagerie du village, ouverte à l'été 1881 par 13 citoyens actionnaires (100 $ chacun).
+- 📖 **Anecdote:** Le terrain a été donné par Louis Blain père le 6 octobre 1880, à condition que la beurrerie soit établie pour le 1er juillet 1881. Elle produit jusqu'en 1903 ; le terrain et tous les bâtiments sont alors vendus 1 800 $ au Dr Jodoin, premier médecin de famille établi à Sainte-Julie. Sa veuve conserve les propriétés jusqu'en 1949.
 - 📚 **Source:** https://saintejulie.ca/profil-et-histoire/histoire-de-la-ville ; https://saintejulie.ca/la-ville/decouvrir-la-ville/portail-de-la-ville/patrimoine-immobilier ; https://saintejulie.ca/profil-et-histoire/circuit-patrimonial
-- ⚠️ **À vérifier (checker):** confirmer que la « maison du docteur » du circuit (1715-1717) est bien le bâtiment de l'ancienne beurrerie (lot 285).
-- ✅ **Verdict:** EN ATTENTE
+- 🔎 **Point vérifié (voir verdict):** confirmer que la « maison du docteur » du circuit (1715-1717) est bien le bâtiment de l'ancienne beurrerie (lot 285).
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS ✅ (1715, rue Principale) ; faits ✅ Ville (13 actionnaires, 6 oct. 1880, été 1881, vente au Dr Jodoin en 1903 pour 1 800 $, veuve jusqu'en 1949) ; ⚠️→✅ script corrigé : la beurrerie produit jusqu'en 1903 (pas 1899) et le script ne prétend plus que la maison actuelle est le bâtiment de la beurrerie
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -552,61 +559,55 @@ Aun así, tómate un segundo para imaginar un sábado por la noche de 1954. Diga
 
 ### 🎙️ Script audio (fr)
 > Persona: Marco
-> Mots: 174
-> Durée estimée: 70s
+> Mots: 172
+> Durée estimée: 69s
 
-Cette maison a eu deux vies. Et la première sentait le beurre frais!
+Sur ce terrain, l'histoire commence avec du beurre frais!
 
-En 1880, treize citoyens de Sainte-Julie décident de s'unir pour fonder une beurrerie-fromagerie. Louis Blain père leur donne le terrain le 6 octobre 1880, et la beurrerie ouvre ses portes à l'été 1881. Pour un village agricole, c'est une petite révolution: le lait des fermes du coin se transforme ici, au cœur du village.
+En 1880, treize citoyens de Sainte-Julie s'associent pour fonder La Beurrerie et Fromagerie de la paroisse de Sainte-Julie. Chacun met cent dollars. Louis Blain père leur donne le terrain le 6 octobre 1880, à une condition: que la beurrerie soit en activité pour l'été suivant. Pari tenu: elle ouvre à l'été 1881. Pendant plus de vingt ans, on y fait du beurre et du fromage pour toute la région.
 
-Mais en 1899, une nouvelle beurrerie s'installe sur le boulevard Saint-Joseph. Et l'ancienne? En 1903, elle est vendue au docteur Jodoin pour 1 800 dollars. Voilà comment la beurrerie devient la maison du docteur! Sa veuve, elle, gardera la maison jusqu'en 1949.
+Puis, en 1903, le terrain et tous les bâtiments sont vendus pour la rondelette somme de 1 800 dollars. L'acheteur? Le docteur Jodoin, le premier médecin de famille à s'établir à Sainte-Julie. Sa veuve conservera ces propriétés jusqu'en 1949. Voilà pourquoi on appelle cet endroit la maison du docteur.
 
-J'adore ce type de reconversion. Là où on brassait la crème, c'est maintenant le médecin du village qui habite. On passe des barattes au stéthoscope.
-
-Prends une seconde pour regarder la maison et essayer d'y deviner son passé industriel. Pas évident, hein? C'est ça, le charme du Vieux-Village: chaque façade cache une deuxième histoire.
+J'adore ce raccourci de l'histoire: au même endroit, on passe des barattes au stéthoscope. Et pour un village qui n'avait jamais eu de médecin de famille, l'arrivée du docteur devait être tout un événement.
 
 C'est une résidence privée aujourd'hui, alors on l'admire depuis le trottoir.
 
 ### 🎙️ Script audio (en)
 > Persona: Marco
-> Mots: 181
-> Durée estimée: 72s
+> Mots: 175
+> Durée estimée: 70s
 
-This house has had two lives. And the first one smelled like fresh butter!
+On this lot, the story starts with fresh butter!
 
-In 1880, thirteen residents of Sainte-Julie teamed up to found a butter and cheese factory. Louis Blain senior gave them the land on October 6, 1880, and the factory opened in the summer of 1881. For a farming village, that was a small revolution: milk from the local farms was now processed right here, in the heart of the village.
+In 1880, thirteen Sainte-Julie residents teamed up to found the parish's butter and cheese factory. Each one put in a hundred dollars. Louis Blain senior gave them the land on October 6, 1880, on one condition: that the factory be up and running by the following summer. Promise kept: it opened in the summer of 1881. For more than twenty years, it made butter and cheese for the whole region.
 
-But in 1899, a new butter factory set up on Boulevard Saint-Joseph. And the old one? In 1903, it was sold to Doctor Jodoin for 1,800 dollars. That's how the butter factory became the doctor's house! His widow kept the house until 1949.
+Then, in 1903, the land and all the buildings were sold for the tidy sum of 1,800 dollars. The buyer? Doctor Jodoin, the first family doctor to settle in Sainte-Julie. His widow kept the properties until 1949. That's why this place is known as the doctor's house.
 
-I love this kind of makeover. Where they used to churn cream, the village doctor now lived. From butter churns to stethoscopes.
-
-Take a second to look at the house and try to spot its industrial past. Not easy, right? That's the charm of the old village: every facade hides a second story.
+I love this little shortcut through history: on the very same spot, we go from butter churns to stethoscopes. And for a village that had never had a family doctor, his arrival must have been quite the event.
 
 It's a private home today, so admire it from the sidewalk.
 
 ### 🎙️ Script audio (es)
 > Persona: Marco
-> Mots: 183
-> Durée estimée: 73s
+> Mots: 178
+> Durée estimée: 71s
 
-Esta casa ha tenido dos vidas. ¡Y la primera olía a mantequilla fresca!
+En este terreno, ¡la historia empieza con mantequilla fresca!
 
-En 1880, trece vecinos de Sainte-Julie se unen para fundar una fábrica de mantequilla y queso. Louis Blain padre les dona el terreno el 6 de octubre de 1880, y la fábrica abre en el verano de 1881. Para un pueblo agrícola es una pequeña revolución: la leche de las granjas de la zona se transforma aquí mismo, en el corazón del pueblo.
+En 1880, trece vecinos de Sainte-Julie se asocian para fundar la fábrica de mantequilla y queso de la parroquia. Cada uno aporta cien dólares. Louis Blain padre les dona el terreno el 6 de octubre de 1880 con una condición: que la fábrica funcione para el verano siguiente. Promesa cumplida: abre en el verano de 1881. Durante más de veinte años produce mantequilla y queso para toda la región.
 
-Pero en 1899 se instala una nueva mantequería en el boulevard Saint-Joseph. ¿Y la antigua? En 1903 se vende al doctor Jodoin por 1800 dólares. ¡Así es como la mantequería se convierte en la casa del doctor! Su viuda conservará la casa hasta 1949.
+Luego, en 1903, el terreno y todos los edificios se venden por la bonita suma de 1800 dólares. ¿El comprador? El doctor Jodoin, el primer médico de familia que se instala en Sainte-Julie. Su viuda conservará estas propiedades hasta 1949. Por eso a este lugar se le llama la casa del doctor.
 
-Me encantan estas reconversiones. Donde antes se batía la nata, ahora vive el médico del pueblo. De la mantequera al estetoscopio.
-
-Tómate un segundo para mirar la casa e intentar adivinar su pasado industrial. No es fácil, ¿verdad? Ese es el encanto del viejo pueblo: cada fachada esconde una segunda historia.
+Me encanta este atajo de la historia: en el mismo lugar pasamos de la mantequera al estetoscopio. Y para un pueblo que nunca había tenido médico de familia, su llegada debió de ser todo un acontecimiento.
 
 Hoy es una residencia privada, así que se admira desde la acera.
 
 ### 🗄️ Scripts BD
 ```json
 [
-  {"language": "fr", "content": "Cette maison a eu deux vies. Et la première sentait le beurre frais!\n\nEn 1880, treize citoyens de Sainte-Julie décident de s'unir pour fonder une beurrerie-fromagerie. Louis Blain père leur donne le terrain le 6 octobre 1880, et la beurrerie ouvre ses portes à l'été 1881. Pour un village agricole, c'est une petite révolution: le lait des fermes du coin se transforme ici, au cœur du village.\n\nMais en 1899, une nouvelle beurrerie s'installe sur le boulevard Saint-Joseph. Et l'ancienne? En 1903, elle est vendue au docteur Jodoin pour 1 800 dollars. Voilà comment la beurrerie devient la maison du docteur! Sa veuve, elle, gardera la maison jusqu'en 1949.\n\nJ'adore ce type de reconversion. Là où on brassait la crème, c'est maintenant le médecin du village qui habite. On passe des barattes au stéthoscope.\n\nPrends une seconde pour regarder la maison et essayer d'y deviner son passé industriel. Pas évident, hein? C'est ça, le charme du Vieux-Village: chaque façade cache une deuxième histoire.\n\nC'est une résidence privée aujourd'hui, alors on l'admire depuis le trottoir.", "persona": "marco"},
-  {"language": "en", "content": "This house has had two lives. And the first one smelled like fresh butter!\n\nIn 1880, thirteen residents of Sainte-Julie teamed up to found a butter and cheese factory. Louis Blain senior gave them the land on October 6, 1880, and the factory opened in the summer of 1881. For a farming village, that was a small revolution: milk from the local farms was now processed right here, in the heart of the village.\n\nBut in 1899, a new butter factory set up on Boulevard Saint-Joseph. And the old one? In 1903, it was sold to Doctor Jodoin for 1,800 dollars. That's how the butter factory became the doctor's house! His widow kept the house until 1949.\n\nI love this kind of makeover. Where they used to churn cream, the village doctor now lived. From butter churns to stethoscopes.\n\nTake a second to look at the house and try to spot its industrial past. Not easy, right? That's the charm of the old village: every facade hides a second story.\n\nIt's a private home today, so admire it from the sidewalk.", "persona": "marco"},
-  {"language": "es", "content": "Esta casa ha tenido dos vidas. ¡Y la primera olía a mantequilla fresca!\n\nEn 1880, trece vecinos de Sainte-Julie se unen para fundar una fábrica de mantequilla y queso. Louis Blain padre les dona el terreno el 6 de octubre de 1880, y la fábrica abre en el verano de 1881. Para un pueblo agrícola es una pequeña revolución: la leche de las granjas de la zona se transforma aquí mismo, en el corazón del pueblo.\n\nPero en 1899 se instala una nueva mantequería en el boulevard Saint-Joseph. ¿Y la antigua? En 1903 se vende al doctor Jodoin por 1800 dólares. ¡Así es como la mantequería se convierte en la casa del doctor! Su viuda conservará la casa hasta 1949.\n\nMe encantan estas reconversiones. Donde antes se batía la nata, ahora vive el médico del pueblo. De la mantequera al estetoscopio.\n\nTómate un segundo para mirar la casa e intentar adivinar su pasado industrial. No es fácil, ¿verdad? Ese es el encanto del viejo pueblo: cada fachada esconde una segunda historia.\n\nHoy es una residencia privada, así que se admira desde la acera.", "persona": "marco"}
+  {"language": "fr", "content": "Sur ce terrain, l'histoire commence avec du beurre frais!\n\nEn 1880, treize citoyens de Sainte-Julie s'associent pour fonder La Beurrerie et Fromagerie de la paroisse de Sainte-Julie. Chacun met cent dollars. Louis Blain père leur donne le terrain le 6 octobre 1880, à une condition: que la beurrerie soit en activité pour l'été suivant. Pari tenu: elle ouvre à l'été 1881. Pendant plus de vingt ans, on y fait du beurre et du fromage pour toute la région.\n\nPuis, en 1903, le terrain et tous les bâtiments sont vendus pour la rondelette somme de 1 800 dollars. L'acheteur? Le docteur Jodoin, le premier médecin de famille à s'établir à Sainte-Julie. Sa veuve conservera ces propriétés jusqu'en 1949. Voilà pourquoi on appelle cet endroit la maison du docteur.\n\nJ'adore ce raccourci de l'histoire: au même endroit, on passe des barattes au stéthoscope. Et pour un village qui n'avait jamais eu de médecin de famille, l'arrivée du docteur devait être tout un événement.\n\nC'est une résidence privée aujourd'hui, alors on l'admire depuis le trottoir.", "persona": "marco"},
+  {"language": "en", "content": "On this lot, the story starts with fresh butter!\n\nIn 1880, thirteen Sainte-Julie residents teamed up to found the parish's butter and cheese factory. Each one put in a hundred dollars. Louis Blain senior gave them the land on October 6, 1880, on one condition: that the factory be up and running by the following summer. Promise kept: it opened in the summer of 1881. For more than twenty years, it made butter and cheese for the whole region.\n\nThen, in 1903, the land and all the buildings were sold for the tidy sum of 1,800 dollars. The buyer? Doctor Jodoin, the first family doctor to settle in Sainte-Julie. His widow kept the properties until 1949. That's why this place is known as the doctor's house.\n\nI love this little shortcut through history: on the very same spot, we go from butter churns to stethoscopes. And for a village that had never had a family doctor, his arrival must have been quite the event.\n\nIt's a private home today, so admire it from the sidewalk.", "persona": "marco"},
+  {"language": "es", "content": "En este terreno, ¡la historia empieza con mantequilla fresca!\n\nEn 1880, trece vecinos de Sainte-Julie se asocian para fundar la fábrica de mantequilla y queso de la parroquia. Cada uno aporta cien dólares. Louis Blain padre les dona el terreno el 6 de octubre de 1880 con una condición: que la fábrica funcione para el verano siguiente. Promesa cumplida: abre en el verano de 1881. Durante más de veinte años produce mantequilla y queso para toda la región.\n\nLuego, en 1903, el terreno y todos los edificios se venden por la bonita suma de 1800 dólares. ¿El comprador? El doctor Jodoin, el primer médico de familia que se instala en Sainte-Julie. Su viuda conservará estas propiedades hasta 1949. Por eso a este lugar se le llama la casa del doctor.\n\nMe encanta este atajo de la historia: en el mismo lugar pasamos de la mantequera al estetoscopio. Y para un pueblo que nunca había tenido médico de familia, su llegada debió de ser todo un acontecimiento.\n\nHoy es una residencia privada, así que se admira desde la acera.", "persona": "marco"}
 ]
 ```
 
@@ -617,9 +618,10 @@ Hoy es una residencia privada, así que se admira desde la acera.
 - 🏛️ **Type:** building
 - 📏 **Rayon déclenchement:** 30m
 - 💡 **Hook:** Deux maisons voisines où la modernité est entrée au village : dans les années 1890, une petite centrale téléphonique s'installe dans la résidence du 1660 ; de décembre 1920 à 1929, « La Lumière électrique » produit l'électricité du village au 1664.
-- 📖 **Anecdote:** Avant l'électricité, le village s'éclairait au gaz : en octobre 1912, la municipalité installe six becs de gaz publics, dont un devant l'hôtel de ville et un devant la banque. L'électricien Émile Lapointe obtient ensuite un privilège de 25 ans en 1921.
+- 📖 **Anecdote:** Avant l'électricité, le village s'éclairait au gaz : en octobre 1912, la municipalité installe six becs de gaz publics, dont un devant l'hôtel de ville et un devant la banque. En 1921, l'électricien Émile Lapointe veut exploiter l'usine sous le nom de La lumière électrique de Ste-Julie de Verchères.
 - 📚 **Source:** https://saintejulie.ca/la-ville/decouvrir-la-ville/portail-de-la-ville/patrimoine-immobilier ; https://saintejulie.ca/la-ville/decouvrir-la-ville/portail-de-la-ville ; https://saintejulie.ca/profil-et-histoire/circuit-patrimonial
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS ✅ (point entre le 1660 et le 1664) ; faits ✅ Ville (centrale téléphonique au 1660 dans les années 1890 ; génératrice au 1664, déc. 1920-1929 ; 6 becs de gaz le 7 oct. 1912) ; ⚠️→✅ « privilège de 25 ans » de Lapointe introuvable, retiré
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -642,8 +644,8 @@ Hoy es una residencia privada, así que se admira desde la acera.
 
 ### 🎙️ Script audio (fr)
 > Persona: Marco
-> Mots: 183
-> Durée estimée: 73s
+> Mots: 191
+> Durée estimée: 76s
 
 Deux maisons voisines, presque jumelles. Rien de spectaculaire à première vue. Et pourtant, c'est ici que le village est entré dans la modernité.
 
@@ -651,7 +653,7 @@ Commence par celle du 1660. Dans les années 1890, une petite centrale télépho
 
 Maintenant, celle du 1664. En décembre 1920, une entreprise au nom très clair, La Lumière électrique, y produit l'électricité du village. Ça dure jusqu'en 1929. Une génératrice dans une maison de la rue Principale, pour éclairer tout un village.
 
-Avant ça, on s'éclairait au gaz. En octobre 1912, la municipalité installe six becs de gaz publics, dont un devant l'hôtel de ville et un autre devant la banque. Puis en 1921, l'électricien Émile Lapointe obtient un privilège de vingt-cinq ans pour l'électricité.
+Avant ça, on s'éclairait au gaz. En octobre 1912, la municipalité installe six becs de gaz publics, dont un devant l'hôtel de ville et un autre devant la banque. Puis en 1921, l'électricien Émile Lapointe veut exploiter cette usine électrique sous le nom de La lumière électrique de Sainte-Julie de Verchères.
 
 Alors la prochaine fois que tu allumes une lumière sans y penser, aie une petite pensée pour ces deux maisons.
 
@@ -659,8 +661,8 @@ Le meilleur angle pour les voir ensemble, c'est depuis le trottoir d'en face. Ce
 
 ### 🎙️ Script audio (en)
 > Persona: Marco
-> Mots: 188
-> Durée estimée: 75s
+> Mots: 198
+> Durée estimée: 79s
 
 Two houses side by side, almost twins. Nothing spectacular at first glance. And yet, this is where the village stepped into the modern age.
 
@@ -668,7 +670,7 @@ Start with number 1660. In the 1890s, a small telephone exchange set up shop in 
 
 Now, number 1664. In December 1920, a company with a very clear name, La Lumière électrique, literally "the electric light", started producing the village's electricity here. It lasted until 1929. A generator in a house on Rue Principale, lighting up an entire village.
 
-Before that, people used gas lighting. In October 1912, the municipality installed six public gas lamps, including one in front of the town hall and another in front of the bank. Then in 1921, electrician Émile Lapointe was granted a twenty-five-year privilege for electricity.
+Before that, people used gas lighting. In October 1912, the municipality installed six public gas lamps, including one in front of the town hall and another in front of the bank. Then in 1921, electrician Émile Lapointe set out to run this power plant under the name La lumière électrique de Sainte-Julie de Verchères.
 
 So next time you flip a light switch without thinking, spare a thought for these two houses.
 
@@ -676,8 +678,8 @@ The best angle to see them together is from the sidewalk across the street. They
 
 ### 🎙️ Script audio (es)
 > Persona: Marco
-> Mots: 189
-> Durée estimée: 76s
+> Mots: 196
+> Durée estimée: 78s
 
 Dos casas vecinas, casi gemelas. Nada espectacular a primera vista. Y sin embargo, aquí es donde el pueblo entró en la modernidad.
 
@@ -685,7 +687,7 @@ Empieza por la del número 1660. En la década de 1890 se instala en esta casa u
 
 Ahora, la del 1664. En diciembre de 1920, una empresa con un nombre muy claro, La Lumière électrique, es decir, la luz eléctrica, produce aquí la electricidad del pueblo. Dura hasta 1929. Un generador en una casa de la rue Principale para iluminar todo un pueblo.
 
-Antes de eso, se alumbraban con gas. En octubre de 1912, el municipio instala seis farolas de gas públicas, una delante del ayuntamiento y otra delante del banco. Luego, en 1921, el electricista Émile Lapointe obtiene un privilegio de veinticinco años para la electricidad.
+Antes de eso, se alumbraban con gas. En octubre de 1912, el municipio instala seis farolas de gas públicas, una delante del ayuntamiento y otra delante del banco. Luego, en 1921, el electricista Émile Lapointe quiere explotar esta planta eléctrica con el nombre de La lumière électrique de Sainte-Julie de Verchères.
 
 Así que la próxima vez que enciendas una luz sin pensarlo, acuérdate un poquito de estas dos casas.
 
@@ -694,9 +696,9 @@ El mejor ángulo para verlas juntas es desde la acera de enfrente. Son residenci
 ### 🗄️ Scripts BD
 ```json
 [
-  {"language": "fr", "content": "Deux maisons voisines, presque jumelles. Rien de spectaculaire à première vue. Et pourtant, c'est ici que le village est entré dans la modernité.\n\nCommence par celle du 1660. Dans les années 1890, une petite centrale téléphonique s'installe dans cette résidence. Imagine: pour appeler quelqu'un, tu passais par une centrale installée dans une maison du village. Côté discrétion, on repassera!\n\nMaintenant, celle du 1664. En décembre 1920, une entreprise au nom très clair, La Lumière électrique, y produit l'électricité du village. Ça dure jusqu'en 1929. Une génératrice dans une maison de la rue Principale, pour éclairer tout un village.\n\nAvant ça, on s'éclairait au gaz. En octobre 1912, la municipalité installe six becs de gaz publics, dont un devant l'hôtel de ville et un autre devant la banque. Puis en 1921, l'électricien Émile Lapointe obtient un privilège de vingt-cinq ans pour l'électricité.\n\nAlors la prochaine fois que tu allumes une lumière sans y penser, aie une petite pensée pour ces deux maisons.\n\nLe meilleur angle pour les voir ensemble, c'est depuis le trottoir d'en face. Ce sont des résidences privées, alors on reste discret.", "persona": "marco"},
-  {"language": "en", "content": "Two houses side by side, almost twins. Nothing spectacular at first glance. And yet, this is where the village stepped into the modern age.\n\nStart with number 1660. In the 1890s, a small telephone exchange set up shop in this home. Picture it: to call someone, you went through an exchange run out of a house in the village. Privacy? Not so much!\n\nNow, number 1664. In December 1920, a company with a very clear name, La Lumière électrique, literally \"the electric light\", started producing the village's electricity here. It lasted until 1929. A generator in a house on Rue Principale, lighting up an entire village.\n\nBefore that, people used gas lighting. In October 1912, the municipality installed six public gas lamps, including one in front of the town hall and another in front of the bank. Then in 1921, electrician Émile Lapointe was granted a twenty-five-year privilege for electricity.\n\nSo next time you flip a light switch without thinking, spare a thought for these two houses.\n\nThe best angle to see them together is from the sidewalk across the street. They're private homes, so let's be discreet.", "persona": "marco"},
-  {"language": "es", "content": "Dos casas vecinas, casi gemelas. Nada espectacular a primera vista. Y sin embargo, aquí es donde el pueblo entró en la modernidad.\n\nEmpieza por la del número 1660. En la década de 1890 se instala en esta casa una pequeña central telefónica. Imagínate: para llamar a alguien, pasabas por una central instalada en una casa del pueblo. ¡La discreción no estaba garantizada!\n\nAhora, la del 1664. En diciembre de 1920, una empresa con un nombre muy claro, La Lumière électrique, es decir, la luz eléctrica, produce aquí la electricidad del pueblo. Dura hasta 1929. Un generador en una casa de la rue Principale para iluminar todo un pueblo.\n\nAntes de eso, se alumbraban con gas. En octubre de 1912, el municipio instala seis farolas de gas públicas, una delante del ayuntamiento y otra delante del banco. Luego, en 1921, el electricista Émile Lapointe obtiene un privilegio de veinticinco años para la electricidad.\n\nAsí que la próxima vez que enciendas una luz sin pensarlo, acuérdate un poquito de estas dos casas.\n\nEl mejor ángulo para verlas juntas es desde la acera de enfrente. Son residencias privadas, así que seamos discretos.", "persona": "marco"}
+  {"language": "fr", "content": "Deux maisons voisines, presque jumelles. Rien de spectaculaire à première vue. Et pourtant, c'est ici que le village est entré dans la modernité.\n\nCommence par celle du 1660. Dans les années 1890, une petite centrale téléphonique s'installe dans cette résidence. Imagine: pour appeler quelqu'un, tu passais par une centrale installée dans une maison du village. Côté discrétion, on repassera!\n\nMaintenant, celle du 1664. En décembre 1920, une entreprise au nom très clair, La Lumière électrique, y produit l'électricité du village. Ça dure jusqu'en 1929. Une génératrice dans une maison de la rue Principale, pour éclairer tout un village.\n\nAvant ça, on s'éclairait au gaz. En octobre 1912, la municipalité installe six becs de gaz publics, dont un devant l'hôtel de ville et un autre devant la banque. Puis en 1921, l'électricien Émile Lapointe veut exploiter cette usine électrique sous le nom de La lumière électrique de Sainte-Julie de Verchères.\n\nAlors la prochaine fois que tu allumes une lumière sans y penser, aie une petite pensée pour ces deux maisons.\n\nLe meilleur angle pour les voir ensemble, c'est depuis le trottoir d'en face. Ce sont des résidences privées, alors on reste discret.", "persona": "marco"},
+  {"language": "en", "content": "Two houses side by side, almost twins. Nothing spectacular at first glance. And yet, this is where the village stepped into the modern age.\n\nStart with number 1660. In the 1890s, a small telephone exchange set up shop in this home. Picture it: to call someone, you went through an exchange run out of a house in the village. Privacy? Not so much!\n\nNow, number 1664. In December 1920, a company with a very clear name, La Lumière électrique, literally \"the electric light\", started producing the village's electricity here. It lasted until 1929. A generator in a house on Rue Principale, lighting up an entire village.\n\nBefore that, people used gas lighting. In October 1912, the municipality installed six public gas lamps, including one in front of the town hall and another in front of the bank. Then in 1921, electrician Émile Lapointe set out to run this power plant under the name La lumière électrique de Sainte-Julie de Verchères.\n\nSo next time you flip a light switch without thinking, spare a thought for these two houses.\n\nThe best angle to see them together is from the sidewalk across the street. They're private homes, so let's be discreet.", "persona": "marco"},
+  {"language": "es", "content": "Dos casas vecinas, casi gemelas. Nada espectacular a primera vista. Y sin embargo, aquí es donde el pueblo entró en la modernidad.\n\nEmpieza por la del número 1660. En la década de 1890 se instala en esta casa una pequeña central telefónica. Imagínate: para llamar a alguien, pasabas por una central instalada en una casa del pueblo. ¡La discreción no estaba garantizada!\n\nAhora, la del 1664. En diciembre de 1920, una empresa con un nombre muy claro, La Lumière électrique, es decir, la luz eléctrica, produce aquí la electricidad del pueblo. Dura hasta 1929. Un generador en una casa de la rue Principale para iluminar todo un pueblo.\n\nAntes de eso, se alumbraban con gas. En octubre de 1912, el municipio instala seis farolas de gas públicas, una delante del ayuntamiento y otra delante del banco. Luego, en 1921, el electricista Émile Lapointe quiere explotar esta planta eléctrica con el nombre de La lumière électrique de Sainte-Julie de Verchères.\n\nAsí que la próxima vez que enciendas una luz sin pensarlo, acuérdate un poquito de estas dos casas.\n\nEl mejor ángulo para verlas juntas es desde la acera de enfrente. Son residencias privadas, así que seamos discretos.", "persona": "marco"}
 ]
 ```
 
@@ -709,7 +711,8 @@ El mejor ángulo para verlas juntas es desde la acera de enfrente. Son residenci
 - 💡 **Hook:** Vers 1860, le forgeron Louis Sénécal choisit ce coin pour y installer sa forge, à l'entrée du village. Pendant 40 ans, on y a ferré les chevaux.
 - 📖 **Anecdote:** En 1870, il vend tout à un autre forgeron, François-Xavier Robidoux, qui garde la forge jusqu'en 1902. La vente de la maison cette année-là met fin aux activités de forge sur ce site.
 - 📚 **Source:** https://www.patrimoine-culturel.gouv.qc.ca/rpcq/detail.do?methode=consulter&id=201251&type=bien
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS ✅ (622, montée Sainte-Julie, voisin immédiat du 618) ; faits ✅ RPCQ (Sénécal vers 1860, Robidoux 1870, fin en 1902)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -799,7 +802,8 @@ Es una residencia privada, así que se mira desde la acera.
 - 💡 **Hook:** Le premier magasin général du village, construit entre 1858 et 1861 par le marchand Léon Malo. Une moitié de la maison servait de logement, l'autre de magasin.
 - 📖 **Anecdote:** Un agrandissement a probablement changé la pente du toit : si la silhouette semble un peu inhabituelle, c'est pour ça.
 - 📚 **Source:** https://www.patrimoine-culturel.gouv.qc.ca/rpcq/detail.do?methode=consulter&id=201252&type=bien ; https://saintejulie.ca/la-ville/decouvrir-la-ville/portail-de-la-ville/patrimoine-immobilier
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS ✅ (630, montée Sainte-Julie) ; faits ✅ RPCQ (1858-1861, Léon Malo, moitié magasin) + Ville (premier magasin général)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -889,8 +893,9 @@ Es una residencia privada, así que se admira desde la acera.
 - 💡 **Hook:** Une maison construite avant 1861… ailleurs. Elle se trouvait sur la rue Principale, près du chemin du Fer-à-Cheval, et a été déménagée ici en 1953.
 - 📖 **Anecdote:** De 1908 à 1939, c'était la maison du maire Louis Comtois. À Sainte-Julie, déménager une maison n'avait rien d'exceptionnel : le premier presbytère, la maison du 913, chemin du Fer-à-Cheval et un camp de bûcherons de la Gatineau ont tous fait le voyage.
 - 📚 **Source:** https://www.patrimoine-culturel.gouv.qc.ca/rpcq/detail.do?methode=consulter&id=201253&type=bien
-- ⚠️ **À vérifier (checker):** le circuit patrimonial titre aussi une photo « 711 — La maison Comtois ». Vérifier qu'il n'y a pas deux maisons Comtois.
-- ✅ **Verdict:** EN ATTENTE
+- 🔎 **Point vérifié (voir verdict):** le circuit patrimonial titre aussi une photo « 711 — La maison Comtois ». Vérifier qu'il n'y a pas deux maisons Comtois.
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS ✅ (montée Sainte-Julie) ; faits ✅ RPCQ (avant 1861, maire Louis Comtois 1908-1939, déménagée en 1953, lucarnes récentes)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -980,7 +985,8 @@ Es una residencia privada, así que nos quedamos en la acera.
 - 💡 **Hook:** Au village, le bureau de poste n'avait pas d'adresse fixe : il déménageait chez le maître de poste. Le 645 l'a accueilli deux fois, de 1913 à 1922, puis de 1950 à 1955.
 - 📖 **Anecdote:** Entre-temps, le comptoir postal est passé au 654, juste en face (1923-1925), une maison de 1907 où ont vécu deux maires, Joseph-Antoine Morin et Armand Savaria. De 1955 à 1960, il loge au 913, chemin du Fer-à-Cheval. Le premier bureau de poste de Sainte-Julie avait été ouvert en 1854 par Honoré Provost.
 - 📚 **Source:** https://www.patrimoine-culturel.gouv.qc.ca/rpcq/detail.do?methode=consulter&id=201254&type=bien ; https://www.patrimoine-culturel.gouv.qc.ca/rpcq/detail.do?methode=consulter&id=201255&type=bien ; https://www.patrimoine-culturel.gouv.qc.ca/rpcq/detail.do?methode=consulter&id=201245&type=bien ; https://saintejulie.ca/profil-et-histoire/histoire-de-la-ville
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS ✅ (montée Sainte-Julie) ; faits ✅ RPCQ 645 (1913-1922, 1950-1955, commerce, cheminée en tôle ouvragée), RPCQ 654 (1907, comptoir 1923-1925, maires Morin et Savaria, usage résidentiel), RPCQ 913 (1955-1960) ; Ville (premier bureau de poste en 1854, Honoré Provost)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -1070,7 +1076,8 @@ Hoy, el 645 alberga un comercio y el 654 es una residencia privada.
 - 💡 **Hook:** Construite entre 1913 et 1916 sur la rue Principale, cette maison a été déménagée ici en 1976 parce que sa voisine, la Caisse populaire, voulait agrandir son stationnement.
 - 📖 **Anecdote:** Elle a aussi fait partie de la tournée de la poste : de 1955 à 1960, c'est elle qui logeait le comptoir postal du village.
 - 📚 **Source:** https://www.patrimoine-culturel.gouv.qc.ca/rpcq/detail.do?methode=consulter&id=201245&type=bien
-- ✅ **Verdict:** EN ATTENTE
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS ✅ (911, chemin du Fer-à-Cheval, voisin immédiat) ; faits ✅ RPCQ (1913-1916, déménagée en 1976 pour le stationnement de la Caisse, comptoir postal 1955-1960)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -1160,8 +1167,9 @@ El chemin du Fer-à-Cheval es una vía transitada. Si vas en coche o en biciclet
 - 💡 **Hook:** Les Savaria possèdent ces terres depuis 1862, et la maison appartient toujours à la famille. Le nom revient partout à Sainte-Julie : l'hôtel de ville (Centre municipal Louis-Armand-Savaria), la salle de spectacle Maurice-Savaria, la rue Savaria.
 - 📖 **Anecdote:** La maison à mansarde actuelle a été construite en 1923 pour Joseph Savaria par Sigsmond Brunelle, charpentier de Sainte-Julie, à la place d'une première maison de 1850. Un maire, Armand Savaria, a aussi habité au 654, montée Sainte-Julie.
 - 📚 **Source:** https://www.patrimoine-culturel.gouv.qc.ca/rpcq/detail.do?methode=consulter&id=201244&type=bien ; https://saintejulie.ca/profil-et-histoire/histoire-de-la-ville
-- ⚠️ **À vérifier (checker):** liens de parenté entre Joseph, Armand, Louis-Armand et Maurice Savaria non établis. Ne pas les affirmer dans le script.
-- ✅ **Verdict:** EN ATTENTE
+- 🔎 **Point vérifié (voir verdict):** liens de parenté entre Joseph, Armand, Louis-Armand et Maurice Savaria non établis. Ne pas les affirmer dans le script.
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS ✅ (chemin du Fer-à-Cheval) ; faits ✅ RPCQ (terres depuis 1862, maison de 1923, Sigsmond Brunelle, maison de 1850 démolie) + Ville (Centre Louis-Armand-Savaria, salle Maurice-Savaria, rue Savaria) ; aucun lien de parenté affirmé
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -1245,8 +1253,9 @@ Es una propiedad privada, así que se admira desde la carretera. El camino es tr
 - 💡 **Hook:** Une maison en bois pièce sur pièce construite entre 1900 et 1920… dans la vallée de la Gatineau, comme poste de bûcherons. Elle a été démontée, vendue et reconstruite ici en 1976.
 - 📖 **Anecdote:** C'est un certain monsieur Pichet, de Sainte-Agathe-des-Monts, qui l'a démontée. Le toit à croupes a été refait lors de la reconstruction.
 - 📚 **Source:** https://www.patrimoine-culturel.gouv.qc.ca/rpcq/detail.do?methode=consulter&id=201243&type=bien
-- ⚠️ **À vérifier (checker):** la seule source de la fiche est « le propriétaire actuel ».
-- ✅ **Verdict:** EN ATTENTE
+- 🔎 **Point vérifié (voir verdict):** la seule source de la fiche est « le propriétaire actuel ».
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS ✅ (130, rue Bellevue ; latitude RPCQ erronée corrigée) ; faits ✅ RPCQ (poste de bûcherons de la Gatineau, démonté par M. Pichet, reconstruit en 1976) ; source de la fiche = le propriétaire, conditionnel conservé
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -1333,11 +1342,12 @@ Es una residencia privada, así que se mira desde la calle.
 - 🏷️ **Catégories:** histoire, architecture
 - 🏛️ **Type:** building
 - 📏 **Rayon déclenchement:** 60m
-- 💡 **Hook:** Construite vers 1830, cette maison est plus vieille que la paroisse elle-même (1850-1851). C'est la plus ancienne date de construction de l'inventaire patrimonial de Sainte-Julie.
+- 💡 **Hook:** Construite vers 1830, cette maison est plus vieille que la paroisse elle-même (1850-1851). C'est l'une des plus anciennes dates de construction de l'inventaire patrimonial de Sainte-Julie.
 - 📖 **Anecdote:** À l'époque, il n'y avait ni église ni village ici : seulement des terres agricoles le long des rangs. Vers 1900, on lui a ajouté une lucarne-pignon et un agrandissement ; le garage, bâti entre 1952 et 1976, est devenu un espace habitable.
 - 📚 **Source:** https://www.patrimoine-culturel.gouv.qc.ca/rpcq/detail.do?methode=consulter&id=201242&type=bien
-- ⚠️ **À vérifier (checker):** la fiche dit « aurait été construite en 1830 » ; le script doit garder ce conditionnel. « Plus ancienne de l'inventaire » vaut pour les fiches RPCQ lues, pas forcément pour toute la ville.
-- ✅ **Verdict:** EN ATTENTE
+- 🔎 **Point vérifié (voir verdict):** la fiche dit « aurait été construite en 1830 » ; le script doit garder ce conditionnel. « Plus ancienne de l'inventaire » vaut pour les fiches RPCQ lues, pas forcément pour toute la ville.
+- ✅ **Verdict:** ✅ APPROUVÉ
+  - GPS ✅ (chemin de la Belle-Rivière, 1877 voisin) ; faits ✅ RPCQ (« aurait été construite en 1830 », modifications vers 1900, 1952-1976, 2006) ; ⚠️→✅ « la plus ancienne » atténué en « l'une des plus anciennes » (liste de l'inventaire non vérifiée comme complète)
 
 ### 🗄️ Données BD (prêtes pour insertion)
 ```json
@@ -1360,8 +1370,8 @@ Es una residencia privada, así que se mira desde la calle.
 
 ### 🎙️ Script audio (fr)
 > Persona: Marco
-> Mots: 178
-> Durée estimée: 71s
+> Mots: 180
+> Durée estimée: 72s
 
 Tu es devant une maison qui aurait vu passer près de deux siècles.
 
@@ -1369,14 +1379,14 @@ Selon l'inventaire du patrimoine, elle aurait été construite vers 1830. Pour t
 
 Bien sûr, elle a évolué. Vers 1900, on lui ajoute une lucarne-pignon, une fenêtre coiffée de son propre petit toit pointu, et un agrandissement. Plus tard, un garage construit entre 1952 et 1976 devient un espace habitable. Puis en 2006, elle est encore agrandie par l'arrière. Une maison qui grandit avec chaque génération.
 
-Parmi les maisons de Sainte-Julie inscrites à l'inventaire patrimonial, c'est celle qui affiche la date de construction la plus ancienne.
+Parmi les maisons de Sainte-Julie inscrites à l'inventaire patrimonial, c'est l'une de celles qui affichent la date de construction la plus ancienne.
 
 C'est une résidence privée, en zone rurale. Si tu es en voiture ou à vélo, profite du chemin de la Belle-Rivière: il a gardé son air de campagne.
 
 ### 🎙️ Script audio (en)
 > Persona: Marco
-> Mots: 174
-> Durée estimée: 70s
+> Mots: 173
+> Durée estimée: 69s
 
 You're looking at a house that may have seen nearly two centuries go by.
 
@@ -1384,14 +1394,14 @@ According to the heritage inventory, it was likely built around 1830. To put tha
 
 Of course, it has changed over time. Around 1900, it got a gable dormer, a window topped with its own little pointed roof, plus an addition. Later, a garage built sometime between 1952 and 1976 was turned into living space. Then in 2006, it was extended again at the back. A house that grows with every generation.
 
-Among the Sainte-Julie houses listed in the heritage inventory, this is the one with the oldest construction date.
+Among the Sainte-Julie houses listed in the heritage inventory, it has one of the oldest construction dates.
 
 It's a private home, out in the countryside. If you're driving or cycling, enjoy Chemin de la Belle-Rivière: it has kept its rural feel.
 
 ### 🎙️ Script audio (es)
 > Persona: Marco
-> Mots: 178
-> Durée estimée: 71s
+> Mots: 180
+> Durée estimée: 72s
 
 Estás frente a una casa que quizá ha visto pasar casi dos siglos.
 
@@ -1399,16 +1409,16 @@ Según el inventario del patrimonio, se habría construido hacia 1830. Para que 
 
 Claro que ha cambiado. Hacia 1900 le añaden una buhardilla con frontón, una ventana coronada por su propio tejadito puntiagudo, y una ampliación. Más tarde, un garaje construido entre 1952 y 1976 se convierte en espacio habitable. Y en 2006 la amplían otra vez por detrás. Una casa que crece con cada generación.
 
-Entre las casas de Sainte-Julie registradas en el inventario patrimonial, es la que tiene la fecha de construcción más antigua.
+Entre las casas de Sainte-Julie registradas en el inventario patrimonial, es una de las que tienen la fecha de construcción más antigua.
 
 Es una residencia privada, en zona rural. Si vas en coche o en bicicleta, disfruta del chemin de la Belle-Rivière: ha conservado su aire de campo.
 
 ### 🗄️ Scripts BD
 ```json
 [
-  {"language": "fr", "content": "Tu es devant une maison qui aurait vu passer près de deux siècles.\n\nSelon l'inventaire du patrimoine, elle aurait été construite vers 1830. Pour te donner une idée, la paroisse de Sainte-Julie n'existait même pas encore! Il faudra attendre 1850 pour qu'elle soit fondée, et 1851 pour que la municipalité soit reconnue. Pas d'église au village, pas de curé, pas de nom de Sainte-Julie. Et cette maison était déjà là, le long du chemin de la Belle-Rivière.\n\nBien sûr, elle a évolué. Vers 1900, on lui ajoute une lucarne-pignon, une fenêtre coiffée de son propre petit toit pointu, et un agrandissement. Plus tard, un garage construit entre 1952 et 1976 devient un espace habitable. Puis en 2006, elle est encore agrandie par l'arrière. Une maison qui grandit avec chaque génération.\n\nParmi les maisons de Sainte-Julie inscrites à l'inventaire patrimonial, c'est celle qui affiche la date de construction la plus ancienne.\n\nC'est une résidence privée, en zone rurale. Si tu es en voiture ou à vélo, profite du chemin de la Belle-Rivière: il a gardé son air de campagne.", "persona": "marco"},
-  {"language": "en", "content": "You're looking at a house that may have seen nearly two centuries go by.\n\nAccording to the heritage inventory, it was likely built around 1830. To put that in perspective, the parish of Sainte-Julie didn't even exist yet! It wouldn't be founded until 1850, and the municipality wasn't recognized until 1851. No church in the village, no priest, not even the name Sainte-Julie. And this house was already standing here, along Chemin de la Belle-Rivière.\n\nOf course, it has changed over time. Around 1900, it got a gable dormer, a window topped with its own little pointed roof, plus an addition. Later, a garage built sometime between 1952 and 1976 was turned into living space. Then in 2006, it was extended again at the back. A house that grows with every generation.\n\nAmong the Sainte-Julie houses listed in the heritage inventory, this is the one with the oldest construction date.\n\nIt's a private home, out in the countryside. If you're driving or cycling, enjoy Chemin de la Belle-Rivière: it has kept its rural feel.", "persona": "marco"},
-  {"language": "es", "content": "Estás frente a una casa que quizá ha visto pasar casi dos siglos.\n\nSegún el inventario del patrimonio, se habría construido hacia 1830. Para que te hagas una idea, ¡la parroquia de Sainte-Julie ni siquiera existía todavía! Habrá que esperar a 1850 para que se funde, y a 1851 para que se reconozca el municipio. Ni iglesia en el pueblo, ni cura, ni el nombre de Sainte-Julie. Y esta casa ya estaba aquí, junto al chemin de la Belle-Rivière.\n\nClaro que ha cambiado. Hacia 1900 le añaden una buhardilla con frontón, una ventana coronada por su propio tejadito puntiagudo, y una ampliación. Más tarde, un garaje construido entre 1952 y 1976 se convierte en espacio habitable. Y en 2006 la amplían otra vez por detrás. Una casa que crece con cada generación.\n\nEntre las casas de Sainte-Julie registradas en el inventario patrimonial, es la que tiene la fecha de construcción más antigua.\n\nEs una residencia privada, en zona rural. Si vas en coche o en bicicleta, disfruta del chemin de la Belle-Rivière: ha conservado su aire de campo.", "persona": "marco"}
+  {"language": "fr", "content": "Tu es devant une maison qui aurait vu passer près de deux siècles.\n\nSelon l'inventaire du patrimoine, elle aurait été construite vers 1830. Pour te donner une idée, la paroisse de Sainte-Julie n'existait même pas encore! Il faudra attendre 1850 pour qu'elle soit fondée, et 1851 pour que la municipalité soit reconnue. Pas d'église au village, pas de curé, pas de nom de Sainte-Julie. Et cette maison était déjà là, le long du chemin de la Belle-Rivière.\n\nBien sûr, elle a évolué. Vers 1900, on lui ajoute une lucarne-pignon, une fenêtre coiffée de son propre petit toit pointu, et un agrandissement. Plus tard, un garage construit entre 1952 et 1976 devient un espace habitable. Puis en 2006, elle est encore agrandie par l'arrière. Une maison qui grandit avec chaque génération.\n\nParmi les maisons de Sainte-Julie inscrites à l'inventaire patrimonial, c'est l'une de celles qui affichent la date de construction la plus ancienne.\n\nC'est une résidence privée, en zone rurale. Si tu es en voiture ou à vélo, profite du chemin de la Belle-Rivière: il a gardé son air de campagne.", "persona": "marco"},
+  {"language": "en", "content": "You're looking at a house that may have seen nearly two centuries go by.\n\nAccording to the heritage inventory, it was likely built around 1830. To put that in perspective, the parish of Sainte-Julie didn't even exist yet! It wouldn't be founded until 1850, and the municipality wasn't recognized until 1851. No church in the village, no priest, not even the name Sainte-Julie. And this house was already standing here, along Chemin de la Belle-Rivière.\n\nOf course, it has changed over time. Around 1900, it got a gable dormer, a window topped with its own little pointed roof, plus an addition. Later, a garage built sometime between 1952 and 1976 was turned into living space. Then in 2006, it was extended again at the back. A house that grows with every generation.\n\nAmong the Sainte-Julie houses listed in the heritage inventory, it has one of the oldest construction dates.\n\nIt's a private home, out in the countryside. If you're driving or cycling, enjoy Chemin de la Belle-Rivière: it has kept its rural feel.", "persona": "marco"},
+  {"language": "es", "content": "Estás frente a una casa que quizá ha visto pasar casi dos siglos.\n\nSegún el inventario del patrimonio, se habría construido hacia 1830. Para que te hagas una idea, ¡la parroquia de Sainte-Julie ni siquiera existía todavía! Habrá que esperar a 1850 para que se funde, y a 1851 para que se reconozca el municipio. Ni iglesia en el pueblo, ni cura, ni el nombre de Sainte-Julie. Y esta casa ya estaba aquí, junto al chemin de la Belle-Rivière.\n\nClaro que ha cambiado. Hacia 1900 le añaden una buhardilla con frontón, una ventana coronada por su propio tejadito puntiagudo, y una ampliación. Más tarde, un garaje construido entre 1952 y 1976 se convierte en espacio habitable. Y en 2006 la amplían otra vez por detrás. Una casa que crece con cada generación.\n\nEntre las casas de Sainte-Julie registradas en el inventario patrimonial, es una de las que tienen la fecha de construcción más antigua.\n\nEs una residencia privada, en zona rural. Si vas en coche o en bicicleta, disfruta del chemin de la Belle-Rivière: ha conservado su aire de campo.", "persona": "marco"}
 ]
 ```
 
@@ -1427,3 +1437,40 @@ Es una residencia privada, en zona rural. Si vas en coche o en bicicleta, disfru
 ---
 **Total:** 16 POIs trouvés
 **Fichier:** content/sainte-julie-quebec-canada/scout-histoire.md
+
+---
+
+## 📋 Rapport de vérification
+
+**Date:** 2026-11-20
+**Vérificateur:** POI Checker
+
+### Résumé
+| Verdict | Nombre |
+|---------|--------|
+| ✅ APPROUVÉ | 16 |
+| ⚠️ À RÉVISER | 0 |
+| ❌ REJETÉ | 0 |
+| ❓ NON VÉRIFIÉ | 0 |
+
+### Méthode
+- **GPS :** géocodage inverse Nominatim des 16 points. Tous retombent sur l'adresse attendue ou sur le voisin immédiat.
+- **Faits :** chaque affirmation des scripts a été recherchée mot pour mot dans les sources primaires : fiches RPCQ (inventaire MRC 2014, d'après O. Lemerise) et pages d'archives de la Ville de Sainte-Julie (Histoire de la ville, Religion, Patrimoine immobilier, Portail).
+
+### Corrections apportées avant approbation
+| POI | Problème | Correction |
+|-----|----------|------------|
+| 2 | Point RPCQ tombé sur le 570, boul. Saint-Joseph | GPS OSM du 611 (écart de 66 m) |
+| 5 | « Plus d'un siècle de commerce » : faux, le magasin change de vocation en 1913 | Script corrigé |
+| 6 | « Désordres en 1952 et 1954 » et « Sûreté appelée pour l'hôtel » : déformation des sources | Script réécrit selon le texte de la Ville |
+| 7 | Beurrerie arrêtée en 1899 (faux, elle produit jusqu'en 1903) ; maison actuelle = beurrerie (non établi) | Script réécrit ; ajout vérifié : premier médecin de famille |
+| 8 | « Privilège de 25 ans » de Lapointe introuvable | Retiré |
+| 16 | « La plus ancienne » non démontrable | « L'une des plus anciennes » |
+
+### Sources consultées
+- https://saintejulie.ca/profil-et-histoire/histoire-de-la-ville
+- https://saintejulie.ca/la-ville/decouvrir-la-ville/portail-de-la-ville
+- https://saintejulie.ca/la-ville/decouvrir-la-ville/portail-de-la-ville/religion
+- https://saintejulie.ca/la-ville/decouvrir-la-ville/portail-de-la-ville/patrimoine-immobilier
+- Fiches RPCQ 124811, 124822, 202061, 201258, 201251, 201252, 201253, 201254, 201255, 201245, 201244, 201243, 201242
+- http://lareleve.qc.ca/2026/11/03/presbytere-cite-immeuble-patrimonial-eglise-sainte-julie-classee-a/ (titre et résumé ; page bloquée aux robots)

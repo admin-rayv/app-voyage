@@ -8,7 +8,7 @@
 
 **Méthode :** deux types de POIs. (1) L'histoire alimentaire du village, tirée des archives de la Ville et de la toponymie. (2) Des commerces actuels, retenus seulement s'ils sont **ouverts en 2026** (preuve datée) et ont une **histoire documentée** (site officiel, presse locale). Les chaînes sont exclues.
 
-**Doublons :** aucun avec les 21 POIs déjà en BD. La Coop (1590) est à environ 35 m de l'Hôtel du village (POI histoire, 1600) : déclenchements voisins, gérés par la file d'attente de l'app.
+**Doublons :** aucun avec les 21 POIs déjà en BD. La Broue Shop et le Capitaine Maboule sont dans le même immeuble (même point GPS) : l'app les jouera l'un après l'autre. La Coop (1590) est à environ 35 m de l'Hôtel du village (POI histoire, 1600) : déclenchements voisins, gérés par la file d'attente de l'app.
 
 ---
 
@@ -166,12 +166,43 @@
 }
 ```
 
+## POI 6: Bar laitier du Capitaine Maboule
+- 📍 **GPS:** 45.575677, -73.3277075 (Nominatim, 1950 chemin du Fer-à-Cheval ; même immeuble que La Broue Shop)
+- 🏠 **Adresse:** 1950, chemin du Fer-à-Cheval, local L (Les Halles du Domaine, « succursale Hauts-Bois »), Sainte-Julie, QC
+- 🏷️ **Catégories:** food
+- 🏛️ **Type:** restaurant
+- 📏 **Rayon déclenchement:** 40m
+- 💡 **Hook:** Une crèmerie saisonnière dont la légende maison commence ainsi : « On ne sait pas exactement d'où vient le Capitaine Maboule… ». Un capitaine obsédé par les mélanges improbables, qui parcourt le monde à la recherche des combinaisons les plus éclatées.
+- 📖 **Anecdote:** Au menu : crème glacée molle, paletas, gâteaux glacés aux noms farfelus (Rodéo Oreo, Bombe des Tropiques, T'es Smarties) et des saveurs latino comme les jus de corossol, de lulo ou de sapote. La crèmerie fait aujourd'hui partie d'Aliments La Guajira, dont le cofondateur, Raymel Viciedo, passionné d'industrie laitière, a quitté Cuba et s'est installé au Canada en 2013.
+- 📚 **Source:** https://www.laguajira.ca/capitainemaboule (capitainemaboule.com y redirige) ; https://www.laguajira.ca/moorico ; archives Wayback de capitainemaboule.com (2023-2026)
+- 🔎 **Saisonnalité vérifiée :** « FERMÉ à compter du 25 décembre 2023. Nous serons de retour au printemps 2024 » (capture du 11 janv. 2024) ; réouverture le 29 mars 2024 ; « de retour pour la saison 2025 » (mai 2025) ; horaire d'été en mai et juin 2026 ; avis jusqu'au 19 sept. 2026. La mention « Fermé temporairement » de novembre 2026 correspond à la pause d'hiver.
+- 🔎 **À vérifier (checker):** l'historique de propriété n'est pas clair (en 2024, le site disait qu'un couple avait acheté le bar laitier en juin 2022). Le script ne doit pas dater ni expliquer le passage à La Guajira.
+- ✅ **Verdict:** EN ATTENTE
+
+### 🗄️ Données BD (prêtes pour insertion)
+```json
+{
+  "name": {"fr": "Bar laitier du Capitaine Maboule", "en": "Capitaine Maboule Ice Cream Bar"},
+  "lat": 45.575677,
+  "lng": -73.3277075,
+  "trigger_radius_m": 40,
+  "type": "restaurant",
+  "categories": ["food"],
+  "image_url": null,
+  "logistics": {
+    "parking": "Stationnement des Halles du Domaine",
+    "toilets": null,
+    "photo_spot": null,
+    "tips": "Saisonnier : fermé l'hiver, de retour au printemps (l'horaire peut varier selon la météo)"
+  }
+}
+```
+
 ---
 
 ## Écartés (et pourquoi)
 | Lieu | Raison |
 |------|--------|
-| Bar laitier du Capitaine Maboule (1950, Fer-à-Cheval) | Son site affiche « Fermé temporairement » sans date de retour. Belle histoire (glaces de Raymel Viciedo, technologue laitier arrivé de Cuba en 2013) : à reprendre s'il rouvre. |
 | Restaurant Ste-Julie Pizzeria (1646, rue Principale) | Statut incertain (« peut être temporairement fermée »). Le lot accueillait la salle du conseil (dès 1901) et la Banque Provinciale : piste pour **vie-locale** ou **histoire**. |
 | Quartier Gourmand (1791, rue Principale) | Ouvert, très bien noté, mais aucune histoire documentée (fondation, fondateurs) |
 | Med Pizza (1668, rue Saint-Louis) | Simple emplacement de l'ancien magasin général Borduas (fermé en 1959) |
@@ -181,5 +212,5 @@
 | Chaînes (Normandin, Benny & Co., Ben & Florentine…) | Exclues |
 
 ---
-**Total:** 5 POIs trouvés
+**Total:** 6 POIs trouvés
 **Fichier:** content/sainte-julie-quebec-canada/scout-food.md

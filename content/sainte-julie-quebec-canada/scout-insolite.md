@@ -1,3 +1,5 @@
+> ✅ **PUSHED TO DB:** 2026-11-20 — 4 POIs, 12 scripts (publiés)
+
 # 🔍 POIs trouvés: Sainte-Julie — insolite
 > Date: 2026-11-20
 > City ID: 9ed9f927-ed8e-4d9c-bcab-55c489de1555

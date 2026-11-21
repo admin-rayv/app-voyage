@@ -1,3 +1,5 @@
+> ✅ **PUSHED TO DB:** 2026-11-21 — 1 POI, 3 scripts (publié)
+
 # 🔍 POIs trouvés: Sainte-Julie — vie-locale (ajout : club de golf)
 > Date: 2026-11-21
 > City ID: 9ed9f927-ed8e-4d9c-bcab-55c489de1555

@@ -734,4 +734,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get vsdInstall => 'Install voices';
+
+  @override
+  String get updateTitle => 'Update available';
+
+  @override
+  String updateBody(String version, String current) {
+    return 'App Voyage $version is available (you have $current). Your favorites and progress are kept.';
+  }
+
+  @override
+  String get updateLater => 'Later';
+
+  @override
+  String get updateNow => 'Update';
 }

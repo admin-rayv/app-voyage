@@ -5,10 +5,14 @@ iOS/App Store. Les textes prêts à coller sont dans
 [STORE-LISTING.md](./STORE-LISTING.md).
 
 **État actuel**
-- ✅ Beta Android par QR (release GitHub, APK signé debug → release dès que la clé existe)
+- ✅ Beta Android par QR (release GitHub) — lien court : https://voyage.bjpr.ca (Caddy → dernière release)
 - ✅ Pages légales publiées : https://admin-rayv.github.io/app-voyage/
 - ✅ CI iOS : vérifie que l'app compile pour iPhone (sans signature)
-- ⏳ Clé de signature release ← **prochaine action (Pierre, ~15 min)**
+- ✅ Clé de signature release créée le 2026-11-23 (v0.7.6) : `~/.config/app-voyage/upload-keystore.jks`
+  + mots de passe dans `~/.config/app-voyage/android-signing.env` ; secrets GitHub configurés.
+  ⚠️ À sauvegarder dans le gestionnaire de mots de passe + copie hors ligne.
+- ✅ Mise à jour dans l'app (v0.7.6+) : au démarrage, l'app compare sa version à la dernière
+  release GitHub et propose de télécharger l'APK (Android). « Plus tard » = redemande après 24 h.
 - ⏳ Comptes développeur Google (25 $ US, une fois) et Apple (99 $ US/an)
 
 ---

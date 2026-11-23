@@ -214,5 +214,10 @@
   "vsdSteps": "1. Toca «Instalar voces»\n2. Selecciona el motor de Google\n3. Toca ⚙️ → «Instalar datos de voz»\n4. Descarga:\n   🇨🇦 Francés (Canadá)\n   🇺🇸 Inglés (EE. UU.)\n   🇪🇸 Español\n5. Vuelve a la app",
   "vsdFree": "⏱️ ¡Toma 30 segundos y es gratis!",
   "vsdLater": "Más tarde",
-  "vsdInstall": "Instalar voces"
+  "vsdInstall": "Instalar voces",
+
+  "updateTitle": "Actualización disponible",
+  "updateBody": "La versión {version} de App Voyage está disponible (tienes la {current}). Tus favoritos y tu progreso se conservan.",
+  "updateLater": "Más tarde",
+  "updateNow": "Actualizar"
 }

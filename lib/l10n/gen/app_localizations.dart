@@ -1305,6 +1305,30 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Installer les voix'**
   String get vsdInstall;
+
+  /// No description provided for @updateTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mise à jour disponible'**
+  String get updateTitle;
+
+  /// No description provided for @updateBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'La version {version} d\'App Voyage est disponible (tu as la {current}). Tes favoris et ta progression sont conservés.'**
+  String updateBody(String version, String current);
+
+  /// No description provided for @updateLater.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus tard'**
+  String get updateLater;
+
+  /// No description provided for @updateNow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Mettre à jour'**
+  String get updateNow;
 }
 
 class _AppLocalizationsDelegate

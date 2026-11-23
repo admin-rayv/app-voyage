@@ -214,5 +214,10 @@
   "vsdSteps": "1. Tap \"Install voices\"\n2. Select the Google engine\n3. Tap ⚙️ → \"Install voice data\"\n4. Download:\n   🇨🇦 French (Canada)\n   🇺🇸 English (US)\n   🇪🇸 Spanish\n5. Come back to the app",
   "vsdFree": "⏱️ It takes 30 seconds and it's free!",
   "vsdLater": "Later",
-  "vsdInstall": "Install voices"
+  "vsdInstall": "Install voices",
+
+  "updateTitle": "Update available",
+  "updateBody": "App Voyage {version} is available (you have {current}). Your favorites and progress are kept.",
+  "updateLater": "Later",
+  "updateNow": "Update"
 }

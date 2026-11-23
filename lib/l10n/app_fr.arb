@@ -250,5 +250,11 @@
   "vsdSteps": "1. Clique « Installer les voix »\n2. Sélectionne le moteur Google\n3. Appuie sur ⚙️ → « Installer les données vocales »\n4. Télécharge :\n   🇨🇦 Français (Canada)\n   🇺🇸 English (US)\n   🇪🇸 Español\n5. Reviens dans l'app",
   "vsdFree": "⏱️ Ça prend 30 secondes et c'est gratuit !",
   "vsdLater": "Plus tard",
-  "vsdInstall": "Installer les voix"
+  "vsdInstall": "Installer les voix",
+
+  "updateTitle": "Mise à jour disponible",
+  "updateBody": "La version {version} d'App Voyage est disponible (tu as la {current}). Tes favoris et ta progression sont conservés.",
+  "@updateBody": { "placeholders": { "version": { "type": "String" }, "current": { "type": "String" } } },
+  "updateLater": "Plus tard",
+  "updateNow": "Mettre à jour"
 }

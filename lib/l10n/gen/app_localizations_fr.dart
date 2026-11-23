@@ -738,4 +738,18 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get vsdInstall => 'Installer les voix';
+
+  @override
+  String get updateTitle => 'Mise à jour disponible';
+
+  @override
+  String updateBody(String version, String current) {
+    return 'La version $version d\'App Voyage est disponible (tu as la $current). Tes favoris et ta progression sont conservés.';
+  }
+
+  @override
+  String get updateLater => 'Plus tard';
+
+  @override
+  String get updateNow => 'Mettre à jour';
 }

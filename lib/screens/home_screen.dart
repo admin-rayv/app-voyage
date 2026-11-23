@@ -7,6 +7,7 @@ import '../config/categories.dart';
 import '../l10n/l10n.dart';
 import '../config/theme.dart';
 import '../services/group_session_service.dart';
+import '../services/update_service.dart';
 import '../services/visited_poi_service.dart';
 import '../widgets/group_session_sheet.dart';
 import '../widgets/voice_setup_dialog.dart';
@@ -33,8 +34,10 @@ class _HomeScreenState extends State<HomeScreen> {
     // Progression « X/Y écoutés » sur les cartes de villes.
     VisitedPoiService().init();
     // Vérifier les voix TTS au premier lancement
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      VoiceSetupDialog.checkAndShow(context);
+    // puis proposer la mise à jour si une version plus récente existe.
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await VoiceSetupDialog.checkAndShow(context);
+      if (mounted) await UpdateService.checkAndPrompt(context);
     });
   }
 

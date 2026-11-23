@@ -4,6 +4,8 @@
 
 Application mobile Flutter qui lit des scripts audio géolocalisés via les voix natives du téléphone. 100% offline après téléchargement.
 
+📲 **Installer l'app (Android) : https://voyage.bjpr.ca** — télécharge toujours la dernière version. Ensuite, l'app propose elle-même les mises à jour.
+
 ---
 
 ## 🚀 Setup rapide

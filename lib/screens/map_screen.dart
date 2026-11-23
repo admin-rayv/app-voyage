@@ -194,22 +194,23 @@ class _MapScreenState extends State<MapScreen>
   /// le point bleu et les distances restent à jour pendant la balade.
   void _startPositionUpdates() {
     if (_positionSubscription != null) return;
-    _positionSubscription = Geolocator.getPositionStream(
-      locationSettings: LocationSettings(
-        accuracy: LocationAccuracy.high,
-        distanceFilter: AppConstants.gpsDistanceFilterMeters,
-      ),
-    ).listen(
-      (position) {
-        if (!mounted) return;
-        setState(() {
-          _userPosition = LatLng(position.latitude, position.longitude);
-        });
-      },
-      onError: (Object error) {
-        DebugLog().log('[MapScreen] position stream error: $error');
-      },
-    );
+    _positionSubscription =
+        Geolocator.getPositionStream(
+          locationSettings: LocationSettings(
+            accuracy: LocationAccuracy.high,
+            distanceFilter: AppConstants.gpsDistanceFilterMeters,
+          ),
+        ).listen(
+          (position) {
+            if (!mounted) return;
+            setState(() {
+              _userPosition = LatLng(position.latitude, position.longitude);
+            });
+          },
+          onError: (Object error) {
+            DebugLog().log('[MapScreen] position stream error: $error');
+          },
+        );
   }
 
   List<models.Point> get _basePoints {
@@ -754,7 +755,11 @@ class _MapScreenState extends State<MapScreen>
             if (distance != null)
               Row(
                 children: [
-                  Icon(Icons.near_me, size: 16, color: AppTheme.textSecondaryOf(context)),
+                  Icon(
+                    Icons.near_me,
+                    size: 16,
+                    color: AppTheme.textSecondaryOf(context),
+                  ),
                   const SizedBox(width: 4),
                   Text(
                     distance < 1000
@@ -885,7 +890,9 @@ class _MapScreenState extends State<MapScreen>
           IconButton(
             icon: Icon(_showList ? Icons.map : Icons.list),
             onPressed: () => setState(() => _showList = !_showList),
-            tooltip: _showList ? context.l10n.viewMapTooltip : context.l10n.viewListTooltip,
+            tooltip: _showList
+                ? context.l10n.viewMapTooltip
+                : context.l10n.viewListTooltip,
           ),
           if (_userPosition != null && !_showList)
             IconButton(
@@ -963,7 +970,8 @@ class _MapScreenState extends State<MapScreen>
           Padding(
             padding: const EdgeInsets.only(right: 6),
             child: FilterChip(
-              selected: _activeFilters.isEmpty &&
+              selected:
+                  _activeFilters.isEmpty &&
                   !_showUnvisitedOnly &&
                   !_showFavoritesOnly,
               label: Text(context.l10n.allFilter(_allPoints.length)),
@@ -1016,7 +1024,9 @@ class _MapScreenState extends State<MapScreen>
               padding: const EdgeInsets.only(right: 6),
               child: FilterChip(
                 selected: isActive,
-                label: Text('${cat.emoji} ${cat.label(context.languageCode)} ($count)'),
+                label: Text(
+                  '${cat.emoji} ${cat.label(context.languageCode)} ($count)',
+                ),
                 onSelected: (_) => _toggleFilter(cat.key),
                 selectedColor: cat.color.withValues(alpha: 0.2),
                 checkmarkColor: cat.color,
@@ -1148,8 +1158,9 @@ class _MapScreenState extends State<MapScreen>
     if (_searchQuery.trim().isNotEmpty) {
       points = points
           .where(
-            (poi) => poi.name.values
-                .any((name) => TextNormalizer.matches(name, _searchQuery)),
+            (poi) => poi.name.values.any(
+              (name) => TextNormalizer.matches(name, _searchQuery),
+            ),
           )
           .toList();
     }
@@ -1250,70 +1261,71 @@ class _MapScreenState extends State<MapScreen>
   Widget _buildMap() {
     final points = _filteredPoints;
 
-    return AnimatedBuilder(
-      animation: _discoveryPulseController,
-      builder: (context, _) => FlutterMap(
-        mapController: _mapController,
-        options: MapOptions(
-          initialCenter: LatLng(widget.city.centerLat, widget.city.centerLng),
-          initialZoom: 14.5,
-        ),
-        children: [
-          MapTiles.tileLayer(context),
-          // Rayons de déclenchement — visibles en mode découverte pour
-          // calibrer le geofencing pendant les tests terrain.
-          if (_discoveryModeEnabled)
-            CircleLayer(
-              circles: points
-                  .map(
-                    (poi) => CircleMarker(
-                      point: LatLng(poi.lat, poi.lng),
-                      radius: poi.triggerRadiusM.toDouble(),
-                      useRadiusInMeter: true,
-                      color: Colors.green.withValues(alpha: 0.08),
-                      borderColor: Colors.green.withValues(alpha: 0.35),
-                      borderStrokeWidth: 1.5,
-                    ),
-                  )
-                  .toList(),
-            ),
-          MarkerClusterLayerWidget(
-            options: MarkerClusterLayerOptions(
-              maxClusterRadius: 46,
-              size: const Size(44, 44),
-              padding: const EdgeInsets.all(50),
-              maxZoom: 17,
-              markers: points.map(_buildMarkerFor).toList(),
-              builder: (context, markers) => _buildClusterBubble(markers),
-            ),
+    // Pas d'AnimatedBuilder autour de la carte : en mode découverte, la
+    // pulsation (60 i/s) reconstruisait toute la carte et ses 135 marqueurs
+    // à chaque image — touchers perdus et téléphone surchargé. Seuls le
+    // bouton et l'anneau du POI en lecture s'animent (voir _buildPoiMarker).
+    return FlutterMap(
+      mapController: _mapController,
+      options: MapOptions(
+        initialCenter: LatLng(widget.city.centerLat, widget.city.centerLng),
+        initialZoom: 14.5,
+      ),
+      children: [
+        MapTiles.tileLayer(context),
+        // Rayons de déclenchement — visibles en mode découverte pour
+        // calibrer le geofencing pendant les tests terrain.
+        if (_discoveryModeEnabled)
+          CircleLayer(
+            circles: points
+                .map(
+                  (poi) => CircleMarker(
+                    point: LatLng(poi.lat, poi.lng),
+                    radius: poi.triggerRadiusM.toDouble(),
+                    useRadiusInMeter: true,
+                    color: Colors.green.withValues(alpha: 0.08),
+                    borderColor: Colors.green.withValues(alpha: 0.35),
+                    borderStrokeWidth: 1.5,
+                  ),
+                )
+                .toList(),
           ),
-          if (_userPosition != null)
-            MarkerLayer(
-              markers: [
-                Marker(
-                  point: _userPosition!,
-                  width: 20,
-                  height: 20,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 3),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.blue.withValues(alpha: 0.3),
-                          blurRadius: 8,
-                          spreadRadius: 3,
-                        ),
-                      ],
-                    ),
+        MarkerClusterLayerWidget(
+          options: MarkerClusterLayerOptions(
+            maxClusterRadius: 46,
+            size: const Size(44, 44),
+            padding: const EdgeInsets.all(50),
+            maxZoom: 17,
+            markers: points.map(_buildMarkerFor).toList(),
+            builder: (context, markers) => _buildClusterBubble(markers),
+          ),
+        ),
+        if (_userPosition != null)
+          MarkerLayer(
+            markers: [
+              Marker(
+                point: _userPosition!,
+                width: 20,
+                height: 20,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 3),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.blue.withValues(alpha: 0.3),
+                        blurRadius: 8,
+                        spreadRadius: 3,
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          MapTiles.attribution(),
-        ],
-      ),
+              ),
+            ],
+          ),
+        MapTiles.attribution(),
+      ],
     );
   }
 
@@ -1380,8 +1392,6 @@ class _MapScreenState extends State<MapScreen>
     required bool isHighlighted,
     required bool isPlaying,
   }) {
-    final pulse = isPlaying ? _discoveryPulseController.value : 0.0;
-    final ringScale = 1 + (pulse * 0.22);
     final markerColor = isVisited ? Colors.grey.shade500 : color;
     final borderColor = isPlaying
         ? Colors.white
@@ -1399,8 +1409,12 @@ class _MapScreenState extends State<MapScreen>
       alignment: Alignment.center,
       children: [
         if (isPlaying)
-          Transform.scale(
-            scale: ringScale,
+          AnimatedBuilder(
+            animation: _discoveryPulseController,
+            builder: (context, child) => Transform.scale(
+              scale: 1 + (_discoveryPulseController.value * 0.22),
+              child: child,
+            ),
             child: Container(
               width: 52,
               height: 52,
@@ -1518,8 +1532,14 @@ class _MapScreenState extends State<MapScreen>
                 if (lastTriggeredPoi != null)
                   Text(
                     autoPlayedPoi != null
-                        ? context.l10n.nowPlayingPoi(autoPlayedPoi.localizedName(context.languageCode))
-                        : context.l10n.lastDetected(lastTriggeredPoi.localizedName(context.languageCode)),
+                        ? context.l10n.nowPlayingPoi(
+                            autoPlayedPoi.localizedName(context.languageCode),
+                          )
+                        : context.l10n.lastDetected(
+                            lastTriggeredPoi.localizedName(
+                              context.languageCode,
+                            ),
+                          ),
                     style: TextStyle(
                       fontSize: 12,
                       color: AppTheme.textSecondaryOf(context),

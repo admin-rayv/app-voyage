@@ -43,6 +43,13 @@ jobs:
           EOF
           echo "Signature release configurée."
 
+      # Gradle 8.14 ne supporte pas Java 25 (défaut d'ubuntu-latest depuis
+      # nov. 2026) : on fixe Java 17.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.41.1'

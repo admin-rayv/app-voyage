@@ -865,7 +865,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutDesc.
   ///
   /// In fr, this message translates to:
-  /// **'Guide audio géolocalisé — un ami historien dans tes écouteurs. Cartes : © OpenStreetMap contributors, © CARTO.'**
+  /// **'Guide audio géolocalisé — un ami historien dans tes écouteurs. Cartes : © OpenStreetMap contributors, Protomaps.'**
   String get aboutDesc;
 
   /// No description provided for @permServiceDisabled.

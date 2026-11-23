@@ -475,7 +475,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutDesc =>
-      'Location-based audio guide — a historian friend in your ears. Maps: © OpenStreetMap contributors, © CARTO.';
+      'Location-based audio guide — a historian friend in your ears. Maps: © OpenStreetMap contributors, Protomaps.';
 
   @override
   String get permServiceDisabled =>

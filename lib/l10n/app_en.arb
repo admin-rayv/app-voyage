@@ -137,7 +137,7 @@
   "noLogs": "No logs",
   "aboutSection": "About",
   "aboutVersion": "App Voyage {version}",
-  "aboutDesc": "Location-based audio guide — a historian friend in your ears. Maps: © OpenStreetMap contributors, © CARTO.",
+  "aboutDesc": "Location-based audio guide — a historian friend in your ears. Maps: © OpenStreetMap contributors, Protomaps.",
 
   "permServiceDisabled": "Location is turned off. Enable it to use discovery mode.",
   "permDenied": "GPS permission denied. Discovery mode not enabled.",

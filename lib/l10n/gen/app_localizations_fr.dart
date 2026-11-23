@@ -479,7 +479,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get aboutDesc =>
-      'Guide audio géolocalisé — un ami historien dans tes écouteurs. Cartes : © OpenStreetMap contributors, © CARTO.';
+      'Guide audio géolocalisé — un ami historien dans tes écouteurs. Cartes : © OpenStreetMap contributors, Protomaps.';
 
   @override
   String get permServiceDisabled =>

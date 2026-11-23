@@ -166,7 +166,7 @@
   "aboutSection": "À propos",
   "aboutVersion": "App Voyage {version}",
   "@aboutVersion": { "placeholders": { "version": { "type": "String" } } },
-  "aboutDesc": "Guide audio géolocalisé — un ami historien dans tes écouteurs. Cartes : © OpenStreetMap contributors, © CARTO.",
+  "aboutDesc": "Guide audio géolocalisé — un ami historien dans tes écouteurs. Cartes : © OpenStreetMap contributors, Protomaps.",
 
   "permServiceDisabled": "La localisation est désactivée. Active-la pour utiliser le mode découverte.",
   "permDenied": "Autorisation GPS refusée. Mode découverte non activé.",

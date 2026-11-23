@@ -137,7 +137,7 @@
   "noLogs": "Sin registros",
   "aboutSection": "Acerca de",
   "aboutVersion": "App Voyage {version}",
-  "aboutDesc": "Audioguía geolocalizada — un amigo historiador en tus auriculares. Mapas: © OpenStreetMap contributors, © CARTO.",
+  "aboutDesc": "Audioguía geolocalizada — un amigo historiador en tus auriculares. Mapas: © OpenStreetMap contributors, Protomaps.",
 
   "permServiceDisabled": "La ubicación está desactivada. Actívala para usar el modo descubrimiento.",
   "permDenied": "Permiso de GPS denegado. Modo descubrimiento no activado.",

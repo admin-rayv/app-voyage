@@ -40,9 +40,34 @@ class MapTileCache {
       final base = await getApplicationSupportDirectory();
       final dir = Directory('${base.path}/${AppConstants.mapCacheDir}');
       await dir.create(recursive: true);
+      await _purgeIfSourceChanged(dir);
       _cacheDir = dir;
     } catch (error) {
       DebugLog().log('[TileCache] init failed: $error');
+    }
+  }
+
+  /// Identifiant de la source de tuiles. Le changer vide le cache une fois
+  /// (ex. passage CARTO → cartes auto-hébergées : les anciennes tuiles
+  /// « API KEY REQUIRED » ne doivent plus occuper de place).
+  static const String _tileSource = 'voyage-cartes-v1';
+
+  static Future<void> _purgeIfSourceChanged(Directory dir) async {
+    final marker = File('${dir.path}/.source');
+    try {
+      if (await marker.exists() &&
+          (await marker.readAsString()).trim() == _tileSource) {
+        return;
+      }
+      await for (final entity in dir.list()) {
+        if (entity is File && entity.path.endsWith('.png')) {
+          await entity.delete();
+        }
+      }
+      await marker.writeAsString(_tileSource);
+      DebugLog().log('[TileCache] cache vidé (nouvelle source $_tileSource)');
+    } catch (error) {
+      DebugLog().log('[TileCache] purge échouée: $error');
     }
   }
 

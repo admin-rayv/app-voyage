@@ -5,7 +5,9 @@ Used by poi-scout to avoid duplicates.
 """
 
 import argparse
+import os
 import sys
+from pathlib import Path
 
 try:
     import requests
@@ -14,9 +16,25 @@ except ImportError:
     os.system("pip3 install requests -q")
     import requests
 
-# Supabase config
-SUPABASE_URL = "https://lfwnpyttyoefqvhfqajb.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmd25weXR0eW9lZnF2aGZxYWpiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MTMwNzY1MCwiZXhwIjoyMDg2ODgzNjUwfQ.Hilu9ymXa14JRi7UnvmXVCnEhQDCyv_5yPiVD2DZYjc"
+# Supabase config — BD auto-hébergée (voir docs/BD-AUTO-HEBERGEE.md).
+# La clé service_role n'est JAMAIS dans le dépôt : elle est lue depuis
+# la variable SUPABASE_SERVICE_ROLE_KEY ou ~/.config/app-voyage/voyagedb.env.
+def _load_config():
+    env = {}
+    cfg = Path(os.environ.get("VOYAGEDB_ENV", Path.home() / ".config/app-voyage/voyagedb.env"))
+    if cfg.exists():
+        for line in cfg.read_text().splitlines():
+            if "=" in line and not line.lstrip().startswith("#"):
+                k, v = line.split("=", 1)
+                env[k.strip()] = v.strip().strip('"').strip("'")
+    url = os.environ.get("SUPABASE_URL") or env.get("API_EXTERNAL_URL") or "https://voyagedb.bjpr.ca"
+    key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or env.get("SERVICE_ROLE_KEY")
+    if not key:
+        sys.exit(f"Clé service_role introuvable : définir SUPABASE_SERVICE_ROLE_KEY ou créer {cfg}")
+    return url.rstrip("/"), key
+
+
+SUPABASE_URL, SUPABASE_KEY = _load_config()
 
 HEADERS = {
     "apikey": SUPABASE_KEY,

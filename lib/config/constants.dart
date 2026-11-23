@@ -2,19 +2,19 @@
 class AppConstants {
   // App Info
   static const String appName = 'App Voyage';
-  static const String appVersion = '0.7.4';
+  static const String appVersion = '0.7.5';
 
   // Supabase — surchargeables par environnement via --dart-define:
   //   flutter run --dart-define=SUPABASE_URL=... --dart-define=SUPABASE_ANON_KEY=...
   // (la clé anon est publique par design — la sécurité vient du RLS)
   static const String supabaseUrl = String.fromEnvironment(
     'SUPABASE_URL',
-    defaultValue: 'https://lfwnpyttyoefqvhfqajb.supabase.co',
+    defaultValue: 'https://voyagedb.bjpr.ca', // BD auto-hébergée (docs/BD-AUTO-HEBERGEE.md)
   );
   static const String supabaseAnonKey = String.fromEnvironment(
     'SUPABASE_ANON_KEY',
     defaultValue:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxmd25weXR0eW9lZnF2aGZxYWpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMDc2NTAsImV4cCI6MjA4Njg4MzY1MH0.J2kmSaIvxhkqGucy9C4ZwbokDS2hU7uBXlb4kE8Ryao',
+        'eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJyb2xlIjogImFub24iLCAiaXNzIjogInN1cGFiYXNlIiwgImlhdCI6IDE3OTUyODA0NjgsICJleHAiOiAyMTEwNjQwNDY4fQ.6JgiUCwNlWgIgoMm6md-6dLTq2NfWBf9jya6c_CoZ4Y',
   );
 
   // GPS settings

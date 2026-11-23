@@ -93,7 +93,7 @@ Exclure les POIs qui:
 
 Avant de proposer, vérifier dans Supabase si le POI existe déjà:
 ```bash
-curl -s "https://lfwnpyttyoefqvhfqajb.supabase.co/rest/v1/points?city_id=eq.CITY_ID&select=name,lat,lng" \
+curl -s "https://voyagedb.bjpr.ca/rest/v1/points?city_id=eq.CITY_ID&select=name,lat,lng" \
   -H "apikey: ANON_KEY"
 ```
 

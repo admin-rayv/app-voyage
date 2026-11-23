@@ -40,3 +40,12 @@ ssh cee-staging "sudo docker exec -i voyage-supabase-db psql -U postgres -d post
 - Fichiers : bucket public `releases` (app-voyage-v0.2.0.apk, SHA-256 identique).
 - Temps réel (diffusion + présence des sessions de groupe) testé.
 - Mémoire : 4 Go de swap ajoutés au VPS (`/swapfile`).
+
+## Bascule (2026-11-23)
+- DNS `voyagedb.bjpr.ca` → 149.56.96.76 actif, certificat Let's Encrypt obtenu par Caddy.
+- App **v0.7.5** : `lib/config/constants.dart` pointe vers https://voyagedb.bjpr.ca (nouvelle clé anon).
+- Outils : `skills/poi-pusher/scripts/push.py` et `skills/poi-scout/scripts/existing_pois.py`
+  lisent l'adresse et la clé service_role dans `~/.config/app-voyage/voyagedb.env`
+  (ou `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY`). Lancer avec `/usr/bin/python3` (a `requests`).
+- supabase.com reste en marche (lecture seule de fait) le temps que les téléphones passent à la v0.7.5.
+  Plus rien n'y est envoyé : ne pas y ajouter de contenu.

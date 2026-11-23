@@ -85,8 +85,8 @@ git push origin main
 ## Supabase Config
 
 ```
-Project URL: https://lfwnpyttyoefqvhfqajb.supabase.co
-Service Role Key: (dans le script, ne pas exposer)
+Project URL: https://voyagedb.bjpr.ca  (auto-hébergée, voir docs/BD-AUTO-HEBERGEE.md)
+Service Role Key: lue depuis ~/.config/app-voyage/voyagedb.env (jamais dans le dépôt)
 ```
 
 ## Tables concernées
